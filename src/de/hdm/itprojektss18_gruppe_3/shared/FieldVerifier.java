@@ -1,4 +1,4 @@
-package itprojektss18_gruppe_3.shared;
+package de.hdm.itprojektss18_gruppe_3.shared;
 
 /**
  * <p>
