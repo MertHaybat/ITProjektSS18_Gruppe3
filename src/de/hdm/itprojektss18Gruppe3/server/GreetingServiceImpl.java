@@ -1,9 +1,9 @@
-package de.hdm.itprojektss18_gruppe_3.server;
+package de.hdm.itprojektss18Gruppe3.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import de.hdm.itprojektss18_gruppe_3.client.GreetingService;
-import de.hdm.itprojektss18_gruppe_3.shared.FieldVerifier;
+import de.hdm.itprojektss18Gruppe3.client.GreetingService;
+import de.hdm.itprojektss18Gruppe3.shared.FieldVerifier;
 
 /**
  * The server-side implementation of the RPC service.

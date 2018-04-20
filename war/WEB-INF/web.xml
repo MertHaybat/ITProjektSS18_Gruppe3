@@ -8,17 +8,17 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
-    <servlet-class>itprojektss18_gruppe_3.server.GreetingServiceImpl</servlet-class>
+    <servlet-class>de.hdm.itprojektss18Gruppe3.server.GreetingServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/itprojektss18_gruppe_3/greet</url-pattern>
+    <url-pattern>/itprojektss18gruppe3/greet</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>ITProjektSS18_Gruppe_3.html</welcome-file>
+    <welcome-file>ITProjektSS18Gruppe3.html</welcome-file>
   </welcome-file-list>
 
 </web-app>

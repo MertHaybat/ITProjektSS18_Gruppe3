@@ -1,4 +1,4 @@
-package de.hdm.itprojektss18_gruppe_3.client;
+package de.hdm.itprojektss18Gruppe3.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
