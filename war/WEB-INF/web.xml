@@ -6,19 +6,23 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
+  
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>de.hdm.itprojektss18Gruppe3.server.GreetingServiceImpl</servlet-class>
+    <servlet-name>kontaktmanagerServlet</servlet-name>
+    <servlet-class>de.hdm.itprojektss18Gruppe3.server.KontaktmanagerAdministrationImpl</servlet-class>
   </servlet>
   
+  
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/itprojektss18gruppe3/greet</url-pattern>
+    <servlet-name>kontaktmanagerServlet</servlet-name>
+    <url-pattern>/itprojektss18gruppe3/kontaktmanager</url-pattern>
+    <url-pattern>/itprojektreport/reportgenerator</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>ITProjektSS18Gruppe3.html</welcome-file>
+    <welcome-file>KontaktmanagerReport.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
