@@ -1,29 +1,60 @@
 package de.hdm.itprojektss18Gruppe3.shared.bo;
 
+/**
+ * Die Klasse Eigenschaft steht in einer 1:n Beziehung zu Kontakt und Nutzer.
+ * Die Klasse Eigenschaft steht in einer n:m Beziehung zu Eigenschaftsausprägung.
+ * Eigenschaft beschreibt ein Kontakt bzw. einen Nutzer. Diese wird dann später von der 
+ * Eigenschaftsausprägung ergänzt bzw. beschrieben.
+ * 
+ * @version 1.0 04 May 2018
+ * @author Giuseppe Galati
+ *
+ */
+
 public class Eigenschaft extends BusinessObject {
 
 	/**
-	 * Dient zum Serialisieren von Objekten für eine RPC fähigen austausch zwischen Server und Client.
+	 * Dient zum Serialisieren von Objekten für eine RPC fähigen Austausch zwischen Server und Client.
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	String bezeichnung = "";
+	/**
+	 * Bezeichnung der Eigenschaft 
+	 */
+	private String bezeichnung = "";
+	
+	/**
+	 * Status der Kontakteigenschaft
+	 */
+	private int status = 0;
+	
+	/**
+	 * Auslesen des Statuses
+	 * @return status
+	 */
+	public int getStatus() {
+		return status;
+	}
+	/**
+	 * Setzen des Statuses
+	 * @param status
+	 */
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
 	/**
-	 * Konstruktor
+	 * Auslesen der Bezeichnung
+	 * @return bezeichnung
 	 */
-	public Eigenschaft(){
-		
-	}
-	
-	public Eigenschaft(String bezeichnung){
-		this.bezeichnung = bezeichnung;
-	}
-
 	public String getBezeichnung() {
 		return bezeichnung;
 	}
 
+	/**
+	 * Setzen der Bezeichnung
+	 * @param bezeichnung
+	 */
 	public void setBezeichnung(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
 	}
