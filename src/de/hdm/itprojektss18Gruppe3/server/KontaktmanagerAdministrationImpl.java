@@ -177,4 +177,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		
 	}
 	
+	public Eigenschaftsauspraegung updateEigenschaftsauspraegung(Eigenschaftsauspraegung eigenschaftsauspraegung){
+		
+	}
+	
+	public void deleteEigenschaftsauspraegung(Eigenschaftsauspraegung eigenschaftsauspraegung){
+		
+	}
+	
 }
