@@ -15,17 +15,17 @@ public class KontaktKontaktliste {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * ID der Kontaktliste 
+	 * Fremdschlüsselbeziehung zur Kontaktliste 
 	 */
 	private int kontaktlisteID = 0;
 	
 	/**
-	 * ID des Kontakts 
+	 * Fremdschlüsselbeziehung zum Kontakt 
 	 */
 	private int kontaktID = 0;
 
 	/**
-	 * Auslesen der KontaktlisteID
+	 * Auslesen der Fremdschlüsselbeziehung zur Kontaktliste 
 	 * @return kontaktlisteID
 	 */
 	public int getKontaktlisteID() {
@@ -33,7 +33,7 @@ public class KontaktKontaktliste {
 	}
 
 	/**
-	 * Setzen der KontaktlisteID
+	 * Setzen der Fremdschlüsselbeziehung zur Kontaktliste 
 	 * @param kontaktlisteID
 	 */
 	public void setKontaktlisteID(int kontaktlisteID) {
@@ -41,7 +41,7 @@ public class KontaktKontaktliste {
 	}
 
 	/**
-	 * Auslesen der KontaktID
+	 * Auslesen der Fremdschlüsselbeziehung zum Kontakt 
 	 * @return kontaktID
 	 */
 	public int getKontaktID() {
@@ -49,7 +49,7 @@ public class KontaktKontaktliste {
 	}
 
 	/**
-	 * Setzen der KontaktID
+	 * Setzen der Fremdschlüsselbeziehung zum Kontakt 
 	 * @param kontaktID
 	 */
 	public void setKontaktID(int kontaktID) {

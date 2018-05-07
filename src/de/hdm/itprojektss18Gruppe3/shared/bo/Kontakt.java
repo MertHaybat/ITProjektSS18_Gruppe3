@@ -25,7 +25,7 @@ public class Kontakt {
 	/**
 	 * Erzeugungsdatum des Kontakts 
 	 */
-	private Date erzeuguungsdatum = null;
+	private Date erzeugungsdatum = null;
 	
 	/**
 	 * Modifikationsdatum des Kontakts 
@@ -51,11 +51,6 @@ public class Kontakt {
 	 * NutzerID des Kontakts 
 	 */
 	private int nutzerID = 0;
-	
-	/**
-	 * EigenschaftsID des Kontakts 
-	 */
-	private int eigenschaftID = 0;
 
 	/**
 	 * Auslesen des Kontaktnamens
@@ -74,19 +69,19 @@ public class Kontakt {
 	}
 
 	/**
-	 * Auslesen des Erzeuguungsdatums
-	 * @return erzeuguungsdatum
+	 * Auslesen des Erzeugungsdatums
+	 * @return erzeugungsdatum
 	 */
-	public Date getErzeuguungsdatum() {
-		return erzeuguungsdatum;
+	public Date getErzeugungsdatum() {
+		return erzeugungsdatum;
 	}
 
 	/**
-	 * Setzen der Erzeuguungsdatums
-	 * @param erzeuguungsdatum
+	 * Setzen der Erzeugungsdatums
+	 * @param erzeugungsdatum
 	 */
-	public void setErzeuguungsdatum(Date erzeuguungsdatum) {
-		this.erzeuguungsdatum = erzeuguungsdatum;
+	public void setErzeugungsdatum(Date erzeugungsdatum) {
+		this.erzeugungsdatum = erzeugungsdatum;
 	}
 
 	/**
@@ -167,21 +162,5 @@ public class Kontakt {
 	 */
 	public void setNutzerID(int nutzerID) {
 		this.nutzerID = nutzerID;
-	}
-
-	/**
-	 * Auslesen der EigenschaftID
-	 * @return eigenschaftID
-	 */
-	public int getEigenschaftID() {
-		return eigenschaftID;
-	}
-
-	/**
-	 * Setzen der EigenschaftID
-	 * @param eigenschaftID
-	 */
-	public void setEigenschaftID(int eigenschaftID) {
-		this.eigenschaftID = eigenschaftID;
 	}
 }

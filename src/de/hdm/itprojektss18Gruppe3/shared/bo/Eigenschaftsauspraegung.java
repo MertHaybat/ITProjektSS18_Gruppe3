@@ -21,7 +21,7 @@ public class Eigenschaftsauspraegung {
 	private String wert = "";
 	
 	/**
-	 * ID des Eigentümers 
+	 * Fremdschlüsselbeziehung zum Eigentümer der Eigenschaftsausprägung  
 	 */
 	private int eigentuemerID = 0;
 
@@ -42,7 +42,7 @@ public class Eigenschaftsauspraegung {
 	}
 
 	/**
-	 * Auslesen der EigentümerID
+	 * Auslesen der Fremdschlüsselbeziehung zum Eigentümer der Eigenschaftsausprägung
 	 * @return eigentuemerID
 	 */
 	public int getEigentuemerID() {
@@ -50,7 +50,7 @@ public class Eigenschaftsauspraegung {
 	}
 
 	/**
-	 * Setzen der EigentümerID
+	 * Setzen der Fremdschlüsselbeziehung zum Eigentümer der Eigenschaftsausprägung
 	 * @param eigentuemerID
 	 */
 	public void setEigentuemerID(int eigentuemerID) {

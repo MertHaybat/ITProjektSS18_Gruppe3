@@ -15,24 +15,25 @@ public class EigenschaftEigenschaftsauspraegung {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * ID der Eigenschaft 
+	 * Fremdschlüsselbeziehung zur Eigenschaft 
 	 */
 	private int eigenschaftID = 0;
 	
 	/**
-	 * ID der Eigenschaftsausprägung 
+	 * Fremdschlüsselbeziehung zur Eigenschaftsausprägung 
 	 */
 	private int eigenschaftsauspraegungID = 0;
 	
 	
 	/**
-	 * ID des Kontakts 
+	 * Fremdschlüsselbeziehung zum Kontakt 
 	 */
 	private int kontaktID = 0;
 
 
 	/**
-	 * Auslesen der eigenschaftID
+	 * Auslesen der Fremdschlüsselbeziehung zur Eigenschaft
+
 	 * @return eigenschaftID
 	 */
 	public int getEigenschaftID() {
@@ -40,7 +41,8 @@ public class EigenschaftEigenschaftsauspraegung {
 	}
 
 	/**
-	 * Setzen der eigenschaftID
+	 * Setzen der Fremdschlüsselbeziehung zur Eigenschaft 
+
 	 * @param eigenschaftID
 	 */
 	public void setEigenschaftID(int eigenschaftID) {
@@ -48,7 +50,7 @@ public class EigenschaftEigenschaftsauspraegung {
 	}
 
 	/**
-	 * Auslesen der eigenschaftsauspraegungID
+	 * Auslesen der Fremdschlüsselbeziehung zur Eigenschaftsausprägung
 	 * @return eigenschaftsauspraegungID
 	 */
 	public int getEigenschaftsauspraegungID() {
@@ -56,7 +58,7 @@ public class EigenschaftEigenschaftsauspraegung {
 	}
 
 	/**
-	 * Setzen der eigenschaftsauspraegungID
+	 * Setzen der Fremdschlüsselbeziehung zur Eigenschaftsausprägung
 	 * @param eigenschaftsauspraegungID
 	 */
 	public void setEigenschaftsauspraegungID(int eigenschaftsauspraegungID) {
@@ -64,7 +66,7 @@ public class EigenschaftEigenschaftsauspraegung {
 	}
 
 	/**
-	 * Auslesen der kontaktID
+	 * Auslesen der Fremdschlüsselbeziehung zur Eigenschaft 
 	 * @return kontaktID
 	 */
 	public int getKontaktID() {
@@ -72,7 +74,7 @@ public class EigenschaftEigenschaftsauspraegung {
 	}
 
 	/**
-	 * Setzen der kontaktID
+	 * Setzen der Fremdschlüsselbeziehung zur Eigenschaft 
 	 * @param kontaktID
 	 */
 	public void setKontaktID(int kontaktID) {

@@ -17,27 +17,27 @@ public class Teilhaberschaft {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * ID des Kontakts 
+	 * Fremdschlüsselbeziehung zum Kontakt  
 	 */
 	private int kontaktID = 0;
 	
 	/**
-	 * ID der Kontaktliste 
+	 * Fremdschlüsselbeziehung zur Kontaktliste
 	 */
 	private int kontaktlisteID = 0;
 
 	/**
-	 * ID der Eigenschaftsausprägung 
+	 * Fremdschlüsselbeziehung zur Eigenschaftsausprägung 
 	 */
 	private int eigenschaftsauspraegungID = 0;
 
 	/**
-	 * ID des Nutzers 
+	 * Fremdschlüsselbeziehung zum Nutzer
 	 */
 	private int nutzerID = 0;
 	
 	/**
-	 * Auslesen der KontaktID
+	 * Auslesen der Fremdschlüsselbeziehung zum Kontakt 
 	 * @return kontaktID
 	 */
 	public int getKontaktID() {
@@ -45,7 +45,7 @@ public class Teilhaberschaft {
 	}
 
 	/**
-	 * Setzen der KontaktID
+	 * Setzen der Fremdschlüsselbeziehung zum Kontakt 
 	 * @param kontaktID
 	 */
 	public void setKontaktID(int kontaktID) {
@@ -53,7 +53,7 @@ public class Teilhaberschaft {
 	}
 
 	/**
-	 * Auslesen der KontaktlisteID
+	 * Auslesen der Fremdschlüsselbeziehung zur Kontaktliste
 	 * @return kontaktlisteID
 	 */
 	public int getKontaktlisteID() {
@@ -61,7 +61,7 @@ public class Teilhaberschaft {
 	}
 
 	/**
-	 * Setzen der KontaktlisteID
+	 * Setzen der Fremdschlüsselbeziehung zur Kontaktliste
 	 * @param kontaktlisteID
 	 */
 	public void setKontaktlisteID(int kontaktlisteID) {
@@ -69,7 +69,7 @@ public class Teilhaberschaft {
 	}
 
 	/**
-	 * Auslesen der eigenschaftsauspraegungID
+	 * Auslesen Fremdschlüsselbeziehung zur Eigenschaftsausprägung
 	 * @return eigenschaftsauspraegungID
 	 */
 	public int getEigenschaftsauspraegungID() {
@@ -77,7 +77,7 @@ public class Teilhaberschaft {
 	}
 
 	/**
-	 * Setzen der eigenschaftsauspraegungID
+	 * Setzen der Fremdschlüsselbeziehung zur Eigenschaftsausprägung
 	 * @param eigenschaftsauspraegungID
 	 */
 	public void setEigenschaftsauspraegungID(int eigenschaftsauspraegungID) {
@@ -85,7 +85,7 @@ public class Teilhaberschaft {
 	}
 
 	/**
-	 * Auslesen der NutzerID
+	 * Auslesen der Fremdschlüsselbeziehung zum Nutzer
 	 * @return nutzerID
 	 */
 	public int getNutzerID() {
@@ -93,7 +93,7 @@ public class Teilhaberschaft {
 	}
 
 	/**
-	 * Setzen der nutzerID
+	 * Setzen der Fremdschlüsselbeziehung zum Nutzer
 	 * @param nutzerID
 	 */
 	public void setNutzerID(int nutzerID) {
