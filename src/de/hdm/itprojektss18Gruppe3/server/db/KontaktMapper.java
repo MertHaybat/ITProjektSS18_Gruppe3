@@ -324,8 +324,181 @@ public class KontaktMapper {
 		return null;
 	}
 	
-}
+	/**
+	 * Die Methode findKontaktByEmail ermoeglicht das Suchen nach einem Kontakt durch seine GoogleMail
+	 * 
+	 * @param googleMail
+	 * @return kontakt
+	 * @return null
+	 */
+	
+	public Kontakt findKontaktByEmail(String googleMail) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		
+		Connection con = DBConnection.connection();
+		
+		/**
+		 * Try and Catch gehoeren zum Exception Handling
+		 * Try = Versuch erst dies
+		 * Catch = Wenn Try fehlschlaegt, versuch es so
+		 */
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontakt WHERE GoogleMail= ? ");
+			stmt.setString(1, googleMail);
+			
+			/**
+			 * Statement das an die DB gesendet wird
+			 */
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				Kontakt kontakt = new Kontakt();
+				kontakt.setId(rs.getInt("ID"));
+				kontakt.setName(rs.getString("Name"));
+				kontakt.setErzeugungsdatum(rs.getDate("Erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("Modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("Status"));
+				kontakt.setGoogleMail(rs.getString("GoogleMail"));
+				kontakt.setKontaktlisteID(rs.getInt("Kontaktliste_ID"));
+				kontakt.setNutzerID(rs.getInt("Nutzer_ID"));
+				
+				return kontakt;
+			}
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+	
+	/**
+	 * Die Methode ermoeglicht die Ausgabe eines Kontaktes, die im Vekotr<Kontakt> gespeichert sind, anhand der nutzerID.
+	 * 
+	 * @param nutzerID
+	 * @return result
+	 */
+	
+	public Vector<Kontakt> findKontaktByNutzerID(int nutzerID) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		
+		Connection con = DBConnection.connection();
+		
+		Vector<Kontakt> result = new Vector<Kontakt>();
 
+		/**
+		 * Try and Catch gehoeren zum Exception Handling
+		 * Try = Versuch erst dies
+		 * Catch = Wenn Try fehlschlaegt, versuch es so
+		 */
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontakt WHERE id= " + nutzerID);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			/**
+			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
+			 */
+			
+			while(rs.next()) {
+				Kontakt kontakt = new Kontakt();
+				kontakt.setId(rs.getInt("ID"));
+				kontakt.setName(rs.getString("Name"));
+				kontakt.setErzeugungsdatum(rs.getDate("Erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("Modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("Status"));
+				kontakt.setGoogleMail(rs.getString("GoogleMail"));
+				kontakt.setKontaktlisteID(rs.getInt("Kontaktliste_ID"));
+				kontakt.setNutzerID(rs.getInt("Nutzer_ID"));
+				
+				/**
+				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 */
+				
+				result.addElement(kontakt);
+		}
+	}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		/**
+		 * Ergebnisvektor zurueckgeben
+		 */
+		
+		return result;
+	}
+	
+	/**
+	 * Die Methode ermoeglicht die Ausgabe eines Kontaktes, die im Vekotr<Kontakt> gespeichert sind, anhand der eigenschaftID.
+	 * 
+	 * @param eigenschaftID
+	 * @return result
+	 */
+	
+	public Vector<Kontakt> findKontaktByEigenschaftID(int eigenschaftID) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		
+		Connection con = DBConnection.connection();
+		
+		Vector<Kontakt> result = new Vector<Kontakt>();
+
+		/**
+		 * Try and Catch gehoeren zum Exception Handling
+		 * Try = Versuch erst dies
+		 * Catch = Wenn Try fehlschlaegt, versuch es so
+		 */
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontakt WHERE id= " + eigenschaftID);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			/**
+			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
+			 */
+			
+			while(rs.next()) {
+				Kontakt kontakt = new Kontakt();
+				kontakt.setId(rs.getInt("ID"));
+				kontakt.setName(rs.getString("Name"));
+				kontakt.setErzeugungsdatum(rs.getDate("Erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("Modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("Status"));
+				kontakt.setGoogleMail(rs.getString("GoogleMail"));
+				kontakt.setKontaktlisteID(rs.getInt("Kontaktliste_ID"));
+				kontakt.setNutzerID(rs.getInt("Nutzer_ID"));
+				
+				/**
+				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 */
+				
+				result.addElement(kontakt);
+		}
+	}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		/**
+		 * Ergebnisvektor zurueckgeben
+		 */
+		
+		return result;
+	}
+}
 
 
 
