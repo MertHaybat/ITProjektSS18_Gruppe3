@@ -9,7 +9,7 @@ package de.hdm.itprojektss18Gruppe3.shared.bo;
  * @author Giuseppe Galati
  *
  */
-public class Teilhaberschaft {
+public class Teilhaberschaft extends BusinessObject{
 
 	/**
 	 * Dient zum Serialisieren von Objekten für eine RPC fähigen Austausch zwischen Server und Client.

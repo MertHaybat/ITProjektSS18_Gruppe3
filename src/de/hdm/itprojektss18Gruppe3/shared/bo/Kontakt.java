@@ -10,7 +10,7 @@ import java.util.Date;
  * @author Giuseppe Galati
  *
  */
-public class Kontakt {
+public class Kontakt extends BusinessObject{
 	
 	/**
 	 * Dient zum Serialisieren von Objekten für eine RPC fähigen Austausch zwischen Server und Client.
