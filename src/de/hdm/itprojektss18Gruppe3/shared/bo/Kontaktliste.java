@@ -8,7 +8,7 @@ package de.hdm.itprojektss18Gruppe3.shared.bo;
  * @author Giuseppe Galati
  *
  */
-public class Kontaktliste {
+public class Kontaktliste extends BusinessObject{
 
 	/**
 	 * Dient zum Serialisieren von Objekten für eine RPC fähigen Austausch zwischen Server und Client.

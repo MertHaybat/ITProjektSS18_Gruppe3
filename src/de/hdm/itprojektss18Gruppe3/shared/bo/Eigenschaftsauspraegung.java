@@ -8,7 +8,7 @@ package de.hdm.itprojektss18Gruppe3.shared.bo;
  *
  */
 
-public class Eigenschaftsauspraegung {
+public class Eigenschaftsauspraegung extends BusinessObject{
 
 	/**
 	 * Dient zum Serialisieren von Objekten für eine RPC fähigen Austausch zwischen Server und Client.
