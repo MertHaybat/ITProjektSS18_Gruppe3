@@ -6,7 +6,7 @@ package de.hdm.itprojektss18Gruppe3.shared.bo;
  * Daher beherbergt die Klasse Teilhaberschaft  neben ihrer eigenen ID außerdem die Fremdschlüssel der Klassen 
  * Kontakt, Kontaktliste, Eigenschaftsausprägung und Nutzer.
  * @version 1.0 06 May 2018
- * @author Giuseppe Galati
+ * @author Giuseppe Galati, Mert Haybat
  *
  */
 public class Teilhaberschaft extends BusinessObject{
@@ -32,10 +32,15 @@ public class Teilhaberschaft extends BusinessObject{
 	private int eigenschaftsauspraegungID = 0;
 
 	/**
-	 * Fremdschlüsselbeziehung zum Nutzer
+	 * Fremdschlüsselbeziehung zum Nutzer seitens Eigentümer
 	 */
-	private int nutzerID = 0;
+	private int eigentuemerID = 0;
 	
+	/**
+	 * Fremdschlüsselbeziehung zum Nutzer seitens Teilhabender
+	 */
+	private int teilhabenderID = 0;
+
 	/**
 	 * Auslesen der Fremdschlüsselbeziehung zum Kontakt 
 	 * @return kontaktID
@@ -85,21 +90,35 @@ public class Teilhaberschaft extends BusinessObject{
 	}
 
 	/**
-	 * Auslesen der Fremdschlüsselbeziehung zum Nutzer
-	 * @return nutzerID
+	 * Auslesen der Fremdschlüsselbeziehung zum Nutzer seitens Eigentümer
+	 * @return eigentuemerID
 	 */
-	public int getNutzerID() {
-		return nutzerID;
+	public int getEigentuemerID() {
+		return eigentuemerID;
+	}
+	
+	/**
+	 * Setzen der Fremdschlüsselbeziehung zum Nutzer seitens Eigentümer
+	 * @param eigentuemerID
+	 */
+	public void setEigentuemerID(int eigentuemerID) {
+		this.eigentuemerID = eigentuemerID;
 	}
 
 	/**
-	 * Setzen der Fremdschlüsselbeziehung zum Nutzer
-	 * @param nutzerID
+	 * Auslesen der Fremdschlüsselbeziehung zum Nutzer seitens Teilhabender
+	 * @return teilhabenderID
 	 */
-	public void setNutzerID(int nutzerID) {
-		this.nutzerID = nutzerID;
+	public int getTeilhabenderID() {
+		return teilhabenderID;
 	}
-
 	
+	/**
+	 * Setzen der Fremdschlüsselbeziehung zum Nutzer seitens Teilhabender
+	 * @param teilhabenderID
+	 */
+	public void setTeilhabenderID(int teilhabenderID) {
+		this.teilhabenderID = teilhabenderID;
+	}
 	
 }

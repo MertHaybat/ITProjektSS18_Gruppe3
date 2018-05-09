@@ -16,9 +16,9 @@ public class Kontaktliste extends BusinessObject{
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * Fremdschlüsselbeziehung zum Kontakt 
+	 * Fremdschlüsselbeziehung zum Nutzer 
 	 */
-	private int kontaktID = 0;
+	private int nutzerID = 0;
 	
 	/**
 	 * Bezeichnung der Kontaktliste 
@@ -26,19 +26,19 @@ public class Kontaktliste extends BusinessObject{
 	private String bezeichnung = "";
 
 	/**
-	 * Auslesen der Fremdschlüsselbeziehung zum Kontakt 
-	 * @return kontaktID
+	 * Auslesen der Fremdschlüsselbeziehung zum Nutzer 
+	 * @return nutzerID
 	 */
-	public int getKontaktID() {
-		return kontaktID;
+	public int getNutzerID() {
+		return nutzerID;
 	}
 
 	/**
-	 * Setzen der Fremdschlüsselbeziehung zum Kontakt 
-	 * @param kontaktID
+	 * Setzen der Fremdschlüsselbeziehung zum Nutzer 
+	 * @param nutzerID
 	 */
-	public void setKontaktID(int kontaktID) {
-		this.kontaktID = kontaktID;
+	public void setNutzerID(int nutzerID) {
+		this.nutzerID = nutzerID;
 	}
 
 	/**

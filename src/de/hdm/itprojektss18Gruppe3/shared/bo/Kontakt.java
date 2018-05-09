@@ -7,10 +7,10 @@ import java.util.Date;
  * Daher besitz die Klasse Kontakt eine n:m Beziehung zur Klasse Kontaktliste
  * Die Klasse Kontakt besitzt eine 1:n Beziehung zu Eigenschaft.
  * @version 1.0 06 May 2018
- * @author Giuseppe Galati
+ * @author Giuseppe Galati, Mert Haybat
  *
  */
-public class Kontakt extends BusinessObject{
+public class Kontakt extends Person{
 	
 	/**
 	 * Dient zum Serialisieren von Objekten für eine RPC fähigen Austausch zwischen Server und Client.
@@ -36,16 +36,6 @@ public class Kontakt extends BusinessObject{
 	 * Status des Kontakts 
 	 */
 	private int status = 0;
-	
-	/**
-	 * GoogleMail-Adresse des Kontakts 
-	 */
-	private String googleMail = "";
-	
-	/**
-	 * KontaktlisteID des Kontakts 
-	 */
-	private int kontaktlisteID = 0;
 	
 	/**
 	 * NutzerID des Kontakts 
@@ -116,38 +106,6 @@ public class Kontakt extends BusinessObject{
 		this.status = status;
 	}
 
-	/**
-	 * Auslesen der GoogleMail-Adresse
-	 * @return googleMail
-	 */
-	public String getGoogleMail() {
-		return googleMail;
-	}
-
-	/**
-	 * Setzen der GoogleMail-Adresse
-	 * @param googleMail
-	 */
-	public void setGoogleMail(String googleMail) {
-		this.googleMail = googleMail;
-	}
-
-	/**
-	 * Auslesen der KontaktlisteID
-	 * @return kontaktlisteID
-	 */
-	public int getKontaktlisteID() {
-		return kontaktlisteID;
-	}
-
-	/**
-	 * Setzen der KontaktlisteID
-	 * @param kontaktlisteID
-	 */
-	public void setKontaktlisteID(int kontaktlisteID) {
-		this.kontaktlisteID = kontaktlisteID;
-	}
-	
 	/**
 	 * Auslesen der NutzerID
 	 * @return nutzerID
