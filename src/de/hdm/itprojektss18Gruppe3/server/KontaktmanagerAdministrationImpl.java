@@ -15,15 +15,15 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 @SuppressWarnings("serial")
 public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet implements KontaktmanagerAdministration {
 
-	private TeilhaberschaftMapper teilhaberschaftMapper;
+	private TeilhaberschaftMapper teilhaberschaftMapper = null;
 	
-	private KontaktMapper kontaktMapper;
+	private KontaktMapper kontaktMapper = null;
 	
-	private KontaktlisteMapper kontaktlisteMapper;
+	private KontaktlisteMapper kontaktlisteMapper = null;
 	
-	private EigenschaftMapper eigenschaftMapper;
+	private EigenschaftMapper eigenschaftMapper = null;
 	
-	private EigenschaftsauspraegungMapper eigenschaftauspraegungMapper;
+	private EigenschaftsauspraegungMapper eigenschaftauspraegungMapper = null;
 	
 	
 	
