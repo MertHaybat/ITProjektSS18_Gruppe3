@@ -2,12 +2,12 @@ package de.hdm.itprojektss18Gruppe3.shared.bo;
 
 /**
  * Die Klasse Eigenschaft steht in einer 1:n Beziehung zu Kontakt und Nutzer.
- * Die Klasse Eigenschaft steht in einer n:m Beziehung zu Eigenschaftsausprägung.
+ * Die Klasse Eigenschaft steht in einer 1:n Beziehung zu Eigenschaftsausprägung.
  * Eigenschaft beschreibt ein Kontakt bzw. einen Nutzer. Diese wird dann später von der 
  * Eigenschaftsausprägung ergänzt bzw. beschrieben.
  * 
  * @version 1.0 04 May 2018
- * @author Giuseppe Galati
+ * @author Giuseppe Galati, Mert Haybat
  *
  */
 
