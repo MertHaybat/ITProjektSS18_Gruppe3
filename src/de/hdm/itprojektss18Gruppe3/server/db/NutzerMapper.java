@@ -10,9 +10,8 @@ import java.util.Vector;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 /**
- * 
+ * @version 1.10 07 May 2018
  * @author ersinbarut
- *
  */
 
 	/**
@@ -20,7 +19,11 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 	 */
 public class NutzerMapper extends PersonMapper{
 	
-
+	/**
+	 * Die Klasse NutzerMapper wird nur einmal instantiiert.
+	 * Hier spricht man von einem sogenannten Singleton.
+	 * Durch static nur einmal vorhanden.
+	 */
 	private static NutzerMapper nutzerMapper = null;
 	
 	/**
@@ -38,6 +41,13 @@ public class NutzerMapper extends PersonMapper{
 	 * @return nutzerMapper
 	 * @see createNutzer
 	 */
+	public static NutzerMapper nutzerMapper(){
+		if (nutzerMapper == null){
+			nutzerMapper = new NutzerMapper();
+		}
+		return nutzerMapper;
+	}
+	
 	
 	public Nutzer createNutzer(Nutzer nutzer){
 		
@@ -132,6 +142,12 @@ public class NutzerMapper extends PersonMapper{
 			}
 	}	
 	
+	/**
+	 * Methode um alle Nutzer zurückzugeben
+	 * @param nutzerid
+	 * @return result 
+	 * gibt als Result alle Nutzer zurück
+	 */
 	public Vector<Nutzer> findAllNutzer(int nutzerid) {
 		
 		/**
