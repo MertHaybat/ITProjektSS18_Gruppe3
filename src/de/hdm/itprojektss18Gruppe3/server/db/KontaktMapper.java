@@ -12,12 +12,12 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.*;
 
 
 /**
- * Class description noch einfuegen!
+ * Class description noch einfügen!
  * @version 1.10 07 May 2018
  * @author wahidvanaki
  *
  */
-public class KontaktMapper {
+public class KontaktMapper{
 	
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
@@ -26,12 +26,11 @@ public class KontaktMapper {
 	 * Hier spricht man von einem sogenannten Singleton.
 	 * Durch static nur einmal vorhanden.
 	 * 
-	 * @see kontaktMapper
 	 */
 	private static KontaktMapper kontaktMapper = null;
 	
 	/**
-	 * Geschuetzter Konstruktor - verhindert die Moeglichkeit, mit "new"
+	 * Geschützter Konstruktor - verhindert die Möglichkeit, mit "new"
 	 * neue Instanzen dieser Klasse zu erzeugen.
 	 * 
 	 */
@@ -43,23 +42,20 @@ public class KontaktMapper {
 	 * Sie stellt die Singleton-Eigenschaft sicher.
 	 * Methode soll nur über diese statische Methode aufgerufen werden
 	 * @return kontaktMapper
-	 * @see kontaktMapper
 	 */
 	public static KontaktMapper kontaktMapper() {
 		if (kontaktMapper == null){
-			kontaktMapper = new KontaktMapper();
-		}
+				kontaktMapper = new KontaktMapper();
+			}
 		return kontaktMapper;	
 	}
 	
 	/**
-	 * Die Methode ermoeglicht das Einfuegen von Objekten "Kontakt".
-	 * Insert SQL = Erstellen von einem Datensatz und das Einfuegen in die Datenbank.
+	 * Die Methode ermöglicht das Einfügen von Objekten "Kontakt".
 	 *
-	 *@return kontakt
-	 *@see insertKontakt
+	 *@return kontakt vom Objekt Kontakt
 	 */
-	public Kontakt insertKontakt(Kontakt kontakt) {
+	public Kontakt createKontakt(Kontakt kontakt) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -67,17 +63,12 @@ public class KontaktMapper {
 		Connection con = DBConnection.connection();
 		java.sql.Date sqlDate = new java.sql.Date(kontakt.getErzeugungsdatum().getTime());
 		java.sql.Date sqlDate1 = new java.sql.Date(kontakt.getModifikationsdatum().getTime());
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */	
+			
 		try {
 			Statement stmt = con.createStatement();
 			
 			/**
-			 * Was ist der momentan hoechste Primaerschluessel
+			 * Was ist der momentan höchste Primärschlüssel
 			 */		
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
 					+ "FROM kontakt ");
@@ -85,16 +76,16 @@ public class KontaktMapper {
 			if(rs.next()) {
 				
 				/**
-				 * Die Variable erhaelt den hoechsten Primaerschluessel inkrementiert um 1
+				 * Die Variable erhält den höchsten Primärschlüssel inkrementiert um 1
 				 */			
 				kontakt.setId(rs.getInt("maxid") + 1);
 				
 				/**
-				 * Druchfuehren der Einfuege Operation via Prepared Statement
+				 * Durchführen der Einfüge Operation via Prepared Statement
 				 */				
 				PreparedStatement stmt1 = con.prepareStatement(
 						"INSERT INTO kontakt(id, name, erzeugungsdatum, modifikationsdatum, status, nutzerid) "
-						+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?) ",
+						+ "VALUES(?, ?, ?, ?, ?, ?) ",
 								
 				Statement.RETURN_GENERATED_KEYS);
 				stmt1.setInt(1, kontakt.getId());
@@ -104,25 +95,33 @@ public class KontaktMapper {
 				stmt1.setInt(5, kontakt.getStatus());
 				stmt1.setInt(6, kontakt.getNutzerID());
 				
-				System.out.println(stmt);
+				//System.out.println(stmt);
 				stmt1.executeUpdate();			
 			}
 		}
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		return kontakt;
 	}
 	
 	/**
-	 * Mit dieser Methode updateKontakt wird das Aktualisieren eines Objektes vom "Kontakt" ermoeglicht.
+	 * Mit dieser Methode updateKontakt wird das Aktualisieren eines Objektes vom "Kontakt" ermöglicht.
 	 * 
-	 * @param kontakt
-	 * @return kontakt
-	 * @see updateKontakt
+	 * @param kontakt 
+	 * @return kontakt vom Objekt Kontakt
 	 */
 	public Kontakt updateKontakt(Kontakt kontakt) {
-		String sql = "UPDATE kontakt SET name= ?, erzeugungsdatum= ?, modifikationsdatum= ?, status= ? WHERE id= ? ";
+		String sql = "UPDATE kontakt SET name= ?, erzeugungsdatum= ?, modifikationsdatum= ?, status= ? WHERE id= id ";
 		java.sql.Date sqlDate= new java.sql.Date(kontakt.getErzeugungsdatum().getTime());
 		java.sql.Date sqlDate1 = new java.sql.Date(kontakt.getModifikationsdatum().getTime());
 		
@@ -130,12 +129,7 @@ public class KontaktMapper {
 		 * Verbindung zur DB Connection
 		 */		
 		Connection con = DBConnection.connection();
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */		
+				
 		try {
 			PreparedStatement stmt = con.prepareStatement(sql);
 			
@@ -152,17 +146,25 @@ public class KontaktMapper {
 		catch(SQLException e2){
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		
 		/**
-		 * Das Aktualisierte Objekt "Kontakt" wird zurueckgegeben.
+		 * Das Aktualisierte Objekt "Kontakt" wird zurückgegeben.
 		 */		
 		return kontakt;
 	}
 	
 	/**
-	 * Die Methode deleteKontakt ermoeglicht das Loeschen vom Objekt "Kontakt"
+	 * Die Methode deleteKontakt ermöglicht das Löschen vom Objekt "Kontakt"
 	 * @param kontakt
-	 * @see deleteKontakt
 	 */	
 	public void deleteKontakt(Kontakt kontakt) {
 		
@@ -170,16 +172,11 @@ public class KontaktMapper {
 		 * Verbindung zur DB Connection
 		 */		
 		Connection con = DBConnection.connection();
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */		
+			
 		try {
 			
 			/**
-			 * Durchfuehren der Loeschoperation
+			 * Durchführen der Löschoperation
 			 */			
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontakt " 
 					+ "WHERE id= id ");
@@ -190,14 +187,23 @@ public class KontaktMapper {
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+		if (con!=null) 
+			try {
+				con.close();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
-	 * Diese Methode durchlaeuft den kompletten Vector und liefert alle Datensätze die im Vector<Kontakt> gespeichert sind.
+	 * Diese Methode durchläuft den kompletten Vector und liefert alle Datensätze die im Vector<Kontakt> gespeichert sind.
 	 * @return result
-	 * @see findAllKontakt
+	 * @throws SQLException 
 	 */	
-	public Vector<Kontakt> findAllKontakt() {
+	public Vector<Kontakt> findAllKontakt(){
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -205,12 +211,7 @@ public class KontaktMapper {
 		Connection con = DBConnection.connection();
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */		
+				
 		try {
 			
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt ORDER BY name ASC ");
@@ -218,7 +219,7 @@ public class KontaktMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			/**
-			 * Fuer jeden Eintrag im Suchergebnis wird nun ein Kontakt-Objekt erstellt.
+			 * Für jeden Eintrag im Suchergebnis wird nun ein Kontakt-Objekt erstellt.
 			 */			
 			while(rs.next()) {
 				Kontakt kontakt = new Kontakt();
@@ -231,28 +232,36 @@ public class KontaktMapper {
 				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				
 				/**
-				 * Hinzufuegen des neuen Objektes zum Ergebnisvektor
+				 * Hinzufügen des neuen Objektes zum Ergebnisvektor
 				 */				
-				result.addElement(kontakt);
+				result.addElement(kontakt);				
 			}
 		}
 		catch(SQLException e2) {
 			e2.printStackTrace();
-		}
+		} 
 		
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */		
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		return result;
 	}
 	
 	/**
-	 * Die Methode findKontaktByKontaktID ermoeglicht das suchen nach einem Kontakt nach kontaktID
+	 * Die Methode findKontaktByKontaktID ermöglicht das suchen nach einem Kontakt nach kontaktID
 	 * 
 	 * @param id
-	 * @return kontakt
-	 * @return null
-	 * @see findByKontaktID
+	 * @return kontakt vom Objekt Kontakt
+	 * @return null falls bisher kein Objekt vom Kontakt erstellt wurde
 	 */	
 	public Kontakt findKontaktByKontaktID(int id) {
 		
@@ -261,17 +270,12 @@ public class KontaktMapper {
 		 */		
 		Connection con = DBConnection.connection();
 		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */	
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE id= id ");
 			stmt.setInt(1, id);
 			
 			/**
-			 * Statement ausfuellen und an die DB senden
+			 * Statement ausfüllen und an die DB senden
 			 */			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -292,15 +296,23 @@ public class KontaktMapper {
 			e2.printStackTrace();
 			return null;
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		return null;
 	}
 	
 	/**
-	 * Die Methode ermoeglicht die Ausgabe eines Kontaktes, die im Vekotr<Kontakt> gespeichert sind, anhand der nutzerid.
+	 * Die Methode ermöglicht die Ausgabe eines Kontaktes, die im Vekotr<Kontakt> gespeichert sind, anhand der nutzerid.
 	 * 
 	 * @param nutzerid
 	 * @return result
-	 * @see findKontaktByNutzerID
 	 */
 	public Vector<Kontakt> findKontaktByNutzerID(int nutzerid) {
 		
@@ -311,11 +323,6 @@ public class KontaktMapper {
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
 
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */	
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE nutzerid= " + nutzerid);
 			
@@ -335,27 +342,35 @@ public class KontaktMapper {
 				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				
 				/**
-				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
 				 */			
 				result.addElement(kontakt);
+			}
 		}
-	}
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */		
 		return result;
 	}
 	
 	/**
-	 * Die Methode ermoeglicht die Ausgabe eines Kontaktes, die im Vekotr<Kontakt> gespeichert sind, anhand der eigenschaftID.
+	 * Die Methode ermöglicht die Ausgabe eines Kontaktes, die im Vekotr<Kontakt> gespeichert sind, anhand der eigenschaftid.
 	 * 
 	 * @param eigenschaftid
 	 * @return result
-	 * @see findKontaktByEigenschaftID
 	 */
 	public Vector<Kontakt> findKontaktByEigenschaftID(int eigenschaftid) {
 		
@@ -366,11 +381,6 @@ public class KontaktMapper {
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
 
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE id= " + eigenschaftid);
 			
@@ -392,7 +402,7 @@ public class KontaktMapper {
 				//eigenschaft.setId(rs.getInt("id"));
 				
 				/**
-				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
 				 */
 				result.addElement(kontakt);
 			}
@@ -400,20 +410,29 @@ public class KontaktMapper {
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */
 		return result;
 	}
 	
 	/**
-	 * Alle Kontakte aus dem Vector<Kontakt> in einer Kontaktliste kontaktlisteID ausgeben
+	 * Alle Kontakte aus dem Vector<Kontakt> in einer Kontaktliste kontaktlisteid ausgeben
 	 * 
 	 * @param kontaktlisteid
 	 * @return result
 	 */
-	public Vector<Kontakt> getAllKontakteByKontaktliste(int kontaktlisteid) {
+	public Vector<Kontakt> findAllKontakteByKontaktliste(int kontaktlisteid) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -422,11 +441,6 @@ public class KontaktMapper {
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
 
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE kontaktlisteid= " + kontaktlisteid);
 			
@@ -450,28 +464,37 @@ public class KontaktMapper {
 				//kontaktliste.setKontaktID(rs.getInt("kontaktid"));
 				
 				/**
-				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
 				 */
 				result.addElement(kontakt);
+			}
 		}
-	}
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */
 		return result;
 	}
 		
 	/**
-	 * Alle Kontakte aus dem Vector<Kontakt> in einer Teilhaberschaft über die kontaktID ausgeben
+	 * Alle Kontakte aus dem Vector<Kontakt> in einer Teilhaberschaft über die kontaktid ausgeben
 	 * 
 	 * @param kontaktid
 	 * @return result
 	 */
-	public Vector<Kontakt> getAllKontakteByTeilhaberschaft(int kontaktid) {
+	public Vector<Kontakt> findAllKontakteByTeilhaberschaft(int kontaktid) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -480,11 +503,6 @@ public class KontaktMapper {
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
 
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE id= " + kontaktid);
 			
@@ -507,17 +525,26 @@ public class KontaktMapper {
 				//teilhaberschaft.setKontaktID(rs.getInt("Kontakt_ID"));
 				
 				/**
-				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
 				 */
 				result.addElement(kontakt);
+			}
 		}
-	}
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */
 		return result;
 	}
