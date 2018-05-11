@@ -1,10 +1,20 @@
 package de.hdm.itprojektss18Gruppe3.server;
 
+import java.util.Vector;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss18Gruppe3.server.db.KontaktMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.KontaktlisteMapper;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministration;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 
 /**
@@ -36,7 +46,7 @@ implements KontaktmanagerAdministration {
 	private KontaktMapper kontaktMapper = null;
 	
 	/**
-	 * Ein No-Argument-Konstruktor f�r die Client-seitige Erzeugung
+	 * Ein No-Argument-Konstruktor f�r die Client-seitige Erzeugung
 	 * von GWT.create
 	 * 
 	 * @see #init()
@@ -47,7 +57,7 @@ implements KontaktmanagerAdministration {
 	}
 
 	/**
-	 * Initialsierungsmethode. Diese Methode muss f�r jede Instanz von
+	 * Initialsierungsmethode. Diese Methode muss f�r jede Instanz von
 	 * KontaktmanagerAdministrationImpl aufgerufen werden.
 	 * 
 	 * @see ReportGeneratorImpl()
@@ -56,6 +66,219 @@ implements KontaktmanagerAdministration {
 	public void init() throws IllegalArgumentException {
 		this.kontaktlisteMapper = KontaktlisteMapper.kontaktlisteMapper();
 		this.kontaktMapper = KontaktMapper.kontaktMapper();		
+	}
+
+	/**
+	 * Überprüfen eines Nutzers nach der E-Mail Adresse
+	 * 
+	 *@param email; die GoogleMail Adresse des Nutzers
+	 *@return Nutzer; Objekt der Klasse Nutzer wird zurückgegeben
+	 */
+	@Override
+	public Nutzer checkEmail(String email) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Erstellen einer Eigenschaftsausprägung
+	 * 
+	 * @param wert; wert ist die Ausprägung einer Eigenschaft
+	 * @param personID; personID definiert Nutzer/Kontakt dem die Eigenschaftsausprägung gehört
+	 * @param status; status sagt aus, ob diese Eigenschaftsausprägung geteilt wurde oder nicht geteilt wurde
+	 * @param eigenschaftID; ist die dazu gehörige Eigenschaft
+	 * @return Eigenschaftsauspraegung; Zurückgegeben wird ein Objekt der Klasse Eigenschaftsauspraegung
+	 */
+	@Override
+	public Eigenschaftsauspraegung createEigenschaftsauspraegung(String wert, int personID, int status,
+			int eigenschaftID) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Erstellen einer Eigenschaft
+	 * 	
+	 * @param bezeichnung; bezeichnung sagt aus was die Eigenschaft ist
+	 * @return Eigenschaft; ein Eigenschaftsobjekt wird zurückgegeben
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Eigenschaft createEigenschaft(String bezeichnung) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Erstellen einer KontaktKontaktliste
+	 * 
+	 * @param kontaktID; ist die KontaktID die ausgewählt wurde
+	 * @param kontaktlisteID; ist die KontaktlisteID die ausgewählt wurde
+	 * @return KontaktKontaktliste Objekt
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public KontaktKontaktliste createKontaktKontaktliste(int kontaktID, int kontaktlisteID)
+			throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Alle Kontakte einer Kontaktliste anzeigen lassen
+	 * 
+	 * @param k; Objekt der Klasse Kontaktliste, hier wird die KontaktlisteID herausgenommen
+	 * @return Vector des Typs Kontakt
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Vector <Kontakt> findAllKontakteByKontaktlisteID(Kontaktliste k) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/**
+	 * Kontakte mit der Kontakt ID anzeigen lassen
+	 * 
+	 * @param k; Objekt der Klasse Kontakt, hier wird die KontaktID herausgenommen
+	 * @return Objekt der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
+	public Kontakt findKontaktByID(Kontakt k) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * Alle Eigenschaftsausprägung einer Person (Nutzer/Kontakt) anzeigen lassen
+	 * 
+	 * @param p; Objekt der Klasse Person, hier wird die PersonID herausgenommen
+	 * @return Vector des Typs Eigenschaftsauspraegung
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Vector <Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByPersonID(Person p) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Alle Eigenschaften einer Person anzeigen lassen
+	 * 
+	 * @param e; Objekt der Klasse Eigenschaft, hier wird die EigenschaftID herausgenommen
+	 * @return Vector des Typs Eigenschaft
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Vector<Eigenschaft> findAllEigenschaftByEigenschaftIDFromPerson(Eigenschaft e) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * Alle Kontakte von einer Eigenschaftsausprägung anzeigen lassen. Dies ist die Suchfunktion.
+	 * 
+	 * @param e; Objekt der Klasse Eigenschaftsausprägung
+	 * @return Vector des Typs Kontakt
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Vector<Kontakt> findAllKontaktByEigenschaftsauspraegung(Eigenschaftsauspraegung e)
+			throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Alle Eigenschaftsausprägungen einer Eigenschaft anzeigen lassen
+	 * 
+	 * @param e; Objekt der Klasse Eigenschaft
+	 * @return Vector des Typs Eigenschaftsausprägung
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByEigenschaftID(Eigenschaft e)
+			throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * Alle Eigenschaftsausprägung durch dessen Wert anzeigen lassen. Diese Methode ist Teil der Suchfunktion
+	 * 
+	 * @param e; Objekt der Klasse Eigenschaftsausprägung
+	 * @return Vector des Typs Eigenschaftsausprägung
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung e)
+			throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/**
+	 * Löschen einer Person (Nutzer/Kontakt)
+	 * 
+	 * @param p; Objekt der Klasse Person
+	 * @return Objekt des Typs Person
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Person deletePerson(Person p) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Löschen der Beziehung zwischen KontaktKontaktliste
+	 * 
+	 * @param k; Objekt der Klasse KontaktKontaktliste
+	 * @return Objekt des Typs KontaktKontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public KontaktKontaktliste deleteKontaktKontaktliste(KontaktKontaktliste k) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Löschen einer Teilhaberschaft mit der PersonID
+	 * 
+	 * @param t; Objekt der Klasse Teilhaberschaft
+	 * @return Objekt des Typs Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Teilhaberschaft deleteTeilhaberschaftByPersonID(Teilhaberschaft t) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * Löschen einer Kontaktliste mit der NutzerID
+	 * 
+	 * @param k; Objekt der Klasse Kontaktliste
+	 * @return Objekt des Typs Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Kontaktliste deleteKontaktlisteByNutzerID(Kontaktliste k) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Löschen einer Eigenschaftsausprägung mit der PersonID
+	 * 
+	 * @param e; Objekt der Klasse Eigenschaftsauspraegung
+	 * @return Objekt des Typs Eigenschaftsauspraegung
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Eigenschaftsauspraegung deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e)
+			throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

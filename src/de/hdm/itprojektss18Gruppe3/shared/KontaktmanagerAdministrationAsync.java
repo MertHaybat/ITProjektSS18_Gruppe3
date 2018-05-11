@@ -1,9 +1,20 @@
 package de.hdm.itprojektss18Gruppe3.shared;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
+
 /**
- * Das asynchrone Gegenstück des Interface {@link KontaktmanagerAdministration}.
+ * Das asynchrone Gegenstï¿½ck des Interface {@link KontaktmanagerAdministration}.
  * Es wird semiautomatisch durch das Google Plugin erstellt und gepflegt.
  * 
  * @author Thomas, Mert
@@ -11,5 +22,41 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface KontaktmanagerAdministrationAsync {
 
 	void init(AsyncCallback<Void> callback);
+
+	void checkEmail(String email, AsyncCallback<Nutzer> callback);
+
+	void createEigenschaftsauspraegung(String wert, int personID, int status, int eigenschaftID,
+			AsyncCallback<Eigenschaftsauspraegung> callback);
+
+	void createEigenschaft(String bezeichnung, AsyncCallback<Eigenschaft> callback);
+
+	void createKontaktKontaktliste(int kontaktID, int kontaktlisteID, AsyncCallback<KontaktKontaktliste> callback);
+
+	void findAllKontakteByKontaktlisteID(Kontaktliste k, AsyncCallback<Vector<Kontakt>> callback);
+
+	void findKontaktByID(Kontakt k, AsyncCallback<Kontakt> callback);
+
+	void findAllEigenschaftsauspraegungByPersonID(Person p, AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
+
+	void findAllEigenschaftByEigenschaftIDFromPerson(Eigenschaft e, AsyncCallback<Vector<Eigenschaft>> callback);
+
+	void findAllKontaktByEigenschaftsauspraegung(Eigenschaftsauspraegung e, AsyncCallback<Vector<Kontakt>> callback);
+
+	void findAllEigenschaftsauspraegungByEigenschaftID(Eigenschaft e,
+			AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
+
+	void findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung e,
+			AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
+
+	void deletePerson(Person p, AsyncCallback<Person> callback);
+
+	void deleteKontaktKontaktliste(KontaktKontaktliste k, AsyncCallback<KontaktKontaktliste> callback);
+
+	void deleteTeilhaberschaftByPersonID(Teilhaberschaft t, AsyncCallback<Teilhaberschaft> callback);
+
+	void deleteKontaktlisteByNutzerID(Kontaktliste k, AsyncCallback<Kontaktliste> callback);
+
+	void deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e,
+			AsyncCallback<Eigenschaftsauspraegung> callback);
 	
 }
