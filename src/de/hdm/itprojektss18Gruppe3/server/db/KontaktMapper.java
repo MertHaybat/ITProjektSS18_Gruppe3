@@ -17,7 +17,6 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.*;
  * @author wahidvanaki
  *
  */
-
 public class KontaktMapper {
 	
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -27,9 +26,8 @@ public class KontaktMapper {
 	 * Hier spricht man von einem sogenannten Singleton.
 	 * Durch static nur einmal vorhanden.
 	 * 
-	 * @see kontaktMapper()
+	 * @see kontaktMapper
 	 */
-	
 	private static KontaktMapper kontaktMapper = null;
 	
 	/**
@@ -37,18 +35,16 @@ public class KontaktMapper {
 	 * neue Instanzen dieser Klasse zu erzeugen.
 	 * 
 	 */
-
 	protected KontaktMapper() {	
 	};
 	
 	/**
-	 * Kann aufgerufen werden durch KontaktMapper.kontaktMapper.
+	 * Kann aufgerufen werden durch KontaktMapper kontaktMapper.
 	 * Sie stellt die Singleton-Eigenschaft sicher.
 	 * Methode soll nur über diese statische Methode aufgerufen werden
 	 * @return kontaktMapper
 	 * @see kontaktMapper
 	 */
-	
 	public static KontaktMapper kontaktMapper() {
 		if (kontaktMapper == null){
 			kontaktMapper = new KontaktMapper();
@@ -58,18 +54,16 @@ public class KontaktMapper {
 	
 	/**
 	 * Die Methode ermoeglicht das Einfuegen von Objekten "Kontakt".
-	 * Insert SQL = Erstellen und das Einfuegen in die Datenbank.
+	 * Insert SQL = Erstellen von einem Datensatz und das Einfuegen in die Datenbank.
 	 *
 	 *@return kontakt
 	 *@see insertKontakt
 	 */
-	
 	public Kontakt insertKontakt(Kontakt kontakt) {
 		
 		/**
 		 * Verbindung zur DB Connection
-		 */
-		
+		 */	
 		Connection con = DBConnection.connection();
 		java.sql.Date sqlDate = new java.sql.Date(kontakt.getErzeugungsdatum().getTime());
 		java.sql.Date sqlDate1 = new java.sql.Date(kontakt.getModifikationsdatum().getTime());
@@ -78,32 +72,28 @@ public class KontaktMapper {
 		 * Try and Catch gehoeren zum Exception Handling
 		 * Try = Versuch erst dies
 		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
-		
+		 */	
 		try {
 			Statement stmt = con.createStatement();
 			
 			/**
 			 * Was ist der momentan hoechste Primaerschluessel
-			 */
-			
+			 */		
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
-					+ "FROM Kontakt ");
+					+ "FROM kontakt ");
 			
 			if(rs.next()) {
 				
 				/**
 				 * Die Variable erhaelt den hoechsten Primaerschluessel inkrementiert um 1
-				 */
-				
+				 */			
 				kontakt.setId(rs.getInt("maxid") + 1);
 				
 				/**
 				 * Druchfuehren der Einfuege Operation via Prepared Statement
-				 */
-				
+				 */				
 				PreparedStatement stmt1 = con.prepareStatement(
-						"INSERT INTO Kontakt(ID, Name, Erzeugungsdatum, Modifikationsdatum, Status, GoogleMail, Kontaktliste_ID, Nutzer_ID) "
+						"INSERT INTO kontakt(id, name, erzeugungsdatum, modifikationsdatum, status, nutzerid) "
 						+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?) ",
 								
 				Statement.RETURN_GENERATED_KEYS);
@@ -112,9 +102,7 @@ public class KontaktMapper {
 				stmt1.setDate(3, sqlDate);
 				stmt1.setDate(4, sqlDate1);
 				stmt1.setInt(5, kontakt.getStatus());
-				stmt1.setString(6, kontakt.getGoogleMail());
-				stmt1.setInt(7, kontakt.setKontaktlisteID());
-				stmt1.setInt(8, kontakt.setNutzerID());
+				stmt1.setInt(6, kontakt.getNutzerID());
 				
 				System.out.println(stmt);
 				stmt1.executeUpdate();			
@@ -134,22 +122,20 @@ public class KontaktMapper {
 	 * @see updateKontakt
 	 */
 	public Kontakt updateKontakt(Kontakt kontakt) {
-		String sql = "UPDATE Kontakt SET Name= ?, Erzeugungsdatum= ?, Modifikationsdatum= ?, Status= ?, GoogleMail= ? WHERE ID= ? ";
+		String sql = "UPDATE kontakt SET name= ?, erzeugungsdatum= ?, modifikationsdatum= ?, status= ? WHERE id= ? ";
 		java.sql.Date sqlDate= new java.sql.Date(kontakt.getErzeugungsdatum().getTime());
 		java.sql.Date sqlDate1 = new java.sql.Date(kontakt.getModifikationsdatum().getTime());
 		
 		/**
 		 * Verbindung zur DB Connection
-		 */
-		
+		 */		
 		Connection con = DBConnection.connection();
 		
 		/**
 		 * Try and Catch gehoeren zum Exception Handling
 		 * Try = Versuch erst dies
 		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
-		
+		 */		
 		try {
 			PreparedStatement stmt = con.prepareStatement(sql);
 			
@@ -157,9 +143,8 @@ public class KontaktMapper {
 			stmt.setDate(2, sqlDate);
 			stmt.setDate(3, sqlDate1);
 			stmt.setInt(4, kontakt.getStatus());
-			stmt.setString(5, kontakt.getGoogleMail());
 			
-			stmt.setInt(6, kontakt.getId());
+			stmt.setInt(5, kontakt.getId());
 			stmt.executeUpdate();
 			
 			System.out.println("Update complete");
@@ -170,41 +155,37 @@ public class KontaktMapper {
 		
 		/**
 		 * Das Aktualisierte Objekt "Kontakt" wird zurueckgegeben.
-		 */
-		
+		 */		
 		return kontakt;
 	}
 	
 	/**
 	 * Die Methode deleteKontakt ermoeglicht das Loeschen vom Objekt "Kontakt"
 	 * @param kontakt
-	 */
-	
+	 * @see deleteKontakt
+	 */	
 	public void deleteKontakt(Kontakt kontakt) {
 		
 		/**
 		 * Verbindung zur DB Connection
-		 */
-		
+		 */		
 		Connection con = DBConnection.connection();
 		
 		/**
 		 * Try and Catch gehoeren zum Exception Handling
 		 * Try = Versuch erst dies
 		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
-		
+		 */		
 		try {
 			
 			/**
 			 * Durchfuehren der Loeschoperation
-			 */
+			 */			
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontakt " 
+					+ "WHERE id= id ");
 			
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM Kontakt " 
-					+ "WHERE ID= ? ");
 			stmt.setInt(1, kontakt.getId());
 			stmt.executeUpdate();
-			
 		}
 		catch(SQLException e2) {
 			e2.printStackTrace();
@@ -214,14 +195,13 @@ public class KontaktMapper {
 	/**
 	 * Diese Methode durchlaeuft den kompletten Vector und liefert alle Datensätze die im Vector<Kontakt> gespeichert sind.
 	 * @return result
-	 */
-	
+	 * @see findAllKontakt
+	 */	
 	public Vector<Kontakt> findAllKontakt() {
 		
 		/**
 		 * Verbindung zur DB Connection
-		 */
-		
+		 */		
 		Connection con = DBConnection.connection();
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
@@ -230,33 +210,29 @@ public class KontaktMapper {
 		 * Try and Catch gehoeren zum Exception Handling
 		 * Try = Versuch erst dies
 		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
-		
+		 */		
 		try {
 			
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontakt ");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt ORDER BY name ASC ");
 			
 			ResultSet rs = stmt.executeQuery();
 			
 			/**
 			 * Fuer jeden Eintrag im Suchergebnis wird nun ein Kontakt-Objekt erstellt.
-			 */
-			
+			 */			
 			while(rs.next()) {
 				Kontakt kontakt = new Kontakt();
-				kontakt.setId(rs.getInt("ID"));
-				kontakt.setName(rs.getString("Name"));
-				kontakt.setErzeugungsdatum(rs.getDate("Erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("Modifikationsdatum"));
-				kontakt.setStatus(rs.getInt("Status"));
-				kontakt.setGoogleMail(rs.getString("GoogleMail"));
-				kontakt.setKontaktlisteID(rs.getInt("Kontaktliste_ID"));
-				kontakt.setNutzerID(rs.getInt("Nutzer_ID"));
+				
+				kontakt.setId(rs.getInt("id"));
+				kontakt.setName(rs.getString("name"));
+				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("status"));
+				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				
 				/**
 				 * Hinzufuegen des neuen Objektes zum Ergebnisvektor
-				 */
-				
+				 */				
 				result.addElement(kontakt);
 			}
 		}
@@ -266,53 +242,48 @@ public class KontaktMapper {
 		
 		/**
 		 * Ergebnisvektor zurueckgeben
-		 */
-		
+		 */		
 		return result;
 	}
 	
 	/**
-	 * Die Methode findByKontaktID ermoeglicht das suchen nach einem Kontakt nach kontaktId
+	 * Die Methode findKontaktByKontaktID ermoeglicht das suchen nach einem Kontakt nach kontaktID
 	 * 
 	 * @param id
 	 * @return kontakt
-	 * @return null(wenn kein Eintrag vorhanden ist).
-	 */
-	
-	public Kontakt findByKontaktID(int id) {
+	 * @return null
+	 * @see findByKontaktID
+	 */	
+	public Kontakt findKontaktByKontaktID(int id) {
 		
 		/**
 		 * Verbindung zur DB Connection
-		 */
-		
+		 */		
 		Connection con = DBConnection.connection();
 		
 		/**
 		 * Try and Catch gehoeren zum Exception Handling
 		 * Try = Versuch erst dies
 		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
-		
+		 */	
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontakt WHERE ID= ? ");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE id= id ");
 			stmt.setInt(1, id);
 			
 			/**
 			 * Statement ausfuellen und an die DB senden
-			 */
-			
+			 */			
 			ResultSet rs = stmt.executeQuery();
 			
 			if(rs.next()) {
 				Kontakt kontakt = new Kontakt();
-				kontakt.setId(rs.getInt("ID"));
-				kontakt.setName(rs.getString("Name"));
-				kontakt.setErzeugungsdatum(rs.getDate("Erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("Modifikationsdatum"));
-				kontakt.setStatus(rs.getInt("Status"));
-				kontakt.setGoogleMail(rs.getString("GoogleMail"));
-				kontakt.setKontaktlisteID(rs.getInt("Kontaktliste_ID"));
-				kontakt.setNutzerID(rs.getInt("Nutzer_ID"));
+				
+				kontakt.setId(rs.getInt("id"));
+				kontakt.setName(rs.getString("name"));
+				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("status"));
+				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				
 				return kontakt;
 			}
@@ -325,71 +296,17 @@ public class KontaktMapper {
 	}
 	
 	/**
-	 * Die Methode findKontaktByEmail ermoeglicht das Suchen nach einem Kontakt durch seine GoogleMail
+	 * Die Methode ermoeglicht die Ausgabe eines Kontaktes, die im Vekotr<Kontakt> gespeichert sind, anhand der nutzerid.
 	 * 
-	 * @param googleMail
-	 * @return kontakt
-	 * @return null
-	 */
-	
-	public Kontakt findKontaktByEmail(String googleMail) {
-		
-		/**
-		 * Verbindung zur DB Connection
-		 */
-		
-		Connection con = DBConnection.connection();
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
-		
-		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontakt WHERE GoogleMail= ? ");
-			stmt.setString(1, googleMail);
-			
-			/**
-			 * Statement das an die DB gesendet wird
-			 */
-			
-			ResultSet rs = stmt.executeQuery();
-			
-			if(rs.next()) {
-				Kontakt kontakt = new Kontakt();
-				kontakt.setId(rs.getInt("ID"));
-				kontakt.setName(rs.getString("Name"));
-				kontakt.setErzeugungsdatum(rs.getDate("Erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("Modifikationsdatum"));
-				kontakt.setStatus(rs.getInt("Status"));
-				kontakt.setGoogleMail(rs.getString("GoogleMail"));
-				kontakt.setKontaktlisteID(rs.getInt("Kontaktliste_ID"));
-				kontakt.setNutzerID(rs.getInt("Nutzer_ID"));
-				
-				return kontakt;
-			}
-		}
-		catch(SQLException e2) {
-			e2.printStackTrace();
-			return null;
-		}
-		return null;
-	}
-	
-	/**
-	 * Die Methode ermoeglicht die Ausgabe eines Kontaktes, die im Vekotr<Kontakt> gespeichert sind, anhand der nutzerID.
-	 * 
-	 * @param nutzerID
+	 * @param nutzerid
 	 * @return result
+	 * @see findKontaktByNutzerID
 	 */
-	
-	public Vector<Kontakt> findKontaktByNutzerID(int nutzerID) {
+	public Vector<Kontakt> findKontaktByNutzerID(int nutzerid) {
 		
 		/**
 		 * Verbindung zur DB Connection
-		 */
-		
+		 */	
 		Connection con = DBConnection.connection();
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
@@ -398,32 +315,28 @@ public class KontaktMapper {
 		 * Try and Catch gehoeren zum Exception Handling
 		 * Try = Versuch erst dies
 		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
-		
+		 */	
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontakt WHERE id= " + nutzerID);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE nutzerid= " + nutzerid);
 			
 			ResultSet rs = stmt.executeQuery();
 			
 			/**
 			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
-			 */
-			
+			 */		
 			while(rs.next()) {
 				Kontakt kontakt = new Kontakt();
-				kontakt.setId(rs.getInt("ID"));
-				kontakt.setName(rs.getString("Name"));
-				kontakt.setErzeugungsdatum(rs.getDate("Erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("Modifikationsdatum"));
-				kontakt.setStatus(rs.getInt("Status"));
-				kontakt.setGoogleMail(rs.getString("GoogleMail"));
-				kontakt.setKontaktlisteID(rs.getInt("Kontaktliste_ID"));
-				kontakt.setNutzerID(rs.getInt("Nutzer_ID"));
+				
+				kontakt.setId(rs.getInt("id"));
+				kontakt.setName(rs.getString("name"));
+				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("status"));
+				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				
 				/**
 				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
-				 */
-				
+				 */			
 				result.addElement(kontakt);
 		}
 	}
@@ -433,24 +346,22 @@ public class KontaktMapper {
 		
 		/**
 		 * Ergebnisvektor zurueckgeben
-		 */
-		
+		 */		
 		return result;
 	}
 	
 	/**
 	 * Die Methode ermoeglicht die Ausgabe eines Kontaktes, die im Vekotr<Kontakt> gespeichert sind, anhand der eigenschaftID.
 	 * 
-	 * @param eigenschaftID
+	 * @param eigenschaftid
 	 * @return result
+	 * @see findKontaktByEigenschaftID
 	 */
-	
-	public Vector<Kontakt> findKontaktByEigenschaftID(int eigenschaftID) {
+	public Vector<Kontakt> findKontaktByEigenschaftID(int eigenschaftid) {
 		
 		/**
 		 * Verbindung zur DB Connection
 		 */
-		
 		Connection con = DBConnection.connection();
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
@@ -460,31 +371,87 @@ public class KontaktMapper {
 		 * Try = Versuch erst dies
 		 * Catch = Wenn Try fehlschlaegt, versuch es so
 		 */
-		
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontakt WHERE id= " + eigenschaftID);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE id= " + eigenschaftid);
 			
 			ResultSet rs = stmt.executeQuery();
 			
 			/**
 			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
 			 */
-			
 			while(rs.next()) {
 				Kontakt kontakt = new Kontakt();
-				kontakt.setId(rs.getInt("ID"));
-				kontakt.setName(rs.getString("Name"));
-				kontakt.setErzeugungsdatum(rs.getDate("Erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("Modifikationsdatum"));
-				kontakt.setStatus(rs.getInt("Status"));
-				kontakt.setGoogleMail(rs.getString("GoogleMail"));
-				kontakt.setKontaktlisteID(rs.getInt("Kontaktliste_ID"));
-				kontakt.setNutzerID(rs.getInt("Nutzer_ID"));
+				//Eigenschaft eigenschaft = new Eigenschaft();
+				
+				kontakt.setId(rs.getInt("id"));
+				kontakt.setName(rs.getString("name"));
+				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("status"));
+				kontakt.setNutzerID(rs.getInt("nutzerid"));
+				//eigenschaft.setId(rs.getInt("id"));
 				
 				/**
 				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				 */
+				result.addElement(kontakt);
+			}
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		/**
+		 * Ergebnisvektor zurueckgeben
+		 */
+		return result;
+	}
+	
+	/**
+	 * Alle Kontakte aus dem Vector<Kontakt> in einer Kontaktliste kontaktlisteID ausgeben
+	 * 
+	 * @param kontaktlisteid
+	 * @return result
+	 */
+	public Vector<Kontakt> getAllKontakteByKontaktliste(int kontaktlisteid) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+		
+		Vector<Kontakt> result = new Vector<Kontakt>();
+
+		/**
+		 * Try and Catch gehoeren zum Exception Handling
+		 * Try = Versuch erst dies
+		 * Catch = Wenn Try fehlschlaegt, versuch es so
+		 */
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE kontaktlisteid= " + kontaktlisteid);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			/**
+			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
+			 */
+			while(rs.next()) {
+				Kontakt kontakt = new Kontakt();
+				//Kontaktliste kontaktliste = new Kontaktliste ();
 				
+				kontakt.setId(rs.getInt("id"));
+				kontakt.setName(rs.getString("name"));
+				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("status"));
+				kontakt.setNutzerID(rs.getInt("nutzerid"));
+				//kontaktliste.setId(rs.getInt("id"));
+				//kontaktliste.setKontaktlisteID(rs.getInt("kontaktlisteid"));
+				//kontaktliste.setKontaktID(rs.getInt("kontaktid"));
+				
+				/**
+				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 */
 				result.addElement(kontakt);
 		}
 	}
@@ -495,10 +462,67 @@ public class KontaktMapper {
 		/**
 		 * Ergebnisvektor zurueckgeben
 		 */
+		return result;
+	}
 		
+	/**
+	 * Alle Kontakte aus dem Vector<Kontakt> in einer Teilhaberschaft über die kontaktID ausgeben
+	 * 
+	 * @param kontaktid
+	 * @return result
+	 */
+	public Vector<Kontakt> getAllKontakteByTeilhaberschaft(int kontaktid) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+		
+		Vector<Kontakt> result = new Vector<Kontakt>();
+
+		/**
+		 * Try and Catch gehoeren zum Exception Handling
+		 * Try = Versuch erst dies
+		 * Catch = Wenn Try fehlschlaegt, versuch es so
+		 */
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE id= " + kontaktid);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			/**
+			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
+			 */
+			while(rs.next()) {
+				Kontakt kontakt = new Kontakt();
+				//Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+				
+				kontakt.setId(rs.getInt("id"));
+				kontakt.setName(rs.getString("name"));
+				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("status"));
+				kontakt.setNutzerID(rs.getInt("nutzerid"));
+				//teilhaberschaft.setId(rs.getInt("ID"));
+				//teilhaberschaft.setKontaktID(rs.getInt("Kontakt_ID"));
+				
+				/**
+				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 */
+				result.addElement(kontakt);
+		}
+	}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		/**
+		 * Ergebnisvektor zurueckgeben
+		 */
 		return result;
 	}
 }
+	
 
 
 
