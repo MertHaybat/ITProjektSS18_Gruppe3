@@ -10,15 +10,19 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
 /**
  * @version 1.10 07 May 2018
  * @author ersinbarut
- *
+ * Die Klasse PersonMapper gilt als Superklasse für die Klassen NutzerMapper und KontaktMapper
+ * Sie beinhaltet nur die id als Attribut
  */
 
 public class PersonMapper {
 	
 	/**
-	 * Die Klasse PersonMapper gilt als Superklasse für die Klassen NutzerMapper und KontaktMapper
-	 * Sie beinhaltet nur die id als Attribut
+	 * Die Klasse PersonMapper wird nur einmal instantiiert.
+	 * Hier spricht man von einem sogenannten Singleton.
+	 * Durch static nur einmal vorhanden.
 	 */
+	
+	
 	private static PersonMapper personMapper = null;
 
 	/**
