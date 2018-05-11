@@ -10,27 +10,25 @@ import java.util.Vector;
 import de.hdm.itprojektss18Gruppe3.shared.bo.*;
 
 /**
- * Class description noch einfuegen!
+ * Class description noch einfügen!
  * @version 1.10 08 May 2018
  * @author wahidvanaki
  *
  */
 public class KontaktlisteMapper {
-
+	
 	/**
 	 * Die Klasse KontaktlisteMapper wird nur einmal instantiiert.
 	 * Hier spricht man von einem sogenannten Singleton.
 	 * Durch static nur einmal vorhanden.
 	 * 
-	 * @see kontaktlisteMapper
 	 */
 	private static KontaktlisteMapper kontaktlisteMapper = null;
-	
+
 	/**
-	 * Geschuetzter Konstruktor - verhindert die Moeglichkeit, mit "new"
+	 * Geschützter Konstruktor - verhindert die Möglichkeit, mit "new"
 	 * neue Instanzen dieser Klasse zu erzeugen.
 	 * 
-	 * @see KontaktlisteMapper
 	 */
 	protected KontaktlisteMapper() {	
 	};
@@ -40,7 +38,6 @@ public class KontaktlisteMapper {
 	 * Sie stellt die Singleton-Eigenschaft sicher.
 	 * Methode soll nur über diese statische Methode aufgerufen werden
 	 * @return kontaktlisteMapper
-	 * @see kontaktlisteMapper
 	 */
 	public static KontaktlisteMapper kontaktlisteMapper() {
 		if (kontaktlisteMapper == null){
@@ -50,29 +47,22 @@ public class KontaktlisteMapper {
 	}
 	
 	/**
-	 * Die Methode ermoeglicht das Einfuegen von Objekten "Kontaktliste".
-	 * Insert SQL = Erstellen und das Einfuegen in die Datenbank.
-	 *
-	 *@return kontaktliste
-	 *@see insertKontaktliste
+	 * Die Methode ermöglicht das Einfügen von Objekten "Kontaktliste".
+	 * 
+	 *@return kontaktliste vom Objekt Kontaktliste
 	 */
-	public Kontaktliste insertKontaktliste(Kontaktliste kontaktliste) {
+	public Kontaktliste createKontaktliste(Kontaktliste kontaktliste) {
 		
 		/**
 		 * Verbindung zur DB Connection
 		 */	
 		Connection con = DBConnection.connection();
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */	
+			
 		try {
 			Statement stmt = con.createStatement();
 			
 			/**
-			 * Was ist der momentan hoechste Primaerschluessel
+			 * Was ist der momentan höchste Primärschlüssel
 			 */		
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
 					+ "FROM kontaktliste ");
@@ -80,12 +70,12 @@ public class KontaktlisteMapper {
 			if(rs.next()) {
 				
 				/**
-				 * Die Variable erhaelt den hoechsten Primaerschluessel inkrementiert um 1
+				 * Die Variable erhält den höchsten Primärschlüssel inkrementiert um 1
 				 */			
 				kontaktliste.setId(rs.getInt("maxid") + 1);
 				
 				/**
-				 * Druchfuehren der Einfuege Operation via Prepared Statement
+				 * Durchführen der Einfüge Operation via Prepared Statement
 				 */				
 				PreparedStatement stmt1 = con.prepareStatement(
 						"INSERT INTO kontaktliste(id, bezeichnung, nutzerid) "
@@ -94,7 +84,7 @@ public class KontaktlisteMapper {
 				Statement.RETURN_GENERATED_KEYS);
 				stmt1.setInt(1, kontaktliste.getId());
 				stmt1.setString(2, kontaktliste.getBezeichnung());
-				//stmt1.setInt(3, kontaktliste.getKontaktID());
+				stmt1.setInt(3, kontaktliste.getNutzerID());
 				
 				System.out.println(stmt);
 				stmt1.executeUpdate();			
@@ -103,29 +93,32 @@ public class KontaktlisteMapper {
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		return kontaktliste;
 	}
 	
 	/**
-	 * Mit dieser Methode updateKontaktliste wird das Aktualisieren eines Objektes vom "Kontaktliste" ermoeglicht.
+	 * Mit dieser Methode updateKontaktliste wird das Aktualisieren eines Objektes vom "Kontaktliste" ermöglicht.
 	 * 
 	 * @param kontaktliste
-	 * @return kontaktliste
-	 * @see updateKontaktliste
+	 * @return kontaktliste vom Objekt Kontaktliste
 	 */
 	public Kontaktliste updateKontaktliste(Kontaktliste kontaktliste) {
-		String sql = "UPDATE kontaktliste SET bezeichnung= ? WHERE id= ? ";
+		String sql = "UPDATE kontaktliste SET bezeichnung= ? WHERE id= id ";
 		
 		/**
 		 * Verbindung zur DB Connection
 		 */		
 		Connection con = DBConnection.connection();
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */		
+			
 		try {
 			PreparedStatement stmt = con.prepareStatement(sql);
 			
@@ -140,17 +133,24 @@ public class KontaktlisteMapper {
 		catch(SQLException e2){
 			e2.printStackTrace();
 		}
-		
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		/**
-		 * Das Aktualisierte Objekt "Kontaktliste" wird zurueckgegeben.
+		 * Das Aktualisierte Objekt "Kontaktliste" wird zurückgegeben.
 		 */		
 		return kontaktliste;
 	}
 	
 	/**
-	 * Die Methode deleteKontaktliste ermoeglicht das Loeschen vom Objekt "Kontaktliste"
+	 * Die Methode deleteKontaktliste ermöglicht das Löschen vom Objekt "Kontaktliste"
 	 * @param kontaktliste
-	 * @see deleteKontaktliste
 	 */	
 	public void deleteKontaktliste(Kontaktliste kontaktliste) {
 		
@@ -158,19 +158,13 @@ public class KontaktlisteMapper {
 		 * Verbindung zur DB Connection
 		 */		
 		Connection con = DBConnection.connection();
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */		
+				
 		try {
-			
 			/**
-			 * Durchfuehren der Loeschoperation
+			 * Durchführen der Löschoperation
 			 */			
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktliste " 
-					+ "WHERE id= ? ");
+					+ "WHERE id= id ");
 			stmt.setInt(1, kontaktliste.getId());
 			stmt.executeUpdate();
 			
@@ -178,45 +172,84 @@ public class KontaktlisteMapper {
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 	}
 	
 	/**
-	 * Diese Methode durchlaeuft den kompletten Vector und liefert alle Datensätze die im Vector<Kontaktliste> gespeichert sind.
-	 * @return result
-	 * @see findAllKontaktliste
-	 */	
-	public Vector<Kontaktliste> findAllKontaktliste() {
+	 * Die Methode deleteKontaktlisteByNutzerID ermöglicht das Löschen vom Objekt "Kontaktliste" anhand der nutzerid
+	 * @param kontaktliste
+	 */
+	public void deleteKontaktlisteByNutzerID(Kontaktliste kontaktliste) {
+		/**
+		 * Verbindung zur DB Connection
+		 */		
+		Connection con = DBConnection.connection();
 		
+		try {
+			/**
+			 * Durchführen der Löschoperation
+			 */			
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktliste " 
+					+ "WHERE id= nutzerid ");
+			stmt.setInt(1, kontaktliste.getId());
+			stmt.setInt(2, kontaktliste.getNutzerID());
+			stmt.executeUpdate();
+			
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+	}
+	
+	/**
+	 * Diese Methode durchläuft den kompletten Vector und liefert alle Datensätze die im Vector<Kontaktliste> gespeichert sind.
+	 * @return result 
+	 */	
+	public Vector<Kontaktliste> findAllKontaktliste() {	
 		/**
 		 * Verbindung zur DB Connection
 		 */		
 		Connection con = DBConnection.connection();
 		
 		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */		
-		try {
 			
+		try {
+			/**
+			 * Durchführen der Suchfunktion
+			 */
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste ");
 			
 			ResultSet rs = stmt.executeQuery();
 			
 			/**
-			 * Fuer jeden Eintrag im Suchergebnis wird nun ein Kontaktliste-Objekt erstellt.
+			 * Für jeden Eintrag im Suchergebnis wird nun ein Kontaktliste-Objekt erstellt.
 			 */			
 			while(rs.next()) {
 				Kontaktliste kontaktliste = new Kontaktliste();
 				
 				kontaktliste.setId(rs.getInt("id"));
 				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
-				//kontaktliste.setKontaktID(rs.getInt("nutzerid"));
+				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
 				
 				/**
-				 * Hinzufuegen des neuen Objektes zum Ergebnisvektor
+				 * Hinzufügen des neuen Objektes zum Ergebnisvektor
 				 */				
 				result.addElement(kontaktliste);
 			}
@@ -224,34 +257,35 @@ public class KontaktlisteMapper {
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
-		
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */		
 		return result;
 	}
 	
 	/**
-	 * Die Methode ermoeglicht die Ausgabe einer Kontaktliste, die im Vekotr<Kontaktliste> gespeichert sind, anhand der nutzerID.
+	 * Die Methode ermöglicht die Ausgabe einer Kontaktliste, die im Vekotr<Kontaktliste> gespeichert sind, anhand der nutzerid.
 	 * 
 	 * @param nutzerid
 	 * @return result
-	 * @see findKontaktlisteByNutzerID
 	 */
 	public Vector<Kontaktliste> findKontaktlisteByNutzerID(int nutzerid) {
-		
 		/**
 		 * Verbindung zur DB Connection
 		 */	
 		Connection con = DBConnection.connection();
 		
 		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
-
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */	
+		
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE id= " + nutzerid);
 			
@@ -265,30 +299,38 @@ public class KontaktlisteMapper {
 				
 				kontaktliste.setId(rs.getInt("id"));
 				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
-				//kontaktliste.setKontaktID(rs.getInt("nutzerid"));
+				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
 				
 				/**
-				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
 				 */			
 				result.addElement(kontaktliste);
+			}
 		}
-	}
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
-		
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */		
 		return result;
 	}
 	
 	/**
-	 * Das suchen einer Kontaktliste im Vector<Kontaktliste> anhand der kontaktID
+	 * Das Suchen einer Kontaktliste im Vector<Kontaktliste> anhand der kontaktid.
 	 * @param kontaktid
 	 * @return result
 	 */
-	public Vector<Kontaktliste> findKontaktlisteByKontaktID(int kontaktid) {
+	public Vector<Kontaktliste> findAllKontaktlisteByKontaktID(int kontaktid) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -297,13 +339,14 @@ public class KontaktlisteMapper {
 		
 		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
 
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE id= " + kontaktid);
+			PreparedStatement stmt = con.prepareStatement("SELECT `kontaktliste`.`bezeichnung`, `kontaktliste`.`nutzerid`, `kontakt`.`id`"
+					+ "FROM `kontaktliste`"
+					+ "LEFT JOIN `kontaktkontaktliste` "
+					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id`"
+					+ "LEFT JOIN `kontakt` "
+					+ "ON `kontaktkontaktliste`.`kontaktid` = `kontakt`.`id` "
+					+ "WHERE `kontaktkontaktliste`.`id`= " + kontaktid);
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -315,32 +358,39 @@ public class KontaktlisteMapper {
 				
 				kontaktliste.setId(rs.getInt("id"));
 				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
-				//kontaktliste.setKontaktID(rs.getInt("nutzerid"));
-				
+				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
 				
 				/**
-				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
 				 */
 				result.addElement(kontaktliste);
+			}
 		}
-	}
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
-		
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */
 		return result;
 	}
 	
 	/**
-	 * Alle Kontaktlisten aus dem Vector<Kontaktliste> in einer Teilhaberschaft über die kontaktlisteID ausgeben
+	 * Alle Kontaktlisten aus dem Vector<Kontaktliste> in einer Teilhaberschaft über die kontaktlisteid ausgeben.
 	 * 
 	 * @param kontaktlisteid
 	 * @return result
 	 */
-	public Vector<Kontaktliste> getAllKontaktlisteByTeilhaberschaft(int kontaktlisteid) {
+	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int kontaktlisteid) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -349,13 +399,8 @@ public class KontaktlisteMapper {
 		
 		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
 
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE id= " + kontaktlisteid);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste Where id= " + kontaktlisteid);
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -364,25 +409,31 @@ public class KontaktlisteMapper {
 			 */
 			while(rs.next()) {
 				Kontaktliste kontaktliste = new Kontaktliste();
-				//Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 				
 				kontaktliste.setId(rs.getInt("id"));
 				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
-				//kontaktliste.setKontaktID(rs.getInt("nutzerid"));
-				//teilhaberschaft.setKontaktID(rs.getInt("kontaktid"));
+				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
 				
 				/**
-				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
 				 */
 				result.addElement(kontaktliste);
+			}
 		}
-	}
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
-		
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */
 		return result;
 	}
