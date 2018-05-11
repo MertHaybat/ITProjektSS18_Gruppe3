@@ -90,11 +90,20 @@ public class PersonMapper {
 			
 			System.out.println(stmt);
 			stmt1.executeUpdate();			
-		}
-	}
+	      }
+	    }
 		    catch (SQLException e) {
 		      e.printStackTrace();
 		    }
+			finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 
 		    return person;
 		  
@@ -116,5 +125,14 @@ public class PersonMapper {
 		    catch (SQLException e) {
 		      e.printStackTrace();
 		    }
-	  }	
+			finally {	
+				if (con!=null) 
+					try {
+						con.close();
+					}
+					catch(SQLException e) {
+						e.printStackTrace();
+					}
+				}
+	}		
 }

@@ -83,6 +83,15 @@ public class NutzerMapper extends PersonMapper{
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		return nutzer;
 	}
 	
@@ -112,6 +121,15 @@ public class NutzerMapper extends PersonMapper{
 		catch(SQLException e2) {
 			e2.printStackTrace();
 		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 	}	
 	
 	public Vector<Nutzer> findAllNutzer(int nutzerid) {
