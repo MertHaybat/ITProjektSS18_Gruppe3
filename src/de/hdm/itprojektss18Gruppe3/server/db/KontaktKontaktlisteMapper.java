@@ -37,7 +37,7 @@ public class KontaktKontaktlisteMapper {
 	 * Kann aufgerufen werden durch KontaktKontaktlisteMapper kontaktkontaktlisteMapper.
 	 * Sie stellt die Singleton-Eigenschaft sicher.
 	 * Methode soll nur über diese statische Methode aufgerufen werden
-	 * @return kontaktlisteMapper
+	 * @return kontaktkontaktlisteMapper
 	 */
 	public static KontaktKontaktlisteMapper kontaktkontaktlisteMapper() {
 		if (kontaktkontaktlisteMapper == null){
@@ -47,7 +47,7 @@ public class KontaktKontaktlisteMapper {
 	}
 	
 	/**
-	 * 
+	 * Ermöglicht das Einfügen von Objekten "KontaktKontaktliste"
 	 * @param kontaktkontaktliste
 	 * @return kontaktkontaktliste
 	 */
@@ -105,6 +105,11 @@ public class KontaktKontaktlisteMapper {
 		return kontaktkontaktliste;
 	}
 	
+	/**
+	 * Das Löschen von einem Objekt "KontaktKontaktlise"
+	 * 
+	 * @param kontaktkontaktliste
+	 */
 	public void deleteKontaktKontaktliste(KontaktKontaktliste kontaktkontaktliste) {
 		
 		/**
@@ -163,7 +168,7 @@ public class KontaktKontaktlisteMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			/**
-			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
+			 * Für jeden Eintrag KontaktKontaktliste wird ein KontaktKontaktliste-Objekt erstellt.
 			 */
 			while(rs.next()) {
 				KontaktKontaktliste kontaktkontaktliste = new KontaktKontaktliste();
