@@ -10,7 +10,11 @@ import java.util.Vector;
 import de.hdm.itprojektss18Gruppe3.shared.bo.*;
 
 /**
- * Class-Description noch einfügen!
+ * Die Mapper-Klasse KontaktKontaktlisteMapper ermöglicht das Abbilden von Objekten "KontaktKontaktliste"
+ * in einer relationalen Datenbank. Dabei sind in der Mapper-Klassen mehrere Methoden wie das erstellen, suchen oder löschen 
+ * etc. implementiert. Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, 
+ * aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
+ * 
  * @version 1.10 12 May 2018
  * @author wahidvanaki
  *
