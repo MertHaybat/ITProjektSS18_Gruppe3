@@ -96,6 +96,50 @@ public class PersonMapper {
 		    return id;
 		  
 	  }
+	
+	/**
+	 * Mit dieser Methode updatePerson wird das Aktualisieren eines Objektes von "Person" ermöglicht.
+	 * 
+	 * @param person
+	 * @return person vom Objekt Person
+	 */
+	public Person updatePerson(Person person) {
+		
+		/**
+		 * Verbindung zur DB Connection aufbauen
+		 */
+		Connection con = DBConnection.connection();
+		
+		try{
+			
+			/**
+			 * Durchführung der Update-Operation via Prepared Statement
+			 */
+			PreparedStatement stmt = con.prepareStatement("UPDATE `person` SET `id`= ? WHERE id= ?");
+			
+			stmt.setInt(1, person.getId());
+			stmt.setInt(2, person.getId());
+
+			stmt.executeQuery();
+			
+			System.out.println("Updated");
+			
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally{
+			if(con!=null)
+				try{
+					con.close();
+				}
+			catch(SQLException e){
+				e.printStackTrace();
+		}
+	}
+	
+		return person;
+}
+	
 	/**
 	 * Die Methode deletePerson ermoeglicht das Loeschen vom Objekt "Person"
 	 * @param pers

@@ -77,7 +77,7 @@ public class EigenschaftMapper {
 				eigenschaft.setId(rs.getInt("maxid")+1);
 				
 				/**
-				 * Durchführung der Einfüge-Operation via Prepared Statement
+				 * Durchführung der Update-Operation via Prepared Statement
 				 */
 				PreparedStatement stmt1 = con.prepareStatement(
 						"INSERT INTO eigenschaft(id, bezeichnung)" 
@@ -108,12 +108,52 @@ public class EigenschaftMapper {
 	}
 	
 	/**
-	 * An dieser Stelle wird noch die Update und Delete -methode eigefügt
+	 * Mit dieser Methode updateEigenschaft wird das Aktualisieren eines Objektes vom "Eigenschaft" ermöglicht.
+	 * 
+	 * @param eigenschaft
+	 * @return eigenschaft vom Objekt Eigenschaft
 	 */
+	public Eigenschaft updateEigenschaft(Eigenschaft eig) {
+	
+		/**
+		 * Verbindung zur DB Connection aufbauen
+		 */	
+		Connection con = DBConnection.connection();
+		
+		try {
+
+			/**
+			 * Durchführung der Einfüge-Operation via Prepared Statement
+			 */
+			PreparedStatement stmt = con.prepareStatement("UPDATE `eigenschaft` SET `bezeichnung`= ? WHERE id = ?");
+
+			stmt.setString(1, eig.getBezeichnung());
+			stmt.setInt(2, eig.getId());
+
+			stmt.executeUpdate();
+
+			System.out.println("Updated");
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally{
+			if(con!=null)
+				try{
+					con.close();
+				}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+
+		return eig;
+	}
+	
 	
 	/**
 	 * Diese Methode durchläuft den kompletten Vektor und liefert alle Datensätze, die im Vector<Eigenschaft> gespeichert sind.
-	 * @return result
+	 * @return result ist ein Vektor des Typs Eigenschaft
 	 * @see findAllEigenschaft
 	 */
 	
