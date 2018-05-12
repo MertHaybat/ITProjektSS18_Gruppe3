@@ -16,7 +16,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.*;
  * @author wahidvanaki
  *
  */
-public class KontaktMapper{
+public class KontaktMapper {
 	
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
@@ -94,7 +94,7 @@ public class KontaktMapper{
 				stmt1.setInt(5, kontakt.getStatus());
 				stmt1.setInt(6, kontakt.getNutzerID());
 				
-				//System.out.println(stmt);
+				System.out.println(stmt);
 				stmt1.executeUpdate();			
 			}
 		}
