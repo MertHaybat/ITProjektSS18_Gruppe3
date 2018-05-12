@@ -5,7 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 
@@ -114,8 +118,180 @@ public class TeilhaberschaftMapper {
 		
 	}
 	
+	/**
+	 * Methode um alle Teilhaberschaften anhand der von Teilhabern zu finden 
+	 * @return result 
+	 */
+	public Vector<Teilhaberschaft> findTeilhaberschaftByTeilhabenderID(int teilhabenderID) {
+		
+		/**
+		 * Verbindung zur Datenbank
+		 */
+		Connection con = DBConnection.connection();
+		
+		Vector<Teilhaberschaft> result = new Vector <Teilhaberschaft>();
+		
+		try{
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE teilhabenderid=" + teilhabenderID);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			/**
+			 * Für jeden Eintrag Teilhabender wird ein Teilhaberschaft-Objekt erstellt.
+			 */		
+			while(rs.next()) {
+				Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+				
+				teilhaberschaft.setId(rs.getInt("id"));
+				teilhaberschaft.setEigenschaftsauspraegungID(rs.getInt("id"));
+				teilhaberschaft.setKontaktID(rs.getInt("id"));
+				teilhaberschaft.setKontaktlisteID(rs.getInt("id"));
+				teilhaberschaft.setTeilhabenderID(rs.getInt("id"));
+				teilhaberschaft.setEigentuemerID(rs.getInt("id"));
+				
+				/**
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 */	
+				result.addElement(teilhaberschaft);
+			}
+		
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */		
+		return result;
+	}
 	
-	
-	
-	
+	/**
+	 * Methode um alle Teilhaberschaften anhand der von Teilhabern zu finden 
+	 * @return result 
+	 */
+	public Vector<Teilhaberschaft> findTeilhaberschaftByEigentuemerID(int eigentuemerID) {
+		
+		/**
+		 * Verbindung zur Datenbank
+		 */
+		Connection con = DBConnection.connection();
+		
+		Vector<Teilhaberschaft> result = new Vector <Teilhaberschaft>();
+		
+		try{
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE eigentuemerid=" + eigentuemerID);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			/**
+			 * Für jeden Eintrag Teilhabender wird ein Teilhaberschaft-Objekt erstellt.
+			 */		
+			while(rs.next()) {
+				Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+				
+				teilhaberschaft.setId(rs.getInt("id"));
+				teilhaberschaft.setEigenschaftsauspraegungID(rs.getInt("id"));
+				teilhaberschaft.setKontaktID(rs.getInt("id"));
+				teilhaberschaft.setKontaktlisteID(rs.getInt("id"));
+				teilhaberschaft.setTeilhabenderID(rs.getInt("id"));
+				teilhaberschaft.setEigentuemerID(rs.getInt("id"));
+				
+				/**
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 */	
+				result.addElement(teilhaberschaft);
+			}
+		
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */		
+		return result;
+	}
+
+	public void deleteTeilhaberschaftByKontaktID(int kontaktid) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */		
+		Connection con = DBConnection.connection();
+			
+		try {
+			
+			/**
+			 * Durchführen der Löschoperation DELETE FROM `teilhaberschaft` WHERE `nutzerid`=2
+			 */			
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM teilhaberschaft WHERE kontaktid=" + kontaktid);
+			
+			stmt.setInt(1, kontaktid);
+			stmt.executeUpdate();
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+		if (con!=null) 
+			try {
+				con.close();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void deleteTeilhaberschaftByNutzerID(int nutzerid) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */		
+		Connection con = DBConnection.connection();
+			
+		try {
+			
+			/**
+			 * Durchführen der Löschoperation DELETE FROM `teilhaberschaft` WHERE `nutzerid`=2
+			 */			
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM teilhaberschaft WHERE kontaktid=" + nutzerid);
+			
+			stmt.setInt(1, nutzerid);
+			stmt.executeUpdate();
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+		if (con!=null) 
+			try {
+				con.close();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }
