@@ -104,6 +104,50 @@ public class NutzerMapper extends PersonMapper{
 		return nutzer;
 	}
 	
+	/**
+	 * Mit dieser Methode updateNutzer wird das Aktualisieren eines Objektes von "Nutzer" ermöglicht.
+	 * 
+	 * @param nutzer
+	 * @return nutzer vom Objekt Nutzer
+	 */
+	public Nutzer updateNutzer(Nutzer nutzer) {
+		
+		/**
+		 * Verbindung zur DB Connection aufbauen
+		 */	
+		Connection con = DBConnection.connection();
+		
+		try {
+			
+			/**
+			 * Durchführung der Update-Operation via Prepared Statement
+			 */
+			PreparedStatement stmt = con.prepareStatement("UPDATE `nutzer` SET `mail`= ? WHERE id= ?");
+			
+			stmt.setString(1, nutzer.getMail());
+			stmt.setInt(2, nutzer.getId());
+			
+			stmt.executeQuery();
+			
+	System.out.println("Updated");
+			
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally{
+			if(con!=null)
+				try{
+					con.close();
+				}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+
+		return nutzer;
+	}
+	
+	
 	public void deleteNutzer(Nutzer nutzer) {
 		
 		/**

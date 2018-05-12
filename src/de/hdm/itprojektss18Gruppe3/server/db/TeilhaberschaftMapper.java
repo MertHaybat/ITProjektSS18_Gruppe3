@@ -114,8 +114,54 @@ public class TeilhaberschaftMapper {
 		
 	}
 	
+	/**
+	 * Mit dieser Methode updateTeilhaberschaft wird das Aktualisieren eines Objektes von "Teilhaberschaft" ermöglicht.
+	 * 
+	 * @param teilhaberschaft
+	 * @return teilhaberschaft vom Objekt Teilhaberschaft
+	 */	
+	public Teilhaberschaft updateTeilhaberschaft(Teilhaberschaft teilhaberschaft) {
+		
+		/**
+		 * Verbindung zur DB Connection aufbauen
+		 */	
+		Connection con = DBConnection.connection();
+		
+		try {
+		
+			/**
+			 * Durchführung der Update-Operation via Prepared Statement
+			 */
+			PreparedStatement stmt = con.prepareStatement("UPDATE `teilhaberschaft` SET `kontaktlisteid`= ?,"
+					+ "`kontaktid`= ?, `eigenschaftsauspraegungid`= ?, "
+					+ "`teilhabenderid`= ?, `eigentuemerid`= ? WHERE id= ?");
+			stmt.setInt(1, teilhaberschaft.getKontaktlisteID());
+			stmt.setInt(2, teilhaberschaft.getKontaktID());
+			stmt.setInt(3, teilhaberschaft.getEigenschaftsauspraegungID());
+			stmt.setInt(4, teilhaberschaft.getTeilhabenderID());
+			stmt.setInt(5, teilhaberschaft.getEigentuemerID());
+			stmt.setInt(6, teilhaberschaft.getId());
+			
+            stmt.executeQuery();
+			
+			System.out.println("Updated");
+			
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally{
+			if(con!=null)
+				try{
+					con.close();
+				}
+			catch(SQLException e){
+				e.printStackTrace();
+
+		}
+	}
 	
+	return teilhaberschaft;
 	
-	
+	}
 	
 }
