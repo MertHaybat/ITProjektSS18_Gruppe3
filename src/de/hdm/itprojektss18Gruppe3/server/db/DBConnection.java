@@ -13,7 +13,7 @@ public class DBConnection {
 	/**
 	 * Die Klasse DBConnection wird nur einmal instantiiert. 
 	 * Dies nennt sich Singleton. Diese Variable ist durch den Bezeichner
-	 * static nur einmal für sämtliche eventuellen Instanzen dieser Klasse
+	 * static nur einmal fï¿½r sï¿½mtliche eventuellen Instanzen dieser Klasse
 	 * vorhanden.
 	 * 
 	 * @see TeilhaberschaftMapper.teilhaberschaftMapper()
@@ -42,15 +42,14 @@ public class DBConnection {
      * @see con
      */
 	public static Connection connection() {
-		if (con == null){
 			String url = null;
 			try{
 				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production){
-					// Wenn das SystemUmfeld in der GoogleCloud ist wird diese Bedingung erfüllt
+					// Wenn das SystemUmfeld in der GoogleCloud ist wird diese Bedingung erfï¿½llt
 					Class.forName("com.mysql.jdbc.GoogleDriver");
 					url = googleUrl;
 				} else {
-					// Bei der Lokalen MySQL Instanz wird diese Bedingung erfüllt.
+					// Bei der Lokalen MySQL Instanz wird diese Bedingung erfï¿½llt.
 					Class.forName("com.mysql.jdbc.Driver");
 					url = localUrl;
 				}
@@ -64,9 +63,9 @@ public class DBConnection {
 				e.printStackTrace();
 				throw new RuntimeException(e.getMessage());
 			}
-		}
 		
-		// Zurückgeben der Verbindung
+		
+		// Zurï¿½ckgeben der Verbindung
 		return con;	
 	}
 	

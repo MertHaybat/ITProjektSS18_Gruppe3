@@ -35,10 +35,11 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	
 	/**
 	 * Methode zum Anlegen eines neuen Nutzers.
+	 * @param mail; ist die Google E-Mail Adresse des Nutzers
 	 * @return Nutzerobjekt
 	 * @throws IllegalArgumentException
 	 */
-	public Nutzer createNutzer() throws IllegalArgumentException;
+	public Nutzer createNutzer(String mail) throws IllegalArgumentException;
 	
 	/**
 	 * Methode zum Anlegen eines neuen Kontakts.

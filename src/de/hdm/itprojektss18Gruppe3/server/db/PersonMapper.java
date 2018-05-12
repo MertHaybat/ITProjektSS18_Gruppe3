@@ -51,7 +51,7 @@ public class PersonMapper {
 	 *@return person
 	 *@see createPerson
 	 */
-	protected Person createPerson(Person person){
+	protected int createPerson(Person person){
 		 
 	/**
 	 * Verbindung zur Datenbank aufbauen 
@@ -59,15 +59,8 @@ public class PersonMapper {
 	    Connection con = DBConnection.connection();
 	    
 	    
-//	    int id = 0;
-	    
-	    /**
-	     * Try and Catch gehören zum Exception Handling
-	     * Try = Den ersten Versuch starten
-	     * Catch = Falls der Versuch bei Try fehlschlägt, springt es auf Catch 
-	     */
+	    int id = 0;
 	    try {
-	    		
 	      Statement stmt = con.createStatement();
 
 	      /*
@@ -82,12 +75,13 @@ public class PersonMapper {
 	    	 * Die Variable erhält den höchsten Primärschlüssel inkrementiert um 1			
 	    	 */
 	        person.setId(rs.getInt("maxid") + 1);
+	        id=person.getId();
 
 			/**
 			 * Druchfuehren der Einfuege Operation via Prepared Statement
 			 */				
 			PreparedStatement stmt1 = con.prepareStatement(
-					"INSERT INTO person(id) VALUES(?) ",
+					"INSERT INTO person(id) VALUES(?)",
 							
 			Statement.RETURN_GENERATED_KEYS);
 			stmt1.setInt(1, person.getId());
@@ -99,17 +93,7 @@ public class PersonMapper {
 		    catch (SQLException e) {
 		      e.printStackTrace();
 		    }
-			finally {	
-			if (con!=null) 
-				try {
-					con.close();
-				}
-				catch(SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
-		    return person;
+		    return id;
 		  
 	  }
 	/**
@@ -121,22 +105,12 @@ public class PersonMapper {
 		 Connection con = DBConnection.connection();
 
 		    try {
-		      Statement stmt = con.createStatement();
-
-		      stmt.executeUpdate("DELETE FROM person" + " WHERE id=" + person.getId());
-		      
+		      PreparedStatement stmt = con.prepareStatement("DELETE FROM person WHERE id= ?");
+		      stmt.setInt(1, person.getId());
+		      stmt.executeUpdate();
 		    }
 		    catch (SQLException e) {
 		      e.printStackTrace();
 		    }
-			finally {	
-				if (con!=null) 
-					try {
-						con.close();
-					}
-					catch(SQLException e) {
-						e.printStackTrace();
-					}
-				}
-	}		
+	}
 }

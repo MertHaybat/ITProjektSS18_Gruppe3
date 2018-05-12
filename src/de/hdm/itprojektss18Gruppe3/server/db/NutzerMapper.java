@@ -55,36 +55,35 @@ public class NutzerMapper extends PersonMapper{
 		 * Verbindung zur Datenbank wird aufgebaut
 		 */
 		Connection con = DBConnection.connection();
-		
-		/**
-		 * Try and Catch gehoeren zum Exception Handling
-		 * Try = Versuch erst dies
-		 * Catch = Wenn Try fehlschlaegt, versuch es so
-		 */	
+	
 		
 		try {
+			
 			Statement stmt = con.createStatement();
 			
 			/**
+			 * Um die NutzerID zu erstellen, wird eine Person angelegt und später die maxID als NutzerID genommen
+			 */
+			nutzer.setId(super.createPerson(nutzer));
+			
+			/**
 			* Zunächst schauen wir nach, welches der momentan höchste
-			* Primärschlüsselwert ist.
+			* Primärschlüsselwert ist in der Tabelle person.
 			*/		
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
-					+ "FROM nutzer ");	
+					+ "FROM person");	
 			if(rs.next()) {
-			/**
-			 * Die Variable erhaelt den hoechsten Primaerschluessel inkrementiert um 1
-			 */		
-				nutzer.setId(rs.getInt("maxid") + 1);
+		
 			
 			/**
 			 * Druchfuehren der Einfuege Operation via Prepared Statement
 			 */			
 				PreparedStatement stmt1 = con.prepareStatement(
-						"INSERT INTO nutzer(id, mail VALUES(?) ",
+						"INSERT INTO nutzer (id, mail) VALUES (?, ?) ",
 								
 				Statement.RETURN_GENERATED_KEYS);
 				stmt1.setInt(1, nutzer.getId());
+				stmt1.setString(2, nutzer.getMail());
 				
 				System.out.println(stmt);
 				stmt1.executeUpdate();			
@@ -112,21 +111,17 @@ public class NutzerMapper extends PersonMapper{
 		 */		
 		Connection con = DBConnection.connection();
 		
-	    /**
-	     * Try and Catch gehören zum Exception Handling
-	     * Try = Den ersten Versuch starten
-	     * Catch = Falls der Versuch bei Try fehlschlägt, springt es auf Catch 
-	     */
 		try {
 			
 			/**
 			 * Durchfuehren der Loeschoperation
 			 */			
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM nutzer " 
-					+ "WHERE id = id ");
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM nutzer WHERE id= ?");
 			
 			stmt.setInt(1, nutzer.getId());
 			stmt.executeUpdate();
+			
+			super.deletePerson(nutzer);
 		}
 		catch(SQLException e2) {
 			e2.printStackTrace();
@@ -148,7 +143,7 @@ public class NutzerMapper extends PersonMapper{
 	 * @return result 
 	 * gibt als Result alle Nutzer zurück
 	 */
-	public Vector<Nutzer> findAllNutzer(int nutzerid) {
+	public Vector<Nutzer> findAllNutzer() {
 		
 		/**
 		 * Verbindung zur Datenbank aufbauen
@@ -172,6 +167,7 @@ public class NutzerMapper extends PersonMapper{
 				Nutzer nutzer = new Nutzer();
 				
 				nutzer.setId(rs.getInt("id"));
+				nutzer.setMail(rs.getString("mail"));
 
 				
 				/**

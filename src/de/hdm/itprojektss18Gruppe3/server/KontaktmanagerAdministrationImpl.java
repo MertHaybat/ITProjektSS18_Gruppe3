@@ -3,10 +3,14 @@ package de.hdm.itprojektss18Gruppe3.server;
 import java.util.Date;
 import java.util.Vector;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+import de.hdm.itprojektss18Gruppe3.server.db.EigenschaftMapper;
+import de.hdm.itprojektss18Gruppe3.server.db.EigenschaftsauspraegungMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.KontaktMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.KontaktlisteMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.NutzerMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.PersonMapper;
+import de.hdm.itprojektss18Gruppe3.server.db.TeilhaberschaftMapper;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministration;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
@@ -60,6 +64,24 @@ implements KontaktmanagerAdministration {
 	private PersonMapper personMapper = null;
 	
 	/**
+   	 * Referenz auf den EigenschaftsauspraegungMapper, der Eigenschaftsauspraegungobjekte mit der Datenbank
+	 * abgleicht.
+	 */
+	private EigenschaftsauspraegungMapper eigenschaftsauspraegungMapper = null;
+	
+	/**
+   	 * Referenz auf den EigenschaftMapper, der Eigenschaftobjekte mit der Datenbank
+	 * abgleicht.
+	 */
+	private EigenschaftMapper eigenschaftMapper = null;
+	
+	/**
+   	 * Referenz auf den TeilhaberschaftMapper, der Teilhaberschaftobjekte mit der Datenbank
+	 * abgleicht.
+	 */
+	private TeilhaberschaftMapper teilhaberschaftMapper = null;
+	
+	/**
 	 * Ein No-Argument-Konstruktor für die Client-seitige Erzeugung
 	 * Ein No-Argument-Konstruktor f�r die Client-seitige Erzeugung
 	 * von GWT.create
@@ -81,17 +103,22 @@ implements KontaktmanagerAdministration {
 	public void init() throws IllegalArgumentException {
 		this.kontaktlisteMapper = KontaktlisteMapper.kontaktlisteMapper();
 		this.kontaktMapper = KontaktMapper.kontaktMapper();		
-//		this.nutzerMapper = NutzerMapper.nutzerMapper();
+		this.nutzerMapper = NutzerMapper.nutzerMapper();
 		this.personMapper = PersonMapper.personMapper();
+		this.eigenschaftMapper = EigenschaftMapper.eigenschaftMapper();
+		this.eigenschaftsauspraegungMapper = EigenschaftsauspraegungMapper.eigenschaftsauspraegungMapper();
+		this.teilhaberschaftMapper = TeilhaberschaftMapper.teilhaberschaftMapper();
 	}
 
 	/**
 	 * Anlegen eines Nutzers.
+	 * @param mail; ist die Google E-Mail Adresse des Nutzers
 	 */
 	@Override
-	public Nutzer createNutzer() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Nutzer createNutzer(String mail) throws IllegalArgumentException {
+		Nutzer nutzer = new Nutzer();
+		nutzer.setMail(mail);
+		return this.nutzerMapper.createNutzer(nutzer);
 	}
 
 	/**
@@ -323,7 +350,13 @@ implements KontaktmanagerAdministration {
 	 */
 	@Override
 	public Person deletePerson(Person p) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+		
+		// Funktioniert nicht weil Person in Nutzer nicht geht
+		
+		if (p instanceof Nutzer){
+			
+		} else if (p instanceof Kontakt){
+		}
 		return null;
 	}
 
