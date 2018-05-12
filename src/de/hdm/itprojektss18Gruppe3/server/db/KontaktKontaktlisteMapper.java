@@ -136,4 +136,63 @@ public class KontaktKontaktlisteMapper {
 			}
 		}
 	}
+	
+	/**
+	 * Alle KontaktKontaktlisten aus dem Vector<KontaktKontaktliste> die in einer Kontaktliste über die kontaktlisteid im Zusammenhang stehen,
+	 * also die in einer n:m Beziehung stehen, werden ausgegeben.
+	 * 
+	 * @param kontaktlisteid
+	 * @return result
+	 */
+	public Vector<KontaktKontaktliste> findAllKontaktKontaktlisteByKontaktlisteID(int kontaktlisteid) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+		
+		Vector<KontaktKontaktliste> result = new Vector<KontaktKontaktliste>();
+
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT `kontaktkontaktliste`.*, `kontaktliste`.`id`, `kontaktliste`.`bezeichnung`"
+					+ "FROM `kontaktliste` "
+					+ "JOIN `kontaktkontaktliste` "
+					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id` "
+					+ "WHERE `kontaktliste`.`id`= " + kontaktlisteid);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			/**
+			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
+			 */
+			while(rs.next()) {
+				KontaktKontaktliste kontaktkontaktliste = new KontaktKontaktliste();
+				
+				kontaktkontaktliste.setId(rs.getInt("id"));
+				kontaktkontaktliste.setKontaktID(rs.getInt("kontaktid"));
+				kontaktkontaktliste.setKontaktlisteID(rs.getInt("kontaktlisteid"));
+				
+				/**
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 */
+				result.addElement(kontaktkontaktliste);
+			}
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		return result;
+	}
 }
