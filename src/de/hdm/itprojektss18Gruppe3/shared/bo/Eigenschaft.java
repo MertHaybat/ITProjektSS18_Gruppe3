@@ -22,26 +22,6 @@ public class Eigenschaft extends BusinessObject {
 	 * Bezeichnung der Eigenschaft 
 	 */
 	private String bezeichnung = "";
-	
-	/**
-	 * Status der Kontakteigenschaft
-	 */
-	private int status = 0;
-	
-	/**
-	 * Auslesen des Statuses
-	 * @return status
-	 */
-	public int getStatus() {
-		return status;
-	}
-	/**
-	 * Setzen des Statuses
-	 * @param status
-	 */
-	public void setStatus(int status) {
-		this.status = status;
-	}
 
 	/**
 	 * Auslesen der Bezeichnung

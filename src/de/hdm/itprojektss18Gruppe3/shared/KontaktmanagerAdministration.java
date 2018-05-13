@@ -135,11 +135,11 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @param wert; wert ist die Ausprägung einer Eigenschaft
 	 * @param personID; personID definiert Nutzer/Kontakt dem die Eigenschaftsausprägung gehört
 	 * @param status; status sagt aus, ob diese Eigenschaftsausprägung geteilt wurde oder nicht geteilt wurde
-	 * @param eigenschaftID; ist die dazu gehörige Eigenschaft
+	 * @param eigenschaft; ist die dazu gehörige Eigenschaft
 	 * @return Eigenschaftsauspraegung; Zurückgegeben wird ein Objekt der Klasse Eigenschaftsauspraegung
 	 * @throws IllegalArgumentException
 	 */
-	public Eigenschaftsauspraegung createEigenschaftsauspraegung(String wert, int personID, int status, int eigenschaftID) throws IllegalArgumentException;
+	public Eigenschaftsauspraegung createEigenschaftsauspraegung(String wert, int personID, int status, String eigenschaft) throws IllegalArgumentException;
 	
 	/**
 	 * CreateEigenschaft erstellt eine Eigenschaft in der Datenbank.
@@ -227,13 +227,21 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Vector <Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung e) throws IllegalArgumentException;
 	
 	/**
+	 * Löschen eines Kontakts mit der NutzerID
+	 * 
+	 * @param k; Objekt der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteKontaktByNutzerID(Kontakt k) throws IllegalArgumentException;
+		
+	/**
 	 * Löschen einer Person (Nutzer/Kontakt)
 	 * 
 	 * @param p; Objekt der Klasse Person
 	 * @return Objekt des Typs Person
 	 * @throws IllegalArgumentException
 	 */
-	public Person deletePerson(Person p) throws IllegalArgumentException;
+	public void deletePerson(Person p) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen der Beziehung zwischen KontaktKontaktliste
@@ -242,7 +250,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Objekt des Typs KontaktKontaktliste
 	 * @throws IllegalArgumentException
 	 */
-	public KontaktKontaktliste deleteKontaktKontaktliste(KontaktKontaktliste k) throws IllegalArgumentException;
+	public void deleteKontaktKontaktliste(KontaktKontaktliste k) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen einer Teilhaberschaft mit der PersonID
@@ -251,7 +259,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Objekt des Typs Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
-	public Teilhaberschaft deleteTeilhaberschaftByPersonID(Teilhaberschaft t) throws IllegalArgumentException;
+	public void deleteTeilhaberschaftByPersonID(Teilhaberschaft t) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen einer Kontaktliste mit der NutzerID
@@ -260,7 +268,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Objekt des Typs Kontaktliste
 	 * @throws IllegalArgumentException
 	 */
-	public Kontaktliste deleteKontaktlisteByNutzerID(Kontaktliste k) throws IllegalArgumentException;
+	public void deleteKontaktlisteByNutzerID(Kontaktliste k) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen einer Eigenschaftsausprägung mit der PersonID
@@ -269,6 +277,32 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Objekt des Typs Eigenschaftsauspraegung
 	 * @throws IllegalArgumentException
 	 */
-	public Eigenschaftsauspraegung deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e) throws IllegalArgumentException;
+	public void deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e) throws IllegalArgumentException;
+	
+	/**
+	 * Anzeigen einer Eigenschaft anhand der Bezeichnung
+	 * 
+	 * @param e; Objekt der Klasse Eigenschaft
+	 * @return Objekt der Klasse Eigenschaft
+	 * @throws IllegalArgumentException
+	 */
+	public Eigenschaft findEigenschaftByBezeichnung(Eigenschaft e) throws IllegalArgumentException;
+
+	/**
+	 * Anzeigen einer Eigenschaft anhand der ID
+	 * 
+	 * @param e; Objekt der Klasse Eigenschaft
+	 * @return Objekt der Klasse Eigenschaft
+	 * @throws IllegalArgumentException
+	 */
+	public Eigenschaft findEigenschaftByEigenschaftID(Eigenschaft e) throws IllegalArgumentException;
+	
+	/**
+	 * Löschen einer KontaktKontaktliste mit der KontaktID
+	 * 
+	 * @param k; Objekt der Klasse KontaktKontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteKontaktKontaktlisteByKontaktID(KontaktKontaktliste k) throws IllegalArgumentException;
 	
 }

@@ -206,56 +206,53 @@ public class KontaktMapper extends PersonMapper{
 	 * @return kontakt vom Objekt Kontakt
 	 * @return null falls bisher kein Objekt vom Kontakt erstellt wurde
 	 */	
-	public Vector<Kontakt> findKontaktByKontaktID(int id) {
-		
+	public Kontakt findKontaktByKontaktID(int id) {
+
 		/**
 		 * Verbindung zur DB Connection
-		 */	
+		 */
 		Connection con = DBConnection.connection();
-		
-		Vector<Kontakt> result = new Vector<Kontakt>();
-	
+
+		Kontakt k = new Kontakt();
+
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE id= " + id);
-			
+
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE `id` = ?");
+
+			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
-			
+
 			/**
-			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
-			 */		
-			while(rs.next()) {
+			 * Für jeden Eintrag im Suchergebnis wird nun ein Kontakt-Objekt
+			 * erstellt.
+			 */
+			if (rs.next()) {
 				Kontakt kontakt = new Kontakt();
-				
+
 				kontakt.setId(rs.getInt("id"));
 				kontakt.setName(rs.getString("name"));
 				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
 				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
 				kontakt.setStatus(rs.getInt("status"));
 				kontakt.setNutzerID(rs.getInt("nutzerid"));
-				
-				/**
-				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
-				 */			
-				result.addElement(kontakt);
+				k = kontakt;
 			}
-		}
-		catch(SQLException e2) {
+		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-		finally {	
-			if (con!=null) 
-				try {
-					con.close();
-				}
-				catch(SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		
+
 		/**
 		 * Ergebnisvektor zurückgeben
-		 */		
-		return result;
+		 */
+		finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return k;
 	}
 
 	/**
@@ -556,56 +553,53 @@ public class KontaktMapper extends PersonMapper{
 //		return result;
 //	}
 
-	public Vector<Kontakt> findAllKontakteByKontaktID(int id) {
-
-		/**
-		 * Verbindung zur DB Connection
-		 */		
-		Connection con = DBConnection.connection();
-		
-		Vector<Kontakt> result = new Vector<Kontakt>();
-				
-		try {
-			
-			PreparedStatement stmt = con.prepareStatement("SELECT kontakt.*, kontakt.id FROM kontakt");
-			
-			ResultSet rs = stmt.executeQuery();
-			
-			/**
-			 * Für jeden Eintrag im Suchergebnis wird nun ein Kontakt-Objekt erstellt.
-			 */			
-			while(rs.next()) {
-				Kontakt kontakt = new Kontakt();
-				
-				kontakt.setId(rs.getInt("id"));
-				kontakt.setName(rs.getString("name"));
-				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
-				kontakt.setStatus(rs.getInt("status"));
-				kontakt.setNutzerID(rs.getInt("nutzerid"));
-				
-				/**
-				 * Hinzufügen des neuen Objektes zum Ergebnisvektor
-				 */				
-				result.addElement(kontakt);				
-			}
-		}
-		catch(SQLException e2) {
-			e2.printStackTrace();
-		} 
-		
-		/**
-		 * Ergebnisvektor zurückgeben
-		 */		
-		finally {	
-			if (con!=null) 
-				try {
-					con.close();
-				}
-				catch(SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		return result;
-	}
+//	public Kontakt findKontaktByKontaktID(int id) {
+//
+//		/**
+//		 * Verbindung zur DB Connection
+//		 */		
+//		Connection con = DBConnection.connection();
+//		
+//		Kontakt k = new Kontakt();
+//		
+//		try {
+//			
+//			PreparedStatement stmt = con.prepareStatement("SELECT kontakt.*, kontakt.id FROM kontakt WHERE=?");
+//			
+//			stmt.setInt(1, id);
+//			ResultSet rs = stmt.executeQuery();
+//			
+//			/**
+//			 * Für jeden Eintrag im Suchergebnis wird nun ein Kontakt-Objekt erstellt.
+//			 */			
+//			if(rs.next()) {
+//				Kontakt kontakt = new Kontakt();
+//				
+//				kontakt.setId(rs.getInt("id"));
+//				kontakt.setName(rs.getString("name"));
+//				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+//				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+//				kontakt.setStatus(rs.getInt("status"));
+//				kontakt.setNutzerID(rs.getInt("nutzerid"));
+//				k=kontakt;
+//			}
+//		}
+//		catch(SQLException e2) {
+//			e2.printStackTrace();
+//		} 
+//		
+//		/**
+//		 * Ergebnisvektor zurückgeben
+//		 */		
+//		finally {	
+//			if (con!=null) 
+//				try {
+//					con.close();
+//				}
+//				catch(SQLException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		return k;
+//	}
 }

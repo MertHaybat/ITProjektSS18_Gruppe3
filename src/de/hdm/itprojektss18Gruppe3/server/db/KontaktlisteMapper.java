@@ -167,8 +167,7 @@ public class KontaktlisteMapper {
 			/**
 			 * Durchführen der Löschoperation
 			 */			
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktliste " 
-					+ "WHERE id= id ");
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktliste WHERE id= ?");
 			stmt.setInt(1, kontaktliste.getId());
 			stmt.executeUpdate();
 			
@@ -201,10 +200,8 @@ public class KontaktlisteMapper {
 			/**
 			 * Durchführen der Löschoperation
 			 */			
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktliste " 
-					+ "WHERE id= nutzerid ");
-			stmt.setInt(1, kontaktliste.getId());
-			stmt.setInt(2, kontaktliste.getNutzerID());
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktliste WHERE nutzerid= ?");
+			stmt.setInt(1, kontaktliste.getNutzerID());
 			stmt.executeUpdate();
 			
 		}

@@ -49,7 +49,7 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void checkEmail(String email, AsyncCallback<Nutzer> callback);
 
-	void createEigenschaftsauspraegung(String wert, int personID, int status, int eigenschaftID,
+	void createEigenschaftsauspraegung(String wert, int personID, int status, String eigenschaft,
 			AsyncCallback<Eigenschaftsauspraegung> callback);
 
 	void createEigenschaft(String bezeichnung, AsyncCallback<Eigenschaft> callback);
@@ -72,15 +72,22 @@ public interface KontaktmanagerAdministrationAsync {
 	void findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung e,
 			AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
 
-	void deletePerson(Person p, AsyncCallback<Person> callback);
+	void deletePerson(Person p, AsyncCallback<Void> callback);
 
-	void deleteKontaktKontaktliste(KontaktKontaktliste k, AsyncCallback<KontaktKontaktliste> callback);
+	void deleteKontaktKontaktliste(KontaktKontaktliste k, AsyncCallback<Void> callback);
 
-	void deleteTeilhaberschaftByPersonID(Teilhaberschaft t, AsyncCallback<Teilhaberschaft> callback);
+	void deleteTeilhaberschaftByPersonID(Teilhaberschaft t, AsyncCallback<Void> callback);
 
-	void deleteKontaktlisteByNutzerID(Kontaktliste k, AsyncCallback<Kontaktliste> callback);
+	void deleteKontaktlisteByNutzerID(Kontaktliste k, AsyncCallback<Void> callback);
 
-	void deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e,
-			AsyncCallback<Eigenschaftsauspraegung> callback);
+	void deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e, AsyncCallback<Void> callback);
+
+	void findEigenschaftByBezeichnung(Eigenschaft e, AsyncCallback<Eigenschaft> callback);
+
+	void findEigenschaftByEigenschaftID(Eigenschaft e, AsyncCallback<Eigenschaft> callback);
+
+	void deleteKontaktByNutzerID(Kontakt k, AsyncCallback<Void> callback);
+
+	void deleteKontaktKontaktlisteByKontaktID(KontaktKontaktliste k, AsyncCallback<Void> callback);
 	
 }

@@ -219,18 +219,18 @@ public class EigenschaftMapper {
 	 * @see findByEigenschaftID
 	 */
 	
-	public Vector <Eigenschaft> findAllEigenschaftByEigenschaftID(int id) {
+	public Eigenschaft findEigenschaftByEigenschaftID(int id) {
 		
 		/**
 		 * Verbindung zur DB Connection
 		 */		
 		Connection con = DBConnection.connection();
 		
-		Vector<Eigenschaft> result = new Vector<Eigenschaft>();
+		Eigenschaft eigenschaft2 = new Eigenschaft();
 
 
 		try{
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM eigenschaft WHERE id = " +id);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM eigenschaft WHERE id = ?");
 			stmt.setInt(1, id);
 			
 			/**
@@ -245,10 +245,7 @@ public class EigenschaftMapper {
 				eigenschaft.setId(rs.getInt("id"));
 				eigenschaft.setBezeichnung(rs.getString("bezeichnung"));
 				
-				/**
-				 * Hinzufuegen des neuen Objektes zum Ergebnisvektor
-				 */	
-				result.addElement(eigenschaft);
+				eigenschaft2=eigenschaft;
 			}
 		}
 		catch(SQLException e2){
@@ -264,8 +261,51 @@ public class EigenschaftMapper {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return eigenschaft2;
 		
+	}
+	
+	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung){
+		
+		
+		Connection con = DBConnection.connection();
+		
+		Eigenschaft eig = new Eigenschaft();
+
+		try {
+
+			/**
+			 * Durchführung der Einfüge-Operation via Prepared Statement
+			 */
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT * FROM `eigenschaft` WHERE `bezeichnung` LIKE ?");
+
+			stmt.setString(1, bezeichnung);
+
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+
+				Eigenschaft eigenschaft = new Eigenschaft();
+
+				eigenschaft.setId(rs.getInt("id"));
+				eigenschaft.setBezeichnung(rs.getString("bezeichnung"));
+				
+				eig=eigenschaft;
+				}
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		} finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+
+		return eig;
+
 	}
 }
 	

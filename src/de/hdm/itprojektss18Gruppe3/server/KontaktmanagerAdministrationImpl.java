@@ -6,6 +6,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss18Gruppe3.server.db.EigenschaftMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.EigenschaftsauspraegungMapper;
+import de.hdm.itprojektss18Gruppe3.server.db.KontaktKontaktlisteMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.KontaktMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.KontaktlisteMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.NutzerMapper;
@@ -79,11 +80,16 @@ implements KontaktmanagerAdministration {
    	 * Referenz auf den TeilhaberschaftMapper, der Teilhaberschaftobjekte mit der Datenbank
 	 * abgleicht.
 	 */
-	private TeilhaberschaftMapper teilhaberschaftMapper = null;
+	private TeilhaberschaftMapper teilhaberschaftMapper = null;	
+	
+	/**
+   	 * Referenz auf den KontaktKontaktlisteMapper, der KontaktKontaktlisteobjekte mit der Datenbank
+	 * abgleicht.
+	 */
+	private KontaktKontaktlisteMapper kontaktKontaktlisteMapper = null;
 	
 	/**
 	 * Ein No-Argument-Konstruktor für die Client-seitige Erzeugung
-	 * Ein No-Argument-Konstruktor f�r die Client-seitige Erzeugung
 	 * von GWT.create
 	 * 
 	 * @see #init()
@@ -94,7 +100,7 @@ implements KontaktmanagerAdministration {
 	}
 
 	/**
-	 * Initialsierungsmethode. Diese Methode muss f�r jede Instanz von
+	 * Initialsierungsmethode. Diese Methode muss für jede Instanz von
 	 * KontaktmanagerAdministrationImpl aufgerufen werden.
 	 * 
 	 * @see ReportGeneratorImpl()
@@ -108,6 +114,8 @@ implements KontaktmanagerAdministration {
 		this.eigenschaftMapper = EigenschaftMapper.eigenschaftMapper();
 		this.eigenschaftsauspraegungMapper = EigenschaftsauspraegungMapper.eigenschaftsauspraegungMapper();
 		this.teilhaberschaftMapper = TeilhaberschaftMapper.teilhaberschaftMapper();
+		this.kontaktKontaktlisteMapper = KontaktKontaktlisteMapper.kontaktkontaktlisteMapper();
+		
 	}
 
 	/**
@@ -198,12 +206,19 @@ implements KontaktmanagerAdministration {
 	/** Überprüfen eines Nutzers nach der E-Mail Adresse
 	 * 
 	 *@param email; die GoogleMail Adresse des Nutzers
-	 *@return Nutzer; Objekt der Klasse Nutzer wird zurückgegeben
+	 *@return nutzer; Objekt der Klasse Nutzer wird zurückgegeben
 	 */
 	@Override
 	public Nutzer checkEmail(String email) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		Nutzer nutzer = new Nutzer();
+		nutzer = this.nutzerMapper.findNutzerByEmail(email);
+		
+		if (nutzer == null){
+			return null;
+		} else {
+			return nutzer;
+		}
+		
 	}
 
 	/**
@@ -217,9 +232,18 @@ implements KontaktmanagerAdministration {
 	 */
 	@Override
 	public Eigenschaftsauspraegung createEigenschaftsauspraegung(String wert, int personID, int status,
-			int eigenschaftID) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+			String eigenschaft) throws IllegalArgumentException {
+		
+		Eigenschaft eigenschaftNeu = createEigenschaft(eigenschaft);
+		
+		Eigenschaftsauspraegung eigenschaftsauspraegung = new Eigenschaftsauspraegung();
+		
+		eigenschaftsauspraegung.setWert(wert);
+		eigenschaftsauspraegung.setPersonID(personID);
+		eigenschaftsauspraegung.setStatus(status);
+		eigenschaftsauspraegung.setEigenschaftID(eigenschaftNeu.getId());
+		
+		return this.eigenschaftsauspraegungMapper.createEigenschaftsauspraegung(eigenschaftsauspraegung);
 	}
 
 	/**
@@ -231,8 +255,19 @@ implements KontaktmanagerAdministration {
 	 */
 	@Override
 	public Eigenschaft createEigenschaft(String bezeichnung) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Eigenschaft eigenschaftNeu = new Eigenschaft();
+
+		eigenschaftNeu.setBezeichnung(bezeichnung);
+
+		Eigenschaft eigenschaft = findEigenschaftByBezeichnung(eigenschaftNeu);
+
+		if (eigenschaft.getBezeichnung() == "") {
+			return this.eigenschaftMapper.createEigenschaft(eigenschaftNeu);
+		} else {
+			return eigenschaft;
+		}
+
 	}
 
 	/**
@@ -246,8 +281,13 @@ implements KontaktmanagerAdministration {
 	@Override
 	public KontaktKontaktliste createKontaktKontaktliste(int kontaktID, int kontaktlisteID)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		KontaktKontaktliste kliste = new KontaktKontaktliste();
+		
+		kliste.setKontaktID(kontaktID);
+		kliste.setKontaktlisteID(kontaktlisteID);
+		
+		return this.kontaktKontaktlisteMapper.createKontaktKontaktliste(kliste);
 	}
 
 	/**
@@ -270,8 +310,7 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	public Kontakt findKontaktByID(Kontakt k) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		return this.kontaktMapper.findKontaktByKontaktID(k.getId());
 	}
 	
 	/**
@@ -283,8 +322,7 @@ implements KontaktmanagerAdministration {
 	 */
 	@Override
 	public Vector <Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByPersonID(Person p) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		return this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByPersonID(p.getId());
 	}
 
 	/**
@@ -324,8 +362,7 @@ implements KontaktmanagerAdministration {
 	@Override
 	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByEigenschaftID(Eigenschaft e)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		return this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungenByEigenschaftID(e.getId());
 	}
 	
 	/**
@@ -338,8 +375,7 @@ implements KontaktmanagerAdministration {
 	@Override
 	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung e)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		return this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByWert(e.getWert());
 	}
 	/**
 	 * Löschen einer Person (Nutzer/Kontakt)
@@ -349,7 +385,7 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public Person deletePerson(Person p) throws IllegalArgumentException {
+	public void deletePerson(Person p) throws IllegalArgumentException {
 		
 		// Funktioniert nicht weil Person in Nutzer nicht geht
 		
@@ -357,7 +393,7 @@ implements KontaktmanagerAdministration {
 			
 		} else if (p instanceof Kontakt){
 		}
-		return null;
+		
 	}
 
 	/**
@@ -368,9 +404,9 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public KontaktKontaktliste deleteKontaktKontaktliste(KontaktKontaktliste k) throws IllegalArgumentException {
+	public void deleteKontaktKontaktliste(KontaktKontaktliste k) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	/**
@@ -381,9 +417,9 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public Teilhaberschaft deleteTeilhaberschaftByPersonID(Teilhaberschaft t) throws IllegalArgumentException {
+	public void deleteTeilhaberschaftByPersonID(Teilhaberschaft t) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 	
 	/**
@@ -394,11 +430,15 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public Kontaktliste deleteKontaktlisteByNutzerID(Kontaktliste k) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void deleteKontaktlisteByNutzerID(Kontaktliste k) throws IllegalArgumentException {
 
+	}
+	
+	@Override
+	public void deleteKontaktKontaktlisteByKontaktID(KontaktKontaktliste k) throws IllegalArgumentException {
+		this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktID(k);
+	}
+	
 	/**
 	 * Löschen einer Eigenschaftsausprägung mit der PersonID
 	 * 
@@ -407,10 +447,50 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public Eigenschaftsauspraegung deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e)
+	public void deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		this.eigenschaftsauspraegungMapper.deleteEigenschaftsauspraegungByPersonID(e);
 	}
+
+	
+	/**
+	 * Löschen eines Kontakts mit der NutzerID
+	 * 
+	 * @param k; Objekt der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public void deleteKontaktByNutzerID(Kontakt k) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * Anzeigen einer Eigenschaft anhand der Bezeichnung
+	 * 
+	 * @param e; Objekt der Klasse Eigenschaft
+	 * @return Objekt der Klasse Eigenschaft
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Eigenschaft findEigenschaftByBezeichnung(Eigenschaft e) throws IllegalArgumentException {
+		return this.eigenschaftMapper.findEigenschaftByBezeichnung(e.getBezeichnung());
+	}
+	
+	/**
+	 * Anzeigen einer Eigenschaft anhand der ID
+	 * 
+	 * @param e; Objekt der Klasse Eigenschaft
+	 * @return Objekt der Klasse Eigenschaft
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Eigenschaft findEigenschaftByEigenschaftID(Eigenschaft e) throws IllegalArgumentException {
+		return this.eigenschaftMapper.findEigenschaftByEigenschaftID(e.getId());
+	}
+
+	
+
+	
 	
 }

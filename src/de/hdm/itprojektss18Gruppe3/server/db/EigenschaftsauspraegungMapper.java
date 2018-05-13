@@ -214,7 +214,7 @@ public class EigenschaftsauspraegungMapper {
 			 * Durchführen der Löschoperation
 			 */
 			
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM eigenschaftsauspraegung WHERE id= ? ");
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM eigenschaftsauspraegung WHERE personid= ? ");
 			
 			stmt.setInt(1, eigenschaftsauspraegung.getPersonID());
 			stmt.executeUpdate();	
@@ -244,7 +244,7 @@ public class EigenschaftsauspraegungMapper {
 		Vector<Eigenschaftsauspraegung> result = new Vector<Eigenschaftsauspraegung>();
 
 		try{
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM eigenschaftsauspraegung WHERE eigenschaftid = ? ");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM eigenschaftsauspraegung WHERE eigenschaftid = ?");
 			stmt.setInt(1, id);
 			
 			/**
@@ -284,7 +284,7 @@ public class EigenschaftsauspraegungMapper {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return result;
 	}
 	
 	/**
@@ -317,7 +317,7 @@ public class EigenschaftsauspraegungMapper {
 					eigenschaftsauspraegung.setWert(rs.getString("wert"));
 					eigenschaftsauspraegung.setPersonID(rs.getInt("personid"));
 					eigenschaftsauspraegung.setStatus(rs.getInt("status"));
-					eigenschaftsauspraegung.setEigenschaftID(rs.getInt("eigenschafid"));
+					eigenschaftsauspraegung.setEigenschaftID(rs.getInt("eigenschaftid"));
 					
 					/**
 					 * Hinzufügen des neuen Objekts zum Ergebnisvektor
@@ -343,6 +343,61 @@ public class EigenschaftsauspraegungMapper {
 		 */
 		return result;
 	}	
+
+	/**
+	 * Diese Methode ist für die Suchfunktion. Es wird nach dem Wert der Eigenschaftsauspraegung geschaut.
+	 * 
+	 * @param wert; Übergabewert der Eigenschaftsauspraegung
+	 * @return Vector des Objekts Eigenschaftsauspraegung
+	 */
+	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWert(String wert) {
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+
+		Vector<Eigenschaftsauspraegung> result = new Vector<Eigenschaftsauspraegung>();
+
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE '%"+wert+"%'");
+//			stmt.setString(1, wert);
+
+			ResultSet rs = stmt.executeQuery();
+			/**
+			 * Für jeden Eintrag Eigenschaftsauspraegung ein
+			 * Eigenschaftsauspraegung-Objekt erstellt.
+			 */
+			while (rs.next()) {
+				Eigenschaftsauspraegung eigenschaftsauspraegung = new Eigenschaftsauspraegung();
+
+				eigenschaftsauspraegung.setId(rs.getInt("id"));
+				eigenschaftsauspraegung.setWert(rs.getString("wert"));
+				eigenschaftsauspraegung.setPersonID(rs.getInt("personid"));
+				eigenschaftsauspraegung.setStatus(rs.getInt("status"));
+				eigenschaftsauspraegung.setEigenschaftID(rs.getInt("eigenschaftid"));
+
+				/**
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 */
+
+				result.addElement(eigenschaftsauspraegung);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		} finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		return result;
+	}
 }
 	
 

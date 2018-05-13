@@ -127,9 +127,45 @@ public class KontaktKontaktlisteMapper {
 			 * Durchführen der Löschoperation
 			 */			
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktkontaktliste " 
-					+ "WHERE id= id ");
+					+ "WHERE id= ?");
 			
 			stmt.setInt(1, kontaktkontaktliste.getId());
+			stmt.executeUpdate();
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+		if (con!=null) 
+			try {
+				con.close();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Das Löschen von KontaktKontaktliste mit der KontaktID
+	 * 
+	 * @param kontaktkontaktliste
+	 */
+	public void deleteKontaktKontaktlisteByKontaktID(KontaktKontaktliste kontaktkontaktliste) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */		
+		Connection con = DBConnection.connection();
+			
+		try {
+			
+			/**
+			 * Durchführen der Löschoperation
+			 */			
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktkontaktliste WHERE kontaktid= ?");
+			
+			stmt.setInt(1, kontaktkontaktliste.getKontaktID());
 			stmt.executeUpdate();
 		}
 		catch(SQLException e2) {
@@ -167,7 +203,9 @@ public class KontaktKontaktlisteMapper {
 					+ "FROM `kontaktliste` "
 					+ "JOIN `kontaktkontaktliste` "
 					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id` "
-					+ "WHERE `kontaktliste`.`id`= " + kontaktlisteid);
+					+ "WHERE `kontaktliste`.`id`= ?");
+			
+			stmt.setInt(1, kontaktlisteid);
 			
 			ResultSet rs = stmt.executeQuery();
 			

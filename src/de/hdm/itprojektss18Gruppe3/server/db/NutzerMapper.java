@@ -230,6 +230,10 @@ public class NutzerMapper extends PersonMapper{
 		return result;
 
 	}
+	public Nutzer findNutzerByEmail(String email){
+		return null;
+		
+	}
 	
 
 }
