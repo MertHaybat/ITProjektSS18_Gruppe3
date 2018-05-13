@@ -153,8 +153,7 @@ implements KontaktmanagerAdministration {
 	 */
 	@Override
 	public Vector<Kontaktliste> findAllKontaktlisteByNutzerID(int nutzerID) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		return this.kontaktlisteMapper.findAllKontaktlisteByNutzerID(nutzerID);
 	}
 
 	/**
@@ -386,12 +385,62 @@ implements KontaktmanagerAdministration {
 	 */
 	@Override
 	public void deletePerson(Person p) throws IllegalArgumentException {
-		
-		// Funktioniert nicht weil Person in Nutzer nicht geht
-		
-		if (p instanceof Nutzer){
+				
+		if (p instanceof Nutzer) {
 			
-		} else if (p instanceof Kontakt){
+			// Teilhaberschaft löschen
+			Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+			teilhaberschaft.setEigentuemerID(p.getId());
+			this.teilhaberschaftMapper.deleteTeilhaberschaftByNutzerID(teilhaberschaft);
+
+			// Eigenschaftsausprägung löschen
+			Eigenschaftsauspraegung eigenschaftsauspraegung = new Eigenschaftsauspraegung();
+			eigenschaftsauspraegung.setPersonID(p.getId());
+			this.eigenschaftsauspraegungMapper.deleteEigenschaftsauspraegungByPersonID(eigenschaftsauspraegung);
+
+			// KontaktKontaktliste löschen
+			Vector<Kontaktliste> vectorNutzer = findAllKontaktlisteByNutzerID(p.getId());
+			for (Kontaktliste kontaktliste : vectorNutzer) {
+				KontaktKontaktliste kliste = new KontaktKontaktliste();
+				kliste.setKontaktlisteID(kontaktliste.getId());
+				this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktlisteID(kliste);
+			}
+
+			// Kontakte Löschen
+			Kontakt k = new Kontakt();
+			k.setNutzerID(p.getId());
+			this.kontaktMapper.deleteKontaktByNutzerID(k);
+
+			// Kontaktliste Löschen
+			Kontaktliste kontaktliste = new Kontaktliste();
+			kontaktliste.setNutzerID(p.getId());
+			this.kontaktlisteMapper.deleteKontaktlisteByNutzerID(kontaktliste);
+
+			// Nutzer löschen
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(p.getId());
+			this.nutzerMapper.deleteNutzer(nutzer);
+
+		} else if (p instanceof Kontakt) {
+			// Teilhaberschaft löschen
+			Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+			teilhaberschaft.setKontaktID(p.getId());
+			this.teilhaberschaftMapper.deleteTeilhaberschaftByKontaktID(teilhaberschaft);
+
+			// Eigenschaftsausprägung löschen
+			Eigenschaftsauspraegung eigenschaftsauspraegung = new Eigenschaftsauspraegung();
+			eigenschaftsauspraegung.setPersonID(p.getId());
+			this.eigenschaftsauspraegungMapper.deleteEigenschaftsauspraegungByPersonID(eigenschaftsauspraegung);
+
+			// KontaktKontaktliste löschen
+			KontaktKontaktliste kliste = new KontaktKontaktliste();
+			kliste.setKontaktID(p.getId());
+			this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktID(kliste);
+
+			// Kontakte Löschen
+			Kontakt kontakt = new Kontakt();
+			kontakt.setId(p.getId());
+			this.kontaktMapper.deleteKontakt(kontakt);
 		}
 		
 	}
@@ -404,9 +453,8 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public void deleteKontaktKontaktliste(KontaktKontaktliste k) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		
+	public void deleteKontaktKontaktlisteByKontaktlisteID(KontaktKontaktliste k) throws IllegalArgumentException {
+		this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktlisteID(k);		
 	}
 
 	/**
@@ -431,9 +479,22 @@ implements KontaktmanagerAdministration {
 	 */
 	@Override
 	public void deleteKontaktlisteByNutzerID(Kontaktliste k) throws IllegalArgumentException {
-
+		
+		KontaktKontaktliste kliste = new KontaktKontaktliste();
+		
+		kliste.setKontaktlisteID(k.getId());
+		
+		deleteKontaktKontaktlisteByKontaktlisteID(kliste);
+		
+		this.kontaktlisteMapper.deleteKontaktlisteByNutzerID(k);
 	}
 	
+	/**
+	 * Löschen einer KontaktKontaktliste mit der KontaktID
+	 * 
+	 * @param k; Objekt der Klasse KontaktKontaktliste
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public void deleteKontaktKontaktlisteByKontaktID(KontaktKontaktliste k) throws IllegalArgumentException {
 		this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktID(k);

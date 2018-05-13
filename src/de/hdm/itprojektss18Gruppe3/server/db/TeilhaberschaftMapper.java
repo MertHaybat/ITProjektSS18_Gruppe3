@@ -280,7 +280,7 @@ public class TeilhaberschaftMapper {
 		return result;
 	}
 
-	public void deleteTeilhaberschaftByKontaktID(int kontaktid) {
+	public void deleteTeilhaberschaftByKontaktID(Teilhaberschaft teilhaberschaft) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -292,9 +292,9 @@ public class TeilhaberschaftMapper {
 			/**
 			 * Durchführen der Löschoperation DELETE FROM `teilhaberschaft` WHERE `nutzerid`=2
 			 */			
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM teilhaberschaft WHERE kontaktid=" + kontaktid);
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM teilhaberschaft WHERE kontaktid=?");
 			
-			stmt.setInt(1, kontaktid);
+			stmt.setInt(1, teilhaberschaft.getKontaktID());
 			stmt.executeUpdate();
 		}
 		catch(SQLException e2) {
@@ -311,7 +311,7 @@ public class TeilhaberschaftMapper {
 		}
 	}
 
-	public void deleteTeilhaberschaftByNutzerID(int nutzerid) {
+	public void deleteTeilhaberschaftByNutzerID(Teilhaberschaft t) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -323,9 +323,9 @@ public class TeilhaberschaftMapper {
 			/**
 			 * Durchführen der Löschoperation DELETE FROM `teilhaberschaft` WHERE `nutzerid`=2
 			 */			
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM teilhaberschaft WHERE kontaktid=" + nutzerid);
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM teilhaberschaft WHERE eigentuemerid=?");
 			
-			stmt.setInt(1, nutzerid);
+			stmt.setInt(1, t.getEigentuemerID());
 			stmt.executeUpdate();
 		}
 		catch(SQLException e2) {

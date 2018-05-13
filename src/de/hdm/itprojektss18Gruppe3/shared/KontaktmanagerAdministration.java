@@ -244,13 +244,13 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public void deletePerson(Person p) throws IllegalArgumentException;
 	
 	/**
-	 * Löschen der Beziehung zwischen KontaktKontaktliste
+	 * Löschen der Beziehung zwischen KontaktKontaktliste mit der KontaktlisteID
 	 * 
 	 * @param k; Objekt der Klasse KontaktKontaktliste
 	 * @return Objekt des Typs KontaktKontaktliste
 	 * @throws IllegalArgumentException
 	 */
-	public void deleteKontaktKontaktliste(KontaktKontaktliste k) throws IllegalArgumentException;
+	public void deleteKontaktKontaktlisteByKontaktlisteID(KontaktKontaktliste k) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen einer Teilhaberschaft mit der PersonID

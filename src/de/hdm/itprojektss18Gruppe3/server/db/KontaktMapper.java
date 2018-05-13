@@ -184,6 +184,7 @@ public class KontaktMapper extends PersonMapper{
 			
 			stmt.setInt(1, kontakt.getId());
 			stmt.executeUpdate();
+			super.deletePerson(kontakt);
 		}
 		catch(SQLException e2) {
 			e2.printStackTrace();
@@ -489,6 +490,34 @@ public class KontaktMapper extends PersonMapper{
 		 * Ergebnisvektor zurückgeben
 		 */
 		return result;
+	}
+
+	public void deleteKontaktByNutzerID(Kontakt kontakt) {
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+
+		try {
+
+			/**
+			 * Durchführen der Löschoperation
+			 */
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontakt " + "WHERE nutzerid=?");
+
+			stmt.setInt(1, kontakt.getNutzerID());
+			stmt.executeUpdate();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		} finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
 	}
 		
 	/**

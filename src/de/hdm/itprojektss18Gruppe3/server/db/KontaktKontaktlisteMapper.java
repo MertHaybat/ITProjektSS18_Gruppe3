@@ -114,7 +114,7 @@ public class KontaktKontaktlisteMapper {
 	 * 
 	 * @param kontaktkontaktliste
 	 */
-	public void deleteKontaktKontaktliste(KontaktKontaktliste kontaktkontaktliste) {
+	public void deleteKontaktKontaktlisteByKontaktlisteID(KontaktKontaktliste kontaktkontaktliste) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -126,10 +126,9 @@ public class KontaktKontaktlisteMapper {
 			/**
 			 * Durchführen der Löschoperation
 			 */			
-			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktkontaktliste " 
-					+ "WHERE id= ?");
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontaktkontaktliste WHERE kontaktlisteid= ?");
 			
-			stmt.setInt(1, kontaktkontaktliste.getId());
+			stmt.setInt(1, kontaktkontaktliste.getKontaktlisteID());
 			stmt.executeUpdate();
 		}
 		catch(SQLException e2) {

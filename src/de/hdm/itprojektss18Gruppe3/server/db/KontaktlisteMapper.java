@@ -279,7 +279,7 @@ public class KontaktlisteMapper {
 	 * @param nutzerid
 	 * @return result
 	 */
-	public Vector<Kontaktliste> findKontaktlisteByNutzerID(int nutzerid) {
+	public Vector<Kontaktliste> findAllKontaktlisteByNutzerID(int nutzerid) {
 		/**
 		 * Verbindung zur DB Connection
 		 */	
@@ -288,7 +288,9 @@ public class KontaktlisteMapper {
 		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
 		
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE id= " + nutzerid);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE nutzerid= ?");
+			
+			stmt.setInt(1, nutzerid);
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -341,13 +343,8 @@ public class KontaktlisteMapper {
 		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT `kontaktliste`.`bezeichnung`, `kontaktliste`.`nutzerid`, `kontakt`.`id`"
-					+ "FROM `kontaktliste`"
-					+ "LEFT JOIN `kontaktkontaktliste` "
-					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id`"
-					+ "LEFT JOIN `kontakt` "
-					+ "ON `kontaktkontaktliste`.`kontaktid` = `kontakt`.`id` "
-					+ "WHERE `kontaktkontaktliste`.`id`= " + kontaktid);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE nutzerid= ?");
+			stmt.setInt(1, kontaktid);
 			
 			ResultSet rs = stmt.executeQuery();
 			

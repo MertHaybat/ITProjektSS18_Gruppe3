@@ -74,7 +74,7 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void deletePerson(Person p, AsyncCallback<Void> callback);
 
-	void deleteKontaktKontaktliste(KontaktKontaktliste k, AsyncCallback<Void> callback);
+	void deleteKontaktKontaktlisteByKontaktlisteID(KontaktKontaktliste k, AsyncCallback<Void> callback);
 
 	void deleteTeilhaberschaftByPersonID(Teilhaberschaft t, AsyncCallback<Void> callback);
 
