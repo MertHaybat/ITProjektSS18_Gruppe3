@@ -274,12 +274,11 @@ public class KontaktlisteMapper {
 	}
 	
 	/**
-	 * Die Methode ermöglicht die Ausgabe einer Kontaktliste, die im Vekotr<Kontaktliste> gespeichert sind, anhand der nutzerid.
-	 * 
-	 * @param nutzerid
-	 * @return result
+	 * Die Methode ermöglicht die Ausgabe einer Kontaktliste, die im Vektor<Kontaktliste> gespeichert sind, anhand der nutzerid.
+	 * @param kontaktliste2 - Objekt der Klasse Kontaktliste - hier wird die NutzerID entnommen
+	 * @return result - gibt als Vektor alle Kontaktlisten eines bestimmten Nutzers zurück
 	 */
-	public Vector<Kontaktliste> findAllKontaktlisteByNutzerID(int nutzerid) {
+	public Vector<Kontaktliste> findAllKontaktlisteByNutzerID(Kontaktliste kontaktliste2) {
 		/**
 		 * Verbindung zur DB Connection
 		 */	
@@ -290,7 +289,7 @@ public class KontaktlisteMapper {
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE nutzerid= ?");
 			
-			stmt.setInt(1, nutzerid);
+			stmt.setInt(1, kontaktliste2.getNutzerID());
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -328,67 +327,67 @@ public class KontaktlisteMapper {
 		return result;
 	}
 	
-	/**
-	 * Das Suchen einer Kontaktliste im Vector<Kontaktliste> anhand der kontaktid.
-	 * @param kontaktid
-	 * @return result
-	 */
-	public Vector<Kontaktliste> findAllKontaktlisteByKontaktID(int kontaktid) {
-		
-		/**
-		 * Verbindung zur DB Connection
-		 */
-		Connection con = DBConnection.connection();
-		
-		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
-
-		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE nutzerid= ?");
-			stmt.setInt(1, kontaktid);
-			
-			ResultSet rs = stmt.executeQuery();
-			
-			/**
-			 * Für jeden Eintrag Kontaktliste ein Kontaktliste-Objekt erstellt.
-			 */
-			while(rs.next()) {
-				Kontaktliste kontaktliste = new Kontaktliste();
-				
-				kontaktliste.setId(rs.getInt("id"));
-				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
-				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
-				
-				/**
-				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
-				 */
-				result.addElement(kontaktliste);
-			}
-		}
-		catch(SQLException e2) {
-			e2.printStackTrace();
-		}
-		finally {	
-			if (con!=null) 
-				try {
-					con.close();
-				}
-				catch(SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		/**
-		 * Ergebnisvektor zurückgeben
-		 */
-		return result;
-	}
+//	/**
+//	 * Das Suchen einer Kontaktliste im Vector<Kontaktliste> anhand der kontaktid.
+//	 * @param kontaktid
+//	 * @return result
+//	 */
+//	public Vector<Kontaktliste> findAllKontaktlisteByKontaktID(int kontaktid) {
+//		
+//		/**
+//		 * Verbindung zur DB Connection
+//		 */
+//		Connection con = DBConnection.connection();
+//		
+//		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
+//
+//		try {
+//			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE nutzerid= ?");
+//			stmt.setInt(1, kontaktid);
+//			
+//			ResultSet rs = stmt.executeQuery();
+//			
+//			/**
+//			 * Für jeden Eintrag Kontaktliste ein Kontaktliste-Objekt erstellt.
+//			 */
+//			while(rs.next()) {
+//				Kontaktliste kontaktliste = new Kontaktliste();
+//				
+//				kontaktliste.setId(rs.getInt("id"));
+//				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
+//				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
+//				
+//				/**
+//				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+//				 */
+//				result.addElement(kontaktliste);
+//			}
+//		}
+//		catch(SQLException e2) {
+//			e2.printStackTrace();
+//		}
+//		finally {	
+//			if (con!=null) 
+//				try {
+//					con.close();
+//				}
+//				catch(SQLException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		/**
+//		 * Ergebnisvektor zurückgeben
+//		 */
+//		return result;
+//	}
 	
 	/**
 	 * Alle Kontaktlisten aus dem Vector<Kontaktliste> in einer Teilhaberschaft über die kontaktlisteid ausgeben.
 	 * 
-	 * @param kontaktlisteid
-	 * @return result
+	 * @param kontaktliste - Objekt, der Klasse Kontaktliste - hier wird die KontaktlisteID entnommen 
+	 * @return result - gibt als Vektor alle Kontaktlisten einer Teilhaberschaft zurück
 	 */
-	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int kontaktlisteid) {
+	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(Kontaktliste kontaktliste2) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -398,7 +397,9 @@ public class KontaktlisteMapper {
 		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste Where id= " + kontaktlisteid);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste Where id= ?");
+			
+			stmt.setInt(1, kontaktliste2.getId());
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -435,4 +436,62 @@ public class KontaktlisteMapper {
 		 */
 		return result;
 	}
+	
+	public Vector<Kontakt> findAllKontakteByKontaktlisteID(Kontakt kontakt2) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+		
+		Vector<Kontakt> result = new Vector<Kontakt>();
+
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT `kontakt`.`name`, `kontakt`.`erzeugungsdatum`, `kontakt`.`modifikationsdatum`, `kontakt`.`status`, `kontaktliste`.`id` "
+					+ "FROM `kontaktliste` "
+					+ "LEFT JOIN `kontaktkontaktliste` "
+					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id` "
+					+ "LEFT JOIN `kontakt` "
+					+ "ON `kontaktkontaktliste`.`kontaktid` = `kontakt`.`id` WHERE `kontaktliste`.`id` = ?");
+			
+			stmt.setInt(1, kontakt2.getId());
+			ResultSet rs = stmt.executeQuery();
+			
+			/**
+			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
+			 */
+			while(rs.next()) {
+				Kontakt kontakt = new Kontakt();
+				
+				kontakt.setId(rs.getInt("id"));
+				kontakt.setName(rs.getString("name"));
+				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("status"));
+				
+				/**
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 */
+				result.addElement(kontakt);
+			}
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		return result;
+	}
+
 }

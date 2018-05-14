@@ -168,9 +168,10 @@ public class TeilhaberschaftMapper {
 	
 	/**
 	 * Methode um alle Teilhaberschaften anhand der von Teilhabern zu finden 
-	 * @return result 
+	 * @param teilhaberschaft2 - Objekt, der Klasse Teilhaberschaft - übergibt die id des Teilhabenden
+	 * @return result - gibt als Vektor alle Teilhaberschaften eines Teilhabenden (durch die teilhabenderid) zurück
 	 */
-	public Vector<Teilhaberschaft> findTeilhaberschaftByTeilhabenderID(int teilhabenderID) {
+	public Vector<Teilhaberschaft> findTeilhaberschaftByTeilhabenderID(Teilhaberschaft teilhaberschaft2) {
 		
 		/**
 		 * Verbindung zur Datenbank
@@ -180,8 +181,9 @@ public class TeilhaberschaftMapper {
 		Vector<Teilhaberschaft> result = new Vector <Teilhaberschaft>();
 		
 		try{
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE teilhabenderid=" + teilhabenderID);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE teilhabenderid= ?");
 			
+			stmt.setInt(1, teilhaberschaft2.getTeilhabenderID());
 			ResultSet rs = stmt.executeQuery();
 			
 			/**
@@ -225,9 +227,10 @@ public class TeilhaberschaftMapper {
 	
 	/**
 	 * Methode um alle Teilhaberschaften anhand der von Teilhabern zu finden 
-	 * @return result 
+	 * @param teilhaberschaft2 - Objekt, der Klasse Teilhaberschaft - übergibt die id des Eigentuemers
+	 * @return result - gibt als Vektor alle Teilhaberschaften eines Eigentuemers (durch die eigentuemerid) zurück
 	 */
-	public Vector<Teilhaberschaft> findTeilhaberschaftByEigentuemerID(int eigentuemerID) {
+	public Vector<Teilhaberschaft> findTeilhaberschaftByEigentuemerID(Teilhaberschaft teilhaberschaft2) {
 		
 		/**
 		 * Verbindung zur Datenbank
@@ -237,8 +240,8 @@ public class TeilhaberschaftMapper {
 		Vector<Teilhaberschaft> result = new Vector <Teilhaberschaft>();
 		
 		try{
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE eigentuemerid=" + eigentuemerID);
-			
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE eigentuemerid=?");
+			stmt.setInt(1, teilhaberschaft2.getEigentuemerID());
 			ResultSet rs = stmt.executeQuery();
 			
 			/**
@@ -310,7 +313,11 @@ public class TeilhaberschaftMapper {
 			}
 		}
 	}
+/**
+ * Die Methode deleteTeilhaberschaftByNutzerID löscht die Teilhaberschaften anhand der Nutzer ID
+ * @param t - Objekt der Klasse Teilhaberschaft - übergibt hier die EigentuemerID 
 
+ */
 	public void deleteTeilhaberschaftByNutzerID(Teilhaberschaft t) {
 		
 		/**
@@ -326,6 +333,41 @@ public class TeilhaberschaftMapper {
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM teilhaberschaft WHERE eigentuemerid=?");
 			
 			stmt.setInt(1, t.getEigentuemerID());
+			stmt.executeUpdate();
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+		if (con!=null) 
+			try {
+				con.close();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Delete Methode um Teilhaberschaften anhand der Teilhaberschaft ID zu löschen 
+	 * @param teilhaberschaft2 - Objekt der Klasse Teilhaberschaft - übergibt hier die Teilhaberschaft ID 
+	 */
+	public void deleteTeilhaberschaftByID(Teilhaberschaft teilhaberschaft2) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */		
+		Connection con = DBConnection.connection();
+			
+		try {
+			
+			/**
+			 * Durchführen der Löschoperation DELETE FROM `teilhaberschaft` WHERE `nutzerid`=2
+			 */			
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM teilhaberschaft WHERE id=?");
+			
+			stmt.setInt(1, teilhaberschaft2.getId());
 			stmt.executeUpdate();
 		}
 		catch(SQLException e2) {
