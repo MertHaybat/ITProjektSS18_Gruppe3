@@ -10,11 +10,15 @@ import java.util.Vector;
 
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
-
 /**
- * @version 1.10 07 May 2018
- * @author ersinbarut
- */
+* Die Mapper-Klasse "TeilhaberschaftMapper" ermöglicht das Abbilden von Objekten "Teilhaberschaft" in einer relationalen Datenbank. 
+* Dabei sind in der Mapper-Klassen mehrere Methoden wie das erstellen, löschen, modifizieren 
+* oder das Suchen nach mehreren Möglichkeiten etc. implementiert. Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, 
+* aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
+* 
+* @version 1.10 07 May 2018
+* @author ersinbarut
+*/
 
 public class TeilhaberschaftMapper {
 
@@ -47,9 +51,10 @@ public class TeilhaberschaftMapper {
 	}
 	
 	/**
-	 * Die Methode ermöglicht das Einfügen von Objekten "Teilhaberschaft".
+	 * Die Methode "createTeilhaberschaft" ermöglicht das Einfügen von Objekten "Teilhaberschaft".
 	 *
 	 *@return teilhaberschaft vom Objekt Teilhaberschaft
+	 *@see createTeilhaberschaft
 	 */
 	public Teilhaberschaft createTeilhaberschaft(Teilhaberschaft teilhaberschaft){
 		
@@ -101,7 +106,6 @@ public class TeilhaberschaftMapper {
 		/**
 		 * Closen der Datenbankverbindung 
 		 */
-		
 		finally {	
 			if (con!=null) 
 				try {
@@ -111,12 +115,11 @@ public class TeilhaberschaftMapper {
 					e.printStackTrace();
 				}
 			}
-		
 		return teilhaberschaft;
-		
 	}
+	
 	/**
-	 * Mit dieser Methode updateTeilhaberschaft wird das Aktualisieren eines Objektes von "Teilhaberschaft" ermöglicht.
+	 * Mit dieser Methode "updateTeilhaberschaft" wird das Aktualisieren eines Objektes von "Teilhaberschaft" ermöglicht.
 	 * 
 	 * @param teilhaberschaft
 	 * @return teilhaberschaft vom Objekt Teilhaberschaft
@@ -157,17 +160,13 @@ public class TeilhaberschaftMapper {
 				}
 			catch(SQLException e){
 				e.printStackTrace();
-
 		}
 	}
-	
 	return teilhaberschaft;
-	
 	}
 	
-	
 	/**
-	 * Methode um alle Teilhaberschaften anhand der von Teilhabern zu finden 
+	 * Methode "findTeilhaberschaftByTeilhabenderID" um alle Teilhaberschaften anhand der von Teilhabern zu finden 
 	 * @param teilhaberschaft2 - Objekt, der Klasse Teilhaberschaft - übergibt die id des Teilhabenden
 	 * @return result - gibt als Vektor alle Teilhaberschaften eines Teilhabenden (durch die teilhabenderid) zurück
 	 */
@@ -226,7 +225,7 @@ public class TeilhaberschaftMapper {
 	}
 	
 	/**
-	 * Methode um alle Teilhaberschaften anhand der von Teilhabern zu finden 
+	 * Methode "findTeilhaberschaftByEigentuemerID" um alle Teilhaberschaften anhand der von Teilhabern zu finden 
 	 * @param teilhaberschaft2 - Objekt, der Klasse Teilhaberschaft - übergibt die id des Eigentuemers
 	 * @return result - gibt als Vektor alle Teilhaberschaften eines Eigentuemers (durch die eigentuemerid) zurück
 	 */
@@ -283,6 +282,11 @@ public class TeilhaberschaftMapper {
 		return result;
 	}
 
+	/**
+	 * Die Methode "deleteTeilhaberschaftByKontaktID" ermöglicht das Löschen einer Teilhaberschaft anhand der "kontaktid"
+	 * @param teilhaberschaft
+	 * @see deleteTeilhaberschaftByKontaktID
+	 */
 	public void deleteTeilhaberschaftByKontaktID(Teilhaberschaft teilhaberschaft) {
 		
 		/**
@@ -314,9 +318,9 @@ public class TeilhaberschaftMapper {
 		}
 	}
 /**
- * Die Methode deleteTeilhaberschaftByNutzerID löscht die Teilhaberschaften anhand der Nutzer ID
+ * Die Methode "deleteTeilhaberschaftByNutzerID" löscht die Teilhaberschaften anhand der Nutzer ID
  * @param t - Objekt der Klasse Teilhaberschaft - übergibt hier die EigentuemerID 
-
+ * @see deleteTeilhaberschaftByNutzerID
  */
 	public void deleteTeilhaberschaftByNutzerID(Teilhaberschaft t) {
 		
@@ -350,8 +354,9 @@ public class TeilhaberschaftMapper {
 	}
 	
 	/**
-	 * Delete Methode um Teilhaberschaften anhand der Teilhaberschaft ID zu löschen 
+	 * Delete Methode "deleteTeilhaberschaftByID" um Teilhaberschaften anhand der Teilhaberschaft ID zu löschen 
 	 * @param teilhaberschaft2 - Objekt der Klasse Teilhaberschaft - übergibt hier die Teilhaberschaft ID 
+	 * @see deleteTeilhaberschaftByID
 	 */
 	public void deleteTeilhaberschaftByID(Teilhaberschaft teilhaberschaft2) {
 		
@@ -383,5 +388,4 @@ public class TeilhaberschaftMapper {
 			}
 		}
 	}
-
 }

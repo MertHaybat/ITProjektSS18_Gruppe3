@@ -10,7 +10,7 @@ import java.util.Vector;
 import de.hdm.itprojektss18Gruppe3.shared.bo.*;
 
 /**
- * Die Mapper-Klasse KontaktKontaktlisteMapper ermöglicht das Abbilden von Objekten "KontaktKontaktliste"
+ * Die Mapper-Klasse "KontaktKontaktlisteMapper" ermöglicht das Abbilden von Objekten "KontaktKontaktliste"
  * in einer relationalen Datenbank. Dabei sind in der Mapper-Klassen mehrere Methoden wie das erstellen, suchen oder löschen 
  * etc. implementiert. Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, 
  * aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
@@ -51,9 +51,10 @@ public class KontaktKontaktlisteMapper {
 	}
 	
 	/**
-	 * Ermöglicht das Einfügen von Objekten "KontaktKontaktliste"
+	 * Die Methode "createKontaktKontaktliste" ermöglicht das Einfügen von Objekten "KontaktKontaktliste"
 	 * @param kontaktkontaktliste
 	 * @return kontaktkontaktliste
+	 * @see createKontaktKontaktliste
 	 */
 	public KontaktKontaktliste createKontaktKontaktliste(KontaktKontaktliste kontaktkontaktliste) {
 		
@@ -110,7 +111,7 @@ public class KontaktKontaktlisteMapper {
 	}
 	
 	/**
-	 * Das Löschen von einem Objekt "KontaktKontaktlise"
+	 * Mit der Methode "deleteKontaktKontaktlisteByKontaktlisteID" wird das Löschen von einem Objekt "KontaktKontaktlise" ermöglicht
 	 * 
 	 * @param kontaktkontaktliste
 	 */
@@ -146,7 +147,7 @@ public class KontaktKontaktlisteMapper {
 	}
 	
 	/**
-	 * Das Löschen von KontaktKontaktliste mit der KontaktID
+	 * Mit der Methode "deleteKontaktKontaktlisteByKontaktID" wird das Löschen von einem Objekt "KontaktKontaktliste" anhand der KontaktID ermöglicht
 	 * 
 	 * @param kontaktkontaktliste
 	 */
@@ -182,7 +183,8 @@ public class KontaktKontaktlisteMapper {
 	}
 	
 	/**
-	 * Alle KontaktKontaktlisten aus dem Vector<KontaktKontaktliste> die in einer Kontaktliste über die kontaktlisteid im Zusammenhang stehen,
+	 * Methode "findAllKontaktKontaktlisteByKontaktlisteID" ermöglicht,
+	 * alle KontaktKontaktlisten aus dem Vector<KontaktKontaktliste> die in einer Kontaktliste über die kontaktlisteid im Zusammenhang stehen,
 	 * also die in einer n:m Beziehung stehen, werden ausgegeben.
 	 * 
 	 * @param kontaktliste - Objekt der Klasse Kontakt: hier wird die ID entnommen

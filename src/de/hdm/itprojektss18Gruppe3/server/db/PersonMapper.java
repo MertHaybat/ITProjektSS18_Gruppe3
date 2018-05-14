@@ -1,19 +1,25 @@
 package de.hdm.itprojektss18Gruppe3.server.db;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
-/**
- * @version 1.10 07 May 2018
- * @author ersinbarut
- * Die Klasse PersonMapper gilt als Superklasse für die Klassen NutzerMapper und KontaktMapper
- * Sie beinhaltet nur die id als Attribut
- */
 
+/**
+* Die Klasse PersonMapper gilt als Superklasse für die Klassen NutzerMapper und KontaktMapper
+* Sie beinhaltet nur die id als Attribut
+* 
+* Die Mapper-Klasse "PersonMapper" ermöglicht das Abbilden von Objekten "Person" in einer relationalen Datenbank. 
+* Dabei sind in der Mapper-Klassen mehrere Methoden wie das erstellen, löschen oder modifizieren implementiert.
+* Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
+* 
+* @version 1.10 07 May 2018
+* @author ersinbarut
+*/
 public class PersonMapper {
 	
 	/**
@@ -26,7 +32,7 @@ public class PersonMapper {
 	private static PersonMapper personMapper = null;
 
 	/**
-	 * Geschuetzter Konstruktor, da nur innerhalbd es packages auf diese Klasse zugegriffen werden soll.
+	 * Geschützter Konstruktor, da nur innerhalbd es packages auf diese Klasse zugegriffen werden soll.
 	 */
 	protected PersonMapper(){
 	}
@@ -45,8 +51,7 @@ public class PersonMapper {
 	}
 	
 	/**
-	 * Die Methode ermoeglicht das Einfuegen von Objekten "Person".
-	 * Insert SQL = Erstellen von einem Datensatz und das Einfuegen in die Datenbank einer id.
+	 * Die Methode "createPerson" ermöglicht das Einfügen von Objekten "Person".
 	 *
 	 *@return person
 	 *@see createPerson
@@ -78,7 +83,7 @@ public class PersonMapper {
 	        id=person.getId();
 
 			/**
-			 * Druchfuehren der Einfuege Operation via Prepared Statement
+			 * Druchführen der Einfüge Operation via Prepared Statement
 			 */				
 			PreparedStatement stmt1 = con.prepareStatement(
 					"INSERT INTO person(id) VALUES(?)",
@@ -94,11 +99,10 @@ public class PersonMapper {
 		      e.printStackTrace();
 		    }
 		    return id;
-		  
 	  }
 	
 	/**
-	 * Mit dieser Methode updatePerson wird das Aktualisieren eines Objektes von "Person" ermöglicht.
+	 * Mit dieser Methode "updatePerson" wird das Aktualisieren eines Objektes von "Person" ermöglicht.
 	 * 
 	 * @param person
 	 * @return person vom Objekt Person
@@ -141,7 +145,7 @@ public class PersonMapper {
 }
 	
 	/**
-	 * Die Methode deletePerson ermoeglicht das Loeschen vom Objekt "Person"
+	 * Die Methode "deletePerson" ermöglicht das Löschen vom Objekt "Person"
 	 * @param pers
 	 * @see deletePerson
 	 */	

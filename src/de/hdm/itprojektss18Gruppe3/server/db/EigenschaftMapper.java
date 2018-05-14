@@ -9,6 +9,16 @@ import java.util.Vector;
 
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 
+/**
+ * Die Mapper-Klasse "EigenschaftMapper" ermöglicht das Abbilden von Objekten "Eigenschaft" in einer relationalen Datenbank. 
+ * Dabei sind in der Mapper-Klassen mehrere Methoden wie das erstellen, löschen, modifizieren 
+ * oder das Suchen nach mehreren Möglichkeiten etc. implementiert. Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, 
+ * aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
+ * 
+ * @version @version 1.10 14 May 2018
+ * @author Giuseppe Galati und wahidvanaki
+ *
+ */
 public class EigenschaftMapper {
 	
 	/**
@@ -46,11 +56,10 @@ public class EigenschaftMapper {
 		}
 	
 	/**
-	 * Die Methode ermöglicht das Einfügen von Objekten "Eigenschaft".
-	 * Insert SQL = Erstellen von einem Datensatz und das Einfügen in die Datenbank.
+	 * Die Methode "createEigenschaft" ermöglicht das Einfügen von Objekten "Eigenschaft".
 	 *
 	 *@return eigenschaft 
-	 *@see insertEigenschaft
+	 *@see createEigenschaft
 	 */
 	
 	public Eigenschaft createEigenschaft (Eigenschaft eigenschaft) {
@@ -108,7 +117,7 @@ public class EigenschaftMapper {
 	}
 	
 	/**
-	 * Mit dieser Methode updateEigenschaft wird das Aktualisieren eines Objektes vom "Eigenschaft" ermöglicht.
+	 * Mit dieser Methode "updateEigenschaft" wird das Aktualisieren eines Objektes vom "Eigenschaft" ermöglicht.
 	 * 
 	 * @param eigenschaft
 	 * @return eigenschaft vom Objekt Eigenschaft
@@ -152,7 +161,7 @@ public class EigenschaftMapper {
 	
 	
 	/**
-	 * Diese Methode durchläuft den kompletten Vektor und liefert alle Datensätze, die im Vector<Eigenschaft> gespeichert sind.
+	 * Diese Methode "findAllEigenschaften" durchläuft den kompletten Vektor und liefert alle Datensätze, die im Vector<Eigenschaft> gespeichert sind.
 	 * @return result - ist ein Vektor des Typs Eigenschaft - gibt alle Eigenschaften zurück, die in der Datenbank hinterlegt wurden
 	 * @see findAllEigenschaft
 	 */
@@ -211,7 +220,7 @@ public class EigenschaftMapper {
 	}
 	
 	/**
-	 * Die Methode findEigenschaftByEigenschaftID ermöglicht das Suchen nach einer Eigenschaft über den Primärschlüssel
+	 * Die Methode "findEigenschaftByEigenschaftID" ermöglicht das Suchen nach einer Eigenschaft über den Primärschlüssel
 	 * @param eig: Objekt der Klasse Eigenschaft: hier wird die EigenschaftID rausgenommen
 	 * @return eigenschaft2: gibt die Eigenschaft zurück
 	 * @see findByEigenschaftID
@@ -263,7 +272,7 @@ public class EigenschaftMapper {
 	}
 	
 	/**
-	 * Die Methode findEigenschaftByBezeichnung sucht die Eigenschaft anhand der Bezeichnung 
+	 * Die Methode "findEigenschaftByBezeichnung" sucht die Eigenschaft anhand der Bezeichnung 
 	 * @param eigenschaft: Objekt der Klasse Eigenschaft: hier wird die Bezeichnung rausgenommen
 	 * @return eig: gibt die Bezeichnung der Eigenschaft zurück
 	 */
@@ -309,4 +318,3 @@ public class EigenschaftMapper {
 
 	}
 }
-	

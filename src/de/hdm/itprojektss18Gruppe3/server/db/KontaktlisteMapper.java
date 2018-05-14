@@ -10,7 +10,7 @@ import java.util.Vector;
 import de.hdm.itprojektss18Gruppe3.shared.bo.*;
 
 /**
-  * Die Mapper-Klasse KontaktlisteMapper ermöglicht das Abbilden von Objekten "Kontaktliste" in einer relationalen Datenbank. 
+  * Die Mapper-Klasse "KontaktlisteMapper" ermöglicht das Abbilden von Objekten "Kontaktliste" in einer relationalen Datenbank. 
  * Dabei sind in der Mapper-Klassen mehrere Methoden wie das erstellen, löschen, modifizieren 
  * oder das Suchen nach mehreren Möglichkeiten etc. implementiert. Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, 
  * aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
@@ -51,9 +51,10 @@ public class KontaktlisteMapper {
 	}
 	
 	/**
-	 * Die Methode ermöglicht das Einfügen von Objekten "Kontaktliste".
+	 * Die Methode "createKontaktliste" ermöglicht das Einfügen von Objekten "Kontaktliste".
 	 * 
 	 *@return kontaktliste vom Objekt Kontaktliste
+	 *@see createKontaktliste
 	 */
 	public Kontaktliste createKontaktliste(Kontaktliste kontaktliste) {
 		
@@ -110,13 +111,13 @@ public class KontaktlisteMapper {
 	}
 	
 	/**
-	 * Mit dieser Methode updateKontaktliste wird das Aktualisieren eines Objektes vom "Kontaktliste" ermöglicht.
+	 * Mit dieser Methode "updateKontaktliste" wird das Aktualisieren eines Objektes vom "Kontaktliste" ermöglicht.
 	 * 
 	 * @param kontaktliste
 	 * @return kontaktliste vom Objekt Kontaktliste
 	 */
 	public Kontaktliste updateKontaktliste(Kontaktliste kontaktliste) {
-		String sql = "UPDATE kontaktliste SET bezeichnung= ? WHERE id= id ";
+		String sql = "UPDATE kontaktliste SET bezeichnung= ? WHERE id= ? ";
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -153,8 +154,9 @@ public class KontaktlisteMapper {
 	}
 	
 	/**
-	 * Die Methode deleteKontaktliste ermöglicht das Löschen vom Objekt "Kontaktliste"
+	 * Die Methode "deleteKontaktliste" ermöglicht das Löschen vom Objekt "Kontaktliste"
 	 * @param kontaktliste
+	 * @see deleteKontaktliste
 	 */	
 	public void deleteKontaktliste(Kontaktliste kontaktliste) {
 		
@@ -189,6 +191,7 @@ public class KontaktlisteMapper {
 	/**
 	 * Die Methode deleteKontaktlisteByNutzerID ermöglicht das Löschen vom Objekt "Kontaktliste" anhand der nutzerid
 	 * @param kontaktliste
+	 * @see deleteKontaktlisteByNutzerID
 	 */
 	public void deleteKontaktlisteByNutzerID(Kontaktliste kontaktliste) {
 		/**
@@ -220,7 +223,7 @@ public class KontaktlisteMapper {
 	}
 	
 	/**
-	 * Diese Methode durchläuft den kompletten Vector und liefert alle Datensätze die im Vector<Kontaktliste> gespeichert sind.
+	 * Diese Methode "findAllKontaktliste" durchläuft den kompletten Vector und liefert alle Datensätze die im Vector<Kontaktliste> gespeichert sind.
 	 * @return result 
 	 */	
 	public Vector<Kontaktliste> findAllKontaktliste() {	
@@ -274,7 +277,7 @@ public class KontaktlisteMapper {
 	}
 	
 	/**
-	 * Die Methode ermöglicht die Ausgabe einer Kontaktliste, die im Vektor<Kontaktliste> gespeichert sind, anhand der nutzerid.
+	 * Die Methode "findAllKontaktlisteByNutzerID" ermöglicht die Ausgabe einer Kontaktliste, die im Vektor<Kontaktliste> gespeichert sind, anhand der nutzerid.
 	 * @param kontaktliste2 - Objekt der Klasse Kontaktliste - hier wird die NutzerID entnommen
 	 * @return result - gibt als Vektor alle Kontaktlisten eines bestimmten Nutzers zurück
 	 */
@@ -382,7 +385,8 @@ public class KontaktlisteMapper {
 //	}
 	
 	/**
-	 * Alle Kontaktlisten aus dem Vector<Kontaktliste> in einer Teilhaberschaft über die kontaktlisteid ausgeben.
+	 * Die Methode "findAllKontaktlisteByTeilhaberschaft" ermöglicht
+	 * alle Kontaktlisten aus dem Vector<Kontaktliste> die in einer Teilhaberschaft sind, über die kontaktlisteid ausgeben.
 	 * 
 	 * @param kontaktliste - Objekt, der Klasse Kontaktliste - hier wird die KontaktlisteID entnommen 
 	 * @return result - gibt als Vektor alle Kontaktlisten einer Teilhaberschaft zurück
@@ -437,6 +441,13 @@ public class KontaktlisteMapper {
 		return result;
 	}
 	
+	/**
+	 * Die Methode "findAllKontakteByKontaktlisteID" ermöglicht
+	 * alle Kontaktlisten aus dem Vector<Kontaktliste> über die kontaktlisteid ausgeben.
+	 * 
+	 * @param kontakt2 - Objekt, der Klasse Kontaktliste 
+	 * @return 
+	 */
 	public Vector<Kontakt> findAllKontakteByKontaktlisteID(Kontakt kontakt2) {
 		
 		/**
@@ -493,5 +504,4 @@ public class KontaktlisteMapper {
 		 */
 		return result;
 	}
-
 }

@@ -11,6 +11,16 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 
+/**
+ * Die Mapper-Klasse "EigenschaftsauspraegungMapper" ermöglicht das Abbilden von Objekten "Eigenschaftsauspraegung" in einer relationalen Datenbank. 
+ * Dabei sind in der Mapper-Klassen mehrere Methoden wie das erstellen, löschen, modifizieren 
+ * oder das Suchen nach mehreren Möglichkeiten etc. implementiert. Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, 
+ * aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
+ * 
+ * @version @version 1.10 14 May 2018
+ * @author Giuseppe Galati und wahidvanaki
+ *
+ */
 public class EigenschaftsauspraegungMapper {
 
 	/**
@@ -49,11 +59,10 @@ public class EigenschaftsauspraegungMapper {
 		}
 	
 	/**
-	 * Die Methode ermöglicht das Einfügen von Objekten "Eigenschaftsauspraegung".
-	 * Insert SQL = Erstellen von einem Datensatz und das Einfügen in die Datenbank.
+	 * Die Methode "createEigenschaftsauspraegung" ermöglicht das Einfügen von Objekten "Eigenschaftsauspraegung".
 	 *
 	 *@return eigenschaftsauspraegung
-	 *@see insertEigenschaftsauspraegung
+	 *@see createEigenschaftsauspraegung
 	 */
 	
 	public Eigenschaftsauspraegung createEigenschaftsauspraegung (Eigenschaftsauspraegung eigenschaftsauspraegung){
@@ -114,7 +123,7 @@ public class EigenschaftsauspraegungMapper {
 	}
 	
 	/**
-	 * Mit dieser Methode updateEigenschaftsauspraegung wird das Aktualisieren eines Objektes von "Eigenschaftsauspraegung" ermöglicht.
+	 * Mit dieser Methode "updateEigenschaftsauspraegung" wird das Aktualisieren eines Objektes von "Eigenschaftsauspraegung" ermöglicht.
 	 * 
 	 * @param eigenschaftsauspraegung - Objekt, der Klasse Eigenschaftsauspraegung
 	 * @return eigenschaftsauspraegung vom Objekt Eigenschaftsauspraegung
@@ -162,8 +171,9 @@ public class EigenschaftsauspraegungMapper {
 	
 	
 	/**
-	 * Die Methode deleteEigenschaftsauspraegung ermöglicht das Löschen vom Objekt "Eigenschaftsauspraegung"
+	 * Die Methode "deleteEigenschaftsauspraegung" ermöglicht das Löschen vom Objekt "Eigenschaftsauspraegung"
 	 * @param eigenschaftsauspraegung
+	 * @see deleteEigenschaftsauspraegung
 	 */	
 	
 	public void deleteEigenschaftsauspraegung(Eigenschaftsauspraegung eigenschaftsauspraegung) {
@@ -198,8 +208,9 @@ public class EigenschaftsauspraegungMapper {
 	}
 	
 	/**
-	 * Die Methode deleteEigenschaftsauspraegungByPersonID ermöglicht das Löschen vom Objekt "Eigenschaftsauspraegung" anhand der PersonID
+	 * Die Methode "deleteEigenschaftsauspraegungByPersonID" ermöglicht das Löschen vom Objekt "Eigenschaftsauspraegung" anhand der PersonID
 	 * @param eigenschaftsauspraegung
+	 * @see deleteEigenschaftsauspraegungByPersonID
 	 */	
 	
 	public void deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung eigenschaftsauspraegung) {
@@ -234,7 +245,7 @@ public class EigenschaftsauspraegungMapper {
 	}
 		
 	/**
-	 * Die Methode findAllEigenschaftsauspraegungenByEigenschaftID ermöglicht das Ausgeben aller Eigenschaftsauspraegungen
+	 * Die Methode "findAllEigenschaftsauspraegungenByEigenschaftID" ermöglicht das Ausgeben aller Eigenschaftsauspraegungen
 	 * zu einer Eigenschaft
 	 * @param auspraegung - Objekt der Klasse Eigenschaftsauspraegung - hier wird die EigenschaftID entnommen
 	 * @return null - gibt in der catch-Methode null zurück um später Fehler besser zu lösen
@@ -295,7 +306,7 @@ public class EigenschaftsauspraegungMapper {
 	}
 	
 	/**
-	 * Das Suchen einer Eigenschaftsausprägung im Vector<Eigenschaftsauspraegung> anhand der personid.
+	 * Mit der Methode "findAllEigenschaftsauspraegungByPersonID" wird das Suchen einer Eigenschaftsausprägung im Vector<Eigenschaftsauspraegung> anhand der "personid" ermöglicht.
 	 * @param auspraegung - Objekt der Klasse Eigenschaftsauspraegung 
 	 * @return result - hier wird ein Vector ausgegeben mit allen Eigenschaftsauspraegungen einer bestimmten Person
 	 */
@@ -352,7 +363,7 @@ public class EigenschaftsauspraegungMapper {
 	}	
 
 	/**
-	 * Diese Methode ist für die Suchfunktion. Es wird nach dem Wert der Eigenschaftsauspraegung geschaut.
+	 * Die Methode "findAllEigeschaftauspraegungByWert" ist für die Suchfunktion. Es wird nach dem Wert der Eigenschaftsauspraegung geschaut.
 	 * 
 	 * @param auspraegung; Übergabewert der Eigenschaftsauspraegung
 	 * @return result - Vector des Objekts Eigenschaftsauspraegung

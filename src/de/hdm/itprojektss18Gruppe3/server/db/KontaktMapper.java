@@ -11,7 +11,7 @@ import java.util.Vector;
 import de.hdm.itprojektss18Gruppe3.shared.bo.*;
 
 /**
- * Die Mapper-Klasse KontaktMapper ermöglicht das Abbilden von Objekten "Kontakt" in einer relationalen Datenbank. 
+ * Die Mapper-Klasse "KontaktMapper" ermöglicht das Abbilden von Objekten "Kontakt" in einer relationalen Datenbank. 
  * Dabei sind in der Mapper-Klassen mehrere Methoden wie das erstellen, löschen, modifizieren 
  * oder das Suchen nach mehreren Möglichkeiten etc. implementiert. Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, 
  * aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
@@ -54,9 +54,10 @@ public class KontaktMapper extends PersonMapper{
 	}
 	
 	/**
-	 * Die Methode ermöglicht das Einfügen von Objekten "Kontakt".
+	 * Die Methode "createKontakt" ermöglicht das Einfügen von Objekten "Kontakt".
 	 *
 	 *@return kontakt vom Objekt Kontakt
+	 *@see createKontakt
 	 */
 	public Kontakt createKontakt(Kontakt kontakt) {
 		
@@ -116,13 +117,13 @@ public class KontaktMapper extends PersonMapper{
 	}
 	
 	/**
-	 * Mit dieser Methode updateKontakt wird das Aktualisieren eines Objektes vom "Kontakt" ermöglicht.
+	 * Mit dieser Methode "updateKontakt" wird das Aktualisieren eines Objektes vom "Kontakt" ermöglicht.
 	 * 
 	 * @param kontakt 
 	 * @return kontakt vom Objekt Kontakt
 	 */
 	public Kontakt updateKontakt(Kontakt kontakt) {
-		String sql = "UPDATE kontakt SET name= ?, erzeugungsdatum= ?, modifikationsdatum= ?, status= ? WHERE id= id ";
+		String sql = "UPDATE kontakt SET name= ?, erzeugungsdatum= ?, modifikationsdatum= ?, status= ? WHERE id= ? ";
 		java.sql.Date sqlDate= new java.sql.Date(kontakt.getErzeugungsdatum().getTime());
 		java.sql.Date sqlDate1 = new java.sql.Date(kontakt.getModifikationsdatum().getTime());
 		
@@ -164,8 +165,9 @@ public class KontaktMapper extends PersonMapper{
 	}
 	
 	/**
-	 * Die Methode deleteKontakt ermöglicht das Löschen vom Objekt "Kontakt"
+	 * Die Methode "deleteKontakt" ermöglicht das Löschen vom Objekt "Kontakt"
 	 * @param kontakt
+	 * @see deleteKontakt
 	 */	
 	public void deleteKontakt(Kontakt kontakt) {
 		
@@ -180,7 +182,7 @@ public class KontaktMapper extends PersonMapper{
 			 * Durchführen der Löschoperation
 			 */			
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM kontakt " 
-					+ "WHERE id=?");
+					+ "WHERE id= ?");
 			
 			stmt.setInt(1, kontakt.getId());
 			stmt.executeUpdate();
@@ -201,7 +203,7 @@ public class KontaktMapper extends PersonMapper{
 	}
 	
 	/**
-	 * Die Methode findKontaktByKontaktID ermöglicht das Suchen nach einem Kontakt anhand der kontaktid
+	 * Die Methode "findKontaktByKontaktID" ermöglicht das Suchen nach einem Kontakt anhand der kontaktid
 	 * 
 	 * @param kontakt2 - Objekt der Klasse Kontakt - hier wird die Kontakt ID entnommen
 	 * @return k - vom Objekt Kontakt - gibt den Kontakt zurück anhand einer KontaktID
@@ -256,9 +258,8 @@ public class KontaktMapper extends PersonMapper{
 	}
 
 	/**
-	 * Diese Methode durchläuft den kompletten Vector und liefert alle Datensätze die im Vector<Kontakt> gespeichert sind.
+	 * Die Methode "findAllKontakt" durchläuft den kompletten Vector und liefert alle Datensätze die im Vector<Kontakt> gespeichert sind.
 	 * @return result
-	 * @throws SQLException 
 	 */	
 	public Vector<Kontakt> findAllKontakt(){
 		
@@ -314,7 +315,7 @@ public class KontaktMapper extends PersonMapper{
 	}
 	
 	/**
-	 * Die Methode ermöglicht die Ausgabe eines Kontaktes, die im Vektor<Kontakt> gespeichert sind, anhand der nutzerid.
+	 * Die Methode "findAllKontaktByNutzerID" ermöglicht die Ausgabe eines Kontaktes, die im Vektor<Kontakt> gespeichert sind, anhand der nutzerid.
 	 * 
 	 * @param kontakt2 - Objekt der Klasse Kontakt - hier wird die NutzerID entnommen
 	 * @return result - gibt als Vektor alle Kontakte anhand der NutzerID zurück 
@@ -493,7 +494,12 @@ public class KontaktMapper extends PersonMapper{
 //		 */
 //		return result;
 //	}
-
+	
+	/**
+	 * Die Methode "deleteKontaktByNutzerID" ermöglicht das Löschen von einem Objekt "Kontakt" anhand der "nutzerid"
+	 * @param kontakt
+	 * @see deleteKontaktByNutzerID
+	 */
 	public void deleteKontaktByNutzerID(Kontakt kontakt) {
 
 		/**

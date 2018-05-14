@@ -10,13 +10,16 @@ import java.util.Vector;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 /**
- * @version 1.10 07 May 2018
- * @author ersinbarut
- */
-
-	/**
-	 * Die Klasse NutzerMapper erbt von ihrer Superklasse PersonMapper
-	 */
+* Die Klasse NutzerMapper erbt von ihrer Superklasse PersonMapper.
+* 
+* Die Mapper-Klasse "NutzerMapper" ermöglicht das Abbilden von Objekten "Nutzer" in einer relationalen Datenbank. 
+* Dabei sind in der Mapper-Klassen mehrere Methoden wie das erstellen, löschen, modifizieren 
+* oder das Suchen nach mehreren Möglichkeiten etc. implementiert. Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, 
+* aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
+* 
+* @version 1.10 07 May 2018
+* @author ersinbarut
+*/
 public class NutzerMapper extends PersonMapper{
 	
 	/**
@@ -27,7 +30,7 @@ public class NutzerMapper extends PersonMapper{
 	private static NutzerMapper nutzerMapper = null;
 	
 	/**
-	 * Geschuetzter Konstruktor - verhindert die Moeglichkeit, mit "new"
+	 * Geschützter Konstruktor - verhindert die Möglichkeit, mit "new"
 	 * neue Instanzen dieser Klasse zu erzeugen.
 	 * 
 	 */
@@ -48,7 +51,13 @@ public class NutzerMapper extends PersonMapper{
 		return nutzerMapper;
 	}
 	
-	
+	/**
+	 * Die Methode "createNutzer" ermöglicht das Einfügen von Objekten "Nutzer".
+	 * 
+	 * @param nutzer
+	 * @return
+	 * @see createNutzer
+	 */
 	public Nutzer createNutzer(Nutzer nutzer){
 		
 		/**
@@ -56,7 +65,6 @@ public class NutzerMapper extends PersonMapper{
 		 */
 		Connection con = DBConnection.connection();
 	
-		
 		try {
 			
 			Statement stmt = con.createStatement();
@@ -76,7 +84,7 @@ public class NutzerMapper extends PersonMapper{
 		
 			
 			/**
-			 * Druchfuehren der Einfuege Operation via Prepared Statement
+			 * Druchführen der Einfüge Operation via Prepared Statement
 			 */			
 				PreparedStatement stmt1 = con.prepareStatement(
 						"INSERT INTO nutzer (id, mail) VALUES (?, ?) ",
@@ -105,7 +113,7 @@ public class NutzerMapper extends PersonMapper{
 	}
 	
 	/**
-	 * Mit dieser Methode updateNutzer wird das Aktualisieren eines Objektes von "Nutzer" ermöglicht.
+	 * Mit dieser Methode "updateNutzer" wird das Aktualisieren eines Objektes von "Nutzer" ermöglicht.
 	 * 
 	 * @param nutzer
 	 * @return nutzer vom Objekt Nutzer
@@ -147,7 +155,10 @@ public class NutzerMapper extends PersonMapper{
 		return nutzer;
 	}
 	
-	
+	/**
+	 * Die Methode "deleteNutzer" ermöglicht das Löschen von einem Objekt "Nutzer".
+	 * @param nutzer
+	 */
 	public void deleteNutzer(Nutzer nutzer) {
 		
 		/**
@@ -158,7 +169,7 @@ public class NutzerMapper extends PersonMapper{
 		try {
 			
 			/**
-			 * Durchfuehren der Loeschoperation
+			 * Durchführen der Löschoperation
 			 */			
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM nutzer WHERE id= ?");
 			
@@ -182,10 +193,9 @@ public class NutzerMapper extends PersonMapper{
 	}	
 	
 	/**
-	 * Methode um alle Nutzer zurückzugeben
+	 * Methode "findAllNutzer" um alle Nutzer aus dem Vector<Nutzer> zurückzugeben
 	 * @param nutzerid
-	 * @return result 
-	 * gibt als Result alle Nutzer zurück
+	 * @return result - gibt als Result alle Nutzer zurück
 	 */
 	public Vector<Nutzer> findAllNutzer() {
 		
@@ -213,9 +223,8 @@ public class NutzerMapper extends PersonMapper{
 				nutzer.setId(rs.getInt("id"));
 				nutzer.setMail(rs.getString("mail"));
 
-				
 				/**
-				 * Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
 				 */
 				result.addElement(nutzer);
 		}
@@ -225,15 +234,13 @@ public class NutzerMapper extends PersonMapper{
 		}
 		
 		/**
-		 * Ergebnisvektor zurueckgeben
+		 * Ergebnisvektor zurückgeben
 		 */		
 		return result;
-
 	}
+	
 	public Nutzer findNutzerByEmail(String email){
 		return null;
 		
 	}
-	
-
 }
