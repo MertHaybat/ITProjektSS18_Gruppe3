@@ -92,4 +92,5 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(Eigenschaft e, Eigenschaftsauspraegung auspraegung, AsyncCallback<Vector<Kontakt>> callback);
 	
+	void deleteTeilhaberschaftByID(Teilhaberschaft t, AsyncCallback<Void> callback);
 }

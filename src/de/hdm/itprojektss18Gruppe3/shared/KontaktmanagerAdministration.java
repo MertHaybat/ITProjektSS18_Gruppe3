@@ -306,4 +306,8 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Kontakt> findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(Eigenschaft e, Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException;
+
+	public void deleteTeilhaberschaftByID(Teilhaberschaft t) throws IllegalArgumentException;
+
+
 }

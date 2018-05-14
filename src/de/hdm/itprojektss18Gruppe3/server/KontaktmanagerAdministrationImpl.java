@@ -575,8 +575,13 @@ implements KontaktmanagerAdministration {
 		return null;
 		
 	}
-
-	
+	/**
+	 * @param t - Übergabeparameter der ID von Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteTeilhaberschaftByID (Teilhaberschaft t) throws IllegalArgumentException{
+		this.teilhaberschaftMapper.deleteTeilhaberschaftByID(t);
+	}
 
 	
 	
