@@ -185,10 +185,10 @@ public class KontaktKontaktlisteMapper {
 	 * Alle KontaktKontaktlisten aus dem Vector<KontaktKontaktliste> die in einer Kontaktliste über die kontaktlisteid im Zusammenhang stehen,
 	 * also die in einer n:m Beziehung stehen, werden ausgegeben.
 	 * 
-	 * @param kontaktlisteid
-	 * @return result
+	 * @param kontaktliste - Objekt der Klasse Kontakt: hier wird die ID entnommen
+	 * @return result - gibt als Vector KontaktKontaktliste anhand der Kontaktliste ID aus
 	 */
-	public Vector<KontaktKontaktliste> findAllKontaktKontaktlisteByKontaktlisteID(int kontaktlisteid) {
+	public Vector<KontaktKontaktliste> findAllKontaktKontaktlisteByKontaktlisteID(KontaktKontaktliste kontaktKontaktliste2) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -204,7 +204,7 @@ public class KontaktKontaktlisteMapper {
 					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id` "
 					+ "WHERE `kontaktliste`.`id`= ?");
 			
-			stmt.setInt(1, kontaktlisteid);
+			stmt.setInt(1, kontaktKontaktliste2.getId());
 			
 			ResultSet rs = stmt.executeQuery();
 			

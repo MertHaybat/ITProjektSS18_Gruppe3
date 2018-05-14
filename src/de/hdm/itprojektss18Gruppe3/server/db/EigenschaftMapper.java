@@ -49,7 +49,7 @@ public class EigenschaftMapper {
 	 * Die Methode ermöglicht das Einfügen von Objekten "Eigenschaft".
 	 * Insert SQL = Erstellen von einem Datensatz und das Einfügen in die Datenbank.
 	 *
-	 *@return eigenschaft
+	 *@return eigenschaft 
 	 *@see insertEigenschaft
 	 */
 	
@@ -153,7 +153,7 @@ public class EigenschaftMapper {
 	
 	/**
 	 * Diese Methode durchläuft den kompletten Vektor und liefert alle Datensätze, die im Vector<Eigenschaft> gespeichert sind.
-	 * @return result ist ein Vektor des Typs Eigenschaft
+	 * @return result - ist ein Vektor des Typs Eigenschaft - gibt alle Eigenschaften zurück, die in der Datenbank hinterlegt wurden
 	 * @see findAllEigenschaft
 	 */
 	
@@ -212,14 +212,12 @@ public class EigenschaftMapper {
 	
 	/**
 	 * Die Methode findEigenschaftByEigenschaftID ermöglicht das Suchen nach einer Eigenschaft über den Primärschlüssel
-	 * 
-	 * @param id
-	 * @return eigenschaft
-	 * @return null
+	 * @param eig: Objekt der Klasse Eigenschaft: hier wird die EigenschaftID rausgenommen
+	 * @return eigenschaft2: gibt die Eigenschaft zurück
 	 * @see findByEigenschaftID
 	 */
 	
-	public Eigenschaft findEigenschaftByEigenschaftID(int id) {
+	public Eigenschaft findEigenschaftByEigenschaftID(Eigenschaft eig) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -231,14 +229,14 @@ public class EigenschaftMapper {
 
 		try{
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM eigenschaft WHERE id = ?");
-			stmt.setInt(1, id);
+			stmt.setInt(1, eig.getId());
 			
 			/**
 			 * Statement ausfüllen und an die DB senden
 			 */	
 			ResultSet rs = stmt.executeQuery();
 			
-			while(rs.next()){
+			if(rs.next()){
 				
 				Eigenschaft eigenschaft = new Eigenschaft();
 				
@@ -250,7 +248,6 @@ public class EigenschaftMapper {
 		}
 		catch(SQLException e2){
 			e2.printStackTrace();
-			return null;
 		}
 		finally{
 			if(con!=null)
@@ -265,7 +262,12 @@ public class EigenschaftMapper {
 		
 	}
 	
-	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung){
+	/**
+	 * Die Methode findEigenschaftByBezeichnung sucht die Eigenschaft anhand der Bezeichnung 
+	 * @param eigenschaft: Objekt der Klasse Eigenschaft: hier wird die Bezeichnung rausgenommen
+	 * @return eig: gibt die Bezeichnung der Eigenschaft zurück
+	 */
+	public Eigenschaft findEigenschaftByBezeichnung(Eigenschaft eigenschaft){
 		
 		
 		Connection con = DBConnection.connection();
@@ -277,20 +279,19 @@ public class EigenschaftMapper {
 			/**
 			 * Durchführung der Einfüge-Operation via Prepared Statement
 			 */
-			PreparedStatement stmt = con
-					.prepareStatement("SELECT * FROM `eigenschaft` WHERE `bezeichnung` LIKE ?");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM `eigenschaft` WHERE `bezeichnung` LIKE ?");
 
-			stmt.setString(1, bezeichnung);
+			stmt.setString(1, eigenschaft.getBezeichnung());
 
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 
-				Eigenschaft eigenschaft = new Eigenschaft();
+				Eigenschaft eigenschaft2 = new Eigenschaft();
 
-				eigenschaft.setId(rs.getInt("id"));
-				eigenschaft.setBezeichnung(rs.getString("bezeichnung"));
+				eigenschaft2.setId(rs.getInt("id"));
+				eigenschaft2.setBezeichnung(rs.getString("bezeichnung"));
 				
-				eig=eigenschaft;
+				eig=eigenschaft2;
 				}
 
 		} catch (SQLException e2) {
