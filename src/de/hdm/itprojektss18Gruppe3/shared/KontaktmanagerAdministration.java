@@ -96,20 +96,13 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	/**
 	 * Suchen eines Teilhaberschaftobjekts eines Teilhabenden.
 	 * @param teilhabenderID
-	 * @return Teilhaberschaftobjekt
+	 * @return Vector des Typs Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
-	public Teilhaberschaft findTeilhaberschaftByTeilhabenderID(int teilhabenderID)
+	public Vector<Teilhaberschaft> findTeilhaberschaftByTeilhabenderID(int teilhabenderID)
 			throws IllegalArgumentException;
 	
-	/**
-	 * Suchen eines Teilhaberschaftobjekts eines Eigentümers.
-	 * @param eigentuemerID
-	 * @return Teilhaberschaftobjekt
-	 * @throws IllegalArgumentException
-	 */
-	public Teilhaberschaft findTeilhaberschaftByEigentuemerID(int eigentuemerID)
-			throws IllegalArgumentException;
+	Vector<Teilhaberschaft> findTeilhaberschaftByEigentuemerID(int eigentuemerID);
 	
 	/**
 	 * Auslesen aller Eigenschaftobjekte.
@@ -197,7 +190,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector des Typs Eigenschaft
 	 * @throws IllegalArgumentException
 	 */
-	public Vector <Eigenschaft> findAllEigenschaftByEigenschaftIDFromPerson(Eigenschaft e) throws IllegalArgumentException;
+	public Vector <Eigenschaft> findAllEigenschaftByEigenschaftIDFromPerson(Eigenschaftsauspraegung e) throws IllegalArgumentException;
 	
 	/**
 	 * Alle Kontakte von einer Eigenschaftsausprägung anzeigen lassen. Dies ist die Suchfunktion.
@@ -305,4 +298,12 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	public void deleteKontaktKontaktlisteByKontaktID(KontaktKontaktliste k) throws IllegalArgumentException;
 	
+	/**
+	 * 
+	 * 
+	 * @param e Objekt der Klasse Eigenschaft
+	 * @return Vector der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Kontakt> findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(Eigenschaft e, Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException;
 }
