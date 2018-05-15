@@ -1,5 +1,71 @@
 /** Add css rules here for your application. */
 
+html {
+	background-image: url("https://image.ibb.co/nedhWJ/funky_lines.png");
+	background-repeat: repeat;
+}
+
+#main {
+	min-height: 500px;
+	background-image: url("https://image.ibb.co/nedhWJ/funky_lines.png");
+	background-repeat: repeat;
+}
+
+#header {
+	height: 80px;
+	width: 89.5%;
+	margin-top: 20px;
+	margin-left: 5%;
+	margin-bottom: 20px;
+	border: 2px solid black;
+	background: linear-gradient(to bottom, #3399ff 0%, #99ccff 100%);
+	box-shadow: 5px 5px 2.5px grey;
+}
+
+#header .headline {
+	font-size: 2.9em;
+	color: white;
+	font-family: 'Ubuntu', sans-serif;
+	font-weight: 1.5%;
+	padding: 15px;
+	text-shadow: 1.5px 1.5px grey;
+	letter-spacing: 0.01em;
+}
+
+#menu {
+	min-height: 550px;
+	width: 15%;
+	display: inline-block;
+	border: 2px solid black;
+	margin-left: 5%;
+	margin-right: 1%;
+	background-color: white;
+	box-shadow: 3px 2px 2px grey;
+}
+
+#menu .headline {
+	font-size: 1.8em;
+	color: blue;
+}
+
+#content {
+	min-height: 550px;
+	width: 73%;
+	display: inline-block;
+	border: 2px solid black;
+	background-color: white;
+	box-shadow: 3px 2px 2px grey;
+}
+
+#footer {
+	height: 80px;
+	width: 90%;
+	margin: 20px auto;
+	border: 2px solid black;
+	background: linear-gradient(to top, #3399ff 0%, #99ccff 100%);
+	box-shadow: 5px 5px 2.5px grey;
+}
+
 
 /** Example rules used by the template application (remove for your app) */
 h1 {
