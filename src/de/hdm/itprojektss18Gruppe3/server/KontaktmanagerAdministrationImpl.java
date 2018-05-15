@@ -584,5 +584,114 @@ implements KontaktmanagerAdministration {
 	}
 
 	
+	/**
+	 * 
+	 * @param eig - Übergabeparameter der Eigenschaft, die geändert werden soll
+	 * @throws IllegalArgumentException
+	 */
+	public void saveEigenschaft(Eigenschaft eig) throws IllegalArgumentException {
+
+		try {
+			eigenschaftMapper.updateEigenschaft(eig);
+		} 
+		catch (Exception e) {
+		}
+	}
+	/**
+	 * 
+	 * @param aus - Übergabeparameter der Eigenschaftsausprägung, die geändert werden soll
+	 * @throws IllegalArgumentException
+	 */
 	
+	public void saveEigenschaftsauspraegung(Eigenschaftsauspraegung aus) throws IllegalArgumentException{
+		
+		try{
+			eigenschaftsauspraegungMapper.updateEigenschaftsauspraegung(aus);
+		} 
+		catch(Exception e){
+		}
+	}
+	
+	/**
+	 * 
+	 * @param k - Übergabeparameter von Kontakt, der geändert werden soll
+	 * @throws IllegalArgumentException
+	 */
+	public void saveKontakt(Kontakt k) throws IllegalArgumentException{
+		
+		try{
+			kontaktMapper.updateKontakt(k);
+		} 
+		catch (Exception e){
+		}
+	}
+	
+	/**
+	 * 
+	 * @param kliste - Übergabeparameter von Kontaktliste, die geändert werden soll
+	 * @throws IllegalArgumentException
+	 */
+	public void saveKontaktliste(Kontaktliste kliste) throws IllegalArgumentException{
+		
+		try{
+			kontaktlisteMapper.updateKontaktliste(kliste);
+		}
+		catch (Exception e){
+		}
+	}
+	
+	/**
+	 * 
+	 * @param n - Übergabeparameter von Nutzer, der geändert werden soll
+	 * @throws IllegalArgumentException
+	 */
+	public void saveNutzer(Nutzer n) throws IllegalArgumentException{
+		
+		try{
+			nutzerMapper.updateNutzer(n);
+		}
+		catch(Exception e){
+		}
+	}
+//	/**
+//	 * 
+//	 * @param nutzer - Übergabeparameter von Person, die über Nutzermapper geändert werden soll
+//	 * @throws IllegalArgumentException
+//	 */
+//	public void saveNutzer2(Nutzer nutzer) throws IllegalArgumentException{
+//		
+//		try{
+//			nutzerMapper.updatePerson(nutzer);
+//		}
+//		catch(Exception e){
+//		}
+//	}
+	
+	/**
+	 * 
+	 * @param p - Übergabeparamater von Person, die geändert werden soll
+	 * @throws IllegalArgumentException
+	 */
+	public void savePerson(Person p) throws IllegalArgumentException{
+		
+		try{
+			personMapper.updatePerson(p);
+		}
+		catch(Exception e){
+		}
+	}
+	
+	/**
+	 * 
+	 * @param t - Übergabeparameter von Teilhaberschaft, die geändert werden soll
+	 * @throws IllegalArgumentException
+	 */
+	public void saveTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException{
+		
+		try{
+			teilhaberschaftMapper.updateTeilhaberschaft(t);
+		}
+		catch(Exception e){
+		}
+	}
 }

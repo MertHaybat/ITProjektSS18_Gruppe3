@@ -93,4 +93,23 @@ public interface KontaktmanagerAdministrationAsync {
 	void findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(Eigenschaft e, Eigenschaftsauspraegung auspraegung, AsyncCallback<Vector<Kontakt>> callback);
 	
 	void deleteTeilhaberschaftByID(Teilhaberschaft t, AsyncCallback<Void> callback);
+
+	void saveEigenschaft(Eigenschaft eig, AsyncCallback<Void> callback);
+	
+	void saveEigenschaftsauspraegung(Eigenschaftsauspraegung aus, AsyncCallback<Void> callback);
+	
+	void saveKontakt(Kontakt k, AsyncCallback<Void> callback);
+	
+	void saveKontaktliste(Kontaktliste kliste, AsyncCallback<Void> callback);
+			
+	void saveNutzer(Nutzer n, AsyncCallback<Void> callback);
+			
+//	void saveNutzer2(Nutzer nutzer, AsyncCallback<Void> callback);
+			
+	void savePerson(Person p, AsyncCallback<Void> callback);
+			
+	void saveTeilhaberschaft(Teilhaberschaft t, AsyncCallback<Void> callback);
+			
+			
+	
 }

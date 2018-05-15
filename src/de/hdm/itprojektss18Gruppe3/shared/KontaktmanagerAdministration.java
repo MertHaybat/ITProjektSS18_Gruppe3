@@ -307,7 +307,69 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	public Vector<Kontakt> findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(Eigenschaft e, Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException;
 
+	/**
+	 * 
+	 * @param t Objekt der Klasse Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
 	public void deleteTeilhaberschaftByID(Teilhaberschaft t) throws IllegalArgumentException;
+
+	/**
+	 * 
+	 * @param eig - Objekt der Klasse Eigenschaft
+	 * @throws IllegalArgumentException
+	 */
+	public void saveEigenschaft(Eigenschaft eig) throws IllegalArgumentException;
+
+	/**
+	 * 
+	 * @param aus - Objekt der Klasse Eigenschaftsausprägung
+	 * @throws IllegalArgumentException
+	 */
+	public void saveEigenschaftsauspraegung(Eigenschaftsauspraegung aus) throws IllegalArgumentException;
+
+	/**
+	 * 
+	 * @param k Objekt der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
+	public void saveKontakt(Kontakt k) throws IllegalArgumentException;
+
+	/**
+	 * 
+	 * @param kliste - Objekt der Klasse Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	public void saveKontaktliste(Kontaktliste kliste) throws IllegalArgumentException;
+
+	/**
+	 * 
+	 * @param n - Objekt der Klasse Nutzer
+	 * @throws IllegalArgumentException
+	 */
+	public void saveNutzer(Nutzer n) throws IllegalArgumentException;
+
+//	/**
+//	 * 
+//	 * @param nutzer - Objekt der Klasse Nutzer
+//	 * @throws IllegalArgumentException
+//	 */
+//	public void saveNutzer2(Nutzer nutzer) throws IllegalArgumentException;
+
+	/**
+	 * 
+	 * @param p - Objekt der Klasse Person
+	 * @throws IllegalArgumentException
+	 */
+	public void savePerson(Person p) throws IllegalArgumentException;
+
+	/**
+	 * 
+	 * @param t - Objekt der Klasse Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
+	public void saveTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException;
+
 
 
 }
