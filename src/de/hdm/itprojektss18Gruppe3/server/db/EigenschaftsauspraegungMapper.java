@@ -247,12 +247,12 @@ public class EigenschaftsauspraegungMapper {
 	/**
 	 * Die Methode "findAllEigenschaftsauspraegungenByEigenschaftID" ermöglicht das Ausgeben aller Eigenschaftsauspraegungen
 	 * zu einer Eigenschaft
-	 * @param auspraegung - Objekt der Klasse Eigenschaftsauspraegung - hier wird die EigenschaftID entnommen
+	 * @param eigenschaftID - Fremdschlüssel aus der Tabelle Eigenschaft
 	 * @return null - gibt in der catch-Methode null zurück um später Fehler besser zu lösen
 	 * @return result - gibt als Vector alle Eigenschaftsauspraegungen zu einer EigenschaftID zurück
 	 */
 	
-	public Vector <Eigenschaftsauspraegung> findAllEigenschaftsauspraegungenByEigenschaftID(Eigenschaftsauspraegung auspraegung) {
+	public Vector <Eigenschaftsauspraegung> findAllEigenschaftsauspraegungenByEigenschaftID(int eigenschaftID) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -263,7 +263,7 @@ public class EigenschaftsauspraegungMapper {
 
 		try{
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM eigenschaftsauspraegung WHERE eigenschaftid = ?");
-			stmt.setInt(1, auspraegung.getEigenschaftID());
+			stmt.setInt(1, eigenschaftID);
 			
 			/**
 			 * Statement ausfüllen und an die DB senden
@@ -307,11 +307,11 @@ public class EigenschaftsauspraegungMapper {
 	
 	/**
 	 * Mit der Methode "findAllEigenschaftsauspraegungByPersonID" wird das Suchen einer Eigenschaftsausprägung im Vector<Eigenschaftsauspraegung> anhand der "personid" ermöglicht.
-	 * @param auspraegung - Objekt der Klasse Eigenschaftsauspraegung 
+	 * @param personID - Fremdschlüssel aus der Tabelle Person
 	 * @return result - hier wird ein Vector ausgegeben mit allen Eigenschaftsauspraegungen einer bestimmten Person
 	 */
 	
-	public Vector <Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByPersonID (Eigenschaftsauspraegung auspraegung) {
+	public Vector <Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByPersonID (int personID) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -322,7 +322,7 @@ public class EigenschaftsauspraegungMapper {
 		
 		try {
 		PreparedStatement stmt = con.prepareStatement("SELECT * FROM eigenschaftsauspraegung WHERE personid = ? ");
-		stmt.setInt(1, auspraegung.getEigenschaftID());
+		stmt.setInt(1, personID);
 		
 		ResultSet rs = stmt.executeQuery();
 		/**
@@ -365,10 +365,10 @@ public class EigenschaftsauspraegungMapper {
 	/**
 	 * Die Methode "findAllEigeschaftauspraegungByWert" ist für die Suchfunktion. Es wird nach dem Wert der Eigenschaftsauspraegung geschaut.
 	 * 
-	 * @param auspraegung; Übergabewert der Eigenschaftsauspraegung
+	 * @param wert - Ist die Eigenschaftsauspraegung die eingegeben wird. Spalte "wert".
 	 * @return result - Vector des Objekts Eigenschaftsauspraegung
 	 */
-	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung auspraegung) {
+	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWert(String wert) {
 
 		/**
 		 * Verbindung zur DB Connection
@@ -378,7 +378,7 @@ public class EigenschaftsauspraegungMapper {
 		Vector<Eigenschaftsauspraegung> result = new Vector<Eigenschaftsauspraegung>();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE '%"+auspraegung.getWert()+"%'");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE '%"+wert+"%'");
 //			stmt.setString(1, wert);
 
 			ResultSet rs = stmt.executeQuery();

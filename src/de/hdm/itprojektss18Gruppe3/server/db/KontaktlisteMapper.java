@@ -278,10 +278,10 @@ public class KontaktlisteMapper {
 	
 	/**
 	 * Die Methode "findAllKontaktlisteByNutzerID" ermöglicht die Ausgabe einer Kontaktliste, die im Vektor<Kontaktliste> gespeichert sind, anhand der nutzerid.
-	 * @param kontaktliste2 - Objekt der Klasse Kontaktliste - hier wird die NutzerID entnommen
+	 * @param nutzerID - NutzerID aus der Kontaktliste
 	 * @return result - gibt als Vektor alle Kontaktlisten eines bestimmten Nutzers zurück
 	 */
-	public Vector<Kontaktliste> findAllKontaktlisteByNutzerID(Kontaktliste kontaktliste2) {
+	public Vector<Kontaktliste> findAllKontaktlisteByNutzerID(int nutzerID) {
 		/**
 		 * Verbindung zur DB Connection
 		 */	
@@ -292,7 +292,7 @@ public class KontaktlisteMapper {
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE nutzerid= ?");
 			
-			stmt.setInt(1, kontaktliste2.getNutzerID());
+			stmt.setInt(1, nutzerID);
 			
 			ResultSet rs = stmt.executeQuery();
 			

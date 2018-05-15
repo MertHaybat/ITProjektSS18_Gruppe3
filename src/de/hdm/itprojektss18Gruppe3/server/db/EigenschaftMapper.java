@@ -221,12 +221,12 @@ public class EigenschaftMapper {
 	
 	/**
 	 * Die Methode "findEigenschaftByEigenschaftID" ermöglicht das Suchen nach einer Eigenschaft über den Primärschlüssel
-	 * @param eig: Objekt der Klasse Eigenschaft: hier wird die EigenschaftID rausgenommen
+	 * @param eigenschaftID: EigenschaftID der Primärschlüssel der Tabelle Eigenschaft
 	 * @return eigenschaft2: gibt die Eigenschaft zurück
 	 * @see findByEigenschaftID
 	 */
 	
-	public Eigenschaft findEigenschaftByEigenschaftID(Eigenschaft eig) {
+	public Eigenschaft findEigenschaftByEigenschaftID(int eigenschaftID) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -238,7 +238,7 @@ public class EigenschaftMapper {
 
 		try{
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM eigenschaft WHERE id = ?");
-			stmt.setInt(1, eig.getId());
+			stmt.setInt(1, eigenschaftID);
 			
 			/**
 			 * Statement ausfüllen und an die DB senden
@@ -273,10 +273,10 @@ public class EigenschaftMapper {
 	
 	/**
 	 * Die Methode "findEigenschaftByBezeichnung" sucht die Eigenschaft anhand der Bezeichnung 
-	 * @param eigenschaft: Objekt der Klasse Eigenschaft: hier wird die Bezeichnung rausgenommen
+	 * @param bezeichnung - Ist die Eigenschaftsbezeichnung die vom User eingegeben wird.
 	 * @return eig: gibt die Bezeichnung der Eigenschaft zurück
 	 */
-	public Eigenschaft findEigenschaftByBezeichnung(Eigenschaft eigenschaft){
+	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung){
 		
 		
 		Connection con = DBConnection.connection();
@@ -290,7 +290,7 @@ public class EigenschaftMapper {
 			 */
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM `eigenschaft` WHERE `bezeichnung` LIKE ?");
 
-			stmt.setString(1, eigenschaft.getBezeichnung());
+			stmt.setString(1, bezeichnung);
 
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {

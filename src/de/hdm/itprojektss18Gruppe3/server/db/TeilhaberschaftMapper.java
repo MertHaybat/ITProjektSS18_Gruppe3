@@ -167,10 +167,10 @@ public class TeilhaberschaftMapper {
 	
 	/**
 	 * Methode "findTeilhaberschaftByTeilhabenderID" um alle Teilhaberschaften anhand der von Teilhabern zu finden 
-	 * @param teilhaberschaft2 - Objekt, der Klasse Teilhaberschaft - übergibt die id des Teilhabenden
+	 * @param teilhabenderID - teilhabenderID aus Teilhaberschaft
 	 * @return result - gibt als Vektor alle Teilhaberschaften eines Teilhabenden (durch die teilhabenderid) zurück
 	 */
-	public Vector<Teilhaberschaft> findTeilhaberschaftByTeilhabenderID(Teilhaberschaft teilhaberschaft2) {
+	public Vector<Teilhaberschaft> findTeilhaberschaftByTeilhabenderID(int teilhabenderID) {
 		
 		/**
 		 * Verbindung zur Datenbank
@@ -182,7 +182,7 @@ public class TeilhaberschaftMapper {
 		try{
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE teilhabenderid= ?");
 			
-			stmt.setInt(1, teilhaberschaft2.getTeilhabenderID());
+			stmt.setInt(1, teilhabenderID);
 			ResultSet rs = stmt.executeQuery();
 			
 			/**
@@ -226,10 +226,10 @@ public class TeilhaberschaftMapper {
 	
 	/**
 	 * Methode "findTeilhaberschaftByEigentuemerID" um alle Teilhaberschaften anhand der von Teilhabern zu finden 
-	 * @param teilhaberschaft2 - Objekt, der Klasse Teilhaberschaft - übergibt die id des Eigentuemers
+	 * @param eigentuemerID - EigentuemerID der Teilhaberschaft
 	 * @return result - gibt als Vektor alle Teilhaberschaften eines Eigentuemers (durch die eigentuemerid) zurück
 	 */
-	public Vector<Teilhaberschaft> findTeilhaberschaftByEigentuemerID(Teilhaberschaft teilhaberschaft2) {
+	public Vector<Teilhaberschaft> findTeilhaberschaftByEigentuemerID(int eigentuemerID) {
 		
 		/**
 		 * Verbindung zur Datenbank
@@ -240,7 +240,7 @@ public class TeilhaberschaftMapper {
 		
 		try{
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE eigentuemerid=?");
-			stmt.setInt(1, teilhaberschaft2.getEigentuemerID());
+			stmt.setInt(1, eigentuemerID);
 			ResultSet rs = stmt.executeQuery();
 			
 			/**

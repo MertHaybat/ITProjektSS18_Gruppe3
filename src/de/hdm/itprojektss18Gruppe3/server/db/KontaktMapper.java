@@ -205,10 +205,10 @@ public class KontaktMapper extends PersonMapper{
 	/**
 	 * Die Methode "findKontaktByKontaktID" ermöglicht das Suchen nach einem Kontakt anhand der kontaktid
 	 * 
-	 * @param kontakt2 - Objekt der Klasse Kontakt - hier wird die Kontakt ID entnommen
+	 * @param kontaktID - Der Primärschlüssel der Tabelle Kontakt
 	 * @return k - vom Objekt Kontakt - gibt den Kontakt zurück anhand einer KontaktID
 	 */	
-	public Kontakt findKontaktByKontaktID(Kontakt kontakt2) {
+	public Kontakt findKontaktByKontaktID(int kontaktID) {
 
 		/**
 		 * Verbindung zur DB Connection
@@ -221,7 +221,7 @@ public class KontaktMapper extends PersonMapper{
 
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE `id` = ?");
 
-			stmt.setInt(1, kontakt2.getId());
+			stmt.setInt(1, kontaktID);
 			ResultSet rs = stmt.executeQuery();
 
 			/**
@@ -435,65 +435,65 @@ public class KontaktMapper extends PersonMapper{
 	/**
 	 * Alle Kontakte aus dem Vector<Kontakt> in einer Kontaktliste kontaktlisteid ausgeben
 	 * 
-	 * @param kontakt2
-	 * @return result
+	 * @param kontaktlisteID ist die KontaktlisteID aus der zusammengesetzten Tabelle
+	 * @return result ein Vector der Klasse Kontakt
 	 */
-//	public Vector<Kontakt> findAllKontakteByKontaktlisteID(Kontakt kontakt2) {
-//		
-//		/**
-//		 * Verbindung zur DB Connection
-//		 */
-//		Connection con = DBConnection.connection();
-//		
-//		Vector<Kontakt> result = new Vector<Kontakt>();
-//
-//		try {
-//			PreparedStatement stmt = con.prepareStatement("SELECT `kontakt`.`name`, `kontakt`.`erzeugungsdatum`, `kontakt`.`modifikationsdatum`, `kontakt`.`status`, `kontaktliste`.`id` "
-//					+ "FROM `kontaktliste` "
-//					+ "LEFT JOIN `kontaktkontaktliste` "
-//					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id` "
-//					+ "LEFT JOIN `kontakt` "
-//					+ "ON `kontaktkontaktliste`.`kontaktid` = `kontakt`.`id` WHERE `kontaktliste`.`id` = ?");
-//			
-//			stmt.setInt(1, kontakt2.getId());
-//			ResultSet rs = stmt.executeQuery();
-//			
-//			/**
-//			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
-//			 */
-//			while(rs.next()) {
-//				Kontakt kontakt = new Kontakt();
-//				
-//				kontakt.setId(rs.getInt("id"));
-//				kontakt.setName(rs.getString("name"));
-//				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-//				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
-//				kontakt.setStatus(rs.getInt("status"));
-//				
-//				/**
-//				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
-//				 */
-//				result.addElement(kontakt);
-//			}
-//		}
-//		catch(SQLException e2) {
-//			e2.printStackTrace();
-//		}
-//		finally {	
-//			if (con!=null) 
-//				try {
-//					con.close();
-//				}
-//				catch(SQLException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		
-//		/**
-//		 * Ergebnisvektor zurückgeben
-//		 */
-//		return result;
-//	}
+	public Vector<Kontakt> findAllKontakteByKontaktlisteID(int kontaktlisteID) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+		
+		Vector<Kontakt> result = new Vector<Kontakt>();
+
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT `kontakt`.`name`, `kontakt`.`erzeugungsdatum`, `kontakt`.`modifikationsdatum`, `kontakt`.`status`, `kontaktliste`.`id` "
+					+ "FROM `kontaktliste` "
+					+ "LEFT JOIN `kontaktkontaktliste` "
+					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id` "
+					+ "LEFT JOIN `kontakt` "
+					+ "ON `kontaktkontaktliste`.`kontaktid` = `kontakt`.`id` WHERE `kontaktliste`.`id` = ?");
+			
+			stmt.setInt(1, kontaktlisteID);
+			ResultSet rs = stmt.executeQuery();
+			
+			/**
+			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
+			 */
+			while(rs.next()) {
+				Kontakt kontakt = new Kontakt();
+				
+				kontakt.setId(rs.getInt("id"));
+				kontakt.setName(rs.getString("name"));
+				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("status"));
+				
+				/**
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 */
+				result.addElement(kontakt);
+			}
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+			if (con!=null) 
+				try {
+					con.close();
+				}
+				catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		return result;
+	}
 	
 	/**
 	 * Die Methode "deleteKontaktByNutzerID" ermöglicht das Löschen von einem Objekt "Kontakt" anhand der "nutzerid"

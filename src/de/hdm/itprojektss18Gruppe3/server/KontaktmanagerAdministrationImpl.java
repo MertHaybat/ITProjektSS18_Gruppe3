@@ -315,7 +315,7 @@ implements KontaktmanagerAdministration {
 	 */
 	@Override
 	public Vector <Kontakt> findAllKontakteByKontaktlisteID(Kontaktliste k) throws IllegalArgumentException {
-		return this.kontaktMapper.findAllKontakteByKontaktliste(k.getId());
+		return this.kontaktMapper.findAllKontakteByKontaktlisteID(k.getId());
 	}
 	/**
 	 * Kontakte mit der Kontakt ID anzeigen lassen
