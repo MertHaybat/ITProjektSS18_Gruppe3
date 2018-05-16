@@ -58,7 +58,7 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findAllKontakteByKontaktlisteID(Kontaktliste k, AsyncCallback<Vector<Kontakt>> callback);
 
-	void findKontaktByID(Kontakt k, AsyncCallback<Kontakt> callback);
+	void findKontaktByID(int kontaktID, AsyncCallback<Kontakt> callback);
 
 	void findAllEigenschaftsauspraegungByPersonID(Person p, AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
 
@@ -72,8 +72,6 @@ public interface KontaktmanagerAdministrationAsync {
 	void findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung e,
 			AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
 
-	void deletePerson(Person p, AsyncCallback<Void> callback);
-
 	void deleteKontaktKontaktlisteByKontaktlisteID(KontaktKontaktliste k, AsyncCallback<Void> callback);
 
 	void deleteTeilhaberschaftByPersonID(Teilhaberschaft t, AsyncCallback<Void> callback);
@@ -86,7 +84,7 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findEigenschaftByEigenschaftID(Eigenschaft e, AsyncCallback<Eigenschaft> callback);
 
-	void deleteKontaktByNutzerID(Kontakt k, AsyncCallback<Void> callback);
+	void deleteKontaktByOwner(Kontakt k, AsyncCallback<Void> callback);
 
 	void deleteKontaktKontaktlisteByKontaktID(KontaktKontaktliste k, AsyncCallback<Void> callback);
 
@@ -109,6 +107,24 @@ public interface KontaktmanagerAdministrationAsync {
 	void savePerson(Person p, AsyncCallback<Void> callback);
 			
 	void saveTeilhaberschaft(Teilhaberschaft t, AsyncCallback<Void> callback);
+
+	void deleteAllTeilhaberschaftByOwner(Nutzer n, AsyncCallback<Void> callback);
+
+	void deleteAllEigenschaftsauspraegungByNutzer(Nutzer n, AsyncCallback<Void> callback);
+
+	void deleteAllKontaktKontaktlisteByOwner(Nutzer n, AsyncCallback<Void> callback);
+
+	void deleteAllKontaktByOwner(Nutzer n, AsyncCallback<Void> callback);
+
+	void deleteAllKontaktlisteByOwner(Nutzer n, AsyncCallback<Void> callback);
+
+	void deleteNutzer(Nutzer n, AsyncCallback<Void> callback);
+
+	void deleteTeilhaberschaftByKontakt(Kontakt k, AsyncCallback<Void> callback);
+
+	void deleteEigenschaftsauspraegungByKontakt(Kontakt k, AsyncCallback<Void> callback);
+
+	void deleteKontaktKontaktlisteByKontakt(Kontakt k, AsyncCallback<Void> callback);
 			
 			
 	

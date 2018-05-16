@@ -12,13 +12,38 @@
     <servlet-class>de.hdm.itprojektss18Gruppe3.server.KontaktmanagerAdministrationImpl</servlet-class>
   </servlet>
   
-  
+  <servlet>
+    <servlet-name>reportgeneratorServlet</servlet-name>
+    <servlet-class>de.hdm.itprojektss18Gruppe3.server.report.ReportGeneratorImpl</servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>kontaktmanagerServlet</servlet-name>
     <url-pattern>/itprojektss18gruppe3/kontaktmanager</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>reportgeneratorServlet</servlet-name>
     <url-pattern>/itprojektreport/reportgenerator</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+  	<servlet-name>loginService</servlet-name>
+  	<servlet-class>de.hdm.itprojektss18Gruppe3.server.LoginServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>loginService</servlet-name>
+  	<url-pattern>/itprojektss18gruppe3/login</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>loginService</servlet-name>
+  	<url-pattern>/itprojektreport/login</url-pattern>
+  </servlet-mapping>  
+  
+    
+    
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>ITProjektSS18Gruppe3.html</welcome-file>
