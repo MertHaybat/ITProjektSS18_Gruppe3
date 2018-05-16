@@ -172,7 +172,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Objekt der Klasse Kontakt
 	 * @throws IllegalArgumentException
 	 */
-	public Kontakt findKontaktByID(Kontakt k) throws IllegalArgumentException;
+	public Kontakt findKontaktByID(int kontaktID) throws IllegalArgumentException;
 	
 	/**
 	 * Alle Eigenschaftsausprägung einer Person (Nutzer/Kontakt) anzeigen lassen
@@ -225,16 +225,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @param k; Objekt der Klasse Kontakt
 	 * @throws IllegalArgumentException
 	 */
-	public void deleteKontaktByNutzerID(Kontakt k) throws IllegalArgumentException;
-		
-	/**
-	 * Löschen einer Person (Nutzer/Kontakt)
-	 * 
-	 * @param p; Objekt der Klasse Person
-	 * @return Objekt des Typs Person
-	 * @throws IllegalArgumentException
-	 */
-	public void deletePerson(Person p) throws IllegalArgumentException;
+	public void deleteKontaktByOwner(Kontakt k) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen der Beziehung zwischen KontaktKontaktliste mit der KontaktlisteID
@@ -370,6 +361,76 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	public void saveTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException;
 
+	/**
+	 * Löschen aller Teilhaberschaften eines Nutzers
+	 * 
+	 * @param n - Objekt der Klasse Nutzer
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteAllTeilhaberschaftByOwner(Nutzer n) throws IllegalArgumentException;
 
+	/**
+	 * Löschen aller Eigenschaftsauspraegungen einer Person
+	 * 
+	 * @param p - Objekt der Klasse Person
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteAllEigenschaftsauspraegungByNutzer(Nutzer n) throws IllegalArgumentException;
+	
+	/**
+	 * Löschen aller KontaktKontaktliste Beziehungen in der Zwischentabelle.
+	 * 
+	 * @param nutzerID - Übergabeparameter des Fremdschlüssels in der Kontaktliste 
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteAllKontaktKontaktlisteByOwner(Nutzer n) throws IllegalArgumentException;
+	
+	/**
+	 * Löschen aller Kontakt eines Nutzers
+	 * 
+	 * @param n - Nutzer Objekt, der Besitzer eines Kontakts
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteAllKontaktByOwner(Nutzer n) throws IllegalArgumentException;
 
+	/**
+	 * Löschen aller Kontaktlisten eines Nutzers
+	 * 
+	 * @param n - Nutzer Objekt, der Besitzer einer Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteAllKontaktlisteByOwner(Nutzer n) throws IllegalArgumentException;
+	
+	/**
+	 * Löschen eines Nutzers
+	 * 
+	 * @param n - Nutzer Objekt, der Besitzer eines Nutzers
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteNutzer(Nutzer n) throws IllegalArgumentException;
+	
+	/**
+	 * Teilhaberschaften ausgehend von einem Kontakt werden gelöscht
+	 * 
+	 * @param k - Kontakt Objekt, für die Fremdschlüssel in der Tabelle Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteTeilhaberschaftByKontakt(Kontakt k) throws IllegalArgumentException;
+	
+	/**
+	 * Eigenschaftsauspraegungungen eines Kontakts werden gelöscht
+	 * 
+	 * @param k - Kontakt Objekt, für die Fremdschlüssel in der Tabelle Eigenschaftsauspraegung
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteEigenschaftsauspraegungByKontakt(Kontakt k) throws IllegalArgumentException;
+
+	/**
+	 * Löschen aller KontaktKontaktliste Beziehungen in der zusammengesetzten Tabelle
+	 * 
+	 * @param k - Kontakt Objekt, für die Fremdschlüssel in der Tabelle KontaktKontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteKontaktKontaktlisteByKontakt(Kontakt k) throws IllegalArgumentException;
+	
 }
