@@ -7,11 +7,14 @@ import com.google.gwt.core.client.GWT;
 import de.hdm.itprojektss18Gruppe3.shared.CommonSettings;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministration;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
+import de.hdm.itprojektss18Gruppe3.shared.ReportGenerator;
+import de.hdm.itprojektss18Gruppe3.shared.ReportGeneratorAsync;
 
 public class ClientsideSettings extends CommonSettings{
 
 	private static KontaktmanagerAdministrationAsync kontaktVerwaltung = null;
 	
+	private static ReportGeneratorAsync reportGenerator = null;
 	  /**
 	   * Name des Client-seitigen Loggers.
 	   */
@@ -29,6 +32,17 @@ public class ClientsideSettings extends CommonSettings{
 		}
 		return kontaktVerwaltung;
 	}
+	
+	public static ReportGeneratorAsync getReportGenerator() {
+
+		if (reportGenerator == null) {
+			reportGenerator = GWT.create(ReportGenerator.class);
+
+			
+		}
+		return reportGenerator;
+	}
+	
 	  public static Logger getLogger() {
 		    return log;
 		  }
