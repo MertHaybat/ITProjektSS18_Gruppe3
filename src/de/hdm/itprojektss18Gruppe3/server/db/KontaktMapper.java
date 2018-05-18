@@ -314,13 +314,14 @@ public class KontaktMapper extends PersonMapper{
 		return result;
 	}
 	
+	
 	/**
 	 * Die Methode "findAllKontaktByNutzerID" ermöglicht die Ausgabe eines Kontaktes, die im Vektor<Kontakt> gespeichert sind, anhand der nutzerid.
 	 * 
-	 * @param kontakt2 - Objekt der Klasse Kontakt - hier wird die NutzerID entnommen
+	 * @param nutzerID - Fremdschlüssel in der Tabelle Kontakt, ist die ID des Besitzers
 	 * @return result - gibt als Vektor alle Kontakte anhand der NutzerID zurück 
 	 */
-	public Vector<Kontakt> findAllKontaktByNutzerID(Kontakt kontakt2) {
+	public Vector<Kontakt> findAllKontaktByNutzerID(int nutzerID) {
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -332,7 +333,7 @@ public class KontaktMapper extends PersonMapper{
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE nutzerid= ?");
 			
-			stmt.setInt(1, kontakt2.getNutzerID());
+			stmt.setInt(1, nutzerID);
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -527,68 +528,13 @@ public class KontaktMapper extends PersonMapper{
 				}
 		}
 	}
-		
+	
 	/**
 	 * Alle Kontakte aus dem Vector<Kontakt> in einer Teilhaberschaft über die kontaktid ausgeben
 	 * 
 	 * @param kontaktid
 	 * @return result
 	 */
-//	public Vector<Kontakt> findAllKontakteByTeilhaberschaft(int kontaktid) {
-//		
-//		/**
-//		 * Verbindung zur DB Connection
-//		 */
-//		Connection con = DBConnection.connection();
-//		
-//		Vector<Kontakt> result = new Vector<Kontakt>();
-//
-//		try {
-//			PreparedStatement stmt = con.prepareStatement("SELECT kontakt.*, teilhaberschaft.kontaktid FROM kontakt JOIN teilhaberschaft ON teilhaberschaft.kontaktid = kontakt.id");
-//
-//
-//			ResultSet rs = stmt.executeQuery();
-//			
-//			/**
-//			 * Für jeden Eintrag Kontakt ein Kontakt-Objekt erstellt.
-//			 */
-//			while(rs.next()) {
-//				Kontakt kontakt = new Kontakt();
-//				Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
-//				
-//				kontakt.setId(rs.getInt("id"));
-//				kontakt.setName(rs.getString("name"));
-//				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-//				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
-//				kontakt.setStatus(rs.getInt("status"));
-//				kontakt.setNutzerID(rs.getInt("nutzerid"));
-//				teilhaberschaft.setId(rs.getInt("id"));
-//				teilhaberschaft.setKontaktID(rs.getInt("kontaktid"));
-//				
-//				/**
-//				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
-//				 */
-//				result.addElement(kontakt);
-//			}
-//		}
-//		catch(SQLException e2) {
-//			e2.printStackTrace();
-//		}
-//		finally {	
-//			if (con!=null) 
-//				try {
-//					con.close();
-//				}
-//				catch(SQLException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		
-//		/**
-//		 * Ergebnisvektor zurückgeben
-//		 */
-//		return result;
-//	}
 
 //	public Kontakt findKontaktByKontaktID(int id) {
 //

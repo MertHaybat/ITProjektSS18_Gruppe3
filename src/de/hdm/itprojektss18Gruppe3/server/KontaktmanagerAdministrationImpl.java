@@ -351,13 +351,15 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public Vector<Eigenschaft> findAllEigenschaftByEigenschaftIDFromPerson(Eigenschaftsauspraegung e) throws IllegalArgumentException {
-		//TODO
-		return null;	
+	public Eigenschaft findEigenschaftByEigenschaftIDFromPerson(Eigenschaftsauspraegung e) throws IllegalArgumentException {
+
+		Eigenschaft eigenschaft = findEigenschaftByEigenschaftID(e.getEigenschaftID());
+		
+		return eigenschaft;	
 	}
 	
 	/**
-	 * Alle Kontakte von einer Eigenschaftsausprägung anzeigen lassen. Dies ist die Suchfunktion.
+	 * Alle Kontakte von einer Eigenschaftsausprägung anzeigen lassen. Dies ist die Suchfunktion in einer einzelnen Kontaktliste.
 	 * 
 	 * @param e; Objekt der Klasse Eigenschaftsausprägung
 	 * @return Vector des Typs Kontakt
@@ -391,8 +393,23 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung e)
+	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWertAndEigenschaft(Eigenschaftsauspraegung e, Eigenschaft eigenschaft)
 			throws IllegalArgumentException {
+		
+		char a = e.getWert().charAt(0);
+		String b = "*";
+		char c = b.charAt(0);
+		char d = e.getWert().charAt(e.getWert().length()-1);
+		Eigenschaft eigenschaftAusDB = findEigenschaftByEigenschaftID(e.getId());
+		
+		if (a == c){
+			System.out.println("Hallo stern am Anfang"); //	SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE '%rt2' AND `eigenschaftid` = 4   
+		} else if (c == d){
+			System.out.println("Hallo stern am Ende"); // SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE 'WE%' AND `eigenschaftid` = 4 
+		} else {
+			System.out.println("Kein Stern"); //SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE 'WE' AND `eigenschaftid` = 4 
+		}
+		
 		return this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByWert(e.getWert());
 	}
 	
@@ -614,8 +631,8 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public Eigenschaft findEigenschaftByEigenschaftID(Eigenschaft e) throws IllegalArgumentException {
-		return this.eigenschaftMapper.findEigenschaftByEigenschaftID(e.getId());
+	public Eigenschaft findEigenschaftByEigenschaftID(int eigenschaftID) throws IllegalArgumentException {
+		return this.eigenschaftMapper.findEigenschaftByEigenschaftID(eigenschaftID);
 	}
 
 	
@@ -627,29 +644,32 @@ implements KontaktmanagerAdministration {
 		return null;
 		
 	}
+	
 	/**
 	 * @param t - Übergabeparameter der ID von Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
+	@Override
 	public void deleteTeilhaberschaftByID (Teilhaberschaft t) throws IllegalArgumentException{
 		this.teilhaberschaftMapper.deleteTeilhaberschaftByID(t);
 	}
 
-	
 	/**
 	 * 
 	 * @param eig - Übergabeparameter der Eigenschaft, die geändert werden soll
 	 * @throws IllegalArgumentException
 	 */
+	@Override
 	public void saveEigenschaft(Eigenschaft eig) throws IllegalArgumentException {
 			eigenschaftMapper.updateEigenschaft(eig);
 	}
+	
 	/**
 	 * 
 	 * @param aus - Übergabeparameter der Eigenschaftsausprägung, die geändert werden soll
 	 * @throws IllegalArgumentException
 	 */
-	
+	@Override
 	public void saveEigenschaftsauspraegung(Eigenschaftsauspraegung aus) throws IllegalArgumentException{
 			
 			Kontakt k = findKontaktByID(aus.getPersonID());
@@ -660,12 +680,13 @@ implements KontaktmanagerAdministration {
 			
 			eigenschaftsauspraegungMapper.updateEigenschaftsauspraegung(aus);
 		}
-	
+
 	/**
 	 * 
 	 * @param k - Übergabeparameter von Kontakt, der geändert werden soll
 	 * @throws IllegalArgumentException
 	 */
+	@Override
 	public void saveKontakt(Kontakt k) throws IllegalArgumentException{
 			k.setModifikationsdatum(new Date());
 			kontaktMapper.updateKontakt(k);
@@ -685,6 +706,7 @@ implements KontaktmanagerAdministration {
 	 * @param n - Übergabeparameter von Nutzer, der geändert werden soll
 	 * @throws IllegalArgumentException
 	 */
+	@Override
 	public void saveNutzer(Nutzer n) throws IllegalArgumentException{
 		nutzerMapper.updateNutzer(n);
 	}
@@ -694,6 +716,7 @@ implements KontaktmanagerAdministration {
 	 * @param p - Übergabeparamater von Person, die geändert werden soll
 	 * @throws IllegalArgumentException
 	 */
+	@Override
 	public void savePerson(Person p) throws IllegalArgumentException{
 			personMapper.updatePerson(p);
 	}
@@ -703,7 +726,81 @@ implements KontaktmanagerAdministration {
 	 * @param t - Übergabeparameter von Teilhaberschaft, die geändert werden soll
 	 * @throws IllegalArgumentException
 	 */
+	@Override
 	public void saveTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException{
 			teilhaberschaftMapper.updateTeilhaberschaft(t);
 	}
+	/**
+	 * Wurde noch nicht getestet.. Kommentare folgen!
+	 *
+	 */
+	@Override
+	public Vector<Kontakt> suchFunktion(Nutzer nutzer, Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException{
+		//TODO
+		// Suchfunktion für Eigenschaftsauspraegung in allen Kontakten
+
+		// Nach dem Wert in der Tabelle Eigenschaftsauspraegung schauen, Wird
+		// gefiltert nach Wert und EigenschaftID
+		Vector<Eigenschaftsauspraegung> auspraegungen = findAllEigenschaftsauspraegungByWertAndEigenschaft(auspraegung,
+				eigenschaft);
+		// Eigenschaftsauspraegung mit der Tabelle Eigenschaft vergleichen
+		// (eigenschaftID - id)
+
+		// In Teilhaberschaft nach den geteilten Auspraegungen suchen. Wenn es
+		// nicht geteilte Ausprägungen gibt, nicht anzeigen.
+
+		Vector<Teilhaberschaft> teilhaberschaftenKontakte = findTeilhaberschaftByTeilhabenderID(nutzer.getId());
+		Vector<Kontakt> teilhabendeKontakte = new Vector<Kontakt>();
+		for (int i = 0; i < teilhaberschaftenKontakte.size(); i++) {
+			teilhabendeKontakte.add(findKontaktByID(teilhaberschaftenKontakte.elementAt(i).getKontaktID()));
+		}
+
+		// In Teilhaberschaft nach den geteilten Kontaktlisten suchen.
+		Kontaktliste k = new Kontaktliste();
+		Vector<Kontakt> teilhabendeKontaktlistenKontakte = new Vector<Kontakt>();
+		Vector<Kontakt> allKontaktlisteKontakte = new Vector<Kontakt>();
+		for (int o = 0; o < teilhaberschaftenKontakte.size(); o++) {
+			k.setId(teilhaberschaftenKontakte.elementAt(o).getKontaktlisteID());
+			allKontaktlisteKontakte = findAllKontakteByKontaktlisteID(k);
+			teilhabendeKontaktlistenKontakte.addAll(allKontaktlisteKontakte);
+		}
+
+		// In den Kontakten nach der NutzerID filtern (alle Kontakte von mir)
+		Vector<Kontakt> alleKontakte = findAllKontaktByNutzerID(nutzer.getId());
+		Vector<Kontakt> alleKontakteVonTeilnahmen = findAllKontakteByTeilhabenderID(nutzer.getId());
+		Vector<Kontakt> allContacts = new Vector<Kontakt>();
+
+		allContacts.addAll(alleKontakteVonTeilnahmen);
+		allContacts.addAll(alleKontakte);
+		allContacts.addAll(teilhabendeKontakte);
+		allContacts.addAll(teilhabendeKontaktlistenKontakte);
+
+		Vector<Kontakt> allFilteredContacts = new Vector<Kontakt>();
+
+		for (int p = 0; p < auspraegungen.size(); p++) {
+			for (int x = 0; x < allContacts.size(); x++) {
+
+				int personID = auspraegungen.elementAt(p).getPersonID();
+
+				if (personID == allContacts.elementAt(x).getId()) {
+					allFilteredContacts.add(allContacts.elementAt(x));
+				}
+			}
+		}
+
+		return allFilteredContacts;
+	}
+
+	@Override
+	public Vector<Kontakt> findAllKontaktByNutzerID(int nutzerID) throws IllegalArgumentException {
+		return this.kontaktMapper.findAllKontaktByNutzerID(nutzerID);
+	}
+
+	@Override
+	public Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
+		findKontaktByID(teilhabenderID);
+		
+		return null;
+	}
+	
 }

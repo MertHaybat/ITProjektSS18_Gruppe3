@@ -62,14 +62,11 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findAllEigenschaftsauspraegungByPersonID(Person p, AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
 
-	void findAllEigenschaftByEigenschaftIDFromPerson(Eigenschaftsauspraegung e, AsyncCallback<Vector<Eigenschaft>> callback);
+	void findEigenschaftByEigenschaftIDFromPerson(Eigenschaftsauspraegung e, AsyncCallback<Eigenschaft> callback);
 
 	void findAllKontaktByEigenschaftsauspraegung(Eigenschaftsauspraegung e, AsyncCallback<Vector<Kontakt>> callback);
 
 	void findAllEigenschaftsauspraegungByEigenschaftID(Eigenschaft e,
-			AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
-
-	void findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung e,
 			AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
 
 	void deleteKontaktKontaktlisteByKontaktlisteID(KontaktKontaktliste k, AsyncCallback<Void> callback);
@@ -82,7 +79,7 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findEigenschaftByBezeichnung(Eigenschaft e, AsyncCallback<Eigenschaft> callback);
 
-	void findEigenschaftByEigenschaftID(Eigenschaft e, AsyncCallback<Eigenschaft> callback);
+	void findEigenschaftByEigenschaftID(int eigenschaftID, AsyncCallback<Eigenschaft> callback);
 
 	void deleteKontaktByOwner(Kontakt k, AsyncCallback<Void> callback);
 
@@ -125,6 +122,16 @@ public interface KontaktmanagerAdministrationAsync {
 	void deleteEigenschaftsauspraegungByKontakt(Kontakt k, AsyncCallback<Void> callback);
 
 	void deleteKontaktKontaktlisteByKontakt(Kontakt k, AsyncCallback<Void> callback);
+
+	void suchFunktion(Nutzer nutzer, Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung,
+			AsyncCallback<Vector<Kontakt>> callback);
+
+	void findAllEigenschaftsauspraegungByWertAndEigenschaft(Eigenschaftsauspraegung e, Eigenschaft eigenschaft,
+			AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
+
+	void findAllKontaktByNutzerID(int nutzerID, AsyncCallback<Vector<Kontakt>> callback);
+
+	void findAllKontakteByTeilhabenderID(int teilhabenderID, AsyncCallback<Vector<Kontakt>> callback);
 			
 			
 	

@@ -190,7 +190,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector des Typs Eigenschaft
 	 * @throws IllegalArgumentException
 	 */
-	public Vector <Eigenschaft> findAllEigenschaftByEigenschaftIDFromPerson(Eigenschaftsauspraegung e) throws IllegalArgumentException;
+	public Eigenschaft findEigenschaftByEigenschaftIDFromPerson(Eigenschaftsauspraegung e) throws IllegalArgumentException;
 	
 	/**
 	 * Alle Kontakte von einer Eigenschaftsausprägung anzeigen lassen. Dies ist die Suchfunktion.
@@ -217,7 +217,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector des Typs Eigenschaftsausprägung
 	 * @throws IllegalArgumentException
 	 */
-	public Vector <Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWert(Eigenschaftsauspraegung e) throws IllegalArgumentException;
+	public Vector <Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWertAndEigenschaft(Eigenschaftsauspraegung e, Eigenschaft eigenschaft) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen eines Kontakts mit der NutzerID
@@ -279,7 +279,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Objekt der Klasse Eigenschaft
 	 * @throws IllegalArgumentException
 	 */
-	public Eigenschaft findEigenschaftByEigenschaftID(Eigenschaft e) throws IllegalArgumentException;
+	public Eigenschaft findEigenschaftByEigenschaftID(int eigenschaftID) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen einer KontaktKontaktliste mit der KontaktID
@@ -432,5 +432,10 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteKontaktKontaktlisteByKontakt(Kontakt k) throws IllegalArgumentException;
+
+	public Vector<Kontakt> suchFunktion(Nutzer nutzer, Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException;
 	
+	public Vector<Kontakt> findAllKontaktByNutzerID(int nutzerID) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
 }
