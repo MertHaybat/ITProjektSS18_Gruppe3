@@ -32,7 +32,47 @@ html {
 	letter-spacing: 0.01em;
 }
 
-#menu {
+#menubar {
+	height: 40px;
+	width: 89.5%;
+	margin-top: 5px;
+	margin-left: 5%;
+	margin-bottom: 10px;
+	border: 2px solid black;
+	background: white;
+	box-shadow: 5px 5px 2.5px grey;
+	display: inline-block;
+}
+
+
+#menubar .menuBarLabelContainer {
+	width: 19em;
+}
+#menubar .menuBarLabel {
+	margin-top: 0.3em;
+	margin-left: 0.9em;
+	font-size: 1.7em;
+	color: 	#606060;
+}
+
+#menubar .mainButton {
+	width: 80px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display: inline-block;
+	cursor:pointer;
+	color:#666666;
+	font-size:10px;
+	font-weight:bold;
+	padding:6px 6px;
+	text-shadow:0px 1px 0px #ffffff;
+	text-align: center;
+	margin-top: 7px;
+	margin-left: 8px;
+}
+
+
+#leftmenutree {
 	min-height: 550px;
 	width: 15%;
 	display: inline-block;
@@ -43,36 +83,56 @@ html {
 	box-shadow: 3px 2px 2px grey;
 }
 
-#menu .headline {
+#leftmenu .headline {
 	font-size: 1.8em;
-	color: blue;
+
 }
 
 #content {
 	min-height: 550px;
-	width: 73%;
+	width: 73.1%;
 	display: inline-block;
 	border: 2px solid black;
 	background-color: white;
 	box-shadow: 3px 2px 2px grey;
 }
 
+#content .headline {
+	font-size: 2.5em;
+	width: 100%;
+	margin: 20px auto;
+	text-align: center;
+	color: grey;
+	font-weight: bold;
+}
+
 #footer {
 	height: 80px;
-	width: 90%;
+	width: 89.5%;
 	margin: 20px auto;
 	border: 2px solid black;
 	background: linear-gradient(to top, #3399ff 0%, #99ccff 100%);
 	box-shadow: 5px 5px 2.5px grey;
 }
 
+.cellListWidgetContainerPanel {
+	border: 1px grey;
+	margin-left: 1em;
+	margin-top: 2em;
+}
+
+.kontaktCellTableView {
+	margin-left: 50px;
+	max-height: 100px;
+	overflow: scroll;
+}
 
 /** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
+.h1 {
+  font-size: 2.4em;
   font-weight: bold;
   color: #777777;
-  margin: 40px 0px 70px;
+  margin-left: 200px;
   text-align: center;
 }
 
@@ -90,8 +150,25 @@ h1 {
 	font-size: 1em;
 }
 
+.gwt-SimplePager {
+	margin: 5px auto;
+	
+}
+
+.gwt-SuggestBox {
+	margin-top: 6px;
+	align: right;
+	float: right;
+}
+
 .dialogVPanel {
   margin: 5px;
+}
+
+.headlinePanel {
+	width: 100%;
+	height: auto;
+	font-size: 2em;
 }
 
 .serverResponseLabelError {
