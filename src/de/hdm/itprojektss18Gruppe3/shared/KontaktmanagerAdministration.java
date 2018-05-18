@@ -438,4 +438,10 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Vector<Kontakt> findAllKontaktByNutzerID(int nutzerID) throws IllegalArgumentException;
 	
 	public Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
+
+	public void deleteEigenschaftsauspraegungById(Eigenschaftsauspraegung e) throws IllegalArgumentException;
+
+	public void deleteTeilhaberschaftByEigenschaftsauspraegungID(Teilhaberschaft t) throws IllegalArgumentException;
+
+	public void deleteTeilhaberschaftById(Teilhaberschaft t) throws IllegalArgumentException;
 }

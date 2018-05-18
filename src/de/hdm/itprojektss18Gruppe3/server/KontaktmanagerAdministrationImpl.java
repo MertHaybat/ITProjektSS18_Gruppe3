@@ -803,4 +803,44 @@ implements KontaktmanagerAdministration {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param t - Übergabeparameter von Teilhaberschaft 
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public void deleteTeilhaberschaftById (Teilhaberschaft t) throws IllegalArgumentException{
+
+		Teilhaberschaft teil = new Teilhaberschaft();
+		teil.setId(t.getId());
+		this.teilhaberschaftMapper.deleteTeilhaberschaftByID(teil);
+			
+		
+	}
+	
+	/**
+	 * @param t - Übergabeparameter von Teilhaberschaft 
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public void deleteTeilhaberschaftByEigenschaftsauspraegungID (Teilhaberschaft t) throws IllegalArgumentException {
+		this.teilhaberschaftMapper.deleteTeilhaberschaftByEigenschaftsauspraegungID(t);
+	}
+	
+	/**
+	 * @param e - Übergabeparameter von Eigenschaftsauspraegung
+	 * @throws IllegalArgumentException 
+	 */
+	@Override
+	public void deleteEigenschaftsauspraegungById (Eigenschaftsauspraegung e) throws IllegalArgumentException{
+		Teilhaberschaft t = new Teilhaberschaft();
+		t.setEigenschaftsauspraegungID(e.getId());
+		
+		deleteTeilhaberschaftByEigenschaftsauspraegungID(t);
+	
+		this.eigenschaftsauspraegungMapper.deleteEigenschaftsauspraegung(e);
+	}
+	
+	
+	
 }

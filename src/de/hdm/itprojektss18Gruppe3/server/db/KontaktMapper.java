@@ -585,4 +585,54 @@ public class KontaktMapper extends PersonMapper{
 //			}
 //		return k;
 //	}
+	
+	public Kontakt findKontaktByName(String name) {
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+
+		Kontakt k = new Kontakt();
+
+		try {
+
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE `name` = ?");
+
+			stmt.setString(1, name);
+			ResultSet rs = stmt.executeQuery();
+
+			/**
+			 * Für jeden Eintrag im Suchergebnis wird nun ein Kontakt-Objekt
+			 * erstellt.
+			 */
+			if (rs.next()) {
+				Kontakt kontakt = new Kontakt();
+
+				kontakt.setId(rs.getInt("id"));
+				kontakt.setName(rs.getString("name"));
+				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setStatus(rs.getInt("status"));
+				kontakt.setNutzerID(rs.getInt("nutzerid"));
+				k = kontakt;
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return k;
+	}
+
 }

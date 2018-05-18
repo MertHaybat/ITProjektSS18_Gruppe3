@@ -132,6 +132,12 @@ public interface KontaktmanagerAdministrationAsync {
 	void findAllKontaktByNutzerID(int nutzerID, AsyncCallback<Vector<Kontakt>> callback);
 
 	void findAllKontakteByTeilhabenderID(int teilhabenderID, AsyncCallback<Vector<Kontakt>> callback);
+
+	void deleteEigenschaftsauspraegungById(Eigenschaftsauspraegung e, AsyncCallback<Void> callback);
+
+	void deleteTeilhaberschaftByEigenschaftsauspraegungID(Teilhaberschaft t, AsyncCallback<Void> callback);
+
+	void deleteTeilhaberschaftById(Teilhaberschaft t, AsyncCallback<Void> callback);
 			
 			
 	
