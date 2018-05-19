@@ -192,11 +192,11 @@ public class TeilhaberschaftMapper {
 				Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 				
 				teilhaberschaft.setId(rs.getInt("id"));
-				teilhaberschaft.setEigenschaftsauspraegungID(rs.getInt("id"));
-				teilhaberschaft.setKontaktID(rs.getInt("id"));
-				teilhaberschaft.setKontaktlisteID(rs.getInt("id"));
-				teilhaberschaft.setTeilhabenderID(rs.getInt("id"));
-				teilhaberschaft.setEigentuemerID(rs.getInt("id"));
+				teilhaberschaft.setEigenschaftsauspraegungID(rs.getInt("eigenschaftsauspraegungid"));
+				teilhaberschaft.setKontaktID(rs.getInt("kontaktid"));
+				teilhaberschaft.setKontaktlisteID(rs.getInt("kontaktlisteid"));
+				teilhaberschaft.setTeilhabenderID(rs.getInt("teilhabenderid"));
+				teilhaberschaft.setEigentuemerID(rs.getInt("eigentuemerid"));
 				
 				/**
 				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
@@ -250,11 +250,11 @@ public class TeilhaberschaftMapper {
 				Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 				
 				teilhaberschaft.setId(rs.getInt("id"));
-				teilhaberschaft.setEigenschaftsauspraegungID(rs.getInt("id"));
-				teilhaberschaft.setKontaktID(rs.getInt("id"));
-				teilhaberschaft.setKontaktlisteID(rs.getInt("id"));
-				teilhaberschaft.setTeilhabenderID(rs.getInt("id"));
-				teilhaberschaft.setEigentuemerID(rs.getInt("id"));
+				teilhaberschaft.setEigenschaftsauspraegungID(rs.getInt("eigenschaftsauspraegungid"));
+				teilhaberschaft.setKontaktID(rs.getInt("kontaktid"));
+				teilhaberschaft.setKontaktlisteID(rs.getInt("kontaktlisteid"));
+				teilhaberschaft.setTeilhabenderID(rs.getInt("teilhabenderid"));
+				teilhaberschaft.setEigentuemerID(rs.getInt("eigentuemerid"));
 				
 				/**
 				 * Hinzufügen des neuen Objekts zum Ergebnisvektor

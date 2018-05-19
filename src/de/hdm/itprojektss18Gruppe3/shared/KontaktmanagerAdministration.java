@@ -9,10 +9,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
@@ -94,14 +91,18 @@ public interface KontaktmanagerAdministration extends RemoteService {
 			int eigentuemerID) throws IllegalArgumentException;
 	
 	/**
-	 * Suchen eines Teilhaberschaftobjekts eines Teilhabenden.
+	 * Suchen von Teilhaberschaften eines Teilhabenden.
 	 * @param teilhabenderID
 	 * @return Vector des Typs Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Teilhaberschaft> findTeilhaberschaftByTeilhabenderID(int teilhabenderID)
-			throws IllegalArgumentException;
 	
+	/**
+	 * Suchen von Teilhaberschaften eines Eigentümers.
+	 * @param eigentuemerID
+	 * @return Vector des Typs Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
 	Vector<Teilhaberschaft> findTeilhaberschaftByEigentuemerID(int eigentuemerID);
 	
 	/**
@@ -237,13 +238,13 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public void deleteKontaktKontaktlisteByKontaktlisteID(KontaktKontaktliste k) throws IllegalArgumentException;
 	
 	/**
-	 * Löschen einer Teilhaberschaft mit der PersonID
+	 * Auslesen von Teilhabern in Teilhaberschaften
 	 * 
 	 * @param t; Objekt der Klasse Teilhaberschaft
 	 * @return Objekt des Typs Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
-	public void deleteTeilhaberschaftByPersonID(Teilhaberschaft t) throws IllegalArgumentException;
+	public Vector <Teilhaberschaft> findAllTeilhaberschaftenByTeilhabenderID(int teilhaberschaftID) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen einer Kontaktliste mit der NutzerID
@@ -437,11 +438,15 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	
 	public Vector<Kontakt> findAllKontaktByNutzerID(int nutzerID) throws IllegalArgumentException;
 	
-	public Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
+	Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID);
 
 	public void deleteEigenschaftsauspraegungById(Eigenschaftsauspraegung e) throws IllegalArgumentException;
 
 	public void deleteTeilhaberschaftByEigenschaftsauspraegungID(Teilhaberschaft t) throws IllegalArgumentException;
 
 	public void deleteTeilhaberschaftById(Teilhaberschaft t) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> findAllKontaktByTeilhaberschaften(int teilhabenderID, int eigentuemerID) throws IllegalArgumentException;
+
+	public Nutzer findNutzerByID(int nutzerID) throws IllegalArgumentException;
 }

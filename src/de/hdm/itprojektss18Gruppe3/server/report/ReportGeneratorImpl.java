@@ -80,8 +80,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kontakte.addColumn(new Column(kontakt.getName()));
 			kontakte.addColumn(new Column(kontakt.getErzeugungsdatum().toString()));
 			kontakte.addColumn(new Column(kontakt.getModifikationsdatum().toString()));
-			kontakte.addColumn(new Column(String.valueOf(kontakt.getStatus())));
-			kontakte.addColumn(new Column(String.valueOf(kontakt.getId())));
+			if(kontakt.getStatus() == 1){
+				kontakte.addColumn(new Column("Geteilt"));
+			} else if (kontakt.getStatus() == 0){	
+				kontakte.addColumn(new Column("Nicht Geteilt"));
+			}
+			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
 			result.addRow(kontakte);
 			
 		}
@@ -92,40 +96,44 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	@Override
 	public AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(Nutzer a, Nutzer b)
 			throws IllegalArgumentException {
-		return null;
-//
-//		if (this.getKontaktVerwaltung() == null) {
-//			return null;
-//		}
-//
-//		AlleKontakteByTeilhaberschaftReport result = new AlleKontakteByTeilhaberschaftReport();
-//		
-//		result.setTitle("Alle Kontakte der Teilhaberschaft");
-//		
-//		result.setCreated(new Date());
-//		
-//		Row headline = new Row();
-//		headline.addColumn(new Column("Kontaktname"));
-//		headline.addColumn(new Column("Erzeugungsdatum"));
-//		headline.addColumn(new Column("Modifkationsdatum"));
-//		headline.addColumn(new Column("Status"));
-//		headline.addColumn(new Column("Ersteller"));
-//		
-//		result.addRow(headline);
-//		/*
-//		 * Methode findAllKontakteByTeilhaberschaft wird noch benötigt
-//		 *Vector<Kontakt> alleKontakteByTeilhaberschaft = this.getKontaktVerwaltung().findAllkontakt
-//		 */
-//		
-//		for (Kontakt kontakt : alleKontakteByTeilhaberschaft) {
-//			Row kontakte = new Row();
-//			kontakte.addColumn(new Column(kontakt.getName()));
-//			kontakte.addColumn(new Column(kontakt.getErzeugungsdatum().toString()));
-//			kontakte.addColumn(new Column(kontakt.getModifikationsdatum().toString()));
-//			kontakte.addColumn(new Column(String.valueOf(kontakt.getStatus())));
-//			kontakte.addColumn(new Column(String.valueOf(kontakt.getId())));
-//			result.addRow(kontakte);
-}
+
+		if (this.getKontaktVerwaltung() == null) {
+			return null;
+		}
+
+		AlleKontakteByTeilhaberschaftReport result = new AlleKontakteByTeilhaberschaftReport();
+
+		result.setTitle("Alle Kontakte der Teilhaberschaften zwischen zwei Nutzern");
+
+		result.setCreated(new Date());
+
+		Row headline = new Row();
+		headline.addColumn(new Column("Kontaktname"));
+		headline.addColumn(new Column("Erzeugungsdatum"));
+		headline.addColumn(new Column("Modifkationsdatum"));
+		headline.addColumn(new Column("Status"));
+		headline.addColumn(new Column("Ersteller"));
+
+		result.addRow(headline);
+
+		Vector<Kontakt> alleKontakteByTeilhaberschaft = this.getKontaktVerwaltung()
+				.findAllKontaktByTeilhaberschaften(a.getId(), b.getId());
+
+		for (Kontakt kontakt : alleKontakteByTeilhaberschaft) {
+			Row kontakte = new Row();
+			kontakte.addColumn(new Column(kontakt.getName()));
+			kontakte.addColumn(new Column(kontakt.getErzeugungsdatum().toString()));
+			kontakte.addColumn(new Column(kontakt.getModifikationsdatum().toString()));
+			if (kontakt.getStatus() == 1) {
+				kontakte.addColumn(new Column("Geteilt"));
+			} else if (kontakt.getStatus() == 0) {
+				kontakte.addColumn(new Column("Nicht Geteilt"));
+			}
+			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
+			result.addRow(kontakte);
+		}
+		return result;
+	}
 
 	@Override
 	public KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(
@@ -157,12 +165,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kontakte.addColumn(new Column(kontakt.getName()));
 			kontakte.addColumn(new Column(kontakt.getErzeugungsdatum().toString()));
 			kontakte.addColumn(new Column(kontakt.getModifikationsdatum().toString()));
-			kontakte.addColumn(new Column(String.valueOf(kontakt.getStatus())));
-			kontakte.addColumn(new Column(String.valueOf(kontakt.getId())));
+			if (kontakt.getStatus() == 1) {
+				kontakte.addColumn(new Column("Geteilt"));
+			} else if (kontakt.getStatus() == 0) {
+				kontakte.addColumn(new Column("Nicht Geteilt"));
+			}
+			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
 			result.addRow(kontakte);
-
 		}
-
 		return result;
 	}
 }

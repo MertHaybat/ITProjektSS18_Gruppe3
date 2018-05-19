@@ -240,7 +240,95 @@ public class NutzerMapper extends PersonMapper{
 	}
 	
 	public Nutzer findNutzerByEmail(String email){
-		return null;
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+
+		Nutzer n = new Nutzer();
+
+		try {
+
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM nutzer WHERE `mail` = ?");
+
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+
+			/**
+			 * Für jeden Eintrag im Suchergebnis wird nun ein Nutzer-Objekt
+			 * erstellt.
+			 */
+			if (rs.next()) {
+				Nutzer nutzer = new Nutzer();
+
+				nutzer.setId(rs.getInt("id"));
+				nutzer.setMail(rs.getString("mail"));
+				
+				n = nutzer;
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return n;
+		
+	}
+	public Nutzer findNutzerByID(int nutzerID){
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+
+		Nutzer n = new Nutzer();
+
+		try {
+
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM nutzer WHERE `id` = ?");
+
+			stmt.setInt(1, nutzerID);
+			ResultSet rs = stmt.executeQuery();
+
+			/**
+			 * Für jeden Eintrag im Suchergebnis wird nun ein Nutzer-Objekt
+			 * erstellt.
+			 */
+			if (rs.next()) {
+				Nutzer nutzer = new Nutzer();
+
+				nutzer.setId(rs.getInt("id"));
+				nutzer.setMail(rs.getString("mail"));
+				
+				n = nutzer;
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return n;
 		
 	}
 }

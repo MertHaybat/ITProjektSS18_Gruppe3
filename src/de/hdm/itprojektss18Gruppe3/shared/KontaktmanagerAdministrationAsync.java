@@ -39,8 +39,6 @@ public interface KontaktmanagerAdministrationAsync {
 	void createTeilhaberschaft(int kontaktlisteID, int kontaktID, int eigenschaftsauspraegungID, int teilhabenderID,
 			int eigentuemerID, AsyncCallback<Teilhaberschaft> callback);
 
-	void findTeilhaberschaftByTeilhabenderID(int teilhabenderID, AsyncCallback<Vector<Teilhaberschaft>> callback);
-
 	void findTeilhaberschaftByEigentuemerID(int eigentuemerID, AsyncCallback<Vector<Teilhaberschaft>> callback);
 
 	void findAllEigenschaften(AsyncCallback<Vector<Eigenschaft>> callback);
@@ -71,8 +69,6 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void deleteKontaktKontaktlisteByKontaktlisteID(KontaktKontaktliste k, AsyncCallback<Void> callback);
 
-	void deleteTeilhaberschaftByPersonID(Teilhaberschaft t, AsyncCallback<Void> callback);
-
 	void deleteKontaktlisteByNutzerID(Kontaktliste k, AsyncCallback<Void> callback);
 
 	void deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e, AsyncCallback<Void> callback);
@@ -98,8 +94,6 @@ public interface KontaktmanagerAdministrationAsync {
 	void saveKontaktliste(Kontaktliste kliste, AsyncCallback<Void> callback);
 			
 	void saveNutzer(Nutzer n, AsyncCallback<Void> callback);
-			
-//	void saveNutzer2(Nutzer nutzer, AsyncCallback<Void> callback);
 			
 	void savePerson(Person p, AsyncCallback<Void> callback);
 			
@@ -138,7 +132,14 @@ public interface KontaktmanagerAdministrationAsync {
 	void deleteTeilhaberschaftByEigenschaftsauspraegungID(Teilhaberschaft t, AsyncCallback<Void> callback);
 
 	void deleteTeilhaberschaftById(Teilhaberschaft t, AsyncCallback<Void> callback);
-			
-			
+
+	void findAllTeilhaberschaftenByTeilhabenderID(int teilhaberschaftID, AsyncCallback<Vector<Teilhaberschaft>> callback);
+
+	void findAllKontaktByTeilhaberschaften(int teilhabenderID, int eigentuemerID,
+			AsyncCallback<Vector<Kontakt>> callback);
+
+	void findNutzerByID(int nutzerID, AsyncCallback<Nutzer> callback);
+
+	
 	
 }
