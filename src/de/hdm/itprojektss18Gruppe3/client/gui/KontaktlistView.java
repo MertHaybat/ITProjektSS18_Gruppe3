@@ -7,6 +7,7 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+import de.hdm.itprojektss18Gruppe3.client.LeftSideFrame;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 
 import java.util.Arrays;
@@ -219,7 +220,6 @@ public class KontaktlistView extends MainFrame {
 		kontaktlistViewPanel.add(kontaktViewCellTableGrid);
 		kontaktlistViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 
-		
 		RootPanel.get("content").add(kontaktlistViewPanel);
 		RootPanel.get("menubar").add(menuBarContainerPanel);
 	}

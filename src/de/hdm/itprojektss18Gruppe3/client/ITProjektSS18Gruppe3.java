@@ -7,12 +7,15 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
@@ -47,7 +50,51 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		vpanel.add(testButtonAllKontaktView);
 		testButtonKontaktlistView.addClickHandler(new KontaktlistViewClickHandler());
 		testButtonAllKontaktView.addClickHandler(new AllKontaktViewClickHandler());
+		
 
+		/*
+		 * Navigationsbaum auf der linken Seite erzeugen
+		 */
+		
+	    TreeItem kontakte = new TreeItem();
+	    TreeItem kontaktlisten = new TreeItem();
+	    TreeItem teilhaberschaften = new TreeItem();
+	    
+	    Label navigationHeadline = new Label("Navigation");
+	    VerticalPanel navigationTreePanel = new VerticalPanel();
+	    
+	    /*
+	     * Baummenü definieren
+	     */
+	    kontakte.setText("Kontakte");
+	    kontaktlisten.setText("Kontaktlisten");
+	    teilhaberschaften.setText("Teilhaberschaften");
+	    kontakte.addTextItem("Neuer Kontakt");
+	    kontakte.addTextItem("Alle Kontakte");
+	    
+	    kontaktlisten.addTextItem("Neue Kontaktliste");
+	    kontaktlisten.addTextItem("Alle Kontaktlisten"); 
+	    
+	    teilhaberschaften.addTextItem("Neue Teilhaberschaft");
+	    teilhaberschaften.addTextItem("Alle Teilhaberschaften");    
+	    
+	    Tree navigationTree = new Tree();
+	    navigationTree.setStylePrimaryName("navigationTree");
+	    navigationTree.addItem(kontakte);
+	    navigationTree.addItem(kontaktlisten);
+	    navigationTree.addItem(teilhaberschaften);
+	    
+	    navigationHeadline.setStylePrimaryName("navigationPanelHeadline");
+	    
+	    navigationTreePanel.add(navigationHeadline);
+	    navigationTreePanel.add(navigationTree);
+
+
+	    // Add it to the root panel.
+	    RootPanel.get("leftmenutree").add(navigationTreePanel);
+	    
+	    
+	    
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(vpanel);
 		nix.addClickHandler(new ClickHandler(){

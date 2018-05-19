@@ -136,6 +136,26 @@ html {
   text-align: center;
 }
 
+.navigationPanelHeadline {
+	font-size: 1.5em;
+	font-weight: bold;
+	color: #606060;
+	margin: 20px 10px 20px 20px;
+}
+
+.gwt-Tree {
+	font-size: 1.5em;
+}
+
+.gwt-TreeItem {
+	font-size: 1.1em;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+	font-weight: bold;
+}
+
+
 .sendButton {
   display: block;
   font-size: 16pt;
