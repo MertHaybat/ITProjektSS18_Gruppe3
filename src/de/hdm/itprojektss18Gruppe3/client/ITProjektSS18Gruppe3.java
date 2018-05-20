@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
+import de.hdm.itprojektss18Gruppe3.client.gui.Kontaktformular;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktlistView;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktmanagerCellTree;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
@@ -35,6 +36,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private Label instructionMessage = new Label("Bitte melde dich mit deinem Google Konto an");
 	private TextBox tb = new TextBox();
 	private Button testButtonKontaktlistView = new Button("KontaktlistView");
+	private Button testButtonKontaktform = new Button("Kontaktformular");
 	private Button testButtonAllKontaktView = new Button("Alle Kontakte");
 	private Button nix = new Button("LEER");
 	private static KontaktmanagerAdministrationAsync verwaltung = ClientsideSettings.getKontaktVerwaltung();
@@ -47,8 +49,10 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		vpanel.add(welcomeMessage);
 
 		vpanel.add(testButtonKontaktlistView);
+		vpanel.add(testButtonKontaktform);
 		vpanel.add(testButtonAllKontaktView);
 		testButtonKontaktlistView.addClickHandler(new KontaktlistViewClickHandler());
+		testButtonKontaktform.addClickHandler(new KontaktformClickHandler());
 		testButtonAllKontaktView.addClickHandler(new AllKontaktViewClickHandler());
 		
 
@@ -137,6 +141,17 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			AllKontaktView allKontaktView = new AllKontaktView();
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(allKontaktView);
+		}
+	}
+	
+	public class KontaktformClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			Kontaktformular kontaktformular = new Kontaktformular();
+			RootPanel.get("content").clear();		
+			RootPanel.get("content").add(kontaktformular);
 		}
 	}
 }
