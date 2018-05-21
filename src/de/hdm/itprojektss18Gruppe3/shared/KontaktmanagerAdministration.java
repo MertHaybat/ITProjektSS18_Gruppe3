@@ -271,7 +271,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Objekt der Klasse Eigenschaft
 	 * @throws IllegalArgumentException
 	 */
-	public Eigenschaft findEigenschaftByBezeichnung(Eigenschaft e) throws IllegalArgumentException;
+	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) throws IllegalArgumentException;
 
 	/**
 	 * Anzeigen einer Eigenschaft anhand der ID
@@ -449,4 +449,6 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Vector<Kontakt> findAllKontaktByTeilhaberschaften(int teilhabenderID, int eigentuemerID) throws IllegalArgumentException;
 
 	public Nutzer findNutzerByID(int nutzerID) throws IllegalArgumentException;
+
+	public Vector<Nutzer> findAllNutzer() throws IllegalArgumentException;
 }

@@ -379,9 +379,7 @@ public class EigenschaftsauspraegungMapper {
 
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE '"+eig.getWert()+"' AND `eigenschaftid` = "+eig.getEigenschaftID()+"");
-					
-//			stmt.setString(1, wert);
-			System.out.println(stmt.executeQuery().getStatement());
+				
 			ResultSet rs = stmt.executeQuery();
 			/**
 			 * Für jeden Eintrag Eigenschaftsauspraegung ein

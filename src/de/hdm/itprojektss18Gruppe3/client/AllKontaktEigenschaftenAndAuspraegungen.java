@@ -5,25 +5,21 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.itprojektss18Gruppe3.client.gui.report.HTMLResultPanel;
 import de.hdm.itprojektss18Gruppe3.shared.ReportGeneratorAsync;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.report.HTMLReportWriter;
 import de.hdm.itprojektss18Gruppe3.shared.report.KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport;
 
-public class AllKontaktEigenschaftenAndAuspraegungen extends HTMLResultPanel{
+public class AllKontaktEigenschaftenAndAuspraegungen extends HTMLResultPanel {
 	ReportGeneratorAsync reportverwaltung = ClientsideSettings.getReportGenerator();
-	
-	Eigenschaft eigenschaft = new Eigenschaft();
-	Eigenschaftsauspraegung auspraeung = new Eigenschaftsauspraegung();
-	
-	public AllKontaktEigenschaftenAndAuspraegungen(){
-		eigenschaft.setId(1);
-		auspraeung.setWert("*er*");
-		
-		reportverwaltung.createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(eigenschaft, auspraeung, new AllKontaktEigenschaftAndAuspraegungenCallback());
+
+	public AllKontaktEigenschaftenAndAuspraegungen(String eigenschaft, String auspraegung) {
+
+		reportverwaltung.createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(eigenschaft, auspraegung,
+				new AllKontaktEigenschaftAndAuspraegungenCallback());
 	}
+
 	
-	class AllKontaktEigenschaftAndAuspraegungenCallback implements AsyncCallback<KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport>{
+	class AllKontaktEigenschaftAndAuspraegungenCallback
+			implements AsyncCallback<KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -36,7 +32,7 @@ public class AllKontaktEigenschaftenAndAuspraegungen extends HTMLResultPanel{
 			hrw.process(result);
 			append(hrw.getReportText());
 		}
-		
+
 	}
 
 }

@@ -73,7 +73,7 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void deleteEigenschaftsauspraegungByPersonID(Eigenschaftsauspraegung e, AsyncCallback<Void> callback);
 
-	void findEigenschaftByBezeichnung(Eigenschaft e, AsyncCallback<Eigenschaft> callback);
+	void findEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Eigenschaft> callback);
 
 	void findEigenschaftByEigenschaftID(int eigenschaftID, AsyncCallback<Eigenschaft> callback);
 
@@ -139,6 +139,8 @@ public interface KontaktmanagerAdministrationAsync {
 			AsyncCallback<Vector<Kontakt>> callback);
 
 	void findNutzerByID(int nutzerID, AsyncCallback<Nutzer> callback);
+
+	void findAllNutzer(AsyncCallback<Vector<Nutzer>> callback);
 
 	
 	

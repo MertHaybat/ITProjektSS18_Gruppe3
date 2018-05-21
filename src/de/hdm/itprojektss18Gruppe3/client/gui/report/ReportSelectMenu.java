@@ -6,8 +6,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.itprojektss18Gruppe3.client.AllKontaktEigenschaftenAndAuspraegungen;
-import de.hdm.itprojektss18Gruppe3.client.AllKontaktTeilhaberschaften;
 import de.hdm.itprojektss18Gruppe3.client.AllKontakteReport;
 
 public class ReportSelectMenu extends VerticalPanel{
@@ -36,7 +34,7 @@ public class ReportSelectMenu extends VerticalPanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new AllKontaktTeilhaberschaften());
+				RootPanel.get("content").add(new TeilnahmenReportForm());
 			}
 
 		});
@@ -46,7 +44,7 @@ public class ReportSelectMenu extends VerticalPanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new AllKontaktEigenschaftenAndAuspraegungen());
+				RootPanel.get("content").add(new EigenschaftenReportForm());
 			}
 
 		});
