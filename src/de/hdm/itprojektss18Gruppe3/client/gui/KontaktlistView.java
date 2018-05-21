@@ -18,6 +18,7 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellList;
@@ -29,6 +30,7 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -40,12 +42,11 @@ import com.google.gwt.user.client.ui.SuggestBox;
 public class KontaktlistView extends MainFrame {
 
 	Label menuBarHeadlineLabel = new Label("Kontaktlisten");
-	HorizontalPanel menuBarPanel = new HorizontalPanel();
 	VerticalPanel contentViewContainer = new VerticalPanel();
 	HorizontalPanel kontaktlistViewPanel = new HorizontalPanel();
 	VerticalPanel allKontaktViewPanel = new VerticalPanel();
-	HorizontalPanel buttonPanel = new HorizontalPanel();
-	HorizontalPanel menuBarContainerPanel = new HorizontalPanel();
+	VerticalPanel menuBarContainerPanel = new VerticalPanel();
+	FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	Grid kontaktViewCellTableGrid = new Grid(2,1);
 	Button addKontaktlisteButton = new Button("+ Kontaktliste");
 	Button deleteKontaktlisteButton = new Button("Loeschen");
@@ -62,17 +63,15 @@ public class KontaktlistView extends MainFrame {
 		 * und dem Panel zuweisen
 		 */
 		menuBarHeadlineLabel.setStylePrimaryName("menuBarLabel");
-		menuBarPanel.add(menuBarHeadlineLabel);
-		menuBarPanel.setStylePrimaryName("menuBarLabelContainer");
+		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
+		//menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 
 		addKontaktlisteButton.setStylePrimaryName("mainButton");
 		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
-		buttonPanel.add(addKontaktlisteButton);
-		buttonPanel.add(deleteKontaktlisteButton);
-		buttonPanel.setStylePrimaryName("menuBarHorizontalPanel");
+		menuBarContainerFlowPanel.add(addKontaktlisteButton);
+		menuBarContainerFlowPanel.add(deleteKontaktlisteButton);
+		menuBarContainerFlowPanel.setWidth("200%");
 
-		menuBarContainerPanel.add(menuBarPanel);
-		menuBarContainerPanel.add(buttonPanel);
 		
 		oracle.add("Test 1");
 		oracle.add("Test 2");
@@ -81,7 +80,9 @@ public class KontaktlistView extends MainFrame {
 		SuggestBox box = new SuggestBox(oracle);
 	    
 	    box.setStylePrimaryName("gwt-SuggestBox");
-	    menuBarContainerPanel.add(box);
+	    menuBarContainerFlowPanel.add(box);
+	    menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
+	    menuBarContainerPanel.add(menuBarContainerFlowPanel);
 
 		
 		/*
@@ -221,6 +222,7 @@ public class KontaktlistView extends MainFrame {
 		kontaktlistViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 
 		RootPanel.get("content").add(kontaktlistViewPanel);
+		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menuBarContainerPanel);
 	}
 	

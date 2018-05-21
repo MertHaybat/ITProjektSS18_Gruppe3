@@ -6,6 +6,7 @@
     color: 	black;
     font-size: 1.3em;
     padding:4px 10px;
+    cursor: pointer;
 }
 
 .cellListOddItem {
@@ -17,6 +18,7 @@
     color: 	black;
     font-size: 1.3em;
     padding: 4px 10px;
+    cursor: pointer;
 }
 
 .cellListWidget {
@@ -33,9 +35,10 @@
 }
 
 .cellListSelectedItem {
-	background: #E0E0E0;
+	background: linear-gradient(to left, #F8F8F8 50%, #ffffff 100%);
 	font-weight: bold;
 	color: black;
 	height: auto;
 	overflow: visible;
+	border: 0.5px black;
 }

@@ -15,12 +15,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.Tree.Resources;
 import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktlistView;
-import de.hdm.itprojektss18Gruppe3.client.gui.KontaktmanagerCellTree;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
@@ -37,8 +38,10 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private Button testButtonKontaktlistView = new Button("KontaktlistView");
 	private Button testButtonAllKontaktView = new Button("Alle Kontakte");
 	private Button nix = new Button("LEER");
+
 	private static KontaktmanagerAdministrationAsync verwaltung = ClientsideSettings.getKontaktVerwaltung();
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onModuleLoad() {
 
@@ -56,10 +59,11 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		 * Navigationsbaum auf der linken Seite erzeugen
 		 */
 		
-	    TreeItem kontakte = new TreeItem();
-	    TreeItem kontaktlisten = new TreeItem();
-	    TreeItem teilhaberschaften = new TreeItem();
-	    
+	    final TreeItem kontakte = new TreeItem();
+	    final TreeItem kontaktlisten = new TreeItem();
+	    final TreeItem teilhaberschaften = new TreeItem();
+	    Tree navigationTree = new Tree();
+   
 	    Label navigationHeadline = new Label("Navigation");
 	    VerticalPanel navigationTreePanel = new VerticalPanel();
 	    
@@ -76,25 +80,44 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	    kontaktlisten.addTextItem("Alle Kontaktlisten"); 
 	    
 	    teilhaberschaften.addTextItem("Neue Teilhaberschaft");
-	    teilhaberschaften.addTextItem("Alle Teilhaberschaften");    
-	    
-	    Tree navigationTree = new Tree();
-	    navigationTree.setStylePrimaryName("navigationTree");
+	    teilhaberschaften.addTextItem("Alle Teilhaberschaften");     
+
 	    navigationTree.addItem(kontakte);
 	    navigationTree.addItem(kontaktlisten);
 	    navigationTree.addItem(teilhaberschaften);
+	    
 	    
 	    navigationHeadline.setStylePrimaryName("navigationPanelHeadline");
 	    
 	    navigationTreePanel.add(navigationHeadline);
 	    navigationTreePanel.add(navigationTree);
+	    
+	    navigationTree.addTreeListener(new TreeListener() {
+			
+			@Override
+			public void onTreeItemStateChanged(TreeItem item) {
+				
+			}
+			
+			@Override
+			public void onTreeItemSelected(TreeItem item) {
+				if(item.getText().equals("Alle Kontaktlisten")) {
+				KontaktlistView kontaktlistView = new KontaktlistView();
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(kontaktlistView);
+				}
+				
+				if(item.getText().equals("Alle Kontakte")) {
+				AllKontaktView allKontaktView = new AllKontaktView();
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(allKontaktView);
+				}
+			}
+		});
 
 
 	    // Add it to the root panel.
-	    RootPanel.get("leftmenutree").add(navigationTreePanel);
-	    
-	    
-	    
+	    RootPanel.get("leftmenutree").add(navigationTreePanel);	    
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(vpanel);
 		nix.addClickHandler(new ClickHandler(){
