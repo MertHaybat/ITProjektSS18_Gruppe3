@@ -94,7 +94,7 @@ public class AllKontaktView extends MainFrame {
 		    contentHeadline.setStylePrimaryName("h2");
 		    
 		    
-		    CellTable<Contact> allKontakteDataGrid = new CellTable<Contact>(13, CellTableResources.INSTANCE);
+		    CellTable<Contact> allKontakteDataGrid = new CellTable<Contact>(11, CellTableResources.INSTANCE);
 		    
 		    allKontakteDataGrid.setHeight("600px");
 		    allKontakteDataGrid.setWidth("1000px");
