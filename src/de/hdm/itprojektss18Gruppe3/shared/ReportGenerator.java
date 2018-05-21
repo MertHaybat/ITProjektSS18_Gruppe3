@@ -1,5 +1,7 @@
 package de.hdm.itprojektss18Gruppe3.shared;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -45,8 +47,8 @@ public interface ReportGenerator extends RemoteService {
 	   * @return Alle Kontakte einer bestimmten Teilhaberschaft
 	   * @throws IllegalArgumentException
 	   */
-	  public abstract AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(Nutzer a, Nutzer b) 
-			  throws IllegalArgumentException;
+	  public abstract AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(String a, String b)
+				throws IllegalArgumentException;
 	
 	  /**
 	   * Diese Methode sucht Kontakte mit übergebenen Eigenschaften und Ausprägungen.
@@ -55,5 +57,13 @@ public interface ReportGenerator extends RemoteService {
 	   * @throws IllegalArgumentException
 	   */
 	  public abstract KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(
-			  Eigenschaft eig, Eigenschaftsauspraegung ea) throws IllegalArgumentException;
+			String eig, String auspraegung) throws IllegalArgumentException;
+
+	  public Vector<Nutzer> findNutzer() throws IllegalArgumentException;
+
+	  public Nutzer findNutzerByMail(String email) throws IllegalArgumentException;
+
+	  public Vector<Eigenschaft> findAllEigenschaften() throws IllegalArgumentException;
+
+	  public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) throws IllegalArgumentException;
 }

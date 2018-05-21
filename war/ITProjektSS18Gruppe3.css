@@ -115,6 +115,19 @@ html {
 	box-shadow: 5px 5px 2.5px grey;
 }
 
+.listbox-report {
+position: relative;
+width: 200px;
+padding: 10px;
+margin: 0 auto;
+color: #fff;
+outline: none;
+font-weight: bold;
+cursor: pointer;
+background: darkgrey;
+border: double;
+}
+
 .cellListWidgetContainerPanel {
 	border: 1px grey;
 	margin-left: 1em;

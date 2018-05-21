@@ -1,5 +1,7 @@
 package de.hdm.itprojektss18Gruppe3.shared;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
@@ -15,10 +17,18 @@ public interface ReportGeneratorAsync {
 
 	void createAlleKontakteReport(AsyncCallback<AlleKontakteReport> callback);
 
-	void createAlleKontakteByTeilhaberschaftReport(Nutzer a, Nutzer b, AsyncCallback<AlleKontakteByTeilhaberschaftReport> callback);
+	void createAlleKontakteByTeilhaberschaftReport(String a, String b,
+			AsyncCallback<AlleKontakteByTeilhaberschaftReport> callback);
 
-	void createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(
-			Eigenschaft eig, Eigenschaftsauspraegung ea,
+	void createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(String eig, String auspraegung,
 			AsyncCallback<KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport> callback);
+
+	void findNutzer(AsyncCallback<Vector<Nutzer>> callback);
+
+	void findNutzerByMail(String email, AsyncCallback<Nutzer> callback);
+
+	void findAllEigenschaften(AsyncCallback<Vector<Eigenschaft>> callback);
+
+	void findEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Eigenschaft> callback);
 
 }
