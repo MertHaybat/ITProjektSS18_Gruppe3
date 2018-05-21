@@ -94,13 +94,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	}
 
 	@Override
-	public AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(Nutzer a, Nutzer b)
+	public AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(String a, String b)
 			throws IllegalArgumentException {
 
 		if (this.getKontaktVerwaltung() == null) {
 			return null;
 		}
 
+		Nutzer nutzerA = findNutzerByMail(a);
+		Nutzer nutzerB = findNutzerByMail(b);
+		
 		AlleKontakteByTeilhaberschaftReport result = new AlleKontakteByTeilhaberschaftReport();
 
 		result.setTitle("Alle Kontakte der Teilhaberschaften zwischen zwei Nutzern");
@@ -117,7 +120,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		result.addRow(headline);
 
 		Vector<Kontakt> alleKontakteByTeilhaberschaft = this.getKontaktVerwaltung()
-				.findAllKontaktByTeilhaberschaften(a.getId(), b.getId());
+				.findAllKontaktByTeilhaberschaften(nutzerA.getId(), nutzerB.getId());
 
 		for (Kontakt kontakt : alleKontakteByTeilhaberschaft) {
 			Row kontakte = new Row();
@@ -137,11 +140,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 	@Override
 	public KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(
-			Eigenschaft eig, Eigenschaftsauspraegung ea) throws IllegalArgumentException {
+			String eig, String auspraegung) throws IllegalArgumentException {
 
 		if (this.getKontaktVerwaltung() == null) {
 			return null;
 		}
+		
+		Eigenschaft eigenschaft = findEigenschaftByBezeichnung(eig);
+		Eigenschaftsauspraegung ea = new Eigenschaftsauspraegung();
+		ea.setWert(auspraegung);
+		
 
 		KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport result = new KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport();
 
@@ -158,7 +166,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 		result.addRow(headline);
 		Vector<Kontakt> kontakteMitBestimmtenEigenschaftenUndAuspraegungen = this.getKontaktVerwaltung()
-				.findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(eig, ea);
+				.findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(eigenschaft, ea);
 
 		for (Kontakt kontakt : kontakteMitBestimmtenEigenschaftenUndAuspraegungen) {
 			Row kontakte = new Row();
@@ -174,5 +182,46 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			result.addRow(kontakte);
 		}
 		return result;
+	}
+
+
+	@Override
+	public Vector<Nutzer> findNutzer() throws IllegalArgumentException {
+
+		if (this.getKontaktVerwaltung() == null) {
+			return null;
+		}
+
+		return this.getKontaktVerwaltung().findAllNutzer();
+	}
+
+	@Override
+	public Nutzer findNutzerByMail(String email) throws IllegalArgumentException {
+		if (this.getKontaktVerwaltung() == null) {
+			return null;
+		}
+
+		return this.getKontaktVerwaltung().checkEmail(email);
+	}
+
+	@Override
+	public Vector<Eigenschaft> findAllEigenschaften() throws IllegalArgumentException {
+		if (this.getKontaktVerwaltung() == null) {
+			return null;
+		}
+
+		return this.getKontaktVerwaltung().findAllEigenschaften();
+	}
+
+	@Override
+	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) throws IllegalArgumentException {
+		if (this.getKontaktVerwaltung() == null) {
+			return null;
+		}
+
+		Eigenschaft e = new Eigenschaft();
+		e.setBezeichnung(bezeichnung);
+
+		return this.getKontaktVerwaltung().findEigenschaftByBezeichnung(bezeichnung);
 	}
 }
