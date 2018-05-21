@@ -50,18 +50,8 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 
 		RootPanel.get("content").add(this);
 
-		btAllKontaktTeilhaberschaften.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				vpanel.clear();
-				vpanel.add(new AllKontaktTeilhaberschaften(lbNutzerEigentuemer.getSelectedValue(),
-						lbNutzerTeilhabender.getSelectedValue()));
-				RootPanel.get("content").add(vpanel);
-
-			}
-
-		});
+		btAllKontaktTeilhaberschaften.addClickHandler(new AllKontaktTeilhaberschaftenClickHandler());
+	
 	}
 
 	class NutzerForTeilhaberschaftCallback implements AsyncCallback<Vector<Nutzer>> {
@@ -80,5 +70,17 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 			}
 		}
 
+	}
+	
+	class AllKontaktTeilhaberschaftenClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			vpanel.clear();
+			vpanel.add(new AllKontaktTeilhaberschaften(lbNutzerEigentuemer.getSelectedValue(),
+					lbNutzerTeilhabender.getSelectedValue()));
+			RootPanel.get("content").add(vpanel);
+		}
+		
 	}
 }

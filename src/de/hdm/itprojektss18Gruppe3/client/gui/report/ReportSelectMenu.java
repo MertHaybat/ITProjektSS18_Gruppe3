@@ -19,39 +19,45 @@ public class ReportSelectMenu extends VerticalPanel{
 		bt2.setStylePrimaryName("reportmenubutton");
 		bt3.setStylePrimaryName("reportmenubutton");
 
-		bt1.addClickHandler(new ClickHandler() {
+		bt1.addClickHandler(new reportEinsClickHandler());
 
-			@Override
-			public void onClick(ClickEvent event) {
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new AllKontakteReport());
-			}
+		bt2.addClickHandler(new reportZweiClickHandler());
 
-		});
-
-		bt2.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new TeilnahmenReportForm());
-			}
-
-		});
-	
-		bt3.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new EigenschaftenReportForm());
-			}
-
-		});
+		bt3.addClickHandler(new reportDreiClickHandler());
 
 		this.add(bt1);
 		this.add(bt2);
 		this.add(bt3);
+
+	}
+
+	class reportEinsClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(new AllKontakteReport());
+		}
+
+	}
+
+	class reportZweiClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(new TeilnahmenReportForm());
+		}
+
+	}
+
+	class reportDreiClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(new EigenschaftenReportForm());
+		}
 
 	}
 }
