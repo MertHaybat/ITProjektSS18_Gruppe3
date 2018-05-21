@@ -271,7 +271,7 @@ implements KontaktmanagerAdministration {
 
 		eigenschaftNeu.setBezeichnung(bezeichnung);
 
-		Eigenschaft eigenschaft = findEigenschaftByBezeichnung(eigenschaftNeu);
+		Eigenschaft eigenschaft = findEigenschaftByBezeichnung(bezeichnung);
 
 		if (eigenschaft.getBezeichnung() == "") {
 			return this.eigenschaftMapper.createEigenschaft(eigenschaftNeu);
@@ -624,8 +624,8 @@ implements KontaktmanagerAdministration {
 	 * @throws IllegalArgumentException
 	 */
 	@Override
-	public Eigenschaft findEigenschaftByBezeichnung(Eigenschaft e) throws IllegalArgumentException {
-		return this.eigenschaftMapper.findEigenschaftByBezeichnung(e.getBezeichnung());
+	public Eigenschaft findEigenschaftByBezeichnung(String e) throws IllegalArgumentException {
+		return this.eigenschaftMapper.findEigenschaftByBezeichnung(e);
 	}
 	
 	/**
@@ -900,9 +900,13 @@ implements KontaktmanagerAdministration {
 	 * @param kk - Übergabeparamter von KontaktKontaktliste 
 	 * @throws IllegalArgumentException
 	 */
+	 @Override
 	public void deleteKontaktKontaktlisteByID(KontaktKontaktliste kk) throws IllegalArgumentException{
 		this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktlisteID(kk);
 	}
-	
+	@Override
+	public Vector<Nutzer> findAllNutzer() throws IllegalArgumentException {
+		return this.nutzerMapper.findAllNutzer();
+	}
 	
 }

@@ -267,11 +267,11 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	/**
 	 * Anzeigen einer Eigenschaft anhand der Bezeichnung
 	 * 
-	 * @param e; Objekt der Klasse Eigenschaft
+	 * @param e; Bezeichnung von Eigenschaft
 	 * @return Objekt der Klasse Eigenschaft
 	 * @throws IllegalArgumentException
 	 */
-	public Eigenschaft findEigenschaftByBezeichnung(Eigenschaft e) throws IllegalArgumentException;
+	public Eigenschaft findEigenschaftByBezeichnung(String e) throws IllegalArgumentException;
 
 	/**
 	 * Anzeigen einer Eigenschaft anhand der ID
@@ -453,4 +453,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public void deleteKontaktlisteByID(Kontaktliste k) throws IllegalArgumentException;
 	
 	public void deleteKontaktKontaktlisteByID(KontaktKontaktliste kk) throws IllegalArgumentException;
+
+	public Vector<Nutzer> findAllNutzer() throws IllegalArgumentException;
+
 }

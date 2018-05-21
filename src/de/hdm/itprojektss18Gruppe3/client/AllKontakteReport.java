@@ -15,6 +15,8 @@ public class AllKontakteReport extends HTMLResultPanel{
 		reportverwaltung.createAlleKontakteReport(new CreateAlleKontakteReportCallback());
 	}
 	
+	
+	
 	class CreateAlleKontakteReportCallback implements AsyncCallback<AlleKontakteReport>{
 
 		@Override
