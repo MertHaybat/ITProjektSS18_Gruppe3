@@ -140,6 +140,10 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findNutzerByID(int nutzerID, AsyncCallback<Nutzer> callback);
 
+	void deleteKontaktlisteByID(Kontaktliste k, AsyncCallback<Void> callback);
+
+	void deleteKontaktKontaktlisteByID(KontaktKontaktliste kk, AsyncCallback<Void> callback);
+
 	
 	
 }

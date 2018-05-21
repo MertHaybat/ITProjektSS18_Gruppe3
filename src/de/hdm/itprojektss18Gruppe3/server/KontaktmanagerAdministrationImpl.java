@@ -817,7 +817,7 @@ implements KontaktmanagerAdministration {
 	}
 	
 	/**
-	 * 
+	 * Methode zum Löschen einer Teilhaberschaft über den Primärschlüssel id
 	 * @param t - Übergabeparameter von Teilhaberschaft 
 	 * @throws IllegalArgumentException
 	 */
@@ -832,6 +832,7 @@ implements KontaktmanagerAdministration {
 	}
 	
 	/**
+	 * Methode zum Löschen einer Teilhaberschaft über den Fremdschlüsse eigenschaftsauspraegungid
 	 * @param t - Übergabeparameter von Teilhaberschaft 
 	 * @throws IllegalArgumentException
 	 */
@@ -841,6 +842,7 @@ implements KontaktmanagerAdministration {
 	}
 	
 	/**
+	 * Methode zum Löschen einer Eigenschaftauspraegung über den Primärschlüssel id
 	 * @param e - Übergabeparameter von Eigenschaftsauspraegung
 	 * @throws IllegalArgumentException 
 	 */
@@ -882,4 +884,25 @@ implements KontaktmanagerAdministration {
 	public Nutzer findNutzerByID(int nutzerID) throws IllegalArgumentException {
 		return this.nutzerMapper.findNutzerByID(nutzerID);
 	}
+	
+	/**
+	 * Methode zum Löschen einer Kontaktliste über den Primärschlüssel id
+	 * @param k - Übergabeparameter von Kontaktliste 
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public void deleteKontaktlisteByID (Kontaktliste k) throws IllegalArgumentException {
+		this.kontaktlisteMapper.deleteKontaktliste(k);
+	}
+	
+	/**
+	 * Methode zum Löschen einer KontaktKontaktliste über dem Primärschlüssel id
+	 * @param kk - Übergabeparamter von KontaktKontaktliste 
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteKontaktKontaktlisteByID(KontaktKontaktliste kk) throws IllegalArgumentException{
+		this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktlisteID(kk);
+	}
+	
+	
 }

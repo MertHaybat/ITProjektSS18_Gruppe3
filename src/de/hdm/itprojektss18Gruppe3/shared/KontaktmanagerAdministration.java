@@ -449,4 +449,8 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Vector<Kontakt> findAllKontaktByTeilhaberschaften(int teilhabenderID, int eigentuemerID) throws IllegalArgumentException;
 
 	public Nutzer findNutzerByID(int nutzerID) throws IllegalArgumentException;
+
+	public void deleteKontaktlisteByID(Kontaktliste k) throws IllegalArgumentException;
+	
+	public void deleteKontaktKontaktlisteByID(KontaktKontaktliste kk) throws IllegalArgumentException;
 }
