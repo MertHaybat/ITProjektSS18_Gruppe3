@@ -35,7 +35,7 @@
 }
 
 .cellListSelectedItem {
-	background: linear-gradient(to left, #F8F8F8 50%, #ffffff 100%);
+	background: linear-gradient(to left, #80bfff 50%, #ffffff 100%);
 	font-weight: bold;
 	color: black;
 	height: auto;
