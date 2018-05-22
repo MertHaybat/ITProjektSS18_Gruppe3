@@ -194,4 +194,6 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			teilhaberschaftDb.center();
 		}
 	}
+	
+	
 }
