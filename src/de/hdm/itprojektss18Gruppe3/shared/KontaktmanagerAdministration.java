@@ -5,6 +5,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -455,5 +456,8 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public void deleteKontaktKontaktlisteByID(KontaktKontaktliste kk) throws IllegalArgumentException;
 
 	public Vector<Nutzer> findAllNutzer() throws IllegalArgumentException;
+	
+	public Vector<EigenschaftsAuspraegungHybrid> findEigenschaftHybrid(Person person) throws IllegalArgumentException;
+
 
 }

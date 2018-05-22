@@ -14,6 +14,7 @@ import de.hdm.itprojektss18Gruppe3.server.db.PersonMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.TeilhaberschaftMapper;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministration;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -908,5 +909,34 @@ implements KontaktmanagerAdministration {
 	public Vector<Nutzer> findAllNutzer() throws IllegalArgumentException {
 		return this.nutzerMapper.findAllNutzer();
 	}
+	
+	@Override
+	public Vector<EigenschaftsAuspraegungHybrid> findEigenschaftHybrid(Person person) throws IllegalArgumentException {
+	 Vector<Eigenschaftsauspraegung> auspraegung = findAllEigenschaftsauspraegungByPersonID(person);
+
+	 Vector<Eigenschaft> eigenschaft = new Vector<Eigenschaft>();
+
+	 for (Eigenschaftsauspraegung eigenschaftsauspraegung : auspraegung) {
+	  eigenschaft.add(findEigenschaftByEigenschaftID(eigenschaftsauspraegung.getEigenschaftID()));
+	 }
+
+	 Vector<EigenschaftsAuspraegungHybrid> eigenschaftAuspraegung = new Vector<EigenschaftsAuspraegungHybrid>();
+
+	 for (int i = 0; i < auspraegung.size(); i++) {
+
+	  for (int x = 0; x < auspraegung.size(); x++) {
+	   if (auspraegung.elementAt(i).getEigenschaftID() == eigenschaft.elementAt(x).getId()) {
+
+	    eigenschaftAuspraegung
+	      .add(new EigenschaftsAuspraegungHybrid(eigenschaft.elementAt(x), auspraegung.elementAt(i)));
+
+	   }
+
+	  }
+	 }
+
+	 return eigenschaftAuspraegung;
+	}
+
 	
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -145,6 +146,9 @@ public interface KontaktmanagerAdministrationAsync {
 	void deleteKontaktKontaktlisteByID(KontaktKontaktliste kk, AsyncCallback<Void> callback);
 
 	void findAllNutzer(AsyncCallback<Vector<Nutzer>> callback);
+
+	void findEigenschaftHybrid(Person person,
+			  AsyncCallback<Vector<EigenschaftsAuspraegungHybrid>> callback);
 
 	
 	

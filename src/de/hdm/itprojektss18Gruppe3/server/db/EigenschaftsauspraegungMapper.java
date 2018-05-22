@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 
 /**
  * Die Mapper-Klasse "EigenschaftsauspraegungMapper" ermöglicht das Abbilden von Objekten "Eigenschaftsauspraegung" in einer relationalen Datenbank. 
