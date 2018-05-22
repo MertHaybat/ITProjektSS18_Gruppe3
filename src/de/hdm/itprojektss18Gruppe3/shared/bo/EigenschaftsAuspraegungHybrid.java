@@ -12,8 +12,10 @@ public class EigenschaftsAuspraegungHybrid implements Serializable {
 	private String auspraegung = "";
 	private String eigenschaft = "";
 	
-	private int auspraegungid = 0;
-	private int eigenschaftid = 0;
+	private int statusAuspraegung = 0;
+	
+	private int auspraegungID = 0;
+	private int eigenschaftID = 0;
 	
 	public EigenschaftsAuspraegungHybrid(){
 		
@@ -23,9 +25,18 @@ public class EigenschaftsAuspraegungHybrid implements Serializable {
 		
 		this.auspraegung = auspraegung.getWert();
 		this.eigenschaft = eigenschaft.getBezeichnung();
-		this.auspraegungid = auspraegung.getId();
-		this.eigenschaftid = auspraegung.getEigenschaftID();
+		this.auspraegungID = auspraegung.getId();
+		this.eigenschaftID = auspraegung.getEigenschaftID();
+		this.statusAuspraegung = auspraegung.getStatus();
 		
+	}
+
+	public int getStatusAuspraegung() {
+		return statusAuspraegung;
+	}
+
+	public void setStatusAuspraegung(int statusAuspraegung) {
+		this.statusAuspraegung = statusAuspraegung;
 	}
 
 	public String getAuspraegung() {
@@ -45,19 +56,19 @@ public class EigenschaftsAuspraegungHybrid implements Serializable {
 	}
 
 	public int getAuspraegungid() {
-		return auspraegungid;
+		return auspraegungID;
 	}
 
-	public void setAuspraegungid(int auspraegungid) {
-		this.auspraegungid = auspraegungid;
+	public void setAuspraegungid(int auspraegungID) {
+		this.auspraegungID = auspraegungID;
 	}
 
 	public int getEigenschaftid() {
-		return eigenschaftid;
+		return eigenschaftID;
 	}
 
-	public void setEigenschaftid(int eigenschaftid) {
-		this.eigenschaftid = eigenschaftid;
+	public void setEigenschaftid(int eigenschaftID) {
+		this.eigenschaftID = eigenschaftID;
 	}
 	
 	

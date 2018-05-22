@@ -31,6 +31,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 /**
  * DialogBox zum Teilen und Betrachten der Teilhaberschaften
+ * 
  * @author ersinbarut
  *
  */
@@ -52,7 +53,8 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		kt.setSelectionModel(ssmAuspraegung, selectionEventManager);
 
-		Column<EigenschaftsAuspraegungHybrid, Boolean> cbColumn = new Column<EigenschaftsAuspraegungHybrid, Boolean>(cbCell) {
+		Column<EigenschaftsAuspraegungHybrid, Boolean> cbColumn = new Column<EigenschaftsAuspraegungHybrid, Boolean>(
+				cbCell) {
 			@Override
 			public Boolean getValue(EigenschaftsAuspraegungHybrid object) {
 				return ssmAuspraegung.isSelected(object);
