@@ -27,7 +27,7 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel vPanel2 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
-	private Label EigenschaftLabel = new Label("Eigenschaft: ");
+	private Label eigenschaftLabel = new Label("Eigenschaft: ");
 	private Button speichern = new Button("speichern");
 	private TextBox tbEigenschaft = new TextBox();
 	private TextBox tbEigenschaftsauspraegung = new TextBox();
@@ -42,7 +42,7 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	/**
 	 * Struktur des linken VerticalPanels
 	 */
-	vPanel.add(EigenschaftLabel);
+	vPanel.add(eigenschaftLabel);
 	vPanel.add(tbEigenschaft);
 	vPanel.add(speichern);
 	
@@ -60,21 +60,18 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	this.add(hPanel);
 	
 
+	/**
+	 * Funktionalität des Buttons anlegen. 
+	 */
 	speichern.addClickHandler(new insertEigenschaftClickHandler());
 
 	
 	}
-//	speichern.addClickHandler(new ClickHandler() {
-//
-//		@Override
-//		public void onClick(ClickEvent event) {
-//			// TODO Auto-generated method stub
-//		kontaktmanagerVerwaltung.createEigenschaft(tbEigenschaft.getValue(), AsyncCallback<Eigenschaft> 
-//		});	
-//		}
-//		
-//	});
 	
+	/**
+	 * Callback um Eigenschaft und Eigenschaftsausprägung zu erstellen
+	 *
+	 */
 	class createEigenschaftsauspraegungCallback implements AsyncCallback<Eigenschaftsauspraegung> {
 
 	@Override
@@ -91,6 +88,9 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 		
 	}
 
+	/*
+	 * ClickHandler, der den Callback ansteuert und die eingegebenen Werte übergibt.
+	 */
 	 class insertEigenschaftClickHandler implements ClickHandler {
 
 		@Override
