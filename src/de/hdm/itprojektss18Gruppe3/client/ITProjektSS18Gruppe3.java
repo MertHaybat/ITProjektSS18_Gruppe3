@@ -22,6 +22,7 @@ import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
 import de.hdm.itprojektss18Gruppe3.client.gui.Kontaktformular;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktlistView;
 import de.hdm.itprojektss18Gruppe3.client.gui.TeilhaberschaftDialogBox;
+import de.hdm.itprojektss18Gruppe3.client.gui.TeilhaberschaftenAlle;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -135,8 +136,11 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 					return;
 					
 				case "Alle Teilhaberschaften":
-					Window.alert("To do");	
+					TeilhaberschaftenAlle teilhaberschaftenAlle = new TeilhaberschaftenAlle();
+					RootPanel.get("content").clear();
+					RootPanel.get("content").add(teilhaberschaftenAlle);
 					return;
+				
 				}
 			}
 		});
