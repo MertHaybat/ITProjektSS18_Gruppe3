@@ -1,5 +1,6 @@
-/** Add css rules here for your application. */
+/** Set ids using widget.getElement().setId("idOfElement") */
 
+/*SEITENAUFBAU*/
 html {
 	background-image: url("https://image.ibb.co/nedhWJ/funky_lines.png");
 	background-repeat: repeat;
@@ -43,7 +44,6 @@ html {
 	box-shadow: 5px 5px 2.5px grey;
 }
 
-
 #menubar .menuBarLabelContainer {
 	height: 40px;
 	display: inline-block;
@@ -59,22 +59,6 @@ html {
 	display: inline-block;
 }
 
-#menubar .mainButton {
-	width: 90px;
-	border-radius:6px;
-	border:1px solid #dcdcdc;
-	display: inline-block;
-	cursor:pointer;
-	color:#666666;
-	font-size:10px;
-	font-weight:bold;
-	padding:7px 6px;
-	text-shadow:0px 1px 0px #ffffff;
-	text-align: center;
-	margin-bottom: 5px;
-	margin-left: 5px;
-}
-
 #leftmenutree {
 	height: 650px;
 	width: 15%;
@@ -88,7 +72,6 @@ html {
 
 #leftmenu .headline {
 	font-size: 1.8em;
-
 }
 
 #content {
@@ -118,32 +101,8 @@ html {
 	box-shadow: 5px 5px 2.5px grey;
 }
 
-.listbox-report {
-position: relative;
-width: 200px;
-padding: 10px;
-margin: 0 auto;
-color: #fff;
-outline: none;
-font-weight: bold;
-cursor: pointer;
-background: darkgrey;
-border: double;
-}
 
-.cellListWidgetContainerPanel {
-	border: 1px grey;
-	margin-left: 1em;
-	margin-top: 2em;
-}
-
-.kontaktCellTableView {
-	margin-left: 50px;
-	max-height: 100px;
-	overflow: scroll;
-}
-
-/** Example rules used by the template application (remove for your app) */
+/* TEXT FORMATIERUNGEN */
 .h1 {
   font-size: 2.4em;
   font-weight: bold;
@@ -159,6 +118,11 @@ border: double;
 	font-style: italic;
 }
 
+.landingpageText {
+	text-align: center;
+	font-size: 1.2em;
+}
+
 .navigationPanelHeadline {
 	font-size: 1.5em;
 	font-weight: bold;
@@ -167,6 +131,31 @@ border: double;
 }
 
 
+/** WIDGET & PANEL FORMATIERUNGEN*/
+.cellListWidgetContainerPanel {
+	border: 1px grey;
+	margin-left: 1em;
+	margin-top: 2em;
+}
+
+.kontaktCellTableView {
+	margin-left: 50px;
+	max-height: 100px;
+	overflow: scroll;
+}
+
+.headlinePanel {
+	width: 100%;
+	height: auto;
+	font-size: 2em;
+}
+
+.dialogVPanel {
+  margin: 5px;
+}
+
+
+/* MENÜBAUM FORMATIERUNG GWT TREE */
 .gwt-Tree {
   padding: 1px 0px;
   margin: 0px;
@@ -180,12 +169,51 @@ border: double;
   background: #ebeff9;
 }
 
+
+/* REPORT GENERATOR FORMATIERUNG */
+.listbox-report {
+position: relative;
+width: 200px;
+padding: 10px;
+margin: 0 auto;
+color: #fff;
+outline: none;
+font-weight: bold;
+cursor: pointer;
+background: darkgrey;
+border: double;
+}
+
+
+/* BUTTON FORMATIERUNGEN */
 .sendButton {
   display: block;
   font-size: 16pt;
 }
 
-/** Most GWT widgets already have a style name defined */
+#menubar .mainButton {
+	width: 90px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display: inline-block;
+	cursor:pointer;
+	color:#666666;
+	font-size:10px;
+	font-weight:bold;
+	padding:7px 6px;
+	text-shadow:0px 1px 0px #ffffff;
+	text-align: center;
+	margin-bottom: 5px;
+	margin-left: 5px;
+}
+
+#closeButton {
+  margin: 15px 6px 6px;
+}
+
+
+/* .GWT WIDGET FORMATIERUNGEN */
+
 .gwt-DialogBox {
   width: 400px;
 }
@@ -204,50 +232,7 @@ border: double;
 	display: inline-block;
 }
 
-.dialogVPanel {
-  margin: 5px;
-}
-
-.headlinePanel {
-	width: 100%;
-	height: auto;
-	font-size: 2em;
-}
-
 .serverResponseLabelError {
   color: red;
 }
 
-.pictogram {
-	src: ('font/entypo-social.svg#EntypoRegular') format('svg');
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
-}
-
-.material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-
-  /* Support for all WebKit browsers. */
-  -webkit-font-smoothing: antialiased;
-  /* Support for Safari and Chrome. */
-  text-rendering: optimizeLegibility;
-
-  /* Support for Firefox. */
-  -moz-osx-font-smoothing: grayscale;
-
-  /* Support for IE. */
-  font-feature-settings: 'liga';
-}

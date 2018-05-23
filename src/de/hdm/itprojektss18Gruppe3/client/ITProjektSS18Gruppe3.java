@@ -33,16 +33,9 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 @SuppressWarnings("deprecation")
 public class ITProjektSS18Gruppe3 implements EntryPoint {
 
-	private HorizontalPanel vpanel = new HorizontalPanel();
+	private VerticalPanel vPanel = new VerticalPanel();
 	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
-	private Label instructionMessage = new Label("Bitte melde dich mit deinem Google Konto an");
-	private TextBox tb = new TextBox();
-	private Button testButtonKontaktlistView = new Button("KontaktlistView");
-	private Button testButtonKontaktform = new Button("Kontaktformular");
-	private Button testButtonAllKontaktView = new Button("Alle Kontakte");
-	private Button nix = new Button("LEER");
-
-	private Button testTeilhaberschaftDialogBox = new Button("Teilen");
+	private HTML instructionMessage = new HTML("<br><br><br>Bitte melde dich mit deinem Google Konto an");
 
 	private static KontaktmanagerAdministrationAsync verwaltung = ClientsideSettings.getKontaktVerwaltung();
 	
@@ -55,18 +48,10 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		k.setId(3);
 		
 		welcomeMessage.addStyleName("headline");
-		vpanel.setStylePrimaryName("headlinePanel");
-		vpanel.add(welcomeMessage);
-
-		vpanel.add(testTeilhaberschaftDialogBox);
-		vpanel.add(testButtonKontaktlistView);
-		vpanel.add(testButtonKontaktform);
-		vpanel.add(testButtonAllKontaktView);
-		testButtonKontaktlistView.addClickHandler(new KontaktlistViewClickHandler());
-		testButtonKontaktform.addClickHandler(new KontaktformClickHandler());
-		testButtonAllKontaktView.addClickHandler(new AllKontaktViewClickHandler());
-		testTeilhaberschaftDialogBox.addClickHandler(new TeilhaberschaftDBClickHandler());
-		
+		vPanel.setStylePrimaryName("headlinePanel");
+		vPanel.add(welcomeMessage);		
+		instructionMessage.setStylePrimaryName("landingpageText");
+		vPanel.add(instructionMessage);
 
 		/*
 		 * Navigationsbaum auf der linken Seite erzeugen
@@ -105,95 +90,61 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	    navigationTreePanel.add(navigationHeadline);
 	    navigationTreePanel.add(navigationTree);
 	    
+
+	    /*
+	     * TreeListener erzeugen und über eine Switch Case Anweisung das jeweils
+	     * angeklickte Menü Item herausfinden, um den User dann auf die gewünschte 
+	     * Seite zu navigieren.
+	     */
+	   
 	    navigationTree.addTreeListener(new TreeListener() {
 			
 			@Override
 			public void onTreeItemStateChanged(TreeItem item) {
-				
 			}
 			
 			@Override
 			public void onTreeItemSelected(TreeItem item) {
-				if(item.getText().equals("Alle Kontaktlisten")) {
-				KontaktlistView kontaktlistView = new KontaktlistView();
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(kontaktlistView);
-				}
+				switch (item.getText()) {
 				
-				if(item.getText().equals("Alle Kontakte")) {
-				AllKontaktView allKontaktView = new AllKontaktView();
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(allKontaktView);
+				case "Neuer Kontakt":
+					Kontaktformular kontaktformular = new Kontaktformular();
+					RootPanel.get("content").clear();		
+					RootPanel.get("content").add(kontaktformular);
+					return;
+				
+				case "Alle Kontakte":
+					AllKontaktView allKontaktView = new AllKontaktView();
+					RootPanel.get("content").clear();
+					RootPanel.get("content").add(allKontaktView);
+					return;
+					
+				case "Neue Kontaktliste":
+					Window.alert("To do");
+					return;
+					
+				case "Alle Kontaktlisten":
+					KontaktlistView kontaktlistView = new KontaktlistView();
+					RootPanel.get("content").clear();
+					RootPanel.get("content").add(kontaktlistView);
+					return;
+					
+				case "Neue Teilhaberschaft":
+					TeilhaberschaftDialogBox teilhaberschaftDb = new TeilhaberschaftDialogBox(k);
+					teilhaberschaftDb.center();
+					return;
+					
+				case "Alle Teilhaberschaften":
+					Window.alert("To do");	
+					return;
 				}
 			}
 		});
-
-
+	    
+	    
 	    // Add it to the root panel.
 	    RootPanel.get("leftmenutree").add(navigationTreePanel);	    
 		RootPanel.get("content").clear();
-		RootPanel.get("content").add(vpanel);
-		nix.addClickHandler(new ClickHandler(){
-
-			@Override
-			public void onClick(ClickEvent event) {
-				verwaltung.createNutzer(tb.getValue(), new AsyncCallback<Nutzer>(){
-
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Nein");
-					}
-
-					@Override
-					public void onSuccess(Nutzer result) {
-						Window.alert("Ja");
-					}
-
-				});
-
-			}
-		});
-
+		RootPanel.get("content").add(vPanel);
 	}
-
-	public class KontaktlistViewClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			KontaktlistView kontaktlistView = new KontaktlistView();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(kontaktlistView);
-		}
-	}
-	
-	public class AllKontaktViewClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			AllKontaktView allKontaktView = new AllKontaktView();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(allKontaktView);
-		}
-	}
-	
-	public class KontaktformClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			Kontaktformular kontaktformular = new Kontaktformular();
-			RootPanel.get("content").clear();		
-			RootPanel.get("content").add(kontaktformular);
-		}
-	}
-	public class TeilhaberschaftDBClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			TeilhaberschaftDialogBox teilhaberschaftDb = new TeilhaberschaftDialogBox(k);
-			teilhaberschaftDb.center();
-		}
-	}
-	
-	
 }
