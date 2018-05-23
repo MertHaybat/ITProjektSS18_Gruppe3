@@ -79,14 +79,14 @@ public class Kontaktformular extends VerticalPanel {
 		kontaktWidget.setWidget(6, 1, temail);
 		kontaktWidget.setWidget(7, 0, lb6);
 		kontaktWidget.setWidget(7, 1, tstatus);
-		kontaktWidget.setWidget(9, 0, badd);
-		kontaktWidget.setWidget(9, 2, bspeichern);
-		kontaktWidget.setWidget(9, 3, bloeschen);
-		kontaktWidget.setWidget(9, 4, babbrechen);
+		kontaktWidget.setWidget(8, 1, thinweistext);
+		kontaktWidget.setWidget(10, 0, badd);
+		kontaktWidget.setWidget(10, 2, bspeichern);
+		kontaktWidget.setWidget(10, 3, bloeschen);
+		kontaktWidget.setWidget(10, 4, babbrechen);
 		kontaktWidget.setWidget(0, 6, lb7);
-		kontaktWidget.setWidget(1, 6, thinweistext);
 		
-		thinweistext.setWidth("600px");
+		thinweistext.setWidth("400px");
 		thinweistext.setHeight("100px");
 		
 		this.add(kontaktWidget);
