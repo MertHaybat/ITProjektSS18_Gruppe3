@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
-import de.hdm.itprojektss18Gruppe3.client.gui.Kontaktformular;
+import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktlistView;
 import de.hdm.itprojektss18Gruppe3.client.gui.TeilhaberschaftDialogBox;
 import de.hdm.itprojektss18Gruppe3.client.gui.TeilhaberschaftenAlle;
@@ -109,9 +109,9 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 				switch (item.getText()) {
 				
 				case "Neuer Kontakt":
-					Kontaktformular kontaktformular = new Kontaktformular();
+					KontaktForm kontaktForm = new KontaktForm(k);
 					RootPanel.get("content").clear();		
-					RootPanel.get("content").add(kontaktformular);
+					RootPanel.get("content").add(kontaktForm);
 					return;
 				
 				case "Alle Kontakte":
