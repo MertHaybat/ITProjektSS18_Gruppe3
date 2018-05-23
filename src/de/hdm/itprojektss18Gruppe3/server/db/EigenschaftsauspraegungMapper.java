@@ -138,17 +138,13 @@ public class EigenschaftsauspraegungMapper {
 			/**
 			 * Durchführung der Update-Operation via Prepared Statement
 			 */
-			PreparedStatement stmt = con.prepareStatement("UPDATE `eigenschaftsauspraegung` SET `wert`= ?, `personid`= ?,"
-					+ " `status`= ?, `eigenschaftid`= ? WHERE id= ?");
+			PreparedStatement stmt = con.prepareStatement("UPDATE `eigenschaftsauspraegung` SET `wert`= ?, `status`= ? WHERE id= ?");
 			
 			stmt.setString(1, eigenschaftsauspraegung.getWert());
-			stmt.setInt(2, eigenschaftsauspraegung.getPersonID());
-			stmt.setInt(3, eigenschaftsauspraegung.getStatus());
-			stmt.setInt(4, eigenschaftsauspraegung.getEigenschaftID());
-			stmt.setInt(5, eigenschaftsauspraegung.getId());
+			stmt.setInt(2, eigenschaftsauspraegung.getStatus());
+			stmt.setInt(3, eigenschaftsauspraegung.getId());
 			
-			stmt.executeQuery();
-			
+			stmt.executeUpdate();
 			System.out.println("Updated");
 			
 		} catch (SQLException e2) {

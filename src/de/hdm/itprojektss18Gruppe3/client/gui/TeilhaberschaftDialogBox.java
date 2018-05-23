@@ -41,8 +41,8 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private final CheckboxCell cbCell = new CheckboxCell(false, true);
 	private FlexTable ftTeilhaberschaft = new FlexTable();
 
-	private Button b1 = new Button("teilen");
-	private Button b2 = new Button("abbrechen");
+	private Button b1 = new Button("Teilen");
+	private Button b2 = new Button("Abbrechen");
 
 	private final Handler<EigenschaftsAuspraegungHybrid> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();

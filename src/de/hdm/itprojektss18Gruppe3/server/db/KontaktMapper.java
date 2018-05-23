@@ -123,9 +123,9 @@ public class KontaktMapper extends PersonMapper{
 	 * @return kontakt vom Objekt Kontakt
 	 */
 	public Kontakt updateKontakt(Kontakt kontakt) {
-		String sql = "UPDATE kontakt SET name= ?, erzeugungsdatum= ?, modifikationsdatum= ?, status= ? WHERE id= ? ";
-		java.sql.Date sqlDate= new java.sql.Date(kontakt.getErzeugungsdatum().getTime());
+		String sql = "UPDATE kontakt SET name= ?, modifikationsdatum= ?, status= ? WHERE id= ? ";
 		java.sql.Date sqlDate1 = new java.sql.Date(kontakt.getModifikationsdatum().getTime());
+		
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -136,11 +136,9 @@ public class KontaktMapper extends PersonMapper{
 			PreparedStatement stmt = con.prepareStatement(sql);
 			
 			stmt.setString(1, kontakt.getName());
-			stmt.setDate(2, sqlDate);
-			stmt.setDate(3, sqlDate1);
-			stmt.setInt(4, kontakt.getStatus());
-			
-			stmt.setInt(5, kontakt.getId());
+			stmt.setDate(2, sqlDate1);
+			stmt.setInt(3, kontakt.getStatus());
+			stmt.setInt(4, kontakt.getId());
 			stmt.executeUpdate();
 			
 			System.out.println("Update complete");
