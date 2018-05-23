@@ -2,11 +2,13 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -28,23 +30,24 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	private VerticalPanel vPanel2 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private Label eigenschaftLabel = new Label("Eigenschaft: ");
-	private Button speichern = new Button("speichern");
+	private Button erstellen = new Button("erstellen");
 	private TextBox tbEigenschaft = new TextBox();
 	private TextBox tbEigenschaftsauspraegung = new TextBox();
 	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	
-	Kontakt kontakt = new Kontakt();
+	private Kontakt kontakt = new Kontakt();
 
 	
-	public NewEigenschaftsauspraegungDialogBox (final Kontakt kontakt) {
-	
+	public NewEigenschaftsauspraegungDialogBox (Kontakt k) {
+	kontakt=k;
+	Window.alert("" + kontakt.getId());
 	/**
 	 * Struktur des linken VerticalPanels
 	 */
 	vPanel.add(eigenschaftLabel);
 	vPanel.add(tbEigenschaft);
-	vPanel.add(speichern);
+	vPanel.add(erstellen);
 	
 	/**
 	 * Struktur des rechten VerticalPanels 
@@ -55,15 +58,15 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	 * Struktur der gesamten Seite. 
 	 * Die beiden VerticalPanels werden dem HorizontalPanel hinzugefügt.
 	 */
-	vPanel.add(hPanel);
-	vPanel2.add(hPanel);
+	hPanel.add(vPanel);
+	hPanel.add(vPanel2);
 	this.add(hPanel);
 	
 
 	/**
 	 * Funktionalität des Buttons anlegen. 
 	 */
-	speichern.addClickHandler(new insertEigenschaftClickHandler());
+	erstellen.addClickHandler(new insertEigenschaftClickHandler());
 
 	
 	}
@@ -84,6 +87,10 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	public void onSuccess(Eigenschaftsauspraegung result) {
 		// TODO Auto-generated method stub
 		hide();
+		KontaktForm kForm = new KontaktForm(kontakt);
+		RootPanel.get("content").clear();
+		RootPanel.get("content").add(kForm);
+		
 	}
 		
 	}
@@ -96,7 +103,7 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 		@Override
 		public void onClick(ClickEvent event) {
 			kontaktmanagerVerwaltung.createEigenschaftsauspraegung
-			(tbEigenschaftsauspraegung.getValue(), 0, kontakt.getId(), tbEigenschaft.getValue(), 
+			(tbEigenschaftsauspraegung.getValue(), kontakt.getId(), 0, tbEigenschaft.getValue(), 
 					new createEigenschaftsauspraegungCallback());
 	
 		}

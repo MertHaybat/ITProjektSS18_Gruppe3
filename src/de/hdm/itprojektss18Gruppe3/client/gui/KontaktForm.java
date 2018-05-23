@@ -46,6 +46,7 @@ public class KontaktForm extends VerticalPanel {
 	private CellTable<EigenschaftsAuspraegungHybrid> celltable = new CellTable<EigenschaftsAuspraegungHybrid>();
 	
 	private Button addAuspraegung = new Button("+");
+	private Button saveChanges = new Button("Speichern");
 	
 	private EigenschaftsAuspraegungHybrid eigenschaftObject = new EigenschaftsAuspraegungHybrid();
 	private EigenschaftsAuspraegungHybrid auspraegungObject = new EigenschaftsAuspraegungHybrid();
@@ -53,8 +54,10 @@ public class KontaktForm extends VerticalPanel {
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
 	
 	private final SingleSelectionModel<EigenschaftsAuspraegungHybrid> ssmAuspraegung = new SingleSelectionModel<EigenschaftsAuspraegungHybrid>();
-	
+	private Kontakt k = new Kontakt();
 	public KontaktForm(Kontakt kontakt){
+		k.setId(3);
+		
 		EditTextCell editEigenschaft = new EditTextCell();
 		EditTextCell editAuspraegung = new EditTextCell();
 		
@@ -96,23 +99,31 @@ public class KontaktForm extends VerticalPanel {
 		});
 		
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
-		addAuspraegung.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
-			}
-		});
+		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
+		saveChanges.addClickHandler(new UpdateAuspraegungClickHandler());
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				// TODO Auto-generated method stub
+//				kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+//			}
+//		});
 		
 		celltable.addColumn(wertEigenschaft, "");
 		celltable.addColumn(wertAuspraegung, "");
 		celltable.setSelectionModel(ssmAuspraegung);
 		this.add(celltable);
 		this.add(addAuspraegung);
+		this.add(saveChanges);
 
 	}
+	class UpdateAuspraegungClickHandler implements ClickHandler{
 
+		@Override
+		public void onClick(ClickEvent event) {
+			kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+		}
+		
+	}
 	class UpdateAuspraegungCallback implements AsyncCallback<Void> {
 
 		@Override
@@ -128,7 +139,33 @@ public class KontaktForm extends VerticalPanel {
 		}
 				
 	}
-	
+
+	class CreateEigenschaftAuspraegungClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+			NewEigenschaftsauspraegungDialogBox dialogbox = new NewEigenschaftsauspraegungDialogBox(k);
+			dialogbox.center();
+		}
+
+		
+				
+	}
+	class CreateEigenschaftAuspraegungCallback implements AsyncCallback<Eigenschaftsauspraegung> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			Window.alert("Fehler beim Speichern der Eigenschaftsauspraegung" + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Eigenschaftsauspraegung result) {
+			// TODO
+			
+		}
+				
+	}
 	class AllAuspraegungenCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungHybrid>> {
 
 		@Override
