@@ -1,25 +1,44 @@
 package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
+import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.HasRows;
+import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.gargoylesoftware.htmlunit.javascript.host.Range;
+import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
+import de.hdm.itprojektss18Gruppe3.client.AllKontakteByKontaktliste;
+import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.LeftSideFrame;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
+import de.hdm.itprojektss18Gruppe3.server.KontaktmanagerAdministrationImpl;
+import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministration;
+import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
+import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -29,6 +48,7 @@ import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSe
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -51,13 +71,15 @@ public class KontaktlistView extends MainFrame {
 	Button addKontaktlisteButton = new Button("+ Kontaktliste");
 	Button deleteKontaktlisteButton = new Button("Loeschen");
 	MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-
-	private static final List<String> KONTAKTLISTEN = Arrays.asList("Familie", "Freunde",
-			"Saufkollegen", "Arbeitskollegen", "Bekannte", "Deppen", "Unbekannte", "HdM Crew", "Dealer", "Hotlines", "Nervensägen", "Pizzeria", "Arzt");
+	private ListDataProvider<List<Kontaktliste>> kontaktlisteDataProvider;
 
 
+
+	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
+	
 	public void run () {
 
+		
 		/*
 		 * Menüleiste mit den Buttons für die Anlage von einer neuen Kontaktliste und dem Löschen einer Kontaktliste erzeugen
 		 * und dem Panel zuweisen
@@ -88,182 +110,177 @@ public class KontaktlistView extends MainFrame {
 		/*
 		 * CellList für die Anzeige der Kontaktlisten eines Users wird erzeugt
 		 */
-		// Create a cell to render each value.
-		TextCell textCell = new TextCell();
-
-		// Create a CellList that uses the cell.
-		CellList<String> cellList = new CellList<String>(textCell, CellListResources.INSTANCE);
+	   
+		CellList<Kontaktliste> cellList = new CellList<Kontaktliste>(new KontaktlistCell(), CellListResources.INSTANCE);
+	    
+	    MyDataProvider dataProvider = new MyDataProvider();
+	    
+	    dataProvider.addDataDisplay(cellList);
+		
 		cellList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-
-
+	    
 
 		// Add a selection model to handle user selection.
-		final SingleSelectionModel<String> selectionModel = new SingleSelectionModel<String>();
+		final SingleSelectionModel<Kontaktliste> selectionModel = new SingleSelectionModel<Kontaktliste>();
 		cellList.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event) {
-				String selected = selectionModel.getSelectedObject();
+				Kontaktliste selected = selectionModel.getSelectedObject();
 				if (selected != null) {
-					// Window.alert("You selected: " + selected);
+					AllKontakteByKontaktliste allKontaktebyKontaktliste = new AllKontakteByKontaktliste(selected);
 				}
 			}
 		});
-
-		// Set the total row count. This isn't strictly necessary, but it affects
-		// paging calculations, so its good habit to keep the row count up to date.
-		cellList.setRowCount(KONTAKTLISTEN.size(), true);
-
-		// Push the data into the widget.
-		cellList.setRowData(0, KONTAKTLISTEN);
+		// Wird angezeit, wenn der CellTable keine Daten enthält (Testzweck)
+		cellList.setEmptyListWidget(addKontaktlisteButton);
+	
 		
 		
-
+		
 		/*
 		 * CellTable für die Anzeige der einzelnen Kontakte aus einer Kontaktliste
 		 */
 		
-		CellTable<Contact> table = new CellTable<Contact>(13, CellTableResources.INSTANCE);
-	    table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+		CellTable<Kontakt> kontaktCellTable = new CellTable<Kontakt>(13, CellTableResources.INSTANCE);
+		kontaktCellTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 	    
 	    SimplePager pager;
 	    
 	    SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
 	    pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-	    pager.setDisplay(table);
+	    pager.setDisplay(kontaktCellTable);
 	    
-	    /*
-	     * CheckBoxen für die Auswahl mehrerer Kontakte anlegen. Hiermit können mehrere Kontakte gleichzeitig
-	     * z.B. aus einer Kontaktliste entfernt werden.
-	     * 
-	     * ERST WENN DB ANBINDUNG STEHT
-	     */
-	    final SelectionModel<Contact> selectionModelAllKontakteView = new MultiSelectionModel<Contact>();
-	        table.setSelectionModel(selectionModelAllKontakteView,
-	            DefaultSelectionEventManager.<Contact> createCheckboxManager());
+   
+	    final SelectionModel<Kontakt> selectionModelAllKontakteView = new MultiSelectionModel<Kontakt>();
+	    kontaktCellTable.setSelectionModel(selectionModelAllKontakteView,
+	            DefaultSelectionEventManager.<Kontakt> createCheckboxManager());
 
 	        
-	        Column<Contact, Boolean> checkColumn = new Column<Contact, Boolean>(
+/*		     * CheckBoxen für die Auswahl mehrerer Kontakte anlegen. Hiermit können mehrere Kontakte gleichzeitig
+		     * z.B. aus einer Kontaktliste entfernt werden.
+		     * */
+	        Column<Kontakt, Boolean> checkColumn = new Column<Kontakt, Boolean>(
 	                new CheckboxCell(true, false)) {
 	              @Override
-	              public Boolean getValue(Contact object) {
+	              public Boolean getValue(Kontakt object) {
 	                // Get the value from the selection model.
-	                //return selectionModel.isSelected(object);
-	            	  return null;
+	                return selectionModelAllKontakteView.isSelected(object);
 	              }
 	            };
-	            table.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-	            table.setColumnWidth(checkColumn, 40, Unit.PX);    
-	        
-	        
-	        
-	        
+	            kontaktCellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+	            kontaktCellTable.setColumnWidth(checkColumn, 40, Unit.PX);    
+	          
 	    // Add a text column to show the name.
-	    TextColumn<Contact> nameColumn = new TextColumn<Contact>() {
+	    TextColumn<Kontakt> nameColumn = new TextColumn<Kontakt>() {
 	      @Override
-	      public String getValue(Contact object) {
-	        return object.name;
+	      public String getValue(Kontakt object) {
+	        return object.getName();
 	      }
 	    };
-	    table.addColumn(nameColumn, "Name");
+	    kontaktCellTable.addColumn(nameColumn, "Name");
 
 	    // Add a Vorname column to show the birthday.
-	    TextColumn<Contact> vornameColumn = new TextColumn<Contact>() {
+	    TextColumn<Kontakt> vornameColumn = new TextColumn<Kontakt>() {
 		      @Override
-		      public String getValue(Contact object) {
-		        return object.vorname;
+		      public String getValue(Kontakt object) {
+		        return object.getName();
 		      }
 		    };
-		    table.addColumn(vornameColumn, "Vorname");	    
+		    kontaktCellTable.addColumn(vornameColumn, "Vorname");	    
 		    
 	    // Add a text column to show the address.
-	    TextColumn<Contact> addressColumn = new TextColumn<Contact>() {
+	    TextColumn<Kontakt> addressColumn = new TextColumn<Kontakt>() {
 	      @Override
-	      public String getValue(Contact object) {
-	        return object.address;
+	      public String getValue(Kontakt object) {
+	        return object.getName();
 	      }
 	    };
-	    table.addColumn(addressColumn, "Address");
+	    kontaktCellTable.addColumn(addressColumn, "Address");
 
 	    // Add a selection model to handle user selection.
-	    final SingleSelectionModel<Contact> selectionModelCellTable = new SingleSelectionModel<Contact>();
-	    table.setSelectionModel(selectionModelCellTable);
+	    final SingleSelectionModel<Kontakt> selectionModelCellTable = new SingleSelectionModel<Kontakt>();
+	    kontaktCellTable.setSelectionModel(selectionModelCellTable);
 	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 	      public void onSelectionChange(SelectionChangeEvent event) {
-	        Contact selected = selectionModelCellTable.getSelectedObject();
+	    	  Kontakt selected = selectionModelCellTable.getSelectedObject();
 	        if (selected != null) {
-	          Window.alert("You selected: " + selected.name);
+	          Window.alert("You selected: " + selected.getName());
 	        }
 	      }
 	    });
 
 	    // Set the total row count. This isn't strictly necessary, but it affects
 	    // paging calculations, so its good habit to keep the row count up to date.
-	    table.setRowCount(CONTACTS.size(), true);
+	//    kontaktCellTable.setRowCount(CONTACTS.size(), true);
 
 	    // Push the data into the widget.
-	    table.setRowData(0, CONTACTS);
+	//    kontaktCellTable.setRowData(0, CONTACTS);
 	    
-	    table.setWidth("auto", true);
-	    table.setColumnWidth(nameColumn, 170.0, Unit.PX);
-	    table.setColumnWidth(vornameColumn, 170.0, Unit.PX);
-	    table.setColumnWidth(addressColumn, 330.0, Unit.PX);
+	    kontaktCellTable.setWidth("auto", true);
+	    kontaktCellTable.setColumnWidth(nameColumn, 170.0, Unit.PX);
+	    kontaktCellTable.setColumnWidth(vornameColumn, 170.0, Unit.PX);
+	    kontaktCellTable.setColumnWidth(addressColumn, 330.0, Unit.PX);
 	    
-	    table.setStylePrimaryName("kontaktCellTableView");
+	    kontaktCellTable.setStylePrimaryName("kontaktCellTableView");
 
 		
 		kontaktlistViewPanel.add(cellList);
-		pager.setStylePrimaryName("gwt-SimplePager");
-		kontaktViewCellTableGrid.setWidget(0, 0, table);
-		kontaktViewCellTableGrid.setWidget(1, 0, pager);
 
-	//	kontaktlistViewPanel.add(table);
-		//kontaktlistViewPanel.add(pager);
+
+		kontaktlistViewPanel.add(kontaktCellTable);
+		kontaktlistViewPanel.add(pager);
 		kontaktlistViewPanel.add(kontaktViewCellTableGrid);
 		kontaktlistViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 
+		RootPanel.get("content").clear();
 		RootPanel.get("content").add(kontaktlistViewPanel);
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menuBarContainerPanel);
+	
+	}
+	
+	static class KontaktlistCell extends AbstractCell<Kontaktliste> {
+
+		@Override
+		public void render(Context context, Kontaktliste value, SafeHtmlBuilder sb) {
+			
+			 if (value == null) {
+			        return;
+			      }
+			      sb.appendEscaped(value.getBezeichnung());
+		}		
 	}
 	
 	
-	
-	//TO BE DELETED WENN DIE DB ANBINDUNG STEHT MIT ABFRAGEN
-	
-		private static class Contact {
-		    private final String address;
-		    private final String vorname;
-		    private final String name;
+	private static class MyDataProvider extends AsyncDataProvider<Kontaktliste> {
 
-		    public Contact(String name, String vorname, String address) {
-		      this.name = name;
-		      this.vorname = vorname;
-		      this.address = address;
-		    }
-		  }
+		@Override
+		protected void onRangeChanged(HasData<Kontaktliste> display) {
+			 final com.google.gwt.view.client.Range range = display.getVisibleRange();
+			 
 
-		  /**
-		   * The list of data to display.
-		   */
-		  private static final List<Contact> CONTACTS = Arrays.asList(
-		      new Contact("John", "Manfred", "123 Fourth Avenue"),
-		      new Contact("Joe", "Hansi", "22 Lance Ln"),
-		      new Contact("George", "Werner", "1600 Pennsylvania Avenue"),
-		      new Contact("John", "Manfred", "123 Fourth Avenue"),
-		      new Contact("Joe", "Hansi", "22 Lance Ln"),
-		      new Contact("George", "Werner", "1600 Pennsylvania Avenue"),
-		      new Contact("John", "Manfred", "123 Fourth Avenue"),
-		      new Contact("Joe", "Hansi", "22 Lance Ln"),
-		      new Contact("George", "Werner", "1600 Pennsylvania Avenue"),
-		      new Contact("John", "Manfred", "123 Fourth Avenue"),
-		      new Contact("George", "Werner", "1600 Pennsylvania Avenue"),
-		      new Contact("John", "Manfred", "123 Fourth Avenue"),
-		      new Contact("Joe", "Hansi", "22 Lance Ln"),
-		      new Contact("George", "Werner", "1600 Pennsylvania Avenue"),
-		      new Contact("John", "Manfred", "123 Fourth Avenue"),
-		      new Contact("Joe", "Hansi", "22 Lance Ln"),
-		      new Contact("George", "Werner", "1600 Pennsylvania Avenue"),
-		      new Contact("Joe", "Hansi", "22 Lance Ln"),
-		      new Contact("George", "Werner", "1600 Pennsylvania Avenue")
-				  );
-		  }
+
+			    
+		    	kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(1, new AsyncCallback<Vector<Kontaktliste>>() {
+			          int start = range.getStart();
+			          int length = range.getLength();
+		    		
+		    		ArrayList<Kontaktliste> kontaktlistenToDisplay = new ArrayList<Kontaktliste>();
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Fehler beim Auslesen aller Kontakte");
+						
+					}
+
+					@Override
+					public void onSuccess(Vector<Kontaktliste> result) {
+						kontaktlistenToDisplay.addAll(result);
+						updateRowData(start, kontaktlistenToDisplay);
+					}
+					
+				});
+
+		}
+		
+	}
+}
