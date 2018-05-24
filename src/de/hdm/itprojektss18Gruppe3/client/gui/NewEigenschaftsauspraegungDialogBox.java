@@ -41,7 +41,7 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	
 	public NewEigenschaftsauspraegungDialogBox (Kontakt k) {
 	kontakt=k;
-	Window.alert("" + kontakt.getId());
+	kontakt.setId(6);
 	/**
 	 * Struktur des linken VerticalPanels
 	 */

@@ -458,6 +458,8 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Vector<Nutzer> findAllNutzer() throws IllegalArgumentException;
 	
 	public Vector<EigenschaftsAuspraegungHybrid> findEigenschaftHybrid(Person person) throws IllegalArgumentException;
+	
+	public void deleteKontaktByID(Kontakt k) throws IllegalArgumentException;
 
 
 }

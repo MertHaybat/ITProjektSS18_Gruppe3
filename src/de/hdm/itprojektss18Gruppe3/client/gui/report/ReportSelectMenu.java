@@ -35,8 +35,9 @@ public class ReportSelectMenu extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent event) {
+			AllKontakteReport allKontakteReport = new AllKontakteReport();
 			RootPanel.get("content").clear();
-			RootPanel.get("content").add(new AllKontakteReport());
+			RootPanel.get("content").add(allKontakteReport);
 		}
 
 	}
@@ -45,8 +46,9 @@ public class ReportSelectMenu extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent event) {
+			TeilnahmenReportForm teilnahmenReportForm = new TeilnahmenReportForm();
 			RootPanel.get("content").clear();
-			RootPanel.get("content").add(new TeilnahmenReportForm());
+			RootPanel.get("content").add(teilnahmenReportForm);
 		}
 
 	}
@@ -55,8 +57,9 @@ public class ReportSelectMenu extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent event) {
+			EigenschaftenReportForm eigenschaftenReportForm = new EigenschaftenReportForm();
 			RootPanel.get("content").clear();
-			RootPanel.get("content").add(new EigenschaftenReportForm());
+			RootPanel.get("content").add(eigenschaftenReportForm);
 		}
 
 	}

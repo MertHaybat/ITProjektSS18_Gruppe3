@@ -150,6 +150,8 @@ public interface KontaktmanagerAdministrationAsync {
 	void findEigenschaftHybrid(Person person,
 			  AsyncCallback<Vector<EigenschaftsAuspraegungHybrid>> callback);
 
+	void deleteKontaktByID(Kontakt k, AsyncCallback<Void> callback);
+
 	
 	
 }

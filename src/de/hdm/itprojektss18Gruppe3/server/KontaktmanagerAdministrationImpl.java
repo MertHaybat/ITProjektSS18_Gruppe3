@@ -222,7 +222,7 @@ implements KontaktmanagerAdministration {
 		Nutzer nutzer = new Nutzer();
 		nutzer = this.nutzerMapper.findNutzerByEmail(email);
 		
-		if (nutzer == null){
+		if (nutzer.getId() == 0){
 			return null;
 		} else {
 			return nutzer;
@@ -912,30 +912,61 @@ implements KontaktmanagerAdministration {
 	
 	@Override
 	public Vector<EigenschaftsAuspraegungHybrid> findEigenschaftHybrid(Person person) throws IllegalArgumentException {
-	 Vector<Eigenschaftsauspraegung> auspraegung = findAllEigenschaftsauspraegungByPersonID(person);
+		Vector<Eigenschaftsauspraegung> auspraegung = findAllEigenschaftsauspraegungByPersonID(person);
 
-	 Vector<Eigenschaft> eigenschaft = new Vector<Eigenschaft>();
+		Vector<Eigenschaft> eigenschaft = new Vector<Eigenschaft>();
 
-	 for (Eigenschaftsauspraegung eigenschaftsauspraegung : auspraegung) {
-	  eigenschaft.add(findEigenschaftByEigenschaftID(eigenschaftsauspraegung.getEigenschaftID()));
-	 }
+		for (Eigenschaftsauspraegung eigenschaftsauspraegung : auspraegung) {
+			eigenschaft.add(findEigenschaftByEigenschaftID(eigenschaftsauspraegung.getEigenschaftID()));
+		}
 
-	 Vector<EigenschaftsAuspraegungHybrid> eigenschaftAuspraegung = new Vector<EigenschaftsAuspraegungHybrid>();
+		Vector<EigenschaftsAuspraegungHybrid> eigenschaftAuspraegung = new Vector<EigenschaftsAuspraegungHybrid>();
 
-	 for (int i = 0; i < auspraegung.size(); i++) {
+		Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
 
-	  for (int x = 0; x < auspraegung.size(); x++) {
-	   if (auspraegung.elementAt(i).getEigenschaftID() == eigenschaft.elementAt(x).getId()) {
+		if (auspraegung.isEmpty()) {
+			createEigenschaftsauspraegung(" ", person.getId(), 0, "Vorname");
+			createEigenschaftsauspraegung(" ", person.getId(), 0, "Nachname");
+			createEigenschaftsauspraegung(" ", person.getId(), 0, "Geburtsdatum");
+			createEigenschaftsauspraegung(" ", person.getId(), 0, "Telefonnummer");
+			createEigenschaftsauspraegung(" ", person.getId(), 0, "E-Mail");
+			auspraegungVector = findAllEigenschaftsauspraegungByPersonID(person);
+			for (int t = 1; t < 6; t++) {
+				eigenschaft.add(findEigenschaftByEigenschaftID(t));
+			}
+			for (int p = 0; p < eigenschaft.size(); p++) {
+				for (int z = 0; z < eigenschaft.size(); z++) {
+					if (eigenschaft.elementAt(p).getId() == auspraegungVector.elementAt(z).getEigenschaftID()) {
+						eigenschaftAuspraegung.add(new EigenschaftsAuspraegungHybrid(eigenschaft.elementAt(p),
+								auspraegungVector.elementAt(z)));
+					}
 
-	    eigenschaftAuspraegung
-	      .add(new EigenschaftsAuspraegungHybrid(eigenschaft.elementAt(x), auspraegung.elementAt(i)));
+				}
 
-	   }
+			}
+		}
 
-	  }
-	 }
+		for (int i = 0; i < auspraegung.size(); i++) {
 
-	 return eigenschaftAuspraegung;
+			for (int x = 0; x < auspraegung.size(); x++) {
+				if (auspraegung.elementAt(i).getEigenschaftID() == eigenschaft.elementAt(x).getId()) {
+					eigenschaftAuspraegung
+							.add(new EigenschaftsAuspraegungHybrid(eigenschaft.elementAt(x), auspraegung.elementAt(i)));
+
+				}
+
+			}
+		}
+
+		return eigenschaftAuspraegung;
+	}
+
+	@Override
+	public void deleteKontaktByID(Kontakt k) throws IllegalArgumentException {
+		deleteKontaktKontaktlisteByKontakt(k);
+		deleteEigenschaftsauspraegungByKontakt(k);
+		deleteTeilhaberschaftByKontakt(k);
+		deleteKontaktByID(k);
 	}
 
 	

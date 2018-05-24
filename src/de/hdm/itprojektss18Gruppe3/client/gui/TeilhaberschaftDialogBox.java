@@ -35,8 +35,10 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
  * @author ersinbarut
  *
  */
-public class TeilhaberschaftDialogBox extends DialogBox {
+public class TeilhaberschaftDialogBox extends DialogBox{
 
+	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
+	
 	private final MultiSelectionModel<EigenschaftsAuspraegungHybrid> ssmAuspraegung = new MultiSelectionModel<EigenschaftsAuspraegungHybrid>();
 	private final CheckboxCell cbCell = new CheckboxCell(false, true);
 	private FlexTable ftTeilhaberschaft = new FlexTable();
@@ -44,12 +46,19 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private Button b1 = new Button("Teilen");
 	private Button b2 = new Button("Abbrechen");
 
+	private Kontakt kontaktNeu = new Kontakt();
+	private KontaktCellTable kt = new KontaktCellTable(kontaktNeu);
+	
 	private final Handler<EigenschaftsAuspraegungHybrid> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
 
-	public TeilhaberschaftDialogBox(final Kontakt kontakt) {
+	public TeilhaberschaftDialogBox(Kontakt kontakt) {
+		kontakt.setId(3);
+		kontaktNeu=kontakt;
+		run();
+	}
+		public void run(){
 
-		KontaktCellTable kt = new KontaktCellTable(kontakt);
 
 		kt.setSelectionModel(ssmAuspraegung, selectionEventManager);
 
@@ -85,7 +94,27 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		b2.addClickHandler(new closeDialogBoxClickHandler());
 
 		kt.insertColumn(0, cbColumn);
+		
+	
+		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontaktNeu, new EigenschaftAuspraegungCallback());
+	}
+	
+	public class EigenschaftAuspraegungCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungHybrid>>{
 
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Vector<EigenschaftsAuspraegungHybrid> result) {
+			
+			kt.setRowData(0, result);
+			kt.setRowCount(result.size(), true);
+			
+		}
+		
 	}
 
 	public class closeDialogBoxClickHandler implements ClickHandler {

@@ -16,7 +16,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 
 public class KontaktCellTable extends CellTable<EigenschaftsAuspraegungHybrid> {
 
-	private static KontaktmanagerAdministrationAsync kverwaltung = ClientsideSettings.getKontaktVerwaltung();
+	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
 	public KontaktCellTable(final Kontakt k) {
 		
@@ -50,7 +50,7 @@ public class KontaktCellTable extends CellTable<EigenschaftsAuspraegungHybrid> {
 			}
 		};
 
-		kverwaltung.findEigenschaftHybrid(k, new AllAuspraegungenCallback());
+//		kverwaltung.findEigenschaftHybrid(k, new AllAuspraegungenCallback());
 		this.addColumn(wertEigenschaft, "");
 		this.addColumn(wertAuspraegung, "");
 		this.addColumn(wertStatus, "");

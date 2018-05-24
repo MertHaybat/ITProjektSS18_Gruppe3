@@ -21,6 +21,14 @@ public class EigenschaftsAuspraegungHybrid implements Serializable {
 		
 	}
 	
+	public EigenschaftsAuspraegungHybrid(Eigenschaft eigenschaft){
+		this.eigenschaft = eigenschaft.getBezeichnung();
+		this.eigenschaftID = eigenschaft.getId();
+		this.setStatusAuspraegung(0);
+//		this.auspraegungID = 
+		
+	}
+	
 	public EigenschaftsAuspraegungHybrid(Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung){
 		
 		this.auspraegung = auspraegung.getWert();
