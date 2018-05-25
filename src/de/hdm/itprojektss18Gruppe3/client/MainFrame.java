@@ -12,7 +12,8 @@ public abstract class MainFrame extends VerticalPanel {
 	     */
 	    super.onLoad();
 	    
-	    RootPanel.get("content").clear();
+	    RootPanel.get("menubar").clear();
+//	    RootPanel.get("content").clear();
 
 	    run();
 	}

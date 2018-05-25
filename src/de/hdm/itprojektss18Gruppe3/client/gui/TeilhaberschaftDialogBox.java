@@ -70,19 +70,7 @@ public class TeilhaberschaftDialogBox extends DialogBox{
 			}
 		};
 
-		kt.addCellPreviewHandler(new Handler<EigenschaftsAuspraegungHybrid>() {
-
-			@Override
-			public void onCellPreview(CellPreviewEvent<EigenschaftsAuspraegungHybrid> event) {
-				if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
-
-					final EigenschaftsAuspraegungHybrid value = event.getValue();
-					final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
-					event.getDisplay().getSelectionModel().setSelected(value, state);
-					event.setCanceled(true);
-				}
-			}
-		});
+		kt.addCellPreviewHandler(new PreviewClickHandler());
 
 		ftTeilhaberschaft.setWidget(0, 0, kt);
 		ftTeilhaberschaft.setWidget(1, 0, b1);
@@ -136,7 +124,7 @@ public class TeilhaberschaftDialogBox extends DialogBox{
 		}
 	}
 
-	class createTeilhaberschaftCallback implements AsyncCallback<Teilhaberschaft> {
+	public class createTeilhaberschaftCallback implements AsyncCallback<Teilhaberschaft> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -149,5 +137,18 @@ public class TeilhaberschaftDialogBox extends DialogBox{
 			hide();
 		}
 
+	}
+	public class PreviewClickHandler implements Handler<EigenschaftsAuspraegungHybrid>{
+
+		@Override
+		public void onCellPreview(CellPreviewEvent<EigenschaftsAuspraegungHybrid> event) {
+			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
+
+				final EigenschaftsAuspraegungHybrid value = event.getValue();
+				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
+				event.getDisplay().getSelectionModel().setSelected(value, state);
+				event.setCanceled(true);
+			}
+		}
 	}
 }
