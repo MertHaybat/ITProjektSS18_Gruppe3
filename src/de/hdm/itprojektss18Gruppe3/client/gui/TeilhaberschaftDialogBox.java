@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -64,8 +65,8 @@ public class TeilhaberschaftDialogBox extends DialogBox{
 	private Button b2 = new Button("Abbrechen");
 	private Button nutzerHinzufuegenBt = new Button("+");
     private ButtonCell buttonCell1 = new ButtonCell();
-	
 
+    private List<EigenschaftsAuspraegungHybrid> ssmListe = new ArrayList<>();
 	private Kontakt kontaktNeu = new Kontakt();
 	private KontaktCellTable kt = new KontaktCellTable(kontaktNeu);
 	
@@ -194,10 +195,27 @@ public class TeilhaberschaftDialogBox extends DialogBox{
 
 		@Override
 		public void onClick(ClickEvent event) {
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			List<EigenschaftsAuspraegungHybrid> eListe = new ArrayList<>();
+			
 			// TODO wurde hard gecodet, variablen hinzufügen
 			// kverwaltung.createTeilhaberschaft(0, k.getId(),
 			// ssmAuspraegung.getSelectedObject().getId(), 2, 1, new
 			// createTeilhaberschaftCallback());
+			for(EigenschaftsAuspraegungHybrid auspraegung : ssmAuspraegung.getSelectedSet()){
+				eListe.add(auspraegung);
+			}
+			for(int i = 0; i<eListe.size(); i++){
+				kontaktmanagerVerwaltung.createTeilhaberschaft(1, kontaktNeu.getId(), 
+						eListe.get(i).getAuspraegungid(), 1, nutzer.getId(), new createTeilhaberschaftCallback());
+				
+			}
+//			for(int i = 0; i<ssmAuspraegung.getSelectedSet().size(); i++){
+//				kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(), 
+//						ssmAuspraegung.getSelectedSet()., teilhabenderID, eigentuemerID, callback);
+//			}
+			
 		}
 	}
 
@@ -211,6 +229,7 @@ public class TeilhaberschaftDialogBox extends DialogBox{
 
 		@Override
 		public void onSuccess(Teilhaberschaft result) {
+			Window.alert("Teilhaberschaft erfolgreich erstellt");
 			hide();
 		}
 

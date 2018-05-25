@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -120,6 +121,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			loginInfo = result;
 			if (loginInfo.isLoggedIn()) {
 				kontaktmanagerVerwaltung.checkEmail(loginInfo.getEmailAddress(), new FindNutzerCallback());
+			
 			} else {
 				loadLogin();
 			}
@@ -143,6 +145,8 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 				zumKontaktmanager.addClickHandler(new zumKontaktmanagerClickHandler());
 				zumReportGenerator.addClickHandler(new zumReportClickHandler());
 				RootPanel.get("content").add(selectPanel);
+				Cookies.setCookie("email", result.getMail());
+				Cookies.setCookie("id", result.getId()+"");
 			} else {
 				CreateNutzerDialogBox dialogbox = new CreateNutzerDialogBox(loginInfo.getEmailAddress());
 				dialogbox.center();
@@ -182,6 +186,8 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			@Override
 			public void onSuccess(Nutzer result) {
 				Window.alert("Ihr Nutzer wurde erfolgreich erstellt");
+				Cookies.setCookie("email", result.getMail());
+				Cookies.setCookie("id", result.getId()+"");
 				loadKontaktmanager();
 				hide();
 			}

@@ -77,22 +77,23 @@ public class TeilhaberschaftMapper {
 				/**
 				 * Die Variable erhält den höchsten Primärschlüssel inkrementiert um 1
 				 */			
-				teilhaberschaft.setId(rs.getInt("maxid")+1);
+//				teilhaberschaft.setId(rs.getInt("maxid")+1);
+//				System.out.println("----------"+rs.getInt("maxid")+1);
 			/**
 			 * Durchführen der Einfüge Operation via Prepared Statement
 			 */
+				
 			PreparedStatement stmt1 = con.prepareStatement(
 					"INSERT INTO `teilhaberschaft`"
 					+ "(`id`, `kontaktlisteid`, `kontaktid`, `eigenschaftsauspraegungid`, `teilhabenderid`, `eigentuemerid`)"
-					+ "VALUES(?,?,?,?,?,?) ",
-					
+					+ "VALUES(NULL,?,?,?,?,?) ",
 			Statement.RETURN_GENERATED_KEYS);
-			stmt1.setInt(1, teilhaberschaft.getId());	
-			stmt1.setInt(2, teilhaberschaft.getKontaktlisteID());
-			stmt1.setInt(3, teilhaberschaft.getKontaktID());
-			stmt1.setInt(4, teilhaberschaft.getEigenschaftsauspraegungID());
-			stmt1.setInt(5, teilhaberschaft.getTeilhabenderID());
-			stmt1.setInt(6, teilhaberschaft.getEigentuemerID());
+//			stmt1.setInt(1, teilhaberschaft.getId());	
+			stmt1.setInt(1, teilhaberschaft.getKontaktlisteID());
+			stmt1.setInt(2, teilhaberschaft.getKontaktID());
+			stmt1.setInt(3, teilhaberschaft.getEigenschaftsauspraegungID());
+			stmt1.setInt(4, teilhaberschaft.getTeilhabenderID());
+			stmt1.setInt(5, teilhaberschaft.getEigentuemerID());
 			
 			//System.out.println(stmt);
 			stmt1.executeUpdate();			
