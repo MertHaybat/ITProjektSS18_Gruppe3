@@ -147,6 +147,45 @@ public class KontaktKontaktlisteMapper {
 	}
 	
 	/**
+	 * Die Methode "deleteKontaktKontaktlisteByKontaktKontaktliste" ermöglicht das Entfernen von einem Objekt "Kontakt" aus einer "Kontaktliste"
+	 * durch die Löschung die "KontaktKontaklisten" Objekt, welches die Verbindung aus beiden Tabellen darstellt.
+	 * 
+	 * @param kontaktkontaktliste
+	 */
+	public void deleteKontaktKontaktlisteByKontaktKontaktliste(KontaktKontaktliste kontaktkontaktliste) {
+		
+		/**
+		 * Verbindung zur DB Connection
+		 */		
+		Connection con = DBConnection.connection();
+			
+		try {
+			
+			/**
+			 * Durchführen der Löschoperation
+			 */			
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM `kontaktkontaktliste` "
+					+ "WHERE ((`kontaktkontaktliste`.`kontaktid` = ?) "
+					+ "AND (`kontaktkontaktliste`.`kontaktlisteid` = ?))");
+			
+			stmt.setInt(1, kontaktkontaktliste.getKontaktlisteID());
+			stmt.executeUpdate();
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+		if (con!=null) 
+			try {
+				con.close();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
 	 * Mit der Methode "deleteKontaktKontaktlisteByKontaktID" wird das Löschen von einem Objekt "KontaktKontaktliste" anhand der KontaktID ermöglicht
 	 * 
 	 * @param kontaktkontaktliste
