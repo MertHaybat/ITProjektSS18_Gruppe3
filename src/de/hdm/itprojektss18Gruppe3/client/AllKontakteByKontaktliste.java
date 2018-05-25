@@ -1,10 +1,12 @@
 package de.hdm.itprojektss18Gruppe3.client;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import de.hdm.itprojektss18Gruppe3.client.gui.KontaktlistView;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
@@ -16,6 +18,9 @@ public class AllKontakteByKontaktliste {
 	public AllKontakteByKontaktliste(Kontaktliste k) {
 		kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new FindAllKontakteByKontaktlisteCallback());
 }
+	
+	private ArrayList<Kontakt> kontakteToDisplay = new ArrayList<Kontakt>();
+
 
 	class FindAllKontakteByKontaktlisteCallback implements AsyncCallback<Vector<Kontakt>> {
 
@@ -28,6 +33,7 @@ public class AllKontakteByKontaktliste {
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
 			Window.alert("Es wurden so viele Kontakte gefunden: " + result.size());
+			kontakteToDisplay.addAll(result);
 		}
 		
 	}
