@@ -50,10 +50,9 @@ html {
 
 }
 #menubar .menuBarLabel {
-	margin-top: 6px;
-	margin-left: 10px;
-	height: 40px;
-	width: 30%;
+	padding-top: 6px;
+	padding-left: 10px;
+	width: 12em;
 	font-size: 1.7em;
 	color: 	#606060;
 	display: inline-block;
@@ -132,6 +131,11 @@ html {
 
 
 /** WIDGET & PANEL FORMATIERUNGEN*/
+
+.menuBarContainerFlowPanel {
+	width: 250%;
+}
+
 .cellListWidgetContainerPanel {
 	border: 1px grey;
 	margin-left: 1em;
@@ -139,9 +143,7 @@ html {
 }
 
 .kontaktCellTableView {
-	margin-left: 50px;
-	max-height: 100px;
-	overflow: scroll;
+	margin-left: 20px;
 }
 
 .headlinePanel {
@@ -192,19 +194,20 @@ border: double;
 }
 
 #menubar .mainButton {
-	width: 90px;
+	width: 95px;
 	border-radius:6px;
 	border:1px solid #dcdcdc;
 	display: inline-block;
 	cursor:pointer;
 	color:#666666;
-	font-size:10px;
+	font-size:11px;
 	font-weight:bold;
-	padding:7px 6px;
+	padding:9px 7px;
 	text-shadow:0px 1px 0px #ffffff;
 	text-align: center;
-	margin-bottom: 5px;
 	margin-left: 5px;
+	margin-top: 4.5px;
+	vertical-align: super;
 }
 
 #closeButton {
@@ -227,9 +230,9 @@ border: double;
 }
 
 .gwt-SuggestBox {
-	margin-top: 3px;
 	margin-left: 20px;
 	display: inline-block;
+	vertical-align: baseline;
 }
 
 .serverResponseLabelError {
