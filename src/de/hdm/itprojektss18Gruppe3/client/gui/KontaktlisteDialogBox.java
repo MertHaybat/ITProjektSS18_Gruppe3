@@ -24,6 +24,8 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
  */
 public class KontaktlisteDialogBox extends DialogBox {
 	
+	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
+
 	/**
 	 * Instanziierung vom VerticalPanel 
 	 */
@@ -46,11 +48,9 @@ public class KontaktlisteDialogBox extends DialogBox {
 	 * Instanziierung der Buttons "speichern" und "abbrechen"
 	 * @see bspeichern, babbrechen 
 	 */
-	private Button bspeichern = new Button("speichern");
-	private Button babbrechen = new Button("abbrechen");
-	
-	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
-	
+	private Button bspeichern = new Button("Speichern");
+	private Button babbrechen = new Button("Abbrechen");
+		
 	/**
 	 * Non-Argument-Konstruktor
 	 */
