@@ -189,6 +189,7 @@ public class KontaktKontaktlisteMapper {
 	 * Mit der Methode "deleteKontaktKontaktlisteByKontaktID" wird das Löschen von einem Objekt "KontaktKontaktliste" anhand der KontaktID ermöglicht
 	 * 
 	 * @param kontaktkontaktliste
+	 * @see deleteKontaktKontaktlisteByKontaktID
 	 */
 	public void deleteKontaktKontaktlisteByKontaktID(KontaktKontaktliste kontaktkontaktliste) {
 		
