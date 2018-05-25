@@ -181,11 +181,9 @@ public class KontaktlistView extends MainFrame {
 	    
    
 
-	      
-	    final SelectionModel<Kontakt> selectionModelAllKontakteView = new MultiSelectionModel<Kontakt>();
-	    kontaktCellTable.setSelectionModel(selectionModelAllKontakteView,
+	    final SelectionModel<Kontakt> selectionModelCellTable = new MultiSelectionModel<Kontakt>();
+	    kontaktCellTable.setSelectionModel(selectionModelCellTable,
 	            DefaultSelectionEventManager.<Kontakt> createCheckboxManager());
-
 	    
 
 	      
@@ -198,7 +196,7 @@ public class KontaktlistView extends MainFrame {
 	              @Override
 	              public Boolean getValue(Kontakt object) {
 	                // Get the value from the selection model.
-	                return selectionModelAllKontakteView.isSelected(object);
+	                return selectionModelCellTable.isSelected(object);
 	              }
 	            };
 	            
@@ -233,16 +231,7 @@ public class KontaktlistView extends MainFrame {
 	    kontaktCellTable.addColumn(addressColumn, "Address");
 
 	    // Add a selection model to handle user selection.
-	    final SingleSelectionModel<Kontakt> selectionModelCellTable = new SingleSelectionModel<Kontakt>();
-	    kontaktCellTable.setSelectionModel(selectionModelCellTable);
-	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-	      public void onSelectionChange(SelectionChangeEvent event) {
-	    	  Kontakt selected = selectionModelCellTable.getSelectedObject();
-	        if (selected != null) {
-	          Window.alert("You selected: " + selected.getName());
-	        }
-	      }
-	    });
+
 
 	    // Set the total row count. This isn't strictly necessary, but it affects
 	    // paging calculations, so its good habit to keep the row count up to date.
