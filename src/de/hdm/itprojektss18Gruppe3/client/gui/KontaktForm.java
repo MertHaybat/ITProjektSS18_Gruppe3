@@ -13,6 +13,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.NoSelectionModel;
@@ -49,6 +50,7 @@ public class KontaktForm extends VerticalPanel {
 	private Label kontaktNameLabel = new Label("Kontaktname: ");
 	private TextBox kontaktNameBox = new TextBox();
 
+	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
 
 	private final NoSelectionModel<EigenschaftsAuspraegungHybrid> ssmAuspraegung = new NoSelectionModel<EigenschaftsAuspraegungHybrid>();
@@ -60,7 +62,14 @@ public class KontaktForm extends VerticalPanel {
 		// TODO Statt der 1 muss die NutzerID rein.. Cookies kommen aber noch!!!
 		kontaktmanagerVerwaltung.createKontakt("Neuer Kontakt", new Date(), new Date(), 0, 1,
 				new CreateKontaktCallback());
-		run();
+		this.add(kontaktNameLabel);
+		this.add(kontaktNameBox);
+		this.add(celltable);
+		
+		this.add(addAuspraegung);
+		this.add(saveChanges);
+		this.add(cancelChanges);
+		run();	
 	}
 
 	public KontaktForm(Kontakt kontakt) {
@@ -69,14 +78,26 @@ public class KontaktForm extends VerticalPanel {
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
 		modifikationsdatum.setText("Zuletzt geändert am: " + kontakt.getModifikationsdatum());
 		erstellungsdatum.setText("Erstellt am: " + kontakt.getErzeugungsdatum());
+		this.add(kontaktNameLabel);
+		this.add(kontaktNameBox);
+		this.add(celltable);
+		
+		this.add(addAuspraegung);
+		this.add(saveChanges);
+		this.add(cancelChanges);
+
 		this.add(modifikationsdatum);
 		this.add(erstellungsdatum);
 		run();
 	}
 
 	public void run() {
+		
+		
+		RootPanel.get("menubar").clear();
+		RootPanel.get("menubar").add(zurueckZuAllKontaktView);
 		// TODO Auto-generated method stub
-		EditTextCell editEigenschaft = new EditTextCell();
+		EditTextCell editEigenschaft = new EditTextCell(); 
 		EditTextCell editAuspraegung = new EditTextCell();
 
 		Column<EigenschaftsAuspraegungHybrid, String> wertEigenschaft = new Column<EigenschaftsAuspraegungHybrid, String>(
@@ -123,18 +144,22 @@ public class KontaktForm extends VerticalPanel {
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
 		saveChanges.addClickHandler(new UpdateAuspraegungClickHandler());
 		cancelChanges.addClickHandler(new CancelChangesClickHandler());
-
+		zurueckZuAllKontaktView.addClickHandler(new ZurueckClickHandler());
+		
 		celltable.addColumn(wertEigenschaft, "");
 		celltable.addColumn(wertAuspraegung, "");
 		celltable.setSelectionModel(ssmAuspraegung);
 
-		this.add(kontaktNameLabel);
-		this.add(kontaktNameBox);
-		this.add(celltable);
+	}
+	private class ZurueckClickHandler implements ClickHandler{
 
-		this.add(addAuspraegung);
-		this.add(saveChanges);
-		this.add(cancelChanges);
+		@Override
+		public void onClick(ClickEvent event) {
+			AllKontaktView allKontaktView = new AllKontaktView();
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(allKontaktView);
+		}
+		
 	}
 
 	class DeleteKontakt implements AsyncCallback<Void> {
@@ -184,6 +209,9 @@ public class KontaktForm extends VerticalPanel {
 		public void onSuccess(Void result) {
 			// TODO Auto-generated method stub
 			Window.alert("Kontakt wurde erfolgreich abgespeichert");
+			RootPanel.get("content").clear();
+			KontaktForm kontaktForm = new KontaktForm(k);
+			RootPanel.get("content").add(kontaktForm);
 		}
 
 	}
