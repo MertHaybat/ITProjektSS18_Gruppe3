@@ -3,10 +3,14 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 import java.util.Date;
 import java.util.Vector;
 
+import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.Window;
@@ -17,6 +21,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
@@ -115,8 +122,24 @@ public class KontaktForm extends VerticalPanel {
 			public String getValue(EigenschaftsAuspraegungHybrid object) {
 				object.setAuspraegungid(object.getAuspraegungid());
 				return object.getAuspraegung();
+				
+			}
+			
+			@Override
+	        public void onBrowserEvent(Context context, Element elem,
+	        		EigenschaftsAuspraegungHybrid object, NativeEvent event) {
+	            super.onBrowserEvent(context, elem, object, event); 
+	         
+	            	if(event.getKeyCode() == KeyCodes.KEY_ENTER) {
+	            		k.setName(kontaktNameBox.getValue());
+	        			kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+	        			kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
+	            	}
+	            
 			}
 		};
+		
+		
 
 		wertEigenschaft.setFieldUpdater(new FieldUpdater<EigenschaftsAuspraegungHybrid, String>() {
 
@@ -144,7 +167,9 @@ public class KontaktForm extends VerticalPanel {
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
 		saveChanges.addClickHandler(new UpdateAuspraegungClickHandler());
 		cancelChanges.addClickHandler(new CancelChangesClickHandler());
+
 		zurueckZuAllKontaktView.addClickHandler(new ZurueckClickHandler());
+
 		
 		celltable.addColumn(wertEigenschaft, "");
 		celltable.addColumn(wertAuspraegung, "");
