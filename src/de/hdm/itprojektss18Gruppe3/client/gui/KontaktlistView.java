@@ -67,13 +67,13 @@ public class KontaktlistView extends MainFrame {
 	private ScrollPanel allKontaktViewPanel = new ScrollPanel();
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
-	private Button addKontaktlisteButton = new Button("+ Kontaktliste");
-	private Button deleteKontaktlisteButton = new Button("Löschen");
+	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
+	private Button deleteKontaktlisteButton = new Button("Kontakt entfernen");
+	private Button addKontaktToKontaktlisteButton = new Button("Kontakt hinzufÃ¼gen");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private ArrayList<Kontakt> kontakteByKontaktlisteToDisplay = new ArrayList<Kontakt>();
 	private static ProvidesKey<Kontakt> keyProvider;
 	private CellTable<Kontakt> kontaktCellTable = new CellTable<Kontakt>(13, CellTableResources.INSTANCE, keyProvider);
-	private SimplePager pager;
 	private ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
 
 
@@ -93,9 +93,11 @@ public class KontaktlistView extends MainFrame {
 		 */
 		menuBarHeadlineLabel.setStylePrimaryName("menuBarLabel");
 		addKontaktlisteButton.setStylePrimaryName("mainButton");
+		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
 		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
 		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
 		menuBarContainerFlowPanel.add(addKontaktlisteButton);
+		menuBarContainerFlowPanel.add(addKontaktToKontaktlisteButton);
 		menuBarContainerFlowPanel.add(deleteKontaktlisteButton);
 		menuBarContainerFlowPanel.add(box);
 		menuBarContainerFlowPanel.setStylePrimaryName("menuBarContainerFlowPanel");
@@ -241,10 +243,6 @@ public class KontaktlistView extends MainFrame {
 		});
 		kontaktCellTable.addColumn(visitProfileButtonColumn, "");
 
-		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-		pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-		pager.setDisplay(kontaktCellTable);
-		pager.setPageSize(13);
 
 
 		// Add a selection model to handle user selection.
@@ -269,6 +267,7 @@ public class KontaktlistView extends MainFrame {
 		contentViewContainer.add(kontaktlistViewPanel);
 		contentViewContainer.add(allKontaktViewPanel);
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
+		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
 		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler());
 		
 		
@@ -286,6 +285,16 @@ public class KontaktlistView extends MainFrame {
 			KontaktlisteDialogBox dbox = new KontaktlisteDialogBox();
 			dbox.center();
 		}
+	}
+	
+	class addKontaktToKontaktlisteClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			Window.alert("HI");
+			
+		}
+		
 	}
 
 	class deleteKontaktlisteClickHandler implements ClickHandler {
