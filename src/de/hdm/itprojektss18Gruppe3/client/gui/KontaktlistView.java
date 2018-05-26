@@ -244,7 +244,7 @@ public class KontaktlistView extends MainFrame {
 		contentViewContainer.add(allKontaktViewPanel);
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
 		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
-		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler());
+		deleteKontaktlisteButton.addClickHandler(new deleteKontaktFromKontaktlisteClickHandler());
 		addTeilhaberschaftKontaktButton.addClickHandler(new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable));
 
 		//new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable)
@@ -260,7 +260,7 @@ public class KontaktlistView extends MainFrame {
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			KontaktlisteDialogBox dbox = new KontaktlisteDialogBox();
+			NewKontaktlisteDialogBox dbox = new NewKontaktlisteDialogBox();
 			dbox.center();
 		}
 	}
@@ -274,26 +274,13 @@ public class KontaktlistView extends MainFrame {
 		}
 	}
 
-	class deleteKontaktlisteClickHandler implements ClickHandler {
+	class deleteKontaktFromKontaktlisteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			for(Kontakt k : selectedKontakteInCellTable) {
-				kontaktmanagerVerwaltung.deleteKontaktByID(k, new AsyncCallback<Void>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Fehler beim Löschen");
-
-					}
-
-					@Override
-					public void onSuccess(Void result) {
-						Window.alert("Kontakt wurde gelöscht!");
-					}
-				});
-			}
-		}
+			KontaktFromKontaktlisteLoeschenDialogBox listeLoeschen = new KontaktFromKontaktlisteLoeschenDialogBox();
+			listeLoeschen.center();
+	}
 	}
 
 	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {
