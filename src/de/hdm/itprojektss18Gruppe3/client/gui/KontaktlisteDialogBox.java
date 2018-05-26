@@ -2,6 +2,7 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -95,8 +96,9 @@ public class KontaktlisteDialogBox extends DialogBox {
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			Nutzer kontaktliste = new Nutzer();
-			kontaktmanagerVerwaltung.createKontaktliste(tkontaktliste.getValue(), kontaktliste.getId(), new createKontaktlisteCallback());
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			kontaktmanagerVerwaltung.createKontaktliste(tkontaktliste.getValue(), nutzer.getId(), new createKontaktlisteCallback());
 		}
 	}
 	

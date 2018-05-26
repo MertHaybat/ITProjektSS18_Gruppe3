@@ -137,6 +137,8 @@ html {
 }
 
 .cellListWidgetContainerPanel {
+	width: auto;
+	height: 600px;
 	border: 1px grey;
 	margin-left: 1em;
 	margin-top: 2em;
@@ -212,6 +214,11 @@ border: double;
 
 #closeButton {
   margin: 15px 6px 6px;
+}
+
+.visitProfileButton {
+	background-image: "images/eye.svg";
+	font-size: 2em;
 }
 
 

@@ -45,14 +45,17 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CustomButton;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 
 
@@ -61,11 +64,11 @@ public class KontaktlistView extends MainFrame {
 	private Label menuBarHeadlineLabel = new Label("Kontaktlisten");
 	private HorizontalPanel contentViewContainer = new HorizontalPanel();
 	private HorizontalPanel kontaktlistViewPanel = new HorizontalPanel();
-	private VerticalPanel allKontaktViewPanel = new VerticalPanel();
+	private ScrollPanel allKontaktViewPanel = new ScrollPanel();
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private Button addKontaktlisteButton = new Button("+ Kontaktliste");
-	private Button deleteKontaktlisteButton = new Button("Löschen");
+	private Button deleteKontaktlisteButton = new Button("L�schen");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private ArrayList<Kontakt> kontakteByKontaktlisteToDisplay = new ArrayList<Kontakt>();
 	private static ProvidesKey<Kontakt> keyProvider;
@@ -139,6 +142,7 @@ public class KontaktlistView extends MainFrame {
 								kontakteByKontaktlisteToDisplay.add(k);
 							}
 
+							
 							kontaktCellTable.setRowCount(kontakteByKontaktlisteToDisplay.size(), true);
 							kontaktCellTable.setRowData(0, kontakteByKontaktlisteToDisplay);		
 						}	
@@ -184,33 +188,18 @@ public class KontaktlistView extends MainFrame {
 		kontaktCellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		kontaktCellTable.setColumnWidth(checkColumn, 40, Unit.PX);    
 
+		
 		// Add a text column to show the name.
-		TextColumn<Kontakt> nameColumn = new TextColumn<Kontakt>() {
+		TextColumn<Kontakt> kontaktnameColumn = new TextColumn<Kontakt>() {
 			@Override
 			public String getValue(Kontakt object) {
 				return object.getName();
 			}
 		};
-		kontaktCellTable.addColumn(nameColumn, "Name");
+		kontaktCellTable.addColumn(kontaktnameColumn, "Kontaktname");
+		kontaktCellTable.setColumnWidth(kontaktnameColumn, 25, Unit.EM);
 
-		// Add a Vorname column to show the birthday.
-		TextColumn<Kontakt> vornameColumn = new TextColumn<Kontakt>() {
-			@Override
-			public String getValue(Kontakt object) {
-				return object.getName();
-			}
-		};
-		kontaktCellTable.addColumn(vornameColumn, "Vorname");	    
-
-		// Add a text column to show the address.
-		TextColumn<Kontakt> addressColumn = new TextColumn<Kontakt>() {
-			@Override
-			public String getValue(Kontakt object) {
-				return object.getName();
-			}
-		};
-		kontaktCellTable.addColumn(addressColumn, "Address");
-
+		
 		Column<Kontakt, String> statusIconColumn = new Column<Kontakt, String>(
 				new TextCell() 
 				{
@@ -272,23 +261,17 @@ public class KontaktlistView extends MainFrame {
 		kontaktCellTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 		kontaktCellTable.setEmptyTableWidget(new HTML("Bitte Kontaktliste auswählen"));
 		kontaktCellTable.setWidth("auto", true);
-		kontaktCellTable.setColumnWidth(nameColumn, 12, Unit.EM);
-		kontaktCellTable.setColumnWidth(vornameColumn, 12, Unit.EM);
-		kontaktCellTable.setColumnWidth(addressColumn, 18, Unit.EM);
-
 		kontaktCellTable.setStylePrimaryName("kontaktCellTableView");
 		kontaktlistViewPanel.add(kontaktlistenCellList);
-
 		allKontaktViewPanel.add(kontaktCellTable);
 		allKontaktViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
-		allKontaktViewPanel.add(pager);
-		pager.setStylePrimaryName("gwt-SimplePager");
 		kontaktlistViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		contentViewContainer.add(kontaktlistViewPanel);
 		contentViewContainer.add(allKontaktViewPanel);
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
 		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler());
-
+		
+		
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(contentViewContainer);
 		RootPanel.get("menubar").clear();

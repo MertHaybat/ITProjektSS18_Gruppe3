@@ -92,8 +92,6 @@ public class MenuTree {
 
 				case "Alle Kontakte":
 					AllKontaktView allKontaktView = new AllKontaktView();
-					RootPanel.get("content").clear();
-					RootPanel.get("content").add(allKontaktView);
 					return;
 
 				case "Neue Kontaktliste":

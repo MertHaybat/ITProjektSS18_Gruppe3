@@ -2,7 +2,9 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;
@@ -16,10 +18,12 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -34,6 +38,8 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 public class AllKontaktView extends MainFrame {
 
@@ -50,7 +56,7 @@ public class AllKontaktView extends MainFrame {
 	private final CheckboxCell cbCell = new CheckboxCell(false, true);
 	private SuggestBox box = new SuggestBox(oracle);
 	private Label contentHeadline = new Label("Die Liste aller deiner Kontakte");
-	private 	SimplePager pager;
+	private SimplePager pager;
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	private final Handler<Kontakt> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
@@ -67,6 +73,16 @@ public class AllKontaktView extends MainFrame {
 //		
 //	}
 //	
+	public AllKontaktView(){
+		Nutzer nutzer = new Nutzer();
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
+		super.onLoad();
+	}
+	public AllKontaktView(Kontaktliste k){
+		kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
+		run();
+	}
 	public void run() {
 		
 		
@@ -87,19 +103,12 @@ public class AllKontaktView extends MainFrame {
 		
 		menuBarContainerFlowPanel.setWidth("200%");
 
-		
-
 		box.setStylePrimaryName("gwt-SuggestBox");
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
-
-
 		contentHeadline.setStylePrimaryName("h2");
-
-
-
 		allKontakteCellTable.setHeight("600px");
-		allKontakteCellTable.setWidth("1000px");
+		allKontakteCellTable.setWidth("800px");
 
 		// Set the message to display when the table is empty.
 		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));  
@@ -128,10 +137,7 @@ public class AllKontaktView extends MainFrame {
 				return ssmAuspraegung.isSelected(object);
 			}
 		};
-		allKontakteCellTable.addCellPreviewHandler(new PreviewClickHandler());
-		
-		allKontakteCellTable.addColumn(cbColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		allKontakteCellTable.setColumnWidth(cbColumn, 40, Unit.PX);
+
 
 
 		// First name.
@@ -159,17 +165,41 @@ public class AllKontaktView extends MainFrame {
 				}
 			}
 		};
+		
+		ButtonCell visitProfileButton = new ButtonCell();
+		Column<Kontakt,String> visitProfileButtonColumn = new Column<Kontakt,String>(visitProfileButton) {
+			public String getValue(Kontakt object) {
+				return "Ansehen";
+			}
+		};
 
+		visitProfileButtonColumn.setFieldUpdater(new FieldUpdater<Kontakt, String>() {
+			@Override
+			public void update(int index, Kontakt object, String value) {
+				KontaktCellTable visitProfile = new KontaktCellTable(object);
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(visitProfile);
+			}
+		});
+		
+		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
+		allKontakteCellTable.addCellPreviewHandler(new PreviewClickHandler());
+		allKontakteCellTable.addColumn(cbColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+		allKontakteCellTable.setColumnWidth(cbColumn, 20, Unit.PX);
 		allKontakteCellTable.addColumn(kontaktnameColumn, "Kontaktname");
-		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 80, Unit.PX);
-		allKontakteCellTable.addColumn(iconColumn);
-		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.PX);
+		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 60, Unit.EM);
+		allKontakteCellTable.addColumn(iconColumn, "Status");
+		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
+		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
 
 
 		//   allKontakteCellTable.setRowCount(CONTACTS.size(), true);
 
 		// Push the data into the widget.
-		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(2, new AllKontaktByNutzerCallback());
+//		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(1, new AllKontaktByNutzerCallback());
+//		Kontaktliste k = new Kontaktliste();
+//		k.setId(1);
+	
 		
 
 		vPanel.add(contentHeadline);
@@ -178,8 +208,6 @@ public class AllKontaktView extends MainFrame {
 		pager.setStylePrimaryName("gwt-SimplePager");
 		vPanel.add(pager);
 //		RootPanel.get("menubar").clear();
-		RootPanel.get("menubar").add(menuBarContainerPanel);
-		RootPanel.get("content").add(vPanel);
 //		this.add(vPanel);
 		
 		showKontaktButton.addClickHandler(new ShowKontaktClickHandler());
@@ -191,6 +219,8 @@ public class AllKontaktView extends MainFrame {
 
 			menuBarContainerFlowPanel.add(deleteKontaktButton);
 			menuBarContainerFlowPanel.add(showKontaktButton);
+			RootPanel.get("menubar").add(menuBarContainerPanel);
+			RootPanel.get("content").add(vPanel);
 
 		
 	}
