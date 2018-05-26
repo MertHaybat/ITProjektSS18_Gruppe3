@@ -1,5 +1,7 @@
 package de.hdm.itprojektss18Gruppe3.client.gui;
 
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
@@ -40,10 +42,10 @@ public class MenuTree {
 		final TreeItem kontaktlisten = new TreeItem();
 		final TreeItem teilhaberschaften = new TreeItem();
 		Tree navigationTree = new Tree();
-
 		Label navigationHeadline = new Label("Navigation");
 		VerticalPanel navigationTreePanel = new VerticalPanel();
 
+		
 		/*
 		 * Baummenü definieren
 		 */
@@ -73,51 +75,49 @@ public class MenuTree {
 		 * angeklickte Menü Item herausfinden, um den User dann auf die
 		 * gewünschte Seite zu navigieren.
 		 */
-
-		navigationTree.addTreeListener(new TreeListener() {
-
-			@Override
-			public void onTreeItemStateChanged(TreeItem item) {
-			}
+		navigationTree.setAnimationEnabled(true);
+		navigationTree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 
 			@Override
-			public void onTreeItemSelected(TreeItem item) {
+			public void onSelection(SelectionEvent<TreeItem> event) {
+				TreeItem item = event.getSelectedItem();
+				
 				switch (item.getText()) {
-
-				case "Neuer Kontakt":
-					KontaktForm kontaktForm = new KontaktForm();
-					RootPanel.get("content").clear();
-					RootPanel.get("content").add(kontaktForm);
-					return;
-
-				case "Alle Kontakte":
-					AllKontaktView allKontaktView = new AllKontaktView();
-					return;
-
-				case "Neue Kontaktliste":
-					Window.alert("To do");
-					return;
-
-				case "Alle Kontaktlisten":
-					KontaktlistView kontaktlistView = new KontaktlistView();
-					RootPanel.get("content").clear();
-					RootPanel.get("content").add(kontaktlistView);
-					return;
-
-				case "Neue Teilhaberschaft":
-					TeilhaberschaftDialogBox teilhaberschaftDb = new TeilhaberschaftDialogBox(k);
-					teilhaberschaftDb.center();
-					return;
-
-				case "Alle Teilhaberschaften":
-					TeilhaberschaftenAlle teilhaberschaftenAlle = new TeilhaberschaftenAlle();
-					RootPanel.get("content").clear();
-					RootPanel.get("content").add(teilhaberschaftenAlle);
-					return;
-
-				}
+				
+								case "Neuer Kontakt":
+									KontaktForm kontaktForm = new KontaktForm();
+									RootPanel.get("content").clear();
+									RootPanel.get("content").add(kontaktForm);
+									return;
+				
+								case "Alle Kontakte":
+									AllKontaktView allKontaktView = new AllKontaktView();
+									return;
+				
+								case "Neue Kontaktliste":
+									Window.alert("To do");
+									return;
+				
+								case "Alle Kontaktlisten":
+									KontaktlistView kontaktlistView = new KontaktlistView();
+									RootPanel.get("content").clear();
+									RootPanel.get("content").add(kontaktlistView);
+									return;
+				
+								case "Neue Teilhaberschaft":
+									TeilhaberschaftDialogBox teilhaberschaftDb = new TeilhaberschaftDialogBox(k);
+									teilhaberschaftDb.center();
+									return;
+				
+								case "Alle Teilhaberschaften":
+									TeilhaberschaftenAlle teilhaberschaftenAlle = new TeilhaberschaftenAlle();
+									RootPanel.get("content").clear();
+									RootPanel.get("content").add(teilhaberschaftenAlle);
+									return;
+			}
 			}
 		});
+	
 
 		// Add it to the root panel.
 		RootPanel.get("leftmenutree").add(navigationTreePanel);

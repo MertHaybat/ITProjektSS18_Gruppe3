@@ -90,6 +90,7 @@ public class AllKontaktView extends MainFrame {
 
 		allKontakteCellTable.setSelectionModel(ssmAuspraegung, selectionEventManager);
 
+
 		/*
 		 * Menüleiste mit den Buttons für die Anlage von einer neuen Kontaktliste und dem Löschen einer Kontaktliste erzeugen
 		 * und dem Panel zuweisen
