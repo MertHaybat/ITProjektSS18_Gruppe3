@@ -133,7 +133,14 @@ html {
 /** WIDGET & PANEL FORMATIERUNGEN*/
 
 .menuBarContainerFlowPanel {
-	width: 250%;
+	width: 90%;
+}
+
+.kontaktlistenViewPanel {
+	width: 250px;
+	height: 500px;
+	margin-left: 1em;
+	margin-top: 2em;
 }
 
 .cellListWidgetContainerPanel {
