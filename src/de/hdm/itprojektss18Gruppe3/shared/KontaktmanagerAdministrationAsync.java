@@ -152,6 +152,12 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void deleteKontaktByID(Kontakt k, AsyncCallback<Void> callback);
 
+	void findAllNutzerByEmail(String mail, AsyncCallback<Vector<Nutzer>> callback);
+
+	void deleteKontaktKontaktliste(KontaktKontaktliste kon, AsyncCallback<Void> callback);
+
+	void findAllEigenschaftByKontakt(Kontakt k, AsyncCallback<Vector<Eigenschaft>> callback);
+
 	
 	
 }
