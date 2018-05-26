@@ -6,6 +6,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SelectionModel;
@@ -20,6 +21,7 @@ import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -39,6 +41,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -62,7 +65,7 @@ public class KontaktlistView extends MainFrame {
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private Button addKontaktlisteButton = new Button("+ Kontaktliste");
-	private Button deleteKontaktlisteButton = new Button("Loeschen");
+	private Button deleteKontaktlisteButton = new Button("LÃ¶schen");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private ArrayList<Kontakt> kontakteByKontaktlisteToDisplay = new ArrayList<Kontakt>();
 	private static ProvidesKey<Kontakt> keyProvider;
@@ -128,7 +131,7 @@ public class KontaktlistView extends MainFrame {
 							kontakteByKontaktlisteToDisplay.clear();
 							
 							//!!!!!!!!!!Kontakte haben alle die selbe ID, daher wird die ganze Tabelle selektiert wenn man eine CheckBox klickt.
-							//!!!!!!!!!!Daher hier manuelles setzen von unterschiedlichen ID's für ProvidesKey
+							//!!!!!!!!!!Daher hier manuelles setzen von unterschiedlichen ID's fÃ¼r ProvidesKey
 							int id = 0;
 							for(Kontakt k : result)  {
 								k.setId(id);
@@ -267,7 +270,7 @@ public class KontaktlistView extends MainFrame {
 
 
 		kontaktCellTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-		kontaktCellTable.setEmptyTableWidget(new HTML("Bitte Kontaktliste auswählen"));
+		kontaktCellTable.setEmptyTableWidget(new HTML("Bitte Kontaktliste auswÃ¤hlen"));
 		kontaktCellTable.setWidth("auto", true);
 		kontaktCellTable.setColumnWidth(nameColumn, 12, Unit.EM);
 		kontaktCellTable.setColumnWidth(vornameColumn, 12, Unit.EM);
@@ -311,13 +314,13 @@ public class KontaktlistView extends MainFrame {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Window.alert("Fehler beim Löschen");
+						Window.alert("Fehler beim LÃ¶schen");
 
 					}
 
 					@Override
 					public void onSuccess(Void result) {
-						Window.alert("Kontakt wurde gelöscht!");
+						Window.alert("Kontakt wurde gelÃ¶scht!");
 					}
 				});
 			}
@@ -342,9 +345,11 @@ public class KontaktlistView extends MainFrame {
 
 		@Override
 		protected void onRangeChanged(HasData<Kontaktliste> display) {
-			final com.google.gwt.view.client.Range range = display.getVisibleRange();
+			Nutzer nutzerKontaktliste = new Nutzer();
+			nutzerKontaktliste.setId(Integer.parseInt(Cookies.getCookie("id")));
+			final Range range = display.getVisibleRange();
 
-			kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(1, new AsyncCallback<Vector<Kontaktliste>>() {
+			kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzerKontaktliste.getId(), new AsyncCallback<Vector<Kontaktliste>>() {
 				int start = range.getStart();
 
 				ArrayList<Kontaktliste> kontaktlistenToDisplay = new ArrayList<Kontaktliste>();

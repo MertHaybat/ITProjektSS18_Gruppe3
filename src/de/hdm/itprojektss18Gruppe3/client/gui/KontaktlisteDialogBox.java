@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 
 /**
@@ -94,7 +95,8 @@ public class KontaktlisteDialogBox extends DialogBox {
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			kontaktmanagerVerwaltung.createKontaktliste(tkontaktliste.getValue(), 1, new createKontaktlisteCallback());
+			Nutzer kontaktliste = new Nutzer();
+			kontaktmanagerVerwaltung.createKontaktliste(tkontaktliste.getValue(), kontaktliste.getId(), new createKontaktlisteCallback());
 		}
 	}
 	
