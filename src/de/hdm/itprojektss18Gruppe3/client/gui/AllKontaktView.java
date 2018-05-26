@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.CellPreviewEvent;
@@ -45,11 +46,13 @@ public class AllKontaktView extends MainFrame {
 
 
 	private VerticalPanel vPanel = new VerticalPanel();
+	private ScrollPanel allKontakteCellTableContainer = new ScrollPanel();
 	private Label menuBarHeadlineLabel = new Label("Kontakte");
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
-	private Button addKontaktButton = new Button("+ Kontakt");
-	private Button deleteKontaktButton = new Button("Loeschen");
+	private Button addKontaktButton = new Button("Neuer Kontakt");
+	private Button deleteKontaktButton = new Button("Kontakt löschen");
+	private Button addKontaktToKontaktlistButton = new Button("Zur Kontaktliste");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private CellTable<Kontakt> allKontakteCellTable = new CellTable<Kontakt>(11, CellTableResources.INSTANCE);
 	private final MultiSelectionModel<Kontakt> ssmAuspraegung = new MultiSelectionModel<Kontakt>();
@@ -60,19 +63,18 @@ public class AllKontaktView extends MainFrame {
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	private final Handler<Kontakt> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
-	private Button showKontaktButton = new Button("Anzeigen");
-	
+
 	/**
 	 * The list of data to display.
 	 */
-	
+
 	private Kontakt kontakt = new Kontakt();
 
-//	public AllKontaktView(){
-//		
-//		
-//	}
-//	
+	//	public AllKontaktView(){
+	//		
+	//		
+	//	}
+	//	
 	public AllKontaktView(){
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
@@ -84,10 +86,10 @@ public class AllKontaktView extends MainFrame {
 		run();
 	}
 	public void run() {
-		
-		
+
+
 		allKontakteCellTable.setSelectionModel(ssmAuspraegung, selectionEventManager);
-		
+
 		/*
 		 * Menüleiste mit den Buttons für die Anlage von einer neuen Kontaktliste und dem Löschen einer Kontaktliste erzeugen
 		 * und dem Panel zuweisen
@@ -95,32 +97,31 @@ public class AllKontaktView extends MainFrame {
 		menuBarHeadlineLabel.setStylePrimaryName("menuBarLabel");
 		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
-	
+
 		addKontaktButton.setStylePrimaryName("mainButton");
 		deleteKontaktButton.setStylePrimaryName("mainButton");
-		showKontaktButton.setStylePrimaryName("mainButton");
-		
-		
+		addKontaktToKontaktlistButton.setStylePrimaryName("mainButton");
+
+
 		menuBarContainerFlowPanel.setWidth("200%");
 
 		box.setStylePrimaryName("gwt-SuggestBox");
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
 		contentHeadline.setStylePrimaryName("h2");
-		allKontakteCellTable.setHeight("600px");
-		allKontakteCellTable.setWidth("800px");
+
 
 		// Set the message to display when the table is empty.
 		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));  
 
 		// Create a Pager to control the table.
-		
+
 		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
 		pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
 		pager.setDisplay(allKontakteCellTable);
 
 		// Add a selection model so we can select cells.
-		
+
 
 		/**
 		 * Add the columns to the table.
@@ -149,7 +150,7 @@ public class AllKontaktView extends MainFrame {
 			}
 		};
 
-	
+
 
 		Column<Kontakt, String> iconColumn = new Column<Kontakt, String>(new TextCell() {
 			public void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
@@ -165,7 +166,7 @@ public class AllKontaktView extends MainFrame {
 				}
 			}
 		};
-		
+
 		ButtonCell visitProfileButton = new ButtonCell();
 		Column<Kontakt,String> visitProfileButtonColumn = new Column<Kontakt,String>(visitProfileButton) {
 			public String getValue(Kontakt object) {
@@ -181,61 +182,48 @@ public class AllKontaktView extends MainFrame {
 				RootPanel.get("content").add(visitProfile);
 			}
 		});
-		
+
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
 		allKontakteCellTable.addCellPreviewHandler(new PreviewClickHandler());
 		allKontakteCellTable.addColumn(cbColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		allKontakteCellTable.setColumnWidth(cbColumn, 20, Unit.PX);
 		allKontakteCellTable.addColumn(kontaktnameColumn, "Kontaktname");
-		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 60, Unit.EM);
+		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
 		allKontakteCellTable.addColumn(iconColumn, "Status");
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
 		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
 
-
-		//   allKontakteCellTable.setRowCount(CONTACTS.size(), true);
-
-		// Push the data into the widget.
-//		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(1, new AllKontaktByNutzerCallback());
-//		Kontaktliste k = new Kontaktliste();
-//		k.setId(1);
-	
-		
-
+		allKontakteCellTableContainer.add(allKontakteCellTable);
+		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.add(contentHeadline);
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
-		vPanel.add(allKontakteCellTable);
-		pager.setStylePrimaryName("gwt-SimplePager");
-		vPanel.add(pager);
-//		RootPanel.get("menubar").clear();
-//		this.add(vPanel);
-		
-		showKontaktButton.addClickHandler(new ShowKontaktClickHandler());
-			
-		
-			menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
-			menuBarContainerFlowPanel.add(box);
-			menuBarContainerFlowPanel.add(addKontaktButton);
+		vPanel.add(allKontakteCellTableContainer);
 
-			menuBarContainerFlowPanel.add(deleteKontaktButton);
-			menuBarContainerFlowPanel.add(showKontaktButton);
-			RootPanel.get("menubar").add(menuBarContainerPanel);
-			RootPanel.get("content").add(vPanel);
+		//		addKontaktToKontaktlistButton.addClickHandler(new ShowKontaktClickHandler());
 
-		
+
+		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
+		menuBarContainerFlowPanel.add(addKontaktButton);
+		menuBarContainerFlowPanel.add(deleteKontaktButton);
+		menuBarContainerFlowPanel.add(addKontaktToKontaktlistButton);
+		menuBarContainerFlowPanel.add(box);
+		RootPanel.get("menubar").add(menuBarContainerPanel);
+		RootPanel.get("content").add(vPanel);
+
+
 	}
 
-	public class ShowKontaktClickHandler implements ClickHandler{
-
-		@Override
-		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			KontaktForm kForm = new KontaktForm(kontakt);
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(kForm);
-		}
-		
-	}
+	//	public class ShowKontaktClickHandler implements ClickHandler{
+	//
+	//		@Override
+	//		public void onClick(ClickEvent event) {
+	//			// TODO Auto-generated method stub
+	//			KontaktForm kForm = new KontaktForm(kontakt);
+	//			RootPanel.get("content").clear();
+	//			RootPanel.get("content").add(kForm);
+	//		}
+	//		
+	//	}
 	public class AllKontaktByNutzerCallback implements AsyncCallback<Vector<Kontakt>>{
 
 		@Override
@@ -248,7 +236,7 @@ public class AllKontaktView extends MainFrame {
 			allKontakteCellTable.setRowCount(result.size(), true);
 			allKontakteCellTable.setRowData(0, result);
 		}
-		
+
 	}
 	public class PreviewClickHandler implements Handler<Kontakt>{
 		@Override
@@ -261,7 +249,7 @@ public class AllKontaktView extends MainFrame {
 				event.setCanceled(true);
 			}
 		}
-		
+
 	}
 
 }
