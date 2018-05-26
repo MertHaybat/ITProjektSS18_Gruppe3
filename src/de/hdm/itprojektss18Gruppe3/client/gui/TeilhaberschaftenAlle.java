@@ -13,6 +13,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 
 /**
  * 
@@ -37,6 +39,9 @@ public class TeilhaberschaftenAlle extends MainFrame{
 //	final Button teilhaberschaftKontakte = new Button("Kontakte aller Teilhaberschaften");
 //	final Button teilhaberschaftKontaktlisten = new Button("Kontaktlisten aller Teilhaberschaften");
 //	final HorizontalPanel hPanel = new HorizontalPanel();
+	private Kontakt kontakt = new Kontakt();
+	private Kontaktliste kliste = new Kontaktliste();
+	
 	
 
 	@Override
@@ -74,31 +79,58 @@ public class TeilhaberschaftenAlle extends MainFrame{
 		hPanel.add(teilhaberschaftKontaktlisten);
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		
+		
 		teilhaberschaftKontakte.setWidth("100%");
 		teilhaberschaftKontaktlisten.setWidth("100%");
 //		teilhaberschaftKontakte.setHeight("200%");
 //		teilhaberschaftKontaktlisten.setHeight("200%");
-
+		teilhaberschaftKontakte.addClickHandler(new ShowKontakteClickHandler());
+		teilhaberschaftKontaktlisten.addClickHandler(new ShowKontaktlistenClickHandler());
+		
+		
 //		teilhaberschaftKontakte.addClickHandler(handler)
 		
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menuBarContainerPanel);
 		RootPanel.get("content").add(vPanel);
 		RootPanel.get("content").add(hPanel);
-
 		
-		final class MyClickHandler implements ClickHandler{
-
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				
-			}
 		
-			
-		}
+//		final class MyClickHandler implements ClickHandler{
+//
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		
+//			
+//		}
 	}
 	
+	
+	public class ShowKontakteClickHandler implements ClickHandler{
 
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			TeilhaberschaftKontakte kontakt = new TeilhaberschaftKontakte();
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(kontakt);
+		}
+		
+	}
+	
+	public class ShowKontaktlistenClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			TeilhaberschaftKontaktliste kontaktliste = new TeilhaberschaftKontaktliste();
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(kontaktliste);
+		}
+		
+	}
 
 }
