@@ -24,7 +24,7 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
  * @author wahidvanaki
  *
  */
-public class KontaktlisteDialogBox extends DialogBox {
+public class NewKontaktlisteDialogBox extends DialogBox {
 	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
@@ -56,7 +56,7 @@ public class KontaktlisteDialogBox extends DialogBox {
 	/**
 	 * Non-Argument-Konstruktor
 	 */
-	public KontaktlisteDialogBox() {
+	public NewKontaktlisteDialogBox() {
 		
 		hPanel.add(kontaktlisteLabel);
 		hPanel.add(tkontaktliste);

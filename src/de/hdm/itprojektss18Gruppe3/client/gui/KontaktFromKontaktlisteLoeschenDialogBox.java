@@ -2,7 +2,6 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -24,7 +23,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
  * @author wahidvanaki
  *
  */
-public class KontaktlisteLoeschenDialogBox extends DialogBox {
+public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	
@@ -41,11 +40,11 @@ public class KontaktlisteLoeschenDialogBox extends DialogBox {
 	 */
 	private Button bBestaetigen = new Button("Bestätigen");
 	private Button bAbbrechen = new Button("Abbrechen");
-
+	
 	/**
 	 * Non-Argument Konstruktor
 	 */
-	public KontaktlisteLoeschenDialogBox() {
+	public KontaktFromKontaktlisteLoeschenDialogBox() {
 		
 		/**
 		 * Anordnung der Buttons in der DialogBox durch die Panels
@@ -64,16 +63,15 @@ public class KontaktlisteLoeschenDialogBox extends DialogBox {
 		bAbbrechen.addClickHandler(new closeKontaktKontaktlisteClickHandler());	
 	}
 	
-	public class deleteKontaktKontaktlisteCallback implements AsyncCallback<KontaktKontaktliste> {
+	public class deleteKontaktKontaktlisteCallback implements AsyncCallback<Void> {
 
 		@Override
 		public void onFailure(Throwable caught) {
 			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
-		public void onSuccess(KontaktKontaktliste result) {
+		public void onSuccess(Void result) {
 			// TODO Auto-generated method stub
 			hide();
 			KontaktlistView kontaktlisteBox = new KontaktlistView();
@@ -88,8 +86,9 @@ public class KontaktlisteLoeschenDialogBox extends DialogBox {
 		@Override	
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
+			
 			KontaktKontaktliste kontaktKontaktliste = new KontaktKontaktliste();
-//			kontaktmanagerVerwaltung.deleteKontaktKontaktliste(kontaktKontaktliste, new deleteKontaktKontaktlisteCallback());
+			kontaktmanagerVerwaltung.deleteKontaktKontaktliste(kontaktKontaktliste, new deleteKontaktKontaktlisteCallback());
 		}
 	}
 	
@@ -99,9 +98,9 @@ public class KontaktlisteLoeschenDialogBox extends DialogBox {
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
 			hide();
-			KontaktlistView kontaktlisteBox = new KontaktlistView();
+			KontaktlistView kontaktlistedbox = new KontaktlistView();
 			RootPanel.get("content").clear();
-			RootPanel.get("content").add(kontaktlisteBox);
+			RootPanel.get("content").add(kontaktlistedbox);
 		}
 		
 	}
