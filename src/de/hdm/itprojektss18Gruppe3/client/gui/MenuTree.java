@@ -105,8 +105,8 @@ public class MenuTree {
 									return;
 				
 								case "Neue Teilhaberschaft":
-									TeilhaberschaftDialogBox teilhaberschaftDb = new TeilhaberschaftDialogBox(k);
-									teilhaberschaftDb.center();
+//									TeilhaberschaftDialogBox teilhaberschaftDb = new TeilhaberschaftDialogBox(k);
+//									teilhaberschaftDb.center();
 									return;
 				
 								case "Alle Teilhaberschaften":
