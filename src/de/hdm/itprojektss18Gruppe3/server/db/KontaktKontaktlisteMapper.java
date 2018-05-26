@@ -168,7 +168,8 @@ public class KontaktKontaktlisteMapper {
 					+ "WHERE ((`kontaktkontaktliste`.`kontaktid` = ?) "
 					+ "AND (`kontaktkontaktliste`.`kontaktlisteid` = ?))");
 			
-			stmt.setInt(1, kontaktkontaktliste.getKontaktlisteID());
+			stmt.setInt(1, kontaktkontaktliste.getKontaktID());
+			stmt.setInt(2, kontaktkontaktliste.getKontaktlisteID());
 			stmt.executeUpdate();
 		}
 		catch(SQLException e2) {
