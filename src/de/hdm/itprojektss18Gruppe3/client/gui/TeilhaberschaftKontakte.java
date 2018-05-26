@@ -44,7 +44,7 @@ import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 public class TeilhaberschaftKontakte extends MainFrame {
 
 	private VerticalPanel vPanel = new VerticalPanel();
-	private Label menuBarHeadlineLabel = new Label("Kontakte aller Teilhaberschaften");
+	private Label menuBarHeadlineLabel = new Label("Teilhaberschaft");
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private Button deleteKontaktButton = new Button("Teilhaberschaft loeschen");
@@ -53,7 +53,7 @@ public class TeilhaberschaftKontakte extends MainFrame {
 	private final MultiSelectionModel<Kontakt> ssmAuspraegung = new MultiSelectionModel<Kontakt>();
 	private final CheckboxCell cbCell = new CheckboxCell(false, true);
 	private SuggestBox box = new SuggestBox(oracle);
-	private Label contentHeadline = new Label("Die Liste aller Kontakte aus Teilhaberschaften");
+	private Label contentHeadline = new Label("Die Liste aller deiner Kontakte aus Teilhaberschaften");
 	private SimplePager pager;
 	private final Handler<Kontakt> selectionEventManager = DefaultSelectionEventManager.createCheckboxManager();
 	private Button showKontaktButton = new Button("Anzeigen");
@@ -98,7 +98,7 @@ public class TeilhaberschaftKontakte extends MainFrame {
 		allKontakteCellTable.setWidth("1000px");
 
 		// Set the message to display when the table is empty.
-		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));
+		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakt in Teilhaberschaften"));
 
 		// Create a Pager to control the table.
 

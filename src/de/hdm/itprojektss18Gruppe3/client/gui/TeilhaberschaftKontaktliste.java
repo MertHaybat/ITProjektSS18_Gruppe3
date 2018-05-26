@@ -57,7 +57,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
  */
 public class TeilhaberschaftKontaktliste extends MainFrame {
 
-	private Label menuBarHeadlineLabel = new Label("Kontaktlisten");
+	private Label menuBarHeadlineLabel = new Label("Teilhaberschaft");
 	private HorizontalPanel contentViewContainer = new HorizontalPanel();
 	private HorizontalPanel kontaktlistViewPanel = new HorizontalPanel();
 	private VerticalPanel allKontaktViewPanel = new VerticalPanel();
@@ -70,6 +70,8 @@ public class TeilhaberschaftKontaktliste extends MainFrame {
 	private CellTable<Kontakt> kontaktCellTable = new CellTable<Kontakt>(13, CellTableResources.INSTANCE, keyProvider);
 	private SimplePager pager;
 	private ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
+	private Label contentHeadline = new Label("Die Liste aller deiner Kontakte aus Teilhaberschaften");
+
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
@@ -102,6 +104,7 @@ public class TeilhaberschaftKontaktliste extends MainFrame {
 		menuBarContainerFlowPanel.add(box);
 		menuBarContainerFlowPanel.setStylePrimaryName("menuBarContainerFlowPanel");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
+		contentHeadline.setStylePrimaryName("h2");
 
 		/*
 		 * CellList für die Anzeige der Kontaktlisten eines Users wird erzeugt
@@ -289,6 +292,7 @@ public class TeilhaberschaftKontaktliste extends MainFrame {
 		kontaktCellTable.setStylePrimaryName("kontaktCellTableView");
 		kontaktlistViewPanel.add(kontaktlistenCellList);
 
+		allKontaktViewPanel.add(contentHeadline);
 		allKontaktViewPanel.add(kontaktCellTable);
 		allKontaktViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		allKontaktViewPanel.add(pager);
