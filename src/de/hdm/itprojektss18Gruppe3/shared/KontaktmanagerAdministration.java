@@ -460,6 +460,12 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Vector<EigenschaftsAuspraegungHybrid> findEigenschaftHybrid(Person person) throws IllegalArgumentException;
 	
 	public void deleteKontaktByID(Kontakt k) throws IllegalArgumentException;
+	
+	public Vector<Nutzer> findAllNutzerByEmail(String mail) throws IllegalArgumentException;
+	
+	public void deleteKontaktKontaktliste(KontaktKontaktliste kon) throws IllegalArgumentException;
+	
+	public Vector<Eigenschaft> findAllEigenschaftByKontakt(Kontakt k) throws IllegalArgumentException;
 
 
 }

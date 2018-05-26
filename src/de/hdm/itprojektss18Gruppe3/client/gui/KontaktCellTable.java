@@ -41,39 +41,15 @@ public class KontaktCellTable extends CellTable<EigenschaftsAuspraegungHybrid> {
 			}
 		};
 		
-		Column<EigenschaftsAuspraegungHybrid, String> wertStatus = new Column<EigenschaftsAuspraegungHybrid, String>(
-				new ClickableTextCell()) {
-
-			@Override
-			public String getValue(EigenschaftsAuspraegungHybrid object) {
-				return String.valueOf(object.getStatusAuspraegung());
-			}
-		};
+		
 
 //		kverwaltung.findEigenschaftHybrid(k, new AllAuspraegungenCallback());
 		this.addColumn(wertEigenschaft, "");
 		this.addColumn(wertAuspraegung, "");
-		this.addColumn(wertStatus, "");
 
 	}
 
-	class AllAuspraegungenCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungHybrid>> {
 
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onSuccess(Vector<EigenschaftsAuspraegungHybrid> result) {
-			// TODO
-			setRowData(0, result);
-			setRowCount(result.size(), true);
-			
-
-		}
-	}
 }
 	
 
