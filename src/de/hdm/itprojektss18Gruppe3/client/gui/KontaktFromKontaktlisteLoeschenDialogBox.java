@@ -60,7 +60,7 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		/**
 		 * Anordnung der Buttons in der DialogBox durch die Panels
 		 */
-		setText("Möchtest du den Kontakt " + listOfNames.toString().substring(0, listOfNames.length() - 2) + " aus der Kontaktliste entfernen?");
+		setText("Möchtest du " + listOfNames.toString().substring(0, listOfNames.length() - 2) + " aus der Kontaktliste entfernen?");
 		hPanel2.add(bBestaetigen);
 		hPanel2.add(bAbbrechen);
 		setGlassEnabled(true);
