@@ -260,7 +260,7 @@ public class KontaktlistView extends MainFrame {
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
 		//deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(selected));
 		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
-		deleteKontaktFromKontaktlisteButton.addClickHandler(new deleteKontaktFromKontaktlisteClickHandler());
+		deleteKontaktFromKontaktlisteButton.addClickHandler(new deleteKontaktFromKontaktlisteClickHandler(selectedKontakteInCellTable));
 		addTeilhaberschaftKontaktButton.addClickHandler(new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable));
 
 		//new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable)
@@ -308,16 +308,27 @@ public class KontaktlistView extends MainFrame {
 
 	class deleteKontaktFromKontaktlisteClickHandler implements ClickHandler {
 
+		ArrayList<Kontakt> kontakteToRemoveFromKontaktliste;
+		
+		public deleteKontaktFromKontaktlisteClickHandler(ArrayList<Kontakt> selectedKontakteInCellTable) {
+			kontakteToRemoveFromKontaktliste = selectedKontakteInCellTable;
+		}
+
 		@Override
 		public void onClick(ClickEvent event) {
-			KontaktFromKontaktlisteLoeschenDialogBox kontaktFromKKontaktlisteLoeschen = new KontaktFromKontaktlisteLoeschenDialogBox();
+			if(kontakteToRemoveFromKontaktliste.size() == 0) {
+				Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du löschen möchtest");
+			} else {
+			KontaktFromKontaktlisteLoeschenDialogBox kontaktFromKKontaktlisteLoeschen = new KontaktFromKontaktlisteLoeschenDialogBox(kontakteToRemoveFromKontaktliste);
 			kontaktFromKKontaktlisteLoeschen.center();
+			}
 	}
 	}
 
 	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {
 
 		ArrayList<Kontakt> selectedKontakteInCellTable;
+		
 		public addTeilhaberschaftKontaktClickHandler(ArrayList<Kontakt> selectedKontakteInCellTable) {
 			this.selectedKontakteInCellTable = selectedKontakteInCellTable;
 		}

@@ -1,5 +1,7 @@
 package de.hdm.itprojektss18Gruppe3.client.gui;
 
+import java.util.ArrayList;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -11,6 +13,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 
 /**
@@ -41,15 +44,23 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	private Button bBestaetigen = new Button("Bestätigen");
 	private Button bAbbrechen = new Button("Abbrechen");
 	
+	ArrayList<Kontakt> kontakteToRemoveFromKontaktliste;
 	/**
 	 * Non-Argument Konstruktor
 	 */
-	public KontaktFromKontaktlisteLoeschenDialogBox() {
+	
+	public KontaktFromKontaktlisteLoeschenDialogBox(ArrayList<Kontakt> kontakteToRemoveFromKontaktliste) {
+		this.kontakteToRemoveFromKontaktliste = kontakteToRemoveFromKontaktliste;
+		
+		StringBuilder listOfNames = new StringBuilder();
+		for(Kontakt k:kontakteToRemoveFromKontaktliste) {
+			listOfNames.append(k.getName() + ", ");
+		}
 		
 		/**
 		 * Anordnung der Buttons in der DialogBox durch die Panels
 		 */
-		setText("Möchtest du den Kontakt .getName aus der Kontaktliste .getName entfernen?");
+		setText("Möchtest du den Kontakt " + listOfNames.toString().substring(0, listOfNames.length() - 2) + " aus der Kontaktliste entfernen?");
 		hPanel2.add(bBestaetigen);
 		hPanel2.add(bAbbrechen);
 		setGlassEnabled(true);
@@ -64,7 +75,8 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		bBestaetigen.addClickHandler(new deleteKontaktKontaktlisteClickHandler());
 		bAbbrechen.addClickHandler(new closeKontaktKontaktlisteClickHandler());	
 	}
-	
+
+
 	public class deleteKontaktKontaktlisteCallback implements AsyncCallback<Void> {
 
 		@Override
