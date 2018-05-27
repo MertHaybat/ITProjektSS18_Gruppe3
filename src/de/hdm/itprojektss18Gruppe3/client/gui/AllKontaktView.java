@@ -1,5 +1,6 @@
 package de.hdm.itprojektss18Gruppe3.client.gui;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.ButtonCell;
@@ -33,6 +34,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
@@ -53,15 +56,15 @@ public class AllKontaktView extends MainFrame {
 	private Button addKontaktButton = new Button("Neuer Kontakt");
 	private Button deleteKontaktButton = new Button("Kontakt löschen");
 	private Button addKontaktToKontaktlistButton = new Button("Zur Kontaktliste");
+	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private CellTable<Kontakt> allKontakteCellTable = new CellTable<Kontakt>(11, CellTableResources.INSTANCE);
-	private final MultiSelectionModel<Kontakt> ssmAuspraegung = new MultiSelectionModel<Kontakt>();
-	private final CheckboxCell cbCell = new CheckboxCell(false, true);
+	private ArrayList<Kontakt> allKontakteSelectedArrayList = new ArrayList<>();
+	private ArrayList<Kontakt> allKontakteByUserArrayList = new ArrayList<>();
+	private static ProvidesKey<Kontakt> keyProvider;
 	private SuggestBox box = new SuggestBox(oracle);
 	private Label contentHeadline = new Label("Die Liste aller deiner Kontakte");
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
-	private final Handler<Kontakt> selectionEventManager = DefaultSelectionEventManager
-			.createCheckboxManager();
 
 	/**
 	 * The list of data to display.
@@ -85,10 +88,25 @@ public class AllKontaktView extends MainFrame {
 		run();
 	}
 	public void run() {
+		
+		keyProvider = new ProvidesKey<Kontakt>() {
+			public Object getKey(Kontakt item) {
+				// Always do a null check.
+				return item == null ? null : item.getId();
+			}
+		};
+		
+		final MultiSelectionModel<Kontakt> selectionModelCellTable = new MultiSelectionModel<Kontakt>(keyProvider);
+		allKontakteCellTable.setSelectionModel(selectionModelCellTable,
+				DefaultSelectionEventManager.<Kontakt> createCheckboxManager());
+		selectionModelCellTable.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 
-
-		allKontakteCellTable.setSelectionModel(ssmAuspraegung, selectionEventManager);
-
+			public void onSelectionChange(SelectionChangeEvent event) {
+				allKontakteSelectedArrayList.clear();
+				allKontakteSelectedArrayList.addAll(((MultiSelectionModel<Kontakt>) selectionModelCellTable).getSelectedSet());
+			}
+		});
+		
 
 		/*
 		 * Menüleiste mit den Buttons für die Anlage von einer neuen Kontaktliste und dem Löschen einer Kontaktliste erzeugen
@@ -101,6 +119,7 @@ public class AllKontaktView extends MainFrame {
 		addKontaktButton.setStylePrimaryName("mainButton");
 		deleteKontaktButton.setStylePrimaryName("mainButton");
 		addKontaktToKontaktlistButton.setStylePrimaryName("mainButton");
+		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
 
 		box.setStylePrimaryName("gwt-SuggestBox");
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
@@ -122,16 +141,15 @@ public class AllKontaktView extends MainFrame {
 		// Checkbox column. This table will uses a checkbox column for selection.
 		// Alternatively, you can call dataGrid.setSelectionEnabled(true) to enable
 		// mouse selection.
-		Column<Kontakt, Boolean> cbColumn = new Column<Kontakt, Boolean>(
-				cbCell) {
+		Column<Kontakt, Boolean> checkColumn = new Column<Kontakt, Boolean>(
+				new CheckboxCell(true, false)) {
 			@Override
 			public Boolean getValue(Kontakt object) {
-				kontakt = object;
-				return ssmAuspraegung.isSelected(object);
+				// Get the value from the selection model.
+				return selectionModelCellTable.isSelected(object);
 			}
 		};
-
-
+		
 
 		// First name.
 		Column<Kontakt, String> kontaktnameColumn =
@@ -141,7 +159,6 @@ public class AllKontaktView extends MainFrame {
 				return object.getName();
 			}
 		};
-
 
 
 		Column<Kontakt, String> iconColumn = new Column<Kontakt, String>(new TextCell() {
@@ -159,6 +176,7 @@ public class AllKontaktView extends MainFrame {
 			}
 		};
 
+		
 		ButtonCell visitProfileButton = new ButtonCell();
 		Column<Kontakt,String> visitProfileButtonColumn = new Column<Kontakt,String>(visitProfileButton) {
 			public String getValue(Kontakt object) {
@@ -176,9 +194,9 @@ public class AllKontaktView extends MainFrame {
 		});
 
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
-		allKontakteCellTable.addCellPreviewHandler(new PreviewClickHandler());
-		allKontakteCellTable.addColumn(cbColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		allKontakteCellTable.setColumnWidth(cbColumn, 20, Unit.PX);
+		//allKontakteCellTable.addCellPreviewHandler(new PreviewClickHandler());
+		allKontakteCellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+		allKontakteCellTable.setColumnWidth(checkColumn, 20, Unit.PX);
 		allKontakteCellTable.addColumn(kontaktnameColumn, "Kontaktname");
 		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
 		allKontakteCellTable.addColumn(iconColumn, "Status");
@@ -191,13 +209,15 @@ public class AllKontaktView extends MainFrame {
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.add(allKontakteCellTableContainer);
 
-		//		addKontaktToKontaktlistButton.addClickHandler(new ShowKontaktClickHandler());
+		addKontaktToKontaktlistButton.addClickHandler(new showKontaktClickHandler());
+		addTeilhaberschaftKontaktButton.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
 
 
 		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
 		menuBarContainerFlowPanel.add(addKontaktButton);
 		menuBarContainerFlowPanel.add(deleteKontaktButton);
 		menuBarContainerFlowPanel.add(addKontaktToKontaktlistButton);
+		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 		menuBarContainerFlowPanel.add(box);
 		RootPanel.get("menubar").add(menuBarContainerPanel);
 		RootPanel.get("content").add(vPanel);
@@ -225,23 +245,66 @@ public class AllKontaktView extends MainFrame {
 
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
-			allKontakteCellTable.setRowCount(result.size(), true);
-			allKontakteCellTable.setRowData(0, result);
+			int id = 0;
+			for(Kontakt k : result)  {
+				k.setId(id);
+				allKontakteByUserArrayList.add(k);
+				id++;
+			}
+			allKontakteCellTable.setRowCount(allKontakteByUserArrayList.size(), true);
+			allKontakteCellTable.setRowData(0, allKontakteByUserArrayList);
 		}
 
 	}
-	public class PreviewClickHandler implements Handler<Kontakt>{
-		@Override
-		public void onCellPreview(CellPreviewEvent<Kontakt> event) {
-			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
+	
+	
+//	public class PreviewClickHandler implements Handler<Kontakt>{
+//		@Override
+//		public void onCellPreview(CellPreviewEvent<Kontakt> event) {
+//			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
+//
+//				final Kontakt value = event.getValue();
+//				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
+//				event.getDisplay().getSelectionModel().setSelected(value, state);
+//				event.setCanceled(true);
+//			}
+//		}
+//
+//	}
 
-				final Kontakt value = event.getValue();
-				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
-				event.getDisplay().getSelectionModel().setSelected(value, state);
-				event.setCanceled(true);
-			}
+	
+	
+	/*
+	 * Diverse ClickHandler um die Klicks auf die Menübuttons zu erfassen und zu händeln.
+	 */
+	class showKontaktClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	
+	
+	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {
+
+		ArrayList<Kontakt> selectedKontakteInCellTable;
+		public addTeilhaberschaftKontaktClickHandler(ArrayList<Kontakt> selectedKontakteInCellTable) {
+			this.selectedKontakteInCellTable = selectedKontakteInCellTable;
 		}
 
+		@Override
+		public void onClick(ClickEvent event) {
+			if(selectedKontakteInCellTable.size() == 0) {
+				Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du teilen möchtest");
+			} else {
+				TeilhaberschaftDialogBox dialogBox = new TeilhaberschaftDialogBox(selectedKontakteInCellTable);
+				dialogBox.center();
+			}
+		}
 	}
 
 }

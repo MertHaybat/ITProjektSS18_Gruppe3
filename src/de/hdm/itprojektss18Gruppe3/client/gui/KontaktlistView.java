@@ -68,6 +68,7 @@ public class KontaktlistView extends MainFrame {
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private ArrayList<Kontakt> kontakteByKontaktlisteToDisplay = new ArrayList<Kontakt>();
 	private static ProvidesKey<Kontakt> keyProvider;
+	private CellList<Kontaktliste> kontaktlistenCellList = new CellList<Kontaktliste>(new KontaktlistCell(), CellListResources.INSTANCE);
 	private CellTable<Kontakt> kontaktCellTable = new CellTable<Kontakt>(13, CellTableResources.INSTANCE, keyProvider);
 	private ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
 	private Kontaktliste selected = null;
@@ -105,25 +106,29 @@ public class KontaktlistView extends MainFrame {
 
 
 		/*
-		 * CellList für die Anzeige der Kontaktlisten eines Users wird erzeugt
+		 * CellList für die Anzeige der Kontaktlisten eines Users wird umgesetzt
 		 */
-
-		CellList<Kontaktliste> kontaktlistenCellList = new CellList<Kontaktliste>(new KontaktlistCell(), CellListResources.INSTANCE);
 		kontaktlistenCellList.setEmptyListWidget(new HTML("<b>Du hast keine Kontaktlisten</b>"));
 		KontaktlistenDataProvider kontaktlistenDataProvider = new KontaktlistenDataProvider();
 		kontaktlistenDataProvider.addDataDisplay(kontaktlistenCellList);	
 		kontaktlistenCellList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 
 
-		// Add a selection model to handle user selection.
+		/*
+		 * SelectionHandler für CellList und CellTable hinzufügen. In der CellList wird damit getrackt,
+		 * welche Kontaktliste der Nutzer anklickt. Im CellTable, in dem dann alle Kontakte innerhalb der 
+		 * Kontaktliste angezeigt werden, dient der MultiSelectionHandler dazu, die Checkbox Auswahl
+		 * des Nutzers zu tracken. Die ausgewählten Kontakt Objekte werden dann in einem ArrayList Objekt 
+		 * gespeichert.  
+		 */
 		final SingleSelectionModel<Kontaktliste> selectionModel = new SingleSelectionModel<Kontaktliste>();
 		kontaktlistenCellList.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event) {
 				selected = selectionModel.getSelectedObject();
-				deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(selected));
-				if (selected != null) {
 
+				if (selected != null) {
+					deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(selected));
 					kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(selected, new AsyncCallback<Vector<Kontakt>>() {
 
 						@Override
@@ -148,15 +153,8 @@ public class KontaktlistView extends MainFrame {
 				}
 			}
 		});
-		// Wird angezeit, wenn der CellTable keine Daten enthält (Testzweck)
-
-		keyProvider = new ProvidesKey<Kontakt>() {
-			public Object getKey(Kontakt item) {
-				// Always do a null check.
-				return item == null ? null : item.getId();
-			}
-		};
-
+		
+		// MultiSelectionModel für den CellTable
 		final MultiSelectionModel<Kontakt> selectionModelCellTable = new MultiSelectionModel<Kontakt>(keyProvider);
 		kontaktCellTable.setSelectionModel(selectionModelCellTable,
 				DefaultSelectionEventManager.<Kontakt> createCheckboxManager());
@@ -169,10 +167,20 @@ public class KontaktlistView extends MainFrame {
 			}
 		});
 
+		//KeyProvider um die Eindeutigkeit eines ausgewählten Kontaktobjektes zu gewährleisten.
+		keyProvider = new ProvidesKey<Kontakt>() {
+			public Object getKey(Kontakt item) {
+				// Always do a null check.
+				return item == null ? null : item.getId();
+			}
+		};
 
-		/*		     * CheckBoxen für die Auswahl mehrerer Kontakte anlegen. Hiermit können mehrere Kontakte gleichzeitig
-		 * z.B. aus einer Kontaktliste entfernt werden.
-		 * */
+
+
+		/*
+		 * CellTable für die Anzeige aller Kontakte innerhalb einer Kontaktliste wird erzeugt. 
+		 * Die einzelnen Spalten der Tabelle werden angelegt.
+		 */
 		Column<Kontakt, Boolean> checkColumn = new Column<Kontakt, Boolean>(
 				new CheckboxCell(true, false)) {
 			@Override
@@ -236,19 +244,21 @@ public class KontaktlistView extends MainFrame {
 				RootPanel.get("content").add(visitProfile);
 			}
 		});
+		
 		kontaktCellTable.addColumn(visitProfileButtonColumn, "");
 		kontaktCellTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 		kontaktCellTable.setEmptyTableWidget(new HTML("Bitte Kontaktliste auswählen"));
 		kontaktCellTable.setWidth("auto", true);
 		kontaktCellTable.setStylePrimaryName("kontaktCellTableView");
 		kontaktlistViewPanel.add(kontaktlistenCellList);
+		
 		allKontaktViewPanel.add(kontaktCellTable);
 		allKontaktViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		kontaktlistViewPanel.setStylePrimaryName("kontaktlistenViewPanel");
 		contentViewContainer.add(kontaktlistViewPanel);
 		contentViewContainer.add(allKontaktViewPanel);
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
-		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(selected));
+		//deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(selected));
 		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
 		deleteKontaktFromKontaktlisteButton.addClickHandler(new deleteKontaktFromKontaktlisteClickHandler());
 		addTeilhaberschaftKontaktButton.addClickHandler(new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable));
@@ -276,16 +286,14 @@ public class KontaktlistView extends MainFrame {
 		private Kontaktliste kontaktlisteToDelete = null;
 		
 		public deleteKontaktlisteClickHandler(Kontaktliste selected) {
-			kontaktlisteToDelete = selected;
+				kontaktlisteToDelete = selected;
 		}
 		
 		@Override
 		public void onClick(ClickEvent event) {
 			DeleteKontaktlisteDialogBox deleteKontakt = new DeleteKontaktlisteDialogBox(kontaktlisteToDelete);
 			deleteKontakt.center();
-
 		}
-
 	}
 	
 
@@ -319,7 +327,8 @@ public class KontaktlistView extends MainFrame {
 			if(selectedKontakteInCellTable.size() == 0) {
 				Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du teilen möchtest");
 			} else {
-				//	TeilhaberschaftDialogBox dialogBox = new TeilhaberschaftDialogBox(selectedKontakteInCellTable);
+				TeilhaberschaftDialogBox dialogBox = new TeilhaberschaftDialogBox(selectedKontakteInCellTable);
+				dialogBox.center();
 			}
 		}
 	}

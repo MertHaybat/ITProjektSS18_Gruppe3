@@ -110,6 +110,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	}
 
 	public void run() {
+		setText("Wählen Sie die zu teilenden Eigenschaften aus sowie die Person, mit der Sie den Kontakt teilen möchten");
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
 		ftTeilhaberschaft.setWidget(2, 0, lb2);
 		ftTeilhaberschaft.setWidget(3, 0, box);

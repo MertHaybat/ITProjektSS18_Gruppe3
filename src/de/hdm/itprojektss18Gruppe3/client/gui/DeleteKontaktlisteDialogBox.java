@@ -52,6 +52,7 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 		
 		vPanel.add(hPanel);
 		vPanel.add(hPanel2);
+		vPanel.setWidth("300px");
 		this.add(vPanel);
 		
 		deleteButton.addClickHandler(new deleteKontaktlisteClickHandler());
@@ -64,7 +65,8 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 		@Override
 		public void onFailure(Throwable caught) {
 			setText("Fehler beim Löschen");
-			
+			vPanel.remove(deleteButton);
+			vPanel.clear();
 		}
 
 		@Override
@@ -72,7 +74,6 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 			setText("Kontaktliste gelöscht");
 			vPanel.remove(deleteButton);
 			vPanel.remove(abortButton);
-
 			vPanel.clear();
 			vPanel.add(okButton);
 			okButton.addClickHandler(new ClickHandler() {

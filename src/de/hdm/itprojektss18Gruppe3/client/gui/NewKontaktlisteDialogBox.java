@@ -39,7 +39,7 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 	/**
 	 * Instanziierung vom Label "kontaktlisteLabel" welches als Hilfe für die TextBox dient, damit erkenntlich ist welche Angabe in die TextBox eingetragen werden soll
 	 */
-	private Label kontaktlisteLabel = new Label("Neue Kontaktliste: ");
+	private Label kontaktlisteLabel = new Label("Bezeichnung: ");
 	
 	/**
 	 * Instanziierung der TextBox namens "tkontaktliste"
@@ -57,7 +57,7 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 	 * Non-Argument-Konstruktor
 	 */
 	public NewKontaktlisteDialogBox() {
-		
+		setText("Gib eine Bezeichnung für die neue Kontaktliste an");
 		hPanel.add(kontaktlisteLabel);
 		hPanel.add(tkontaktliste);
 		hPanel2.add(bspeichern);
@@ -65,6 +65,7 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 		
 		vPanel.add(hPanel);
 		vPanel.add(hPanel2);
+		vPanel.setWidth("300px");
 		this.add(vPanel);
 		
 		bspeichern.addClickHandler(new insertKontaktlisteClickHandler());
@@ -82,7 +83,6 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 
 		@Override
 		public void onSuccess(Kontaktliste result) {
-			// TODO Auto-generated method stub
 			hide();
 			KontaktlistView kontaktlisteBox = new KontaktlistView();
 			RootPanel.get("content").clear();
@@ -95,7 +95,6 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			kontaktmanagerVerwaltung.createKontaktliste(tkontaktliste.getValue(), nutzer.getId(), new createKontaktlisteCallback());
@@ -106,11 +105,7 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			hide();
-			KontaktlistView kontaktlisteBox = new KontaktlistView();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(kontaktlisteBox);
 		}
 		
 	}
