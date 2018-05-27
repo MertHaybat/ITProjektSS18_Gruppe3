@@ -19,13 +19,12 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 public class MenuTree {
 	private VerticalPanel vPanel = new VerticalPanel();
 	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
-	private HTML instructionMessage = new HTML("<br><br><br>Bitte melde dich mit deinem Google Konto an");
+	private HTML instructionMessage = new HTML("<br>Bitte melde dich mit deinem Google Konto an");
 
 	private static KontaktmanagerAdministrationAsync verwaltung = ClientsideSettings.getKontaktVerwaltung();
 
 	private Kontakt k = new Kontakt();
 
-	@SuppressWarnings("deprecation")
 	public MenuTree() {
 
 		welcomeMessage.addStyleName("headline");

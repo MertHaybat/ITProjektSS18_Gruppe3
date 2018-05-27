@@ -59,7 +59,6 @@ public class AllKontaktView extends MainFrame {
 	private final CheckboxCell cbCell = new CheckboxCell(false, true);
 	private SuggestBox box = new SuggestBox(oracle);
 	private Label contentHeadline = new Label("Die Liste aller deiner Kontakte");
-	private SimplePager pager;
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	private final Handler<Kontakt> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
@@ -103,9 +102,6 @@ public class AllKontaktView extends MainFrame {
 		deleteKontaktButton.setStylePrimaryName("mainButton");
 		addKontaktToKontaktlistButton.setStylePrimaryName("mainButton");
 
-
-		menuBarContainerFlowPanel.setWidth("200%");
-
 		box.setStylePrimaryName("gwt-SuggestBox");
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
@@ -115,11 +111,6 @@ public class AllKontaktView extends MainFrame {
 		// Set the message to display when the table is empty.
 		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));  
 
-		// Create a Pager to control the table.
-
-		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-		pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-		pager.setDisplay(allKontakteCellTable);
 
 		// Add a selection model so we can select cells.
 

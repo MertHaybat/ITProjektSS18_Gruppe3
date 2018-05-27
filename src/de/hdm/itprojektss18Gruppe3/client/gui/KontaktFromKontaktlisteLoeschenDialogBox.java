@@ -33,7 +33,7 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel hPanel1 = new HorizontalPanel();
 	private HorizontalPanel hPanel2 = new HorizontalPanel();
-	
+
 	/**
 	 * Buttons für die DialogBox
 	 * Zum einen für das Bestätigen und Abbrechen
@@ -49,8 +49,10 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		/**
 		 * Anordnung der Buttons in der DialogBox durch die Panels
 		 */
+		setText("Möchtest du den Kontakt .getName aus der Kontaktliste .getName entfernen?");
 		hPanel2.add(bBestaetigen);
 		hPanel2.add(bAbbrechen);
+		setGlassEnabled(true);
 		
 		vPanel.add(hPanel1);
 		vPanel.add(hPanel2);
@@ -98,9 +100,6 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
 			hide();
-			KontaktlistView kontaktlistedbox = new KontaktlistView();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(kontaktlistedbox);
 		}
 		
 	}

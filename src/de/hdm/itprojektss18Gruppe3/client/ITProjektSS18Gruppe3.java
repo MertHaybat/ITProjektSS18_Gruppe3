@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -25,18 +26,19 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private VerticalPanel selectPanel = new VerticalPanel();
+	private HorizontalPanel selectPanel = new HorizontalPanel();
 	private VerticalPanel vPanelBar = new VerticalPanel();
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the Kontaktmanager application.");
+	private Label instructionMessage = new Label("Clientauswahl");
 	private Anchor signInLink = new Anchor("Sign In");
 	private Anchor signOutLink = new Anchor("Sign Out");
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 
-	private Button zumReportGenerator = new Button("Zum Report Generator");
-	private Button zumKontaktmanager = new Button("Zum Kontaktmanager");
+	private Button zumReportGenerator = new Button("Report-Generator");
+	private Button zumKontaktmanager = new Button("Kontaktmanager");
 	private Button loginButton = new Button("Login");
 	private Button zurClientAuswahl = new Button("Zurück zur Client-Auswahl");
 
@@ -59,6 +61,8 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 	private void loadKontaktmanager() {
 		zurClientAuswahl.addClickHandler(new ClientAuswahlClickHandler());
+		zurClientAuswahl.setStylePrimaryName("mainButton");
+		zurClientAuswahl.setWidth("150px");
 		vPanelBar.add(zurClientAuswahl);
 		RootPanel.get("content").clear();
 		RootPanel.get("leftmenutree").clear();
@@ -84,6 +88,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			RootPanel.get("menubar").clear();
 			signInLink.setHref(GWT.getHostPageBaseURL() + "KontaktmanagerReport.html");
 			Window.open(signInLink.getHref(), "_self", "");
 		}
@@ -94,6 +99,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			RootPanel.get("menubar").clear();
 			loadKontaktmanager();
 		}
 
@@ -139,9 +145,14 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		@Override
 		public void onSuccess(Nutzer result) {
 			if (result != null) {
+				RootPanel.get("menubar").add(instructionMessage);
+				instructionMessage.setStylePrimaryName("menuBarLabel");
 				RootPanel.get("content").clear();
 				selectPanel.add(zumKontaktmanager);
 				selectPanel.add(zumReportGenerator);
+				zumKontaktmanager.setStylePrimaryName("clientAuswahlButton");
+				zumReportGenerator.setStylePrimaryName("clientAuswahlButton");
+				selectPanel.setStylePrimaryName("clientAuswahlPanel");
 				zumKontaktmanager.addClickHandler(new zumKontaktmanagerClickHandler());
 				zumReportGenerator.addClickHandler(new zumReportClickHandler());
 				RootPanel.get("content").add(selectPanel);

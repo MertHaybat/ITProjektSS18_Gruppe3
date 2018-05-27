@@ -84,13 +84,11 @@
   overflow: auto;
 }
 .cellTableSelectedRowCell {
-  border: selectionBorderWidth solid #80bfff;
 }
 /**
  * The keyboard selected cell is visible over selection.
  */
 .cellTableKeyboardSelectedCell {
-  border: selectionBorderWidth solid #d7dde8;
 }
 .cellTableLoading {
   margin: 30px;
