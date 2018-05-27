@@ -30,7 +30,7 @@ public class DBConnection {
 	/**
 	 * Die URL, mit deren Hilfe die Datenbank angesprochen wird.
 	 */
-    private static String googleUrl = "jdbc:google:mysql://bankproject-154007:bankproject/bankproject?user=demo&password=demo";
+    private static String googleUrl = "jdbc:google:mysql://kontaktmanagergruppe3:europe-west:kontaktmanagergruppe3/itprojekt?user=root&password=1234";
     private static String localUrl = "jdbc:mysql://127.0.0.1:3306/itprojektgruppe3?user=root&password=";
 
     /**
