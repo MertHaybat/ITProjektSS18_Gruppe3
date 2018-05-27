@@ -249,7 +249,10 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * Auslesen aller Eigenschaften.
+	 * Auslesen aller Eigenschaften
+	 * 
+	 * @return Vector des Typs Eigenschaft
+	 * @throws IllegalArgumentException
 	 */
 	@Override
 	public Vector<Eigenschaft> findAllEigenschaften() throws IllegalArgumentException {
@@ -257,7 +260,10 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * Auslesen aller Kontakte.
+	 * Auslesen aller Kontakte
+	 * 
+	 * @return Vector des Typs Kontakt
+	 * @throws IllegalArgumentException
 	 */
 	@Override
 	public Vector<Kontakt> findAllKontakte() throws IllegalArgumentException {
@@ -744,6 +750,17 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return this.eigenschaftMapper.findEigenschaftByEigenschaftID(eigenschaftID);
 	}
 
+	/**
+	 * Auslesen aller Kontakte mit bestimmten Eigenschaften 
+	 * 		und Eigenschaftsauspraegungen
+	 * 
+	 * @param e;
+	 * 			Objekt der Klasse Eigenschaft
+	 * @param auspraegung;
+	 * 			Objekt der Klasse Eigenschaftsauspraegung
+	 * @return Vector des Typs Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Kontakt> findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(Eigenschaft e,
 			Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException {
