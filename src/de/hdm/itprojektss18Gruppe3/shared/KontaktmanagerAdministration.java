@@ -18,7 +18,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
  * Synchrone Schnittstelle für eine RPC-fähige Klasse zur Verwaltung von Kontakten.
  * 
  * @version 1.30 11 May 2018
- * @author Thomas, Mert
+ * @author Thomas, Mert, giuseppeggalati
  */
 @RemoteServiceRelativePath("kontaktmanager")
 public interface KontaktmanagerAdministration extends RemoteService {
@@ -439,7 +439,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	
 	public Vector<Kontakt> findAllKontaktByNutzerID(int nutzerID) throws IllegalArgumentException;
 	
-	Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID);
+	public Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID);
 
 	public void deleteEigenschaftsauspraegungById(Eigenschaftsauspraegung e) throws IllegalArgumentException;
 
@@ -465,7 +465,30 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	
 	public void deleteKontaktKontaktliste(KontaktKontaktliste kon) throws IllegalArgumentException;
 	
+	/**
+	 * Alle Eigenschaften eines Kontakts anzeigen lassen. Dies ist die Suchfunktion.
+	 * 
+	 * @param k; Objekt der Klasse Kontakt
+	 * @return Vector des Typs Eigenschaft
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Eigenschaft> findAllEigenschaftByKontakt(Kontakt k) throws IllegalArgumentException;
-
+	
+	/**
+	 * Löschen einer Kontaktliste mit der TeilhaberschaftID
+	 * 
+	 * @param k; Objekt der Klasse Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteKontaktlisteByTeilhaberschaftID(Kontaktliste k) throws IllegalArgumentException;
+	
+	/**
+	 * Alle Kontaktlisten von einer Teilhaberschaft anzeigen lassen. Dies ist die Suchfunktion.
+	 * 
+	 * @param teilhabenderID; Objekt der Klasse Teilhaberschaft
+	 * @return Vector des Typs Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	public Vector <Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID) throws IllegalArgumentException;	
 
 }
