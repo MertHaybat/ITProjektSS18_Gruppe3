@@ -83,35 +83,27 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private CellTable<Eigenschaft> eigenschaftCT = new CellTable<Eigenschaft>();
 	private ListDataProvider<Nutzer> nutzerDataProvider = new ListDataProvider<Nutzer>(nutzerSuggestbox);
 	
-//	public TeilhaberschaftDialogBox(List <Kontakt> kontakt){
-//		Kontakt k1 = new Kontakt();
-//		Kontakt k2 = new Kontakt();
-//		k1.setId(3);
-//		k1.setId(4);
-//		kontakt.add(k1);
-//		kontakt.add(k2);
-//		ftTeilhaberschaft.setWidget(1, 0, eigenschaftCT);
-//		run();
-//	}
+	public TeilhaberschaftDialogBox(Kontakt kontakt){
+		kontaktNeu = kontakt;
+		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontaktNeu, new EigenschaftAuspraegungCallback());
+		run();
+	}
 	
 	public TeilhaberschaftDialogBox(List<Kontakt> kontakt) {
-//		kontakt.setId(3);
-//		kontaktNeu = kontakt;
-	
-		Window.alert(kontakt.size()+"");
+
 		for (Kontakt kontakte: kontakt) {
 			
 			kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakte, new EigenschaftAuspraegungCallback());
 		}
 		
 
-		ftTeilhaberschaft.setWidget(1, 0, kt);
 		run();
 	}
 
 	public void run() {
 		setText("Wählen Sie die zu teilenden Eigenschaften aus sowie die Person, mit der Sie den Kontakt teilen möchten");
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
+		ftTeilhaberschaft.setWidget(1, 0, kt);
 		ftTeilhaberschaft.setWidget(2, 0, lb2);
 		ftTeilhaberschaft.setWidget(3, 0, box);
 		ftTeilhaberschaft.setWidget(4, 1, nutzerHinzufuegenBt);
@@ -282,14 +274,15 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onSuccess(Vector<EigenschaftsAuspraegungHybrid> result) {
-			Window.alert("result " + result.size());
-			for (EigenschaftsAuspraegungHybrid eigenschaftsAuspraegungHybrid : result) {
-				
-				hybridListe.add(eigenschaftsAuspraegungHybrid);
-			}
-			kt.setRowData(0, hybridListe);
-			kt.setRowCount(hybridListe.size(), true);
-			kt.redraw();
+			
+			//TODO
+//			for (EigenschaftsAuspraegungHybrid eigenschaftsAuspraegungHybrid : result) {
+//				
+//				hybridListe.add(eigenschaftsAuspraegungHybrid);
+//			}
+			kt.setRowData(0, result);
+			kt.setRowCount(result.size(), true);
+//			kt.redraw();
 
 		}
 
