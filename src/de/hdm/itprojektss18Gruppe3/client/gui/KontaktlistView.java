@@ -61,14 +61,16 @@ public class KontaktlistView extends MainFrame {
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
-	private Button deleteKontaktlisteButton = new Button("Kontakt entfernen");
+	private Button deleteKontaktlisteButton = new Button ("Kontaktliste löschen");
 	private Button addKontaktToKontaktlisteButton = new Button("Kontakt hinzufügen");
+	private Button deleteKontaktFromKontaktlisteButton = new Button("Kontakt entfernen");
 	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private ArrayList<Kontakt> kontakteByKontaktlisteToDisplay = new ArrayList<Kontakt>();
 	private static ProvidesKey<Kontakt> keyProvider;
 	private CellTable<Kontakt> kontaktCellTable = new CellTable<Kontakt>(13, CellTableResources.INSTANCE, keyProvider);
 	private ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
+	private Kontaktliste selected = null;
 
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
@@ -87,13 +89,15 @@ public class KontaktlistView extends MainFrame {
 		 */
 		menuBarHeadlineLabel.setStylePrimaryName("menuBarLabel");
 		addKontaktlisteButton.setStylePrimaryName("mainButton");
-		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
 		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
+		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
+		deleteKontaktFromKontaktlisteButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
 		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
 		menuBarContainerFlowPanel.add(addKontaktlisteButton);
-		menuBarContainerFlowPanel.add(addKontaktToKontaktlisteButton);
 		menuBarContainerFlowPanel.add(deleteKontaktlisteButton);
+		menuBarContainerFlowPanel.add(addKontaktToKontaktlisteButton);
+		menuBarContainerFlowPanel.add(deleteKontaktFromKontaktlisteButton);
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 		menuBarContainerFlowPanel.add(box);
 		menuBarContainerFlowPanel.setStylePrimaryName("menuBarContainerFlowPanel");
@@ -116,7 +120,8 @@ public class KontaktlistView extends MainFrame {
 		kontaktlistenCellList.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event) {
-				Kontaktliste selected = selectionModel.getSelectedObject();
+				selected = selectionModel.getSelectedObject();
+				deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(selected));
 				if (selected != null) {
 
 					kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(selected, new AsyncCallback<Vector<Kontakt>>() {
@@ -243,8 +248,9 @@ public class KontaktlistView extends MainFrame {
 		contentViewContainer.add(kontaktlistViewPanel);
 		contentViewContainer.add(allKontaktViewPanel);
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
+		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(selected));
 		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
-		deleteKontaktlisteButton.addClickHandler(new deleteKontaktFromKontaktlisteClickHandler());
+		deleteKontaktFromKontaktlisteButton.addClickHandler(new deleteKontaktFromKontaktlisteClickHandler());
 		addTeilhaberschaftKontaktButton.addClickHandler(new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable));
 
 		//new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable)
@@ -264,6 +270,24 @@ public class KontaktlistView extends MainFrame {
 			dbox.center();
 		}
 	}
+	
+	class deleteKontaktlisteClickHandler implements ClickHandler {
+
+		private Kontaktliste kontaktlisteToDelete = null;
+		
+		public deleteKontaktlisteClickHandler(Kontaktliste selected) {
+			kontaktlisteToDelete = selected;
+		}
+		
+		@Override
+		public void onClick(ClickEvent event) {
+			DeleteKontaktlisteDialogBox deleteKontakt = new DeleteKontaktlisteDialogBox(kontaktlisteToDelete);
+			deleteKontakt.center();
+
+		}
+
+	}
+	
 
 	class addKontaktToKontaktlisteClickHandler implements ClickHandler {
 
@@ -278,8 +302,8 @@ public class KontaktlistView extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			KontaktFromKontaktlisteLoeschenDialogBox listeLoeschen = new KontaktFromKontaktlisteLoeschenDialogBox();
-			listeLoeschen.center();
+			KontaktFromKontaktlisteLoeschenDialogBox kontaktFromKKontaktlisteLoeschen = new KontaktFromKontaktlisteLoeschenDialogBox();
+			kontaktFromKKontaktlisteLoeschen.center();
 	}
 	}
 
