@@ -482,13 +482,9 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	public void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t) throws IllegalArgumentException;
 	
-	/**
-	 * Alle Kontaktlisten von einer Teilhaberschaft anzeigen lassen. Dies ist die Suchfunktion.
-	 * 
-	 * @param teilhabenderID; Objekt der Klasse Teilhaberschaft
-	 * @return Vector des Typs Kontaktliste
-	 * @throws IllegalArgumentException
-	 */
-	public Vector <Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID) throws IllegalArgumentException;	
+	Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int teilhabenderID) throws IllegalArgumentException;
+
+	Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException;
+
 
 }

@@ -160,7 +160,9 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t, AsyncCallback<Void> callback);
 
-	void findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID, AsyncCallback<Vector<Kontaktliste>> callback);
+	void findKontaktlisteByID(int kontaktlisteID, AsyncCallback<Kontaktliste> callback);
+
+	void findAllKontaktlisteByTeilhaberschaft(int teilhabenderID, AsyncCallback<Vector<Kontaktliste>> callback);
 
 	
 	

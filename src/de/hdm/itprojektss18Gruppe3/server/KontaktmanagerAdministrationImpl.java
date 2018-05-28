@@ -1150,10 +1150,40 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	
 
 	@Override
-	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID)
+	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int teilhabenderID)
 			throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		return null;
+		Vector <Teilhaberschaft> teilhaberschaftVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Kontaktliste> kontaktlisteVector = new Vector<Kontaktliste>();
+		
+		for(Teilhaberschaft teilhaberschaft : teilhaberschaftVector) {
+			kontaktlisteVector.add(findKontaktlisteByID(teilhaberschaft.getKontaktlisteID()));
+		}
+
+		return kontaktlisteVector;
+		
 	}
+
+
+//	@Override
+//	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID)
+//			throws IllegalArgumentException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
+	@Override
+	public Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return this.kontaktlisteMapper.findKontaktlisteByID(kontaktlisteID);
+	}
+
+//	@Override
+//	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID)
+//			throws IllegalArgumentException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
 
 }
