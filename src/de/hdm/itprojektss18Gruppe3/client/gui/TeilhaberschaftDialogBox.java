@@ -67,9 +67,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private Label lb2 = new Label("Mit wem möchten Sie diese Eigenschaften teilen: ");
 	private Button b1 = new Button("Teilen");
 	private Button b2 = new Button("Abbrechen");
-	private Button nutzerHinzufuegenBt = new Button("+");
 	private CellTable<Nutzer> selectedNutzerCT = new CellTable<Nutzer>();
-	private List<EigenschaftsAuspraegungHybrid> hybridListe = new ArrayList<>();
 	private Kontakt kontaktNeu = new Kontakt();
 
 	private KontaktCellTable kt = new KontaktCellTable(kontaktNeu);
@@ -95,39 +93,20 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 			
 			kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakte, new EigenschaftAuspraegungCallback());
 		}
-		
-
+		kontaktNeu = kontakt.get(kontakt.size()-1);
 		run();
 	}
 
 	public void run() {
+		
 		setText("Wählen Sie die zu teilenden Eigenschaften aus sowie die Person, mit der Sie den Kontakt teilen möchten");
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
 		ftTeilhaberschaft.setWidget(1, 0, kt);
 		ftTeilhaberschaft.setWidget(2, 0, lb2);
 		ftTeilhaberschaft.setWidget(3, 0, box);
-		ftTeilhaberschaft.setWidget(4, 1, nutzerHinzufuegenBt);
 		ftTeilhaberschaft.setWidget(4, 0, selectedNutzerCT);
 		ftTeilhaberschaft.setWidget(5, 1, b1);
 		ftTeilhaberschaft.setWidget(5, 2, b2);
-
-
-
-//		Column<Eigenschaft, Boolean> EigenschaftcbColumn = new Column<Eigenschaft, Boolean>(
-//				cbCell) {
-//			@Override
-//			public Boolean getValue(Eigenschaft object) {
-//				return eigenschaftModel.isSelected(object);
-//			}
-//		};
-//		Column<Eigenschaft, String> eigenschaftColumn = new Column<Eigenschaft, String>(new TextCell()) {
-//
-//			@Override
-//			public String getValue(Eigenschaft object) {
-//				return object.getBezeichnung();
-//			}
-//		};
-		
 		
 		Column<EigenschaftsAuspraegungHybrid, Boolean> cbColumn = new Column<EigenschaftsAuspraegungHybrid, Boolean>(
 				cbCell) {
@@ -164,7 +143,6 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		box.addKeyPressHandler(new NutzerHinzfuegenKeyPressHandler());
 		b1.addClickHandler(new insertTeilhaberschaftClickHandler());
 		b2.addClickHandler(new closeDialogBoxClickHandler());
-		nutzerHinzufuegenBt.addClickHandler(new NutzerHinzufuegenClickHandler());
 		kt.insertColumn(0, cbColumn);
 
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
@@ -209,13 +187,18 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		@Override
 		public void onKeyPress(KeyPressEvent event) {
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-				Nutzer nutzer = new Nutzer();
-				nutzer.setMail(box.getValue());
-
-				nutzerSuggestbox.add(nutzer);
-
-				selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-				selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+				if(box.getValue() == ""){
+					Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
+				} else {
+					
+					Nutzer nutzer = new Nutzer();
+					nutzer.setMail(box.getValue());
+					
+					nutzerSuggestbox.add(nutzer);
+					box.setValue("");
+					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
+					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+				}
 				// ausgewaehlteNutzerCt.redraw();
 			}
 
@@ -223,22 +206,6 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 	}
 
-	public class NutzerHinzufuegenClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			// TODO
-			// Nutzer nutzer = new Nutzer();
-			// nutzer.setMail(box.getValue());
-			//
-			// nutzerSuggestbox.add(nutzer);
-			//
-			// ausgewaehlteNutzerCt.setRowCount(nutzerSuggestbox.size(), true);
-			// ausgewaehlteNutzerCt.setRowData(0, nutzerSuggestbox);
-			// ausgewaehlteNutzerCt.redraw();
-		}
-
-	}
 	public class EigenschaftPreviewClickHander implements Handler<Eigenschaft> {
 		@Override
 		public void onCellPreview(CellPreviewEvent<Eigenschaft> event) {
@@ -309,6 +276,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 			}
 			for (int i = 0; i < eListe.size(); i++) {
 				for (int o = 0; o < nutzerSuggestbox.size(); o++) {
+					
 					kontaktmanagerVerwaltung.checkEmail(nutzerSuggestbox.get(o).getMail(), new FindNutzerByEmail());
 					kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(),
 							eListe.get(i).getAuspraegungid(), nutzerausdb.getId(), nutzer.getId(),

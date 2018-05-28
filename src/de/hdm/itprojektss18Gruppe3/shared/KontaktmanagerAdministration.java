@@ -39,19 +39,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	public Nutzer createNutzer(String mail) throws IllegalArgumentException;
 	
-	/**
-	 * Methode zum Anlegen eines neuen Kontakts.
-	 * @param name
-	 * @param erzeugungsdatum
-	 * @param modifikationsdatum
-	 * @param status
-	 * @param nutzerID
-	 * @return Kontaktobjekt
-	 * @throws IllegalArgumentException
-	 */
-	public Kontakt createKontakt(String name, Date erzeugungsdatum,
-			Date modifikationsdatum, int status, int nutzerID)
-				throws IllegalArgumentException;
+	Kontakt createKontakt(String name, int status, int nutzerID);
 	
 	/**
 	 * Auslesen aller Kontakte.

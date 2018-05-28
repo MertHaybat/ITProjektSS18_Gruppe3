@@ -26,6 +26,8 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
+	private HorizontalPanel hPanelBar = new HorizontalPanel();
+	private HorizontalPanel hPanelLogout = new HorizontalPanel();
 	private HorizontalPanel selectPanel = new HorizontalPanel();
 	private VerticalPanel vPanelBar = new VerticalPanel();
 	private Label loginLabel = new Label(
@@ -37,6 +39,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 
+	private Button logoutButton = new Button("Ausloggen");
 	private Button zumReportGenerator = new Button("Report-Generator");
 	private Button zumKontaktmanager = new Button("Kontaktmanager");
 	private Button loginButton = new Button("Login");
@@ -61,16 +64,27 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 	private void loadKontaktmanager() {
 		zurClientAuswahl.addClickHandler(new ClientAuswahlClickHandler());
+		logoutButton.addClickHandler(new logoutClickHandler());
 		zurClientAuswahl.setStylePrimaryName("mainButton");
 		zurClientAuswahl.setWidth("150px");
-		vPanelBar.add(zurClientAuswahl);
+		logoutButton.setStylePrimaryName("logoutButton");
+		hPanelBar.add(zurClientAuswahl);
+		hPanelBar.add(logoutButton);
 		RootPanel.get("content").clear();
 		RootPanel.get("leftmenutree").clear();
-		RootPanel.get("menubar").add(vPanelBar);
-
+		RootPanel.get("menubar").add(hPanelBar);
 		MenuTree menutree = new MenuTree();
 		signOutLink.setHref(loginInfo.getLogoutUrl());
-		menutree.addWidget(signOutLink);
+	}
+
+	public class logoutClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			signOutLink.setHref(loginInfo.getLogoutUrl());
+			Window.open(signOutLink.getHref(), "_self", "");
+
+		}
 	}
 
 	class ClientAuswahlClickHandler implements ClickHandler {
@@ -127,7 +141,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			loginInfo = result;
 			if (loginInfo.isLoggedIn()) {
 				kontaktmanagerVerwaltung.checkEmail(loginInfo.getEmailAddress(), new FindNutzerCallback());
-			
+
 			} else {
 				loadLogin();
 			}
@@ -157,11 +171,10 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 				zumReportGenerator.addClickHandler(new zumReportClickHandler());
 				RootPanel.get("content").add(selectPanel);
 				Cookies.setCookie("email", result.getMail());
-				Cookies.setCookie("id", result.getId()+"");
+				Cookies.setCookie("id", result.getId() + "");
 			} else {
 				CreateNutzerDialogBox dialogbox = new CreateNutzerDialogBox(loginInfo.getEmailAddress());
 				dialogbox.center();
-
 
 			}
 		}
@@ -198,7 +211,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			public void onSuccess(Nutzer result) {
 				Window.alert("Ihr Nutzer wurde erfolgreich erstellt");
 				Cookies.setCookie("email", result.getMail());
-				Cookies.setCookie("id", result.getId()+"");
+				Cookies.setCookie("id", result.getId() + "");
 				loadKontaktmanager();
 				hide();
 			}

@@ -19,7 +19,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 public class MenuTree {
 	private VerticalPanel vPanel = new VerticalPanel();
 	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
-	private HTML instructionMessage = new HTML("<br>Bitte melde dich mit deinem Google Konto an");
+	private HTML instructionMessage = new HTML("<br>Hier kannst du deine Kontakte verwalten.");
 
 	private static KontaktmanagerAdministrationAsync verwaltung = ClientsideSettings.getKontaktVerwaltung();
 
@@ -51,13 +51,13 @@ public class MenuTree {
 		kontakte.setText("Kontakte");
 		kontaktlisten.setText("Kontaktlisten");
 		teilhaberschaften.setText("Teilhaberschaften");
-		kontakte.addTextItem("Neuer Kontakt");
+//		kontakte.addTextItem("Neuer Kontakt");
 		kontakte.addTextItem("Alle Kontakte");
 
 		kontaktlisten.addTextItem("Neue Kontaktliste");
 		kontaktlisten.addTextItem("Alle Kontaktlisten");
 
-		teilhaberschaften.addTextItem("Neue Teilhaberschaft");
+//		teilhaberschaften.addTextItem("Neue Teilhaberschaft");
 		teilhaberschaften.addTextItem("Alle Teilhaberschaften");
 
 		navigationTree.addItem(kontakte);
@@ -83,11 +83,9 @@ public class MenuTree {
 				
 				switch (item.getText()) {
 				
-								case "Neuer Kontakt":
-									KontaktForm kontaktForm = new KontaktForm();
-									RootPanel.get("content").clear();
-									RootPanel.get("content").add(kontaktForm);
-									return;
+//								case "Neuer Kontakt":
+//									KontaktForm kontaktForm = new KontaktForm();
+//									return;
 				
 								case "Alle Kontakte":
 									AllKontaktView allKontaktView = new AllKontaktView();
@@ -123,7 +121,5 @@ public class MenuTree {
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(vPanel);
 	}
-	public void addWidget (Widget w){
-		this.vPanel.add(w);
-	}
 }
+
