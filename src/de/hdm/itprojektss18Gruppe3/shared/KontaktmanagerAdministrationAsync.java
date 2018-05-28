@@ -30,8 +30,7 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void createNutzer(String mail, AsyncCallback<Nutzer> callback);
 
-	void createKontakt(String name, Date erzeugungsdatum, Date modifikationsdatum, int status, int nutzerID,
-			AsyncCallback<Kontakt> callback);
+	void createKontakt(String name, int status, int nutzerID, AsyncCallback<Kontakt> callback);
 
 	void createKontaktliste(String bezeichnung, int nutzerID, AsyncCallback<Kontaktliste> callback);
 

@@ -1,5 +1,6 @@
 package de.hdm.itprojektss18Gruppe3.client;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -11,10 +12,9 @@ public abstract class MainFrame extends VerticalPanel {
 	     * Superklasse eine Initialisierung vorzunehmen.
 	     */
 	    super.onLoad();
-	    
 	    RootPanel.get("menubar").clear();
-	    RootPanel.get("content").clear();
-	    run();
+	    RootPanel.get("content").clear();	  
+	    this.run();
 	}
 
 	protected abstract void run();

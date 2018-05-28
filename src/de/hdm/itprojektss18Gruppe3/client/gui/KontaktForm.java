@@ -13,9 +13,12 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -25,10 +28,12 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
+import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 /**
  * Die Klasse "Kontaktformular" beinhaltet einige festgelegten Textboxen, die
@@ -42,7 +47,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
  * @author wahidvanaki
  *
  */
-public class KontaktForm extends VerticalPanel {
+public class KontaktForm extends MainFrame {
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
@@ -50,14 +55,18 @@ public class KontaktForm extends VerticalPanel {
 
 	private Button addAuspraegung = new Button("+");
 	private Button saveChanges = new Button("Speichern");
-	private Button cancelChanges = new Button("Abbrechen");
-
+	private Button deleteContact = new Button("Kontakt Löschen");
+	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
+	
+	private VerticalPanel vPanel = new VerticalPanel();
+	private VerticalPanel vPanel2 = new VerticalPanel();
+	private HorizontalPanel hPanel = new HorizontalPanel();
+	
 	private Label modifikationsdatum = new Label("Modifikationsdatum: ");
 	private Label erstellungsdatum = new Label("Erstellungsdatum: ");
 	private Label kontaktNameLabel = new Label("Kontaktname: ");
 	private TextBox kontaktNameBox = new TextBox();
 
-	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
 
 	private final NoSelectionModel<EigenschaftsAuspraegungHybrid> ssmAuspraegung = new NoSelectionModel<EigenschaftsAuspraegungHybrid>();
@@ -66,17 +75,13 @@ public class KontaktForm extends VerticalPanel {
 	private Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
 
 	public KontaktForm() {
-		// TODO Statt der 1 muss die NutzerID rein.. Cookies kommen aber noch!!!
-		kontaktmanagerVerwaltung.createKontakt("Neuer Kontakt", new Date(), new Date(), 0, 1,
+		Nutzer nutzer = new Nutzer();
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+		nutzer.setMail(Cookies.getCookie("mail"));
+		kontaktmanagerVerwaltung.createKontakt("Neuer Kontakt", 0, nutzer.getId(),
 				new CreateKontaktCallback());
-		this.add(kontaktNameLabel);
-		this.add(kontaktNameBox);
-		this.add(celltable);
 		
-		this.add(addAuspraegung);
-		this.add(saveChanges);
-		this.add(cancelChanges);
-		run();	
+		super.onLoad();
 	}
 
 	public KontaktForm(Kontakt kontakt) {
@@ -85,28 +90,20 @@ public class KontaktForm extends VerticalPanel {
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
 		modifikationsdatum.setText("Zuletzt geändert am: " + kontakt.getModifikationsdatum());
 		erstellungsdatum.setText("Erstellt am: " + kontakt.getErzeugungsdatum());
-		this.add(kontaktNameLabel);
-		this.add(kontaktNameBox);
-		this.add(celltable);
 		
-		this.add(addAuspraegung);
-		this.add(saveChanges);
-		this.add(cancelChanges);
 
-		this.add(modifikationsdatum);
-		this.add(erstellungsdatum);
-		run();
+		vPanel2.add(modifikationsdatum);
+		vPanel2.add(erstellungsdatum);
+		super.onLoad();
+		
 	}
 
 	public void run() {
-		
-		
-		RootPanel.get("menubar").clear();
-		RootPanel.get("menubar").add(zurueckZuAllKontaktView);
+		addAuspraegung.setStylePrimaryName("addButton");
+		zurueckZuAllKontaktView.setStylePrimaryName("mainButton");
 		// TODO Auto-generated method stub
 		EditTextCell editEigenschaft = new EditTextCell(); 
 		EditTextCell editAuspraegung = new EditTextCell();
-
 		Column<EigenschaftsAuspraegungHybrid, String> wertEigenschaft = new Column<EigenschaftsAuspraegungHybrid, String>(
 				editEigenschaft) {
 			@Override
@@ -166,7 +163,7 @@ public class KontaktForm extends VerticalPanel {
 
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
 		saveChanges.addClickHandler(new UpdateAuspraegungClickHandler());
-		cancelChanges.addClickHandler(new CancelChangesClickHandler());
+		deleteContact.addClickHandler(new DeleteChangesClickHandler());
 
 		zurueckZuAllKontaktView.addClickHandler(new ZurueckClickHandler());
 
@@ -175,14 +172,26 @@ public class KontaktForm extends VerticalPanel {
 		celltable.addColumn(wertAuspraegung, "");
 		celltable.setSelectionModel(ssmAuspraegung);
 
+		hPanel.add(zurueckZuAllKontaktView);
+		
+		vPanel.add(kontaktNameLabel);
+		vPanel.add(kontaktNameBox);
+		vPanel.add(celltable);
+		
+		vPanel.add(addAuspraegung);
+		vPanel.add(deleteContact);	
+	
+		
+		RootPanel.get("menubar").add(hPanel);
+		RootPanel.get("content").add(vPanel);
+		RootPanel.get("content").add(vPanel2);
+
 	}
 	private class ZurueckClickHandler implements ClickHandler{
 
 		@Override
 		public void onClick(ClickEvent event) {
 			AllKontaktView allKontaktView = new AllKontaktView();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(allKontaktView);
 		}
 		
 	}
@@ -196,12 +205,13 @@ public class KontaktForm extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Void result) {
-
+			Window.alert("Kontakt wurde erfolgreich gelöscht");
+			AllKontaktView allKontaktView = new AllKontaktView();
 		}
 
 	}
 
-	class CancelChangesClickHandler implements ClickHandler {
+	class DeleteChangesClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
@@ -234,9 +244,9 @@ public class KontaktForm extends VerticalPanel {
 		public void onSuccess(Void result) {
 			// TODO Auto-generated method stub
 			Window.alert("Kontakt wurde erfolgreich abgespeichert");
-			RootPanel.get("content").clear();
-			KontaktForm kontaktForm = new KontaktForm(k);
-			RootPanel.get("content").add(kontaktForm);
+//			RootPanel.get("content").clear();
+//			KontaktForm kontaktForm = new KontaktForm(k);
+//			RootPanel.get("content").add(kontaktForm);
 		}
 
 	}

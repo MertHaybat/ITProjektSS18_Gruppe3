@@ -2,6 +2,8 @@ package de.hdm.itprojektss18Gruppe3.server;
 
 import java.util.Date;
 import java.util.Vector;
+
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss18Gruppe3.server.db.EigenschaftMapper;
@@ -151,13 +153,13 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * 		  	Kontakt
 	 */
 	@Override
-	public Kontakt createKontakt(String name, Date erzeugungsdatum, Date modifikationsdatum, int status, int nutzerID)
+	public Kontakt createKontakt(String name, int status, int nutzerID)
 			throws IllegalArgumentException {
 
 		Kontakt kontakt = new Kontakt();
 		kontakt.setName(name);
-		kontakt.setErzeugungsdatum(erzeugungsdatum);
-		kontakt.setModifikationsdatum(modifikationsdatum);
+		kontakt.setErzeugungsdatum(new Date());
+		kontakt.setModifikationsdatum(new Date());
 		kontakt.setStatus(status);
 		kontakt.setNutzerID(nutzerID);
 
@@ -365,11 +367,21 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			throws IllegalArgumentException {
 		Kontaktliste kontaktliste = new Kontaktliste();
 		kontaktliste.setId(kontaktlisteID);
+		System.out.println("---kontakt---" + kontaktID);
+		System.out.println("---liste---"+kontaktlisteID);
+		
+		
+		
 		
 		Vector<Kontakt> kontakteVector = findAllKontakteByKontaktlisteID(kontaktliste);
 		for (Kontakt kontakt : kontakteVector) {
+			System.out.println("kontakt2" + kontakt.getId());
 			if(kontaktID == kontakt.getId()){
 				kontakteVector.remove(kontakt);
+				for (Kontakt kontakt2 : kontakteVector) {
+					System.out.println("kontakt3" + kontakt2.getId());
+					
+				}
 			}
 		}
 
@@ -377,6 +389,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		for (Kontakt kontakt : kontakteVector) {
 			kliste.setKontaktID(kontakt.getId());
 			kliste.setKontaktlisteID(kontaktlisteID);
+			System.out.println("----kontaktid" + kontakt.getId());
+			System.out.println("---listeid" + kontaktlisteID);
 			this.kontaktKontaktlisteMapper.createKontaktKontaktliste(kliste);
 		}
 		

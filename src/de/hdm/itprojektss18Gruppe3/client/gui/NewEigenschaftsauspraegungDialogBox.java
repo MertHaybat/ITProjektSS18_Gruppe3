@@ -30,7 +30,9 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	private VerticalPanel vPanel2 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private Label eigenschaftLabel = new Label("Eigenschaft: ");
-	private Button erstellen = new Button("erstellen");
+	private Label auspraegungLabel = new Label("Eigenschaftsausprägung: ");
+	private Button erstellen = new Button("Erstellen");
+	private Button abbrechen = new Button("Abbrechen");
 	private TextBox tbEigenschaft = new TextBox();
 	private TextBox tbEigenschaftsauspraegung = new TextBox();
 	
@@ -41,7 +43,6 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	
 	public NewEigenschaftsauspraegungDialogBox (Kontakt k) {
 	kontakt=k;
-	kontakt.setId(6);
 	/**
 	 * Struktur des linken VerticalPanels
 	 */
@@ -52,7 +53,9 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	/**
 	 * Struktur des rechten VerticalPanels 
 	 */
+	vPanel2.add(auspraegungLabel);
 	vPanel2.add(tbEigenschaftsauspraegung);
+	vPanel2.add(abbrechen);
 		
 	/**
 	 * Struktur der gesamten Seite. 
@@ -67,8 +70,20 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	 * Funktionalität des Buttons anlegen. 
 	 */
 	erstellen.addClickHandler(new insertEigenschaftClickHandler());
-
+	abbrechen.addClickHandler(new AbbruchClickHandler());
 	
+	}
+	/**
+	 * ClickHandler um Vorgang abzubrechen und DialogBox zu schließen.
+	 * 
+	 */
+	private class AbbruchClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+			hide();
+		}
+		
 	}
 	
 	/**
