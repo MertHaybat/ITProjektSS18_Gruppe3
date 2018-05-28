@@ -1136,31 +1136,54 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return null;
 	}
 
-	@Override
-	public void deleteKontaktlisteByTeilhaberschaftID(Kontaktliste k) throws IllegalArgumentException {
+	public void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		
 		Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 
-		teilhaberschaft.setTeilhabenderID(k.getId());
+		teilhaberschaft.setTeilhabenderID(t.getId());
 		
 		deleteTeilhaberschaftByKontaktlisteID(teilhaberschaft);
 		
-		this.kontaktlisteMapper.deleteKontaktliste(k);
-			
-
+		this.teilhaberschaftMapper.deleteTeilhaberschaftByKontaktlisteID(t);
 	}
+	
 
-	private void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft teilhaberschaft) {
+	@Override
+	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int teilhabenderID)
+			throws IllegalArgumentException {
 		// TODO Auto-generated method stub
+		Vector <Teilhaberschaft> teilhaberschaftVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Kontaktliste> kontaktlisteVector = new Vector<Kontaktliste>();
+		
+		for(Teilhaberschaft teilhaberschaft : teilhaberschaftVector) {
+			kontaktlisteVector.add(findKontaktlisteByID(teilhaberschaft.getKontaktlisteID()));
+		}
+
+		return kontaktlisteVector;
 		
 	}
 
+
+//	@Override
+//	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID)
+//			throws IllegalArgumentException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
 	@Override
-	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID)
-			throws IllegalArgumentException {
+	public Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		return null;
+		return this.kontaktlisteMapper.findKontaktlisteByID(kontaktlisteID);
 	}
+
+//	@Override
+//	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID)
+//			throws IllegalArgumentException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
 
 }

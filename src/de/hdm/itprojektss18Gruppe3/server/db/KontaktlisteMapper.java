@@ -440,7 +440,55 @@ public class KontaktlisteMapper {
 		 */
 		return result;
 	}
-	
+
+	public Kontaktliste findKontaktlisteByID(int kontaktlisteID) {
+		// TODO Auto-generated method stub
+		
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+
+		Kontaktliste k = new Kontaktliste();
+
+		try {
+			
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE `id` = ?");
+
+			stmt.setInt(1, kontaktlisteID);
+			ResultSet rs = stmt.executeQuery();
+
+			/**
+			 * Für jeden Eintrag im Suchergebnis wird nun ein Kontaktlisten-Objekt
+			 * erstellt.
+			 */
+			if (rs.next()) {
+				Kontaktliste kontaktliste = new Kontaktliste();
+				
+				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
+				kontaktliste.setId(rs.getInt("id"));
+				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
+				k = kontaktliste;
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return k;
+	}
+
 //	/**
 //	 * Die Methode "findAllKontakteByKontaktlisteID" ermöglicht
 //	 * alle Kontaktlisten aus dem Vector<Kontaktliste> über die kontaktlisteid ausgeben.

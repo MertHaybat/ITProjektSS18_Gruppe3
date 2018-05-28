@@ -419,6 +419,42 @@ public class TeilhaberschaftMapper {
 			}
 		}
 	}
+
+	/**
+	 * Delete Methode "deleteTeilhaberschaftByKontaktlisteID" um Teilhaberschaften anhand der Kontaktliste ID zu löschen 
+	 * @param t - Objekt der Klasse Teilhaberschaft - übergibt hier die Teilhaberschaft ID 
+	 * @see deleteTeilhaberschaftByID
+	 */
+	public void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t) {
+		// TODO Auto-generated method stub
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+		
+		try {
+			
+			/**
+			 * Durchführen der Löschoperation 
+			 */
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM teilhaberschaft WHERE kontaktlisteid=?");
+			
+			stmt.setInt(1, t.getKontaktlisteID());
+			stmt.executeUpdate();
+		}
+		catch(SQLException e2) {
+			e2.printStackTrace();
+		}
+		finally {	
+		if (con!=null) 
+			try {
+				con.close();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	
 }
