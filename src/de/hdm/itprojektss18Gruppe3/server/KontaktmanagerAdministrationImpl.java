@@ -1136,25 +1136,18 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return null;
 	}
 
-	@Override
-	public void deleteKontaktlisteByTeilhaberschaftID(Kontaktliste k) throws IllegalArgumentException {
+	public void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		
 		Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 
-		teilhaberschaft.setTeilhabenderID(k.getId());
+		teilhaberschaft.setTeilhabenderID(t.getId());
 		
 		deleteTeilhaberschaftByKontaktlisteID(teilhaberschaft);
 		
-		this.kontaktlisteMapper.deleteKontaktliste(k);
-			
-
+		this.teilhaberschaftMapper.deleteTeilhaberschaftByKontaktlisteID(t);
 	}
-
-	private void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft teilhaberschaft) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID)

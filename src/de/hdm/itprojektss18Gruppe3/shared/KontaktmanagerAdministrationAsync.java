@@ -158,7 +158,7 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findAllEigenschaftByKontakt(Kontakt k, AsyncCallback<Vector<Eigenschaft>> callback);
 
-	void deleteKontaktlisteByTeilhaberschaftID(Kontaktliste k, AsyncCallback<Void> callback);
+	void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t, AsyncCallback<Void> callback);
 
 	void findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID, AsyncCallback<Vector<Kontaktliste>> callback);
 
