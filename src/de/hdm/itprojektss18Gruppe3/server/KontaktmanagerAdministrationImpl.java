@@ -124,9 +124,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * Anlegen eines Nutzers
 	 * 
 	 * @param mail;
-	 * 			ist die Google E-Mail Adresse des Nutzers
-	 * @return Nutzer; Zurückgegeben wird ein Objekt der Klasse
-	 * 		   	Nutzer
+	 *            ist die Google E-Mail Adresse des Nutzers
+	 * @return Nutzer; Zurückgegeben wird ein Objekt der Klasse Nutzer
 	 */
 	@Override
 	public Nutzer createNutzer(String mail) throws IllegalArgumentException {
@@ -139,22 +138,20 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * Anlegen eines Kontakts
 	 * 
 	 * @param name;
-	 * 			ist der Name des Kontakts
+	 *            ist der Name des Kontakts
 	 * @param erzeugungsdatum;
-	 * 			zeigt den Zeitpunkt der Erstellung des Kontakts an
+	 *            zeigt den Zeitpunkt der Erstellung des Kontakts an
 	 * @param modifikationsdatum;
-	 * 			zeigt an, wann der Kontakt zuletzt modifiziert wurde
+	 *            zeigt an, wann der Kontakt zuletzt modifiziert wurde
 	 * @param status;
-	 * 			status sagt aus, ob der Kontakt geteilt oder
-	 * 			nicht geteilt wurde
+	 *            status sagt aus, ob der Kontakt geteilt oder nicht geteilt
+	 *            wurde
 	 * @param nutzerID;
-	 * 			Übergabeparameter des Fremdschlüssels für den Kontakt
-	 * @return Kontakt; Zurückgegeben wird ein Objekt der Klasse 
-	 * 		  	Kontakt
+	 *            Übergabeparameter des Fremdschlüssels für den Kontakt
+	 * @return Kontakt; Zurückgegeben wird ein Objekt der Klasse Kontakt
 	 */
 	@Override
-	public Kontakt createKontakt(String name, int status, int nutzerID)
-			throws IllegalArgumentException {
+	public Kontakt createKontakt(String name, int status, int nutzerID) throws IllegalArgumentException {
 
 		Kontakt kontakt = new Kontakt();
 		kontakt.setName(name);
@@ -170,11 +167,11 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * Anlegen einer Kontaktliste
 	 * 
 	 * @param bezeichnung;
-	 * 			bezeichnung sagt aus, wie die Kontaktliste benannt wurde
+	 *            bezeichnung sagt aus, wie die Kontaktliste benannt wurde
 	 * @param nutzerID;
-	 * 			Übergabeparameter des Fremdschlüssels in der Kontaktliste
+	 *            Übergabeparameter des Fremdschlüssels in der Kontaktliste
 	 * @return Kontaktliste; Zurückgegeben wird ein Objekt der Klasse
-	 * 	       	Kontaktliste
+	 *         Kontaktliste
 	 */
 	@Override
 	public Kontaktliste createKontaktliste(String bezeichnung, int nutzerID) throws IllegalArgumentException {
@@ -191,8 +188,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * Alle Kontaktlisten eines Nutzers anzeigen lassen
 	 * 
 	 * @param nutzerID;
-	 * 			Primärschlüssel des Nutzers, mithilfe dessen die verbundenen
-	 * 			Kontaktlisten des Nutzers angezeigt gesucht werden können.
+	 *            Primärschlüssel des Nutzers, mithilfe dessen die verbundenen
+	 *            Kontaktlisten des Nutzers angezeigt gesucht werden können.
 	 * @return Vector des Typs Kontaktliste
 	 * @throws IllegalArgumentException
 	 */
@@ -205,19 +202,17 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * Anlegen einer Teilhaberschaft
 	 * 
 	 * @param kontaktlisteID;
-	 * 			definiert Kontaktliste, die der Teilhaberschaft
-	 * 		 	angehört
+	 *            definiert Kontaktliste, die der Teilhaberschaft angehört
 	 * @param kontaktID;
-	 * 			definiert den Kontakt, der der Teilhaberschaft
-	 * 			angehört
+	 *            definiert den Kontakt, der der Teilhaberschaft angehört
 	 * @param eigenschaftsauspraegungID;
-	 * 			definiert die Eigenschaftsausprägung, die geteilt wird
+	 *            definiert die Eigenschaftsausprägung, die geteilt wird
 	 * @param teilhabenderID;
-	 * 			definiert den Teilhabenden an der Teilhaberschaft
+	 *            definiert den Teilhabenden an der Teilhaberschaft
 	 * @param eigentuemerID;
-	 * 			definiert den Eigentümer der Teilhaberschaft
+	 *            definiert den Eigentümer der Teilhaberschaft
 	 * @return Teilhaberschaftsobjekt; Zurückgegeben wird ein Objekt der Klasse
-	 * 			Teilhaberschaft
+	 *         Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
 	@Override
@@ -239,8 +234,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * Auslesen von Teilhaberschaften eines Eigentümers
 	 * 
 	 * @param eigentuemerID;
-	 * 			eigentuemerID definiert den Nutzer, der die Teilhaberschaft
-	 * 			erstellt hat
+	 *            eigentuemerID definiert den Nutzer, der die Teilhaberschaft
+	 *            erstellt hat
 	 * @return Vector des Typs Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
@@ -365,36 +360,27 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	@Override
 	public KontaktKontaktliste createKontaktKontaktliste(int kontaktID, int kontaktlisteID)
 			throws IllegalArgumentException {
+		int kontaktCount = 0;
 		Kontaktliste kontaktliste = new Kontaktliste();
 		kontaktliste.setId(kontaktlisteID);
-		System.out.println("---kontakt---" + kontaktID);
-		System.out.println("---liste---"+kontaktlisteID);
-		
-		
-		
-		
+
 		Vector<Kontakt> kontakteVector = findAllKontakteByKontaktlisteID(kontaktliste);
+
 		for (Kontakt kontakt : kontakteVector) {
-			System.out.println("kontakt2" + kontakt.getId());
-			if(kontaktID == kontakt.getId()){
-				kontakteVector.remove(kontakt);
-				for (Kontakt kontakt2 : kontakteVector) {
-					System.out.println("kontakt3" + kontakt2.getId());
-					
-				}
+			if (kontaktID == kontakt.getId()) {
+				kontaktCount++;
 			}
+
+		}
+		if (kontaktCount == 0) {
+			KontaktKontaktliste kliste = new KontaktKontaktliste();
+			kliste.setKontaktlisteID(kontaktlisteID);
+			kliste.setKontaktID(kontaktID);
+			return this.kontaktKontaktlisteMapper.createKontaktKontaktliste(kliste);
+		} else {
+			return null;
 		}
 
-		KontaktKontaktliste kliste = new KontaktKontaktliste();
-		for (Kontakt kontakt : kontakteVector) {
-			kliste.setKontaktID(kontakt.getId());
-			kliste.setKontaktlisteID(kontaktlisteID);
-			System.out.println("----kontaktid" + kontakt.getId());
-			System.out.println("---listeid" + kontaktlisteID);
-			this.kontaktKontaktlisteMapper.createKontaktKontaktliste(kliste);
-		}
-		
-		return null;
 	}
 
 	/**
@@ -765,13 +751,13 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * Auslesen aller Kontakte mit bestimmten Eigenschaften 
-	 * 		und Eigenschaftsauspraegungen
+	 * Auslesen aller Kontakte mit bestimmten Eigenschaften und
+	 * Eigenschaftsauspraegungen
 	 * 
 	 * @param e;
-	 * 			Objekt der Klasse Eigenschaft
+	 *            Objekt der Klasse Eigenschaft
 	 * @param auspraegung;
-	 * 			Objekt der Klasse Eigenschaftsauspraegung
+	 *            Objekt der Klasse Eigenschaftsauspraegung
 	 * @return Vector des Typs Kontakt
 	 * @throws IllegalArgumentException
 	 */
@@ -1134,7 +1120,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	@Override
 	public Vector<Nutzer> findAllNutzerByEmail(String mail) throws IllegalArgumentException {
-		
+
 		return null;
 	}
 
@@ -1142,49 +1128,48 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	public void deleteKontaktKontaktliste(KontaktKontaktliste kon) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktKontaktliste(kon);
-		}
+	}
 
 	@Override
-	public Vector<Eigenschaft> findAllEigenschaftByKontakt(Kontakt k) throws IllegalArgumentException {		
-		
+	public Vector<Eigenschaft> findAllEigenschaftByKontakt(Kontakt k) throws IllegalArgumentException {
+
 		return null;
 	}
 
 	public void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		
+
 		Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 
 		teilhaberschaft.setTeilhabenderID(t.getId());
-		
+
 		deleteTeilhaberschaftByKontaktlisteID(teilhaberschaft);
-		
+
 		this.teilhaberschaftMapper.deleteTeilhaberschaftByKontaktlisteID(t);
 	}
-	
 
 	@Override
 	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int teilhabenderID)
 			throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		Vector <Teilhaberschaft> teilhaberschaftVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Teilhaberschaft> teilhaberschaftVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
 		Vector<Kontaktliste> kontaktlisteVector = new Vector<Kontaktliste>();
-		
-		for(Teilhaberschaft teilhaberschaft : teilhaberschaftVector) {
+
+		for (Teilhaberschaft teilhaberschaft : teilhaberschaftVector) {
 			kontaktlisteVector.add(findKontaktlisteByID(teilhaberschaft.getKontaktlisteID()));
 		}
 
 		return kontaktlisteVector;
-		
+
 	}
 
-
-//	@Override
-//	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID)
-//			throws IllegalArgumentException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	// @Override
+	// public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int
+	// teilhabenderID)
+	// throws IllegalArgumentException {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
 
 	@Override
 	public Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException {
@@ -1192,12 +1177,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return this.kontaktlisteMapper.findKontaktlisteByID(kontaktlisteID);
 	}
 
-//	@Override
-//	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int teilhabenderID)
-//			throws IllegalArgumentException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
+	// @Override
+	// public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int
+	// teilhabenderID)
+	// throws IllegalArgumentException {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
 
 }

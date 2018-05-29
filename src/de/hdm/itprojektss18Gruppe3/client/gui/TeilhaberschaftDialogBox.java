@@ -33,10 +33,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
+import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.addTeilhaberschaftKontaktClickHandler.DeleteKontaktDialogBox.NutzerHinzufuegenKeyPressHandler;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
@@ -71,7 +73,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private Kontakt kontaktNeu = new Kontakt();
 
 	private KontaktCellTable kt = new KontaktCellTable(kontaktNeu);
-
+	
 	private final Handler<EigenschaftsAuspraegungHybrid> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
 
@@ -140,11 +142,12 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		eigenschaftCT.addCellPreviewHandler(new EigenschaftPreviewClickHander());
 		kt.addCellPreviewHandler(new PreviewClickHander());
-		box.addKeyPressHandler(new NutzerHinzfuegenKeyPressHandler());
+		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		b1.addClickHandler(new insertTeilhaberschaftClickHandler());
 		b2.addClickHandler(new closeDialogBoxClickHandler());
 		kt.insertColumn(0, cbColumn);
-
+		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
+		
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
 //		eigenschaftCT.addColumn(EigenschaftcbColumn, "");
 //		eigenschaftCT.addColumn(eigenschaftColumn, "Eigenschaft");
@@ -182,10 +185,12 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 	}
 
-	public class NutzerHinzfuegenKeyPressHandler implements KeyPressHandler {
+	public class NutzerHinzufuegenKeyPressHandler implements KeyPressHandler {
+
 
 		@Override
 		public void onKeyPress(KeyPressEvent event) {
+			// TODO Auto-generated method stub
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
 				if(box.getValue() == ""){
 					Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
@@ -199,10 +204,10 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
 					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
 				}
-				// ausgewaehlteNutzerCt.redraw();
 			}
-
+			
 		}
+		
 
 	}
 

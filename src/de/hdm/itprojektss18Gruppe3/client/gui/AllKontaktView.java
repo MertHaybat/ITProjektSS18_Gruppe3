@@ -2,25 +2,23 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -31,25 +29,23 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
+import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
-import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 public class AllKontaktView extends MainFrame {
 
@@ -61,7 +57,7 @@ public class AllKontaktView extends MainFrame {
 	private Button addKontaktButton = new Button("Neuer Kontakt");
 	private Button deleteKontaktButton = new Button("Kontakt löschen");
 	private Button addKontaktToKontaktlistButton = new Button("+ Kontaktliste");
-	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt Teilen");
+	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private CellTable<Kontakt> allKontakteCellTable = new CellTable<Kontakt>(11, CellTableResources.INSTANCE);
 	private ArrayList<Kontakt> allKontakteSelectedArrayList = new ArrayList<>();
@@ -73,6 +69,8 @@ public class AllKontaktView extends MainFrame {
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 	private MultiSelectionModel<Kontakt> selectionModelCellTable = new MultiSelectionModel<Kontakt>(keyProvider);
+	private Nutzer nutzerausdb = null;
+	
 	/**
 	 * The list of data to display.
 	 */
@@ -383,9 +381,173 @@ public class AllKontaktView extends MainFrame {
 		public void onClick(ClickEvent event) {
 			if (selectedKontakteInCellTable.size() == 0) {
 				Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du teilen möchtest");
-			} else {
+			} else if (selectedKontakteInCellTable.size() == 1) {
 				TeilhaberschaftDialogBox dialogBox = new TeilhaberschaftDialogBox(selectedKontakteInCellTable);
 				dialogBox.center();
+			} else if (selectedKontakteInCellTable.size() > 1){
+				DeleteKontaktDialogBox dBox = new DeleteKontaktDialogBox(selectedKontakteInCellTable);
+				dBox.center();
+			}
+		}
+		
+		public class DeleteKontaktDialogBox extends DialogBox{
+			private VerticalPanel vPanel = new VerticalPanel();
+			private HorizontalPanel hPanel = new HorizontalPanel();
+			private Label abfrage= new Label("Wählen Sie die Teilnehmer aus: ");
+			private Button sichern = new Button("Sichern");
+			private Button abbrechen = new Button("Abbrechen");
+			private ArrayList<Kontakt> kontakt = new ArrayList<>();
+			private List<Nutzer> nutzerListe = new ArrayList<>();
+			
+			private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+			private SuggestBox box = new SuggestBox(oracle);
+			private CellTable<Nutzer> selectedNutzerCT = new CellTable<Nutzer>();
+			private List<Nutzer> nutzerSuggestbox = new ArrayList<>();
+			private ListDataProvider<Nutzer> nutzerDataProvider = new ListDataProvider<Nutzer>(nutzerSuggestbox);
+			
+			
+			
+			public DeleteKontaktDialogBox(ArrayList<Kontakt> k){
+				kontakt=k;
+				Column<Nutzer, String> nutzertxtColumn = new Column<Nutzer, String>(new TextCell()) {
+
+					@Override
+					public String getValue(Nutzer object) {
+						return object.getMail();
+					}
+				};
+				Column<Nutzer, String> buttonColumn1 = new Column<Nutzer, String>(new ButtonCell()) {
+					@Override
+					public String getValue(Nutzer x) {
+						return "x";
+					}
+				};
+				buttonColumn1.setFieldUpdater(new ButtonHandlerFieldUpdate());
+				kontaktmanagerVerwaltung.findAllNutzer(new getAllNutzerCallback());
+				selectedNutzerCT.addColumn(nutzertxtColumn, "");
+				selectedNutzerCT.addColumn(buttonColumn1, "");
+				sichern.addClickHandler(new CreateTeilhaberschaftClickHandler());
+				abbrechen.addClickHandler(new AbortTeilhaberschaftClickHandler());
+				nutzerDataProvider.addDataDisplay(selectedNutzerCT);
+				vPanel.add(abfrage);
+				vPanel.add(box);
+				vPanel.add(selectedNutzerCT);
+				hPanel.add(sichern);
+				hPanel.add(abbrechen);
+				vPanel.add(hPanel);
+				box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
+				box.setStylePrimaryName("gwt-SuggestBox");
+				this.setTitle("Kontakte teilen");
+				this.add(vPanel);
+			}
+			class ButtonHandlerFieldUpdate implements FieldUpdater<Nutzer, String>{
+
+				@Override
+				public void update(int index, Nutzer object, String value) {
+					nutzerDataProvider.getList().remove(object);
+					nutzerDataProvider.refresh();
+					selectedNutzerCT.redraw();
+				}
+				
+			}
+			class getAllNutzerCallback implements AsyncCallback<Vector<Nutzer>> {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onSuccess(Vector<Nutzer> result) {
+					for (Nutzer nutzer : result) {
+						nutzerListe.add(nutzer);
+
+					}
+					for (Nutzer nutzer : nutzerListe) {
+						oracle.add(nutzer.getMail());
+
+					}
+				}
+
+			}
+			public class NutzerHinzufuegenKeyPressHandler implements KeyPressHandler{
+
+				@Override
+				public void onKeyPress(KeyPressEvent event) {
+					if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+						if(box.getValue() == ""){
+							Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
+						} else {
+							
+							Nutzer nutzer = new Nutzer();
+							nutzer.setMail(box.getValue());
+							
+							nutzerSuggestbox.add(nutzer);
+							box.setValue("");
+							selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
+							selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+						}
+					}
+				}
+				
+			}
+			public class FindNutzerByEmail implements AsyncCallback<Nutzer>{
+
+				@Override
+				public void onFailure(Throwable caught) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onSuccess(Nutzer result) {
+					nutzerausdb = result;
+				}
+				
+			}
+			public class CreateTeilhaberschaftClickHandler implements ClickHandler{
+
+				@Override
+				public void onClick(ClickEvent event) {
+					Nutzer nutzer = new Nutzer();
+					nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+					nutzer.setMail(Cookies.getCookie("mail"));
+					for (Kontakt kontakt : kontakt) {
+						
+						for(int i = 0; i < nutzerSuggestbox.size(); i++){
+							kontaktmanagerVerwaltung.checkEmail(nutzerSuggestbox.get(i).getMail(), new FindNutzerByEmail());
+							kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontakt.getId(), 0, 
+									nutzerausdb.getId(), nutzer.getId(), new createTeilhaberschaftCallback());
+							
+						}
+						
+					}
+				}
+				
+			}
+			class createTeilhaberschaftCallback implements AsyncCallback<Teilhaberschaft> {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onSuccess(Teilhaberschaft result) {
+					Window.alert("Teilhaberschaft erfolgreich erstellt");
+					hide();
+				}
+
+			}
+			public class AbortTeilhaberschaftClickHandler implements ClickHandler{
+
+				@Override
+				public void onClick(ClickEvent event) {
+					hide();
+				}
+				
 			}
 		}
 	}

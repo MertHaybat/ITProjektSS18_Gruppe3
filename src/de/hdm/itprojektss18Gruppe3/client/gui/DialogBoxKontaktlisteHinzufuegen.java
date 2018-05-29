@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -16,10 +17,14 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.CellPreviewEvent;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
+import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
@@ -34,17 +39,17 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 	private ArrayList<Kontakt> kontakte = new ArrayList<>();
 	private CellTable<Kontaktliste> kontaktliste = new CellTable<Kontaktliste>();
 	private MultiSelectionModel<Kontaktliste> selectionModel = new MultiSelectionModel<Kontaktliste>();
-	private ArrayList<Kontaktliste> kontaktlisteArraylist = new ArrayList<>();
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
+	private final Handler<Kontaktliste> selectionEventManager = DefaultSelectionEventManager
+			.createCheckboxManager();
 	
 	public DialogBoxKontaktlisteHinzufuegen(ArrayList<Kontakt> k){
 		kontakte=k;
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		nutzer.setMail(Cookies.getCookie("mail"));
-		kontaktliste.setSelectionModel(selectionModel);
-//		kontaktlisteArraylist.addAll(selectionModel.getSelectedSet());
+		kontaktliste.setSelectionModel(selectionModel, selectionEventManager);
 		speichern.addClickHandler(new AddClickHandler());
 		abbrechen.addClickHandler(new AbortClickHandler());
 		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzer.getId(), new AllKontaktlisteByNutzerCallback());
@@ -54,6 +59,8 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 				return object.getBezeichnung();
 			}
 		};
+		
+		kontaktliste.addCellPreviewHandler(new PreviewClickHander());
 		kontaktliste.addColumn(kontaktnameColumn, "Kontaktliste:");
 		vPanel.add(abfrage);
 		vPanel.add(kontaktliste);
@@ -107,10 +114,26 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 
 		@Override
 		public void onSuccess(KontaktKontaktliste result) {
-			Window.alert("Kontakt erfolgreich in die Kontaktliste hinzugefügt.");
+			if(result != null){
+				Window.alert("Kontakt erfolgreich in die Kontaktliste hinzugefügt.");	
+			} else {
+				Window.alert("Kontakt ist bereits in dieser Kontaktliste");
+			}
 			hide();
 		}
 		
+	}
+	public class PreviewClickHander implements Handler<Kontaktliste> {
+		@Override
+		public void onCellPreview(CellPreviewEvent<Kontaktliste> event) {
+			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
+
+				final Kontaktliste value = event.getValue();
+				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
+				event.getDisplay().getSelectionModel().setSelected(value, state);
+				event.setCanceled(true);
+			}
+		}
 	}
 	
 	

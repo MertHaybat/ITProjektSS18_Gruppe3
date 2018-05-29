@@ -84,12 +84,12 @@ public class KontaktKontaktlisteMapper {
 				 */				
 				PreparedStatement stmt1 = con.prepareStatement(
 						"INSERT INTO kontaktkontaktliste(id, kontaktid, kontaktlisteid) "
-						+ "VALUES(?, ?, ?) ",
+						+ "VALUES(NULL, ?, ?) ",
 								
 				Statement.RETURN_GENERATED_KEYS);
-				stmt1.setInt(1, kontaktkontaktliste.getId());
-				stmt1.setInt(2, kontaktkontaktliste.getKontaktID());
-				stmt1.setInt(3, kontaktkontaktliste.getKontaktlisteID());
+//				stmt1.setInt(1, kontaktkontaktliste.getId());
+				stmt1.setInt(1, kontaktkontaktliste.getKontaktID());
+				stmt1.setInt(2, kontaktkontaktliste.getKontaktlisteID());
 				
 				System.out.println(stmt);
 				stmt1.executeUpdate();			
