@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -15,6 +16,7 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 
 /**
  * Die Klasse "KontaktlisteLoeschenDialogBox" soll das Löschen von einem Kontakt aus einer Kontaktliste ermöglichen.
@@ -43,15 +45,15 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	 */
 	private Button bBestaetigen = new Button("Bestätigen");
 	private Button bAbbrechen = new Button("Abbrechen");
-	
+	private Kontaktliste kliste = new Kontaktliste();
 	ArrayList<Kontakt> kontakteToRemoveFromKontaktliste;
-	/**
-	 * Non-Argument Konstruktor
-	 */
 	
-	public KontaktFromKontaktlisteLoeschenDialogBox(ArrayList<Kontakt> kontakteToRemoveFromKontaktliste) {
-		this.kontakteToRemoveFromKontaktliste = kontakteToRemoveFromKontaktliste;
+	public KontaktFromKontaktlisteLoeschenDialogBox(ArrayList<Kontakt> kontakteToRemoveFromKontaktliste, Kontaktliste kontaktliste) {
 		
+		
+		
+		this.kontakteToRemoveFromKontaktliste = kontakteToRemoveFromKontaktliste;
+		this.kliste = kontaktliste;
 		StringBuilder listOfNames = new StringBuilder();
 		for(Kontakt k:kontakteToRemoveFromKontaktliste) {
 			listOfNames.append(k.getName() + ", ");
@@ -96,13 +98,18 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	}
 	
 	class deleteKontaktKontaktlisteClickHandler implements ClickHandler {
+		KontaktKontaktliste k = new KontaktKontaktliste();
 
 		@Override	
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
+				for (Kontakt kontakt : kontakteToRemoveFromKontaktliste) {
+					k.setKontaktID(kontakt.getId());
+					k.setKontaktlisteID(kliste.getId());
+					kontaktmanagerVerwaltung.deleteKontaktKontaktliste(k, new deleteKontaktKontaktlisteCallback());
+				
+			}
 			
-			KontaktKontaktliste kontaktKontaktliste = new KontaktKontaktliste();
-			kontaktmanagerVerwaltung.deleteKontaktKontaktliste(kontaktKontaktliste, new deleteKontaktKontaktlisteCallback());
 		}
 	}
 	

@@ -73,6 +73,7 @@ public class KontaktlistView extends MainFrame {
 	private ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
 	private Kontaktliste selected = null;
 
+	private SingleSelectionModel<Kontaktliste> selectionModel = new SingleSelectionModel<Kontaktliste>();
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
@@ -121,7 +122,6 @@ public class KontaktlistView extends MainFrame {
 		 * des Nutzers zu tracken. Die ausgewählten Kontakt Objekte werden dann in einem ArrayList Objekt 
 		 * gespeichert.  
 		 */
-		final SingleSelectionModel<Kontaktliste> selectionModel = new SingleSelectionModel<Kontaktliste>();
 		kontaktlistenCellList.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event) {
@@ -139,12 +139,9 @@ public class KontaktlistView extends MainFrame {
 
 						@Override
 						public void onSuccess(Vector<Kontakt> result) {
-							kontakteByKontaktlisteToDisplay.clear();
-							int id = 0;
 							for(Kontakt k : result)  {
-								k.setId(id);
 								kontakteByKontaktlisteToDisplay.add(k);
-								id++;
+						
 							}
 							kontaktCellTable.setRowCount(kontakteByKontaktlisteToDisplay.size(), true);
 							kontaktCellTable.setRowData(0, kontakteByKontaktlisteToDisplay);		
@@ -319,10 +316,12 @@ public class KontaktlistView extends MainFrame {
 			if(kontakteToRemoveFromKontaktliste.size() == 0) {
 				Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du löschen möchtest");
 			} else {
-			KontaktFromKontaktlisteLoeschenDialogBox kontaktFromKKontaktlisteLoeschen = new KontaktFromKontaktlisteLoeschenDialogBox(kontakteToRemoveFromKontaktliste);
+			KontaktFromKontaktlisteLoeschenDialogBox kontaktFromKKontaktlisteLoeschen = new KontaktFromKontaktlisteLoeschenDialogBox(kontakteToRemoveFromKontaktliste, selectionModel.getSelectedObject());
 			kontaktFromKKontaktlisteLoeschen.center();
+			
+			
 			}
-	}
+		}
 	}
 
 	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {
