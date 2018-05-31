@@ -127,7 +127,6 @@ public class CustomTreeModel implements TreeViewModel{
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
 
 
-
 		welcomeMessage.addStyleName("headline");
 		vPanel.setStylePrimaryName("headlinePanel");
 		vPanel.add(welcomeMessage);
