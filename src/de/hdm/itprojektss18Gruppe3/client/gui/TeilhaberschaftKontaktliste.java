@@ -320,12 +320,6 @@ public class TeilhaberschaftKontaktliste extends MainFrame {
 	// }
 	// }
 
-	/**
-	 * 
-	 * @author ersinbarut Die Methode deleteKontaktlisteByTeilhaberschaftID muss
-	 *         noch implementiert werden !!!
-	 */
-
 	class deleteKontaktlisteClickHandler implements ClickHandler {
 
 		@Override

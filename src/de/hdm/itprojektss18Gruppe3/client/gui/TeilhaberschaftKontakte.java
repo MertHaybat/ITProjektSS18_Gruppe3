@@ -41,6 +41,7 @@ import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
  * @author ersinbarut
  *
  */
+
 public class TeilhaberschaftKontakte extends MainFrame {
 
 	private VerticalPanel vPanel = new VerticalPanel();
@@ -98,7 +99,7 @@ public class TeilhaberschaftKontakte extends MainFrame {
 		allKontakteCellTable.setWidth("1000px");
 
 		// Set the message to display when the table is empty.
-		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakt in Teilhaberschaften"));
+		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte in Teilhaberschaften"));
 
 		// Create a Pager to control the table.
 
