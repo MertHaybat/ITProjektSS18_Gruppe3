@@ -1,5 +1,6 @@
 package de.hdm.itprojektss18Gruppe3.client.gui;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -29,6 +31,10 @@ import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
+import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.KontaktDeleteClickHandler.DeleteKontaktDialogBox;
+import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.KontaktDeleteClickHandler.DeleteKontaktDialogBox.AbortDeleteClickHandler;
+import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.KontaktDeleteClickHandler.DeleteKontaktDialogBox.DeleteKontaktCallback;
+import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.KontaktDeleteClickHandler.DeleteKontaktDialogBox.DeleteKontaktClickHandler;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
@@ -55,7 +61,7 @@ public class KontaktForm extends MainFrame {
 
 	private Button addAuspraegung = new Button("+");
 	private Button saveChanges = new Button("Speichern");
-	private Button deleteContact = new Button("Kontakt Löschen");
+	private Button deleteContact = new Button("Abbrechen");
 	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
 	
 	private VerticalPanel vPanel = new VerticalPanel();
@@ -196,32 +202,91 @@ public class KontaktForm extends MainFrame {
 		
 	}
 
-	class DeleteKontakt implements AsyncCallback<Void> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			Window.alert("Server Fehler: " + caught.getMessage());
-		}
-
-		@Override
-		public void onSuccess(Void result) {
-			Window.alert("Kontakt wurde erfolgreich gelöscht");
-			AllKontaktView allKontaktView = new AllKontaktView();
-		}
-
-	}
+//	class DeleteKontakt implements AsyncCallback<Void> {
+//
+//		@Override
+//		public void onFailure(Throwable caught) {
+//			Window.alert("Server Fehler: " + caught.getMessage());
+//		}
+//
+//		@Override
+//		public void onSuccess(Void result) {
+//			Window.alert("Kontakt wurde erfolgreich gelöscht");
+//			AllKontaktView allKontaktView = new AllKontaktView();
+//		}
+//
+//	}
 
 	class DeleteChangesClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
+		
+			
+			DeleteKontaktDialogBox db = new DeleteKontaktDialogBox();
+			db.center();
+			
 
-			kontaktmanagerVerwaltung.deleteKontaktByOwner(k, new DeleteKontakt());
+//			kontaktmanagerVerwaltung.deleteKontaktByOwner(k, new DeleteKontakt());
 
 		}
 
 	}
+	
+	public class DeleteKontaktDialogBox extends DialogBox{
+		private VerticalPanel vPanel = new VerticalPanel();
+		private HorizontalPanel hPanel = new HorizontalPanel();
+		private Label abfrage= new Label("Sind Sie sicher, dass Sie diesen Vorgang abbrechen "
+				+ "und Ihre Änderungen verwerfen möchten?");
+		private Button ja = new Button("Ja");
+		private Button nein = new Button("Nein");
+		
+		public DeleteKontaktDialogBox(){
+			ja.addClickHandler(new DeleteKontaktClickHandler());
+			nein.addClickHandler(new AbortDeleteClickHandler());
+			vPanel.add(abfrage);
+			hPanel.add(ja);
+			hPanel.add(nein);
+			vPanel.add(hPanel);
+			this.setTitle("Vorgang abbrechen");
+			this.add(vPanel);
+		}
+		
+		public class AbortDeleteClickHandler implements ClickHandler{
 
+			@Override
+			public void onClick(ClickEvent event) {
+				hide();
+			}
+			
+		}
+		public class DeleteKontaktClickHandler implements ClickHandler{
+
+			@Override
+			public void onClick(ClickEvent event) {
+		
+					kontaktmanagerVerwaltung.deleteKontaktByOwner(k, new DeleteKontaktCallback());					
+				}
+			}
+			
+		
+		public class DeleteKontaktCallback implements AsyncCallback<Void>{
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Der Vorgang konnte nicht abgebrochen werden: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("Der Vorgang wurde erfolgreich abgebrochen.");
+				hide();
+				AllKontaktView allKontaktView = new AllKontaktView();
+			}
+			
+		}
+		
+	}
 	class UpdateAuspraegungClickHandler implements ClickHandler {
 
 		@Override
