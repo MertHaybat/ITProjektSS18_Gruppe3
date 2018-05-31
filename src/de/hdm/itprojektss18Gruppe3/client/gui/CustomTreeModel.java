@@ -92,7 +92,6 @@ public class CustomTreeModel implements TreeViewModel{
 		public void onClick(ClickEvent event) {
 			AllKontaktView akv = new AllKontaktView();
 
-			
 		}	
 	}
 

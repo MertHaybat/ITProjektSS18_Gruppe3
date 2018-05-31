@@ -8,6 +8,7 @@ import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -33,15 +34,19 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
+import de.hdm.itprojektss18Gruppe3.client.gui.TeilhaberschaftDialogBox.PreviewClickHander;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
+import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -107,7 +112,7 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.setSelectionModel(selectionModelCellTable,
 				DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
 		selectionModelCellTable.addSelectionChangeHandler(new SelectionChangeHandlerCellTable());
-
+		allKontakteCellTable.addCellPreviewHandler(new PreviewClickHander());
 		/*
 		 * Menüleiste mit den Buttons für die Anlage von einer neuen
 		 * Kontaktliste und dem Löschen einer Kontaktliste erzeugen und dem
@@ -189,7 +194,7 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.setColumnWidth(checkColumn, 20, Unit.PX);
 		allKontakteCellTable.addColumn(kontaktnameColumn, "Kontaktname");
 		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
-		allKontakteCellTable.addColumn(iconColumn, "Status");
+		allKontakteCellTable.addColumn(iconColumn, "");
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
 		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
 
@@ -548,6 +553,19 @@ public class AllKontaktView extends MainFrame {
 					hide();
 				}
 				
+			}
+		}
+	}
+	
+	public class PreviewClickHander implements Handler<Kontakt> {
+		@Override
+		public void onCellPreview(CellPreviewEvent<Kontakt> event) {
+			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
+
+				final Kontakt value = event.getValue();
+				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
+				event.getDisplay().getSelectionModel().setSelected(value, state);
+				event.setCanceled(true);
 			}
 		}
 	}
