@@ -2,6 +2,7 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -32,24 +33,27 @@ public class TeilhaberschaftenAlle extends MainFrame{
 //	private Label lb1 = new Label("Kontakte aller Teilhaberschaften");
 //	private Label lb2 = new Label("Kontaktlisten aller Teilhaberschaften");
 
-	VerticalPanel vPanel = new VerticalPanel();
-	Label menuBarHeadlineLabel = new Label("Teilhaberschaften");
-	FlowPanel menuBarContainerFlowPanel = new FlowPanel();
-	VerticalPanel menuBarContainerPanel = new VerticalPanel();
+	private VerticalPanel vPanel = new VerticalPanel();
+	private Label menuBarHeadlineLabel = new Label("Teilhaberschaften");
+	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
+	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 //	final Button teilhaberschaftKontakte = new Button("Kontakte aller Teilhaberschaften");
 //	final Button teilhaberschaftKontaktlisten = new Button("Kontaktlisten aller Teilhaberschaften");
 //	final HorizontalPanel hPanel = new HorizontalPanel();
 	private Kontakt kontakt = new Kontakt();
 	private Kontaktliste kliste = new Kontaktliste();
+	private HorizontalPanel hPanel = new HorizontalPanel();
+	private Button teilhaberschaftKontakte = new Button("Kontakte aller Teilhaberschaften");
+	private Button teilhaberschaftKontaktlisten = new Button("Kontaktlisten aller Teilhaberschaften");
 	
-	
-
+	public TeilhaberschaftenAlle() {
+		super.onLoad();
+	}
 	@Override
 	protected void run() {
-		
-		final HorizontalPanel hPanel = new HorizontalPanel();
-		final Button teilhaberschaftKontakte = new Button("Kontakte aller Teilhaberschaften");
-		final Button teilhaberschaftKontaktlisten = new Button("Kontaktlisten aller Teilhaberschaften");
+//		final HorizontalPanel hPanel = new HorizontalPanel();
+//		final Button teilhaberschaftKontakte = new Button("Kontakte aller Teilhaberschaften");
+//		final Button teilhaberschaftKontaktlisten = new Button("Kontaktlisten aller Teilhaberschaften");
 		hPanel.setWidth("600px");
 		hPanel.setBorderWidth(4);
 		
@@ -77,6 +81,7 @@ public class TeilhaberschaftenAlle extends MainFrame{
 		vPanel.add(contentHeadline);
 		hPanel.add(teilhaberschaftKontakte);
 		hPanel.add(teilhaberschaftKontaktlisten);
+		vPanel.add(hPanel);
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		
 		
@@ -91,9 +96,9 @@ public class TeilhaberschaftenAlle extends MainFrame{
 //		teilhaberschaftKontakte.addClickHandler(handler)
 		
 		RootPanel.get("menubar").clear();
-		RootPanel.get("menubar").add(menuBarContainerPanel);
+		RootPanel.get("menubar").add(hPanel);
 		RootPanel.get("content").add(vPanel);
-		RootPanel.get("content").add(hPanel);
+//		RootPanel.get("content").add(hPanel);
 		
 		
 //		final class MyClickHandler implements ClickHandler{
