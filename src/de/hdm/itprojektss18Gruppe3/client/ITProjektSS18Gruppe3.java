@@ -4,17 +4,20 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.cellview.client.CellTree;
+import com.google.gwt.user.cellview.client.TreeNode;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import de.hdm.itprojektss18Gruppe3.client.gui.MenuTree;
+import de.hdm.itprojektss18Gruppe3.client.gui.CustomTreeModel;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.LoginService;
 import de.hdm.itprojektss18Gruppe3.shared.LoginServiceAsync;
@@ -30,6 +33,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private HorizontalPanel hPanelLogout = new HorizontalPanel();
 	private HorizontalPanel selectPanel = new HorizontalPanel();
 	private VerticalPanel vPanelBar = new VerticalPanel();
+	private HorizontalPanel treeContainer = new HorizontalPanel();
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the Kontaktmanager application.");
 	private Label instructionMessage = new Label("Clientauswahl");
@@ -73,7 +77,14 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		RootPanel.get("content").clear();
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("menubar").add(hPanelBar);
-		MenuTree menutree = new MenuTree();
+		
+		
+		//AUFRUF DES BAUMS
+		CustomTreeModel ctm = new CustomTreeModel();
+		CellTree cellTree = new CellTree(ctm, "Root");
+		treeContainer.add(cellTree);
+		RootPanel.get("leftmenutree").add(treeContainer);
+
 		signOutLink.setHref(loginInfo.getLogoutUrl());
 	}
 
