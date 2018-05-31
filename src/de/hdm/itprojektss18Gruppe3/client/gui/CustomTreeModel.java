@@ -9,12 +9,16 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.cellview.client.CellTree;
+import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
+import com.google.gwt.user.cellview.client.TreeNode;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Tree;
@@ -32,48 +36,55 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 
-public class CustomTreeModel implements TreeViewModel{
+public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 
 	private VerticalPanel vPanel = new VerticalPanel();
-	DecoratorPanel treeContainer = new DecoratorPanel();
+	private HorizontalPanel treeContainer = new HorizontalPanel();
 	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
 	private HTML instructionMessage = new HTML("<br>Hier kannst du deine Kontakte verwalten.");
-	Nutzer nutzerKontaktliste = new Nutzer();
-	Tree navigationTree = new Tree();
-	Label navigationHeadline = new Label("Navigation");
-	VerticalPanel navigationTreePanel = new VerticalPanel();
+	private Nutzer nutzerKontaktliste = new Nutzer();
+	private Tree navigationTree = new Tree();
+	private Label navigationHeadline = new Label("Navigation");
+	private VerticalPanel navigationTreePanel = new VerticalPanel();
 	private SingleSelectionModel<Kontaktliste> selectionModel = null;
-	private BusinessObjectKeyProvider kontaktlistenKeyProvider = null;
 	private Kontaktliste selectedKontaktliste;
 	private List<String> menuList;
-	ListDataProvider<String> dataProvider;
-	ListDataProvider<Kontaktliste> kontaktlistenDataProvider = new ListDataProvider<Kontaktliste>();
-
+	private ListDataProvider<String> dataProvider;
+	private ListDataProvider<Kontaktliste> kontaktlistenDataProvider = new ListDataProvider<Kontaktliste>();
 	private Button kontakte = new Button("Kontakte");
 	private Button teilhaberschaften = new Button("Teilhaberschaften");
-	
+	private CustomTreeModel customTreeModel;
+	private CellTree navigationCellTree;
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
 
-	private class BusinessObjectKeyProvider implements
-	ProvidesKey<Kontaktliste> {
-		@Override
-		public Integer getKey(Kontaktliste kontaktliste) {
-			if (kontaktliste == null) {
-				return null;
-			} else {
-				return new Integer(kontaktliste.getId());
-			}
-		}
-	};
+	public CustomTreeModel() {
+		menuList = new ArrayList<String>();
+		menuList.add("Alle Kontaktlisten");
+		menuList.add("Kontakte");
+		menuList.add("Teilhaberschaften");
+		dataProvider = new ListDataProvider<String>(menuList);
+		selectionModel = new SingleSelectionModel<Kontaktliste>();
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
+
+		nutzerKontaktliste.setId(Integer.parseInt(Cookies.getCookie("id")));
+		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzerKontaktliste.getId(), new FindAllKontaktlisteAsyncCallback());
+
+	}
 
 
+	public void setSelectedKontaktliste(Kontaktliste selection) {
+		selectedKontaktliste = selection;
+	}
 
 
-
-
+	/*
+	 * SelectionChangeEventHandler um die Selektion des Nutzers auf eine Kontaktliste
+	 * erfassen zu können und die einzelnen Kontakte innerhalb der angeklickten Kontaktliste
+	 * anzeigen zu können. Dies geschieht in der Klasse KontaktlistView, an die die Selektion übergeben wird.
+	 */
 	private class SelectionChangeEventHandler implements
 	SelectionChangeEvent.Handler {
 		@Override
@@ -85,13 +96,14 @@ public class CustomTreeModel implements TreeViewModel{
 			RootPanel.get("content").add(klV);
 		}
 	}
-	
+
+
+	//BEIDE CLICKHANDLER NUR ZUM ÜBERGANG, DA KA WIE MAN ANDERE PUNKTE IN DEN TREE BEKOMMT
 	public class kontakteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			AllKontaktView akv = new AllKontaktView();
-
 		}	
 	}
 
@@ -102,51 +114,15 @@ public class CustomTreeModel implements TreeViewModel{
 			TeilhaberschaftenAlle teilhaberschaftenAlle = new TeilhaberschaftenAlle();
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(teilhaberschaftenAlle);
-			
 		}
-		
-	}
-
-	
-	
-
-	public CustomTreeModel() {
-		
-		kontakte.addClickHandler(new kontakteClickHandler());
-		teilhaberschaften.addClickHandler(new teilhaberschaftClickHandler());
-
-		menuList = new ArrayList<String>();
-		menuList.add("Alle Kontaktlisten");
-
-		nutzerKontaktliste.setId(Integer.parseInt(Cookies.getCookie("id")));
-		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzerKontaktliste.getId(), new FindAllKontaktlisteAsyncCallback());
-
-		kontaktlistenKeyProvider = new BusinessObjectKeyProvider();
-		selectionModel = new SingleSelectionModel<Kontaktliste>(kontaktlistenKeyProvider);
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
-
-
-		welcomeMessage.addStyleName("headline");
-		vPanel.setStylePrimaryName("headlinePanel");
-		vPanel.add(welcomeMessage);
-		instructionMessage.setStylePrimaryName("landingpageText");
-		vPanel.add(instructionMessage);
-		vPanel.add(kontakte);
-		vPanel.add(teilhaberschaften);
-
-
-		RootPanel.get("content").clear();
-		RootPanel.get("content").add(vPanel);
-
-
-	}
-
-	public void setSelectedKontaktliste(Kontaktliste selection) {
-		selectedKontaktliste = selection;
 	}
 
 
-
+	/*
+	 * AsybcCallback zum Abfragen aller Kontaktlisten des eingeloggten Nutzers. Das Ergebnis wird dem 
+	 * DataListProvider übergeben, wodurch die Anzeige der einzelnen Kontaktlisten im CellTree
+	 * ermöglicht wird
+	 */
 
 	public class FindAllKontaktlisteAsyncCallback implements AsyncCallback<Vector<Kontaktliste>> {
 
@@ -164,12 +140,11 @@ public class CustomTreeModel implements TreeViewModel{
 	}
 
 
+	// Get the NodeInfo that provides the children of the specified value.
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
 
 		if(value.equals("Root")) {
-
-			dataProvider = new ListDataProvider<String>(menuList);
 
 			Cell<String> cell = new AbstractCell<String>() {
 				@Override
@@ -179,6 +154,7 @@ public class CustomTreeModel implements TreeViewModel{
 					}
 				}
 			};
+			// Return a node info that pairs the data with a cell.
 			return new DefaultNodeInfo<String>(dataProvider, cell);   
 
 		} else {
@@ -191,19 +167,49 @@ public class CustomTreeModel implements TreeViewModel{
 					}
 				}
 			};
-
+			// Return a node info that pairs the data with a cell.
 			return new DefaultNodeInfo<Kontaktliste>(kontaktlistenDataProvider, kontaktlistenCell, selectionModel, null);
 
 		}
 	}
 
-
+	// Check if the specified value represents a leaf node. Leaf nodes
+	// cannot be opened.
 	@Override
 	public boolean isLeaf(Object value) {
 		if(value instanceof Kontaktliste) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
+	}
+
+
+	public void onLoad() {
+
+		customTreeModel = new CustomTreeModel();
+		navigationCellTree = new CellTree(customTreeModel, "Root");
+		navigationCellTree.setAnimationEnabled(true);
+		treeContainer.add(navigationCellTree);
+		navigationCellTree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+
+		//KÖNNEN DANN WEG WENN TREE KLAPPT
+		kontakte.addClickHandler(new kontakteClickHandler());
+		teilhaberschaften.addClickHandler(new teilhaberschaftClickHandler());
+
+
+		welcomeMessage.addStyleName("headline");
+		vPanel.setStylePrimaryName("headlinePanel");
+		vPanel.add(welcomeMessage);
+		instructionMessage.setStylePrimaryName("landingpageText");
+		vPanel.add(instructionMessage);
+		vPanel.add(kontakte);
+		vPanel.add(teilhaberschaften);
+
+		RootPanel.get("leftmenutree").clear();
+		RootPanel.get("leftmenutree").add(treeContainer);
+		RootPanel.get("content").clear();
+		RootPanel.get("content").add(vPanel);
 	}
 
 }

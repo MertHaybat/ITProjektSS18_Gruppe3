@@ -81,9 +81,9 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		
 		//AUFRUF DES BAUMS
 		CustomTreeModel ctm = new CustomTreeModel();
-		CellTree cellTree = new CellTree(ctm, "Root");
-		treeContainer.add(cellTree);
-		RootPanel.get("leftmenutree").add(treeContainer);
+		RootPanel.get("leftmenutree").clear();
+		RootPanel.get("leftmenutree").add(ctm);
+
 
 		signOutLink.setHref(loginInfo.getLogoutUrl());
 	}

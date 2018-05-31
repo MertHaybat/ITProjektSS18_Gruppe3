@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
@@ -24,10 +25,12 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CustomButton;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -178,6 +181,8 @@ public class AllKontaktView extends MainFrame {
 				}
 			}
 		};
+		
+	
 
 		ButtonCell visitProfileButton = new ButtonCell();
 		Column<Kontakt, String> visitProfileButtonColumn = new Column<Kontakt, String>(visitProfileButton) {
@@ -188,6 +193,21 @@ public class AllKontaktView extends MainFrame {
 
 		visitProfileButtonColumn.setFieldUpdater(new VisitProfileUpdate());
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
+		
+		
+		Column<Kontakt, String> visitColumn = new Column<Kontakt, String>(new TextCell() {
+			public void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
+				sb.appendHtmlConstant("<img width=\"20\" src=\"images/" + value.asString() + "\">");
+			}
+		}) {
+			@Override
+			public String getValue(Kontakt object) {
+					return "eye.svg";
+			}
+		};
+		
+
+		
 		// allKontakteCellTable.addCellPreviewHandler(new
 		// PreviewClickHandler());
 		allKontakteCellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
@@ -196,7 +216,7 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
 		allKontakteCellTable.addColumn(iconColumn, "");
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
-		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
+		allKontakteCellTable.addColumn(visitColumn, "");
 
 		allKontakteCellTableContainer.add(allKontakteCellTable);
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
@@ -232,7 +252,9 @@ public class AllKontaktView extends MainFrame {
 	// }
 	//
 	// }
-	public class KontaktDeleteClickHandler implements ClickHandler{
+	
+	
+	public class KontaktDeleteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
