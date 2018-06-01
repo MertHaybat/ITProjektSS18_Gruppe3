@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -28,6 +29,8 @@ import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm.UpdateKontaktCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 public class KontaktPopup extends PopupPanel{
@@ -37,20 +40,30 @@ public class KontaktPopup extends PopupPanel{
 	private VerticalPanel vPanel = new VerticalPanel();
 	private TextArea ktNameTa = new TextArea();
 	private Button speichern = new Button("Hinzufügen");
+	private Kontaktliste kontaktliste = new Kontaktliste();
 	
 	public KontaktPopup(){
 		super(true);
+		speichern.addClickHandler(new SpeichernOhneKontaktlisteClickHandler());
+		run();
+	}
+	public KontaktPopup(Kontaktliste kontaktliste){
+		super(true);
+		this.kontaktliste = kontaktliste;
+		speichern.addClickHandler(new SpeichernMitKontaktlisteClickHandler());
+		run();
+	}
+	public void run(){
 		setAnimationEnabled(true);
 		ktNameTa.setReadOnly(true);
 		ktNameTa.setValue("Geben Sie einen Kontaktnamen an.");
 		ktNameTa.addClickHandler(new KontaktClickHandler());
-		speichern.addClickHandler(new SpeichernClickHandler());
 		vPanel.add(ktNameTa);
 		vPanel.add(speichern);
 		this.add(vPanel);
-		
 	}
-	class SpeichernClickHandler implements ClickHandler{
+	
+	class SpeichernMitKontaktlisteClickHandler implements ClickHandler{
 
 		@Override
 		public void onClick(ClickEvent event) {
@@ -58,7 +71,20 @@ public class KontaktPopup extends PopupPanel{
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("mail"));
 			kontaktmanagerVerwaltung.createKontakt(ktNameTa.getValue(), 0, nutzer.getId(),
-					new CreateKontaktCallback());
+					new CreateKontaktMitKontaktlisteCallback());
+		}
+		
+	}
+	
+	class SpeichernOhneKontaktlisteClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			nutzer.setMail(Cookies.getCookie("mail"));
+			kontaktmanagerVerwaltung.createKontakt(ktNameTa.getValue(), 0, nutzer.getId(),
+					new CreateKontaktOhneKontaktlisteCallback());
 		}
 		
 	}
@@ -71,7 +97,40 @@ public class KontaktPopup extends PopupPanel{
 		}
 		
 	}
-	class CreateKontaktCallback implements AsyncCallback<Kontakt> {
+	class CreateKontaktMitKontaktlisteCallback implements AsyncCallback<Kontakt> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Erstellen des Kontakts: " + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Kontakt result) {
+			hide();
+			kontaktmanagerVerwaltung.createKontaktKontaktliste(result.getId(), kontaktliste.getId(), new CreateKontaktKontaktlisteCallback());
+		
+			
+		}
+		class CreateKontaktKontaktlisteCallback implements AsyncCallback<KontaktKontaktliste>{
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(KontaktKontaktliste result) {
+				Window.alert("Kontakt wurde erfolgreich in der Kontaktliste erstellt.");
+				KontaktlistView klV = new KontaktlistView(kontaktliste);
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(klV);
+			}
+			
+		}
+
+	}
+	class CreateKontaktOhneKontaktlisteCallback implements AsyncCallback<Kontakt> {
 
 		@Override
 		public void onFailure(Throwable caught) {

@@ -70,7 +70,7 @@ public class AllKontaktView extends MainFrame {
 			.getKontaktVerwaltung();
 	private MultiSelectionModel<Kontakt> selectionModelCellTable = new MultiSelectionModel<Kontakt>(keyProvider);
 	private Nutzer nutzerausdb = null;
-	
+	private Kontaktliste kontaktliste = new Kontaktliste();
 	/**
 	 * The list of data to display.
 	 */
@@ -90,6 +90,7 @@ public class AllKontaktView extends MainFrame {
 	}
 
 	public AllKontaktView(Kontaktliste k) {
+		this.kontaktliste=k;
 		kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
 		run();
 	}
@@ -313,7 +314,9 @@ public class AllKontaktView extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			new KontaktPopup().center();
+			KontaktPopup k = new KontaktPopup();
+			k.center();
+			
 		}
 
 	}
