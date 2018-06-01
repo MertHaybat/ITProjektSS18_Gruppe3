@@ -11,6 +11,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -63,6 +64,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private SuggestBox box = new SuggestBox(oracle);
 	private List<Nutzer> nutzerListe = new ArrayList<>();
 	private List<Nutzer> nutzerSuggestbox = new ArrayList<>();
+	private List<Nutzer> nutzerMail = new ArrayList<>();
 
 	private Nutzer nutzerausdb = null;
 	private Label lb1 = new Label("Wählen Sie die Eigenschaften aus, die Sie teilen möchten: ");
@@ -73,34 +75,34 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private Kontakt kontaktNeu = new Kontakt();
 
 	private KontaktCellTable kt = new KontaktCellTable(kontaktNeu);
-	
+
 	private final Handler<EigenschaftsAuspraegungHybrid> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
 
 	private final Handler<Eigenschaft> eigenschaftSelectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
-	
+
 	private CellTable<Eigenschaft> eigenschaftCT = new CellTable<Eigenschaft>();
 	private ListDataProvider<Nutzer> nutzerDataProvider = new ListDataProvider<Nutzer>(nutzerSuggestbox);
-	
-	public TeilhaberschaftDialogBox(Kontakt kontakt){
+
+	public TeilhaberschaftDialogBox(Kontakt kontakt) {
 		kontaktNeu = kontakt;
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontaktNeu, new EigenschaftAuspraegungCallback());
 		run();
 	}
-	
+
 	public TeilhaberschaftDialogBox(List<Kontakt> kontakt) {
 
-		for (Kontakt kontakte: kontakt) {
-			
+		for (Kontakt kontakte : kontakt) {
+
 			kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakte, new EigenschaftAuspraegungCallback());
 		}
-		kontaktNeu = kontakt.get(kontakt.size()-1);
+		kontaktNeu = kontakt.get(kontakt.size() - 1);
 		run();
 	}
 
 	public void run() {
-		
+
 		setText("Wählen Sie die zu teilenden Eigenschaften aus sowie die Person, mit der Sie den Kontakt teilen möchten");
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
 		ftTeilhaberschaft.setWidget(1, 0, kt);
@@ -109,7 +111,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		ftTeilhaberschaft.setWidget(4, 0, selectedNutzerCT);
 		ftTeilhaberschaft.setWidget(5, 1, b1);
 		ftTeilhaberschaft.setWidget(5, 2, b2);
-		
+
 		Column<EigenschaftsAuspraegungHybrid, Boolean> cbColumn = new Column<EigenschaftsAuspraegungHybrid, Boolean>(
 				cbCell) {
 			@Override
@@ -134,9 +136,9 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		buttonColumn1.setFieldUpdater(new ButtonHandlerFieldUpdate());
 
 		box.setStylePrimaryName("gwt-SuggestBox");
-		
+
 		kontaktmanagerVerwaltung.findAllNutzer(new getAllNutzerCallback());
-		
+
 		eigenschaftCT.setSelectionModel(eigenschaftModel, eigenschaftSelectionEventManager);
 		kt.setSelectionModel(ssmAuspraegung, selectionEventManager);
 
@@ -147,19 +149,18 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		b2.addClickHandler(new closeDialogBoxClickHandler());
 		kt.insertColumn(0, cbColumn);
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
-		
+
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
-//		eigenschaftCT.addColumn(EigenschaftcbColumn, "");
-//		eigenschaftCT.addColumn(eigenschaftColumn, "Eigenschaft");
+		// eigenschaftCT.addColumn(EigenschaftcbColumn, "");
+		// eigenschaftCT.addColumn(eigenschaftColumn, "Eigenschaft");
 		selectedNutzerCT.addColumn(nutzertxtColumn, "");
 		selectedNutzerCT.addColumn(buttonColumn1, "");
 
 		this.add(ftTeilhaberschaft);
 
-
 	}
 
-	public class ButtonHandlerFieldUpdate implements FieldUpdater<Nutzer, String>{
+	public class ButtonHandlerFieldUpdate implements FieldUpdater<Nutzer, String> {
 
 		@Override
 		public void update(int index, Nutzer object, String value) {
@@ -167,8 +168,9 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 			nutzerDataProvider.refresh();
 			selectedNutzerCT.redraw();
 		}
-		
+
 	}
+
 	public class FindNutzerByEmail implements AsyncCallback<Nutzer> {
 
 		@Override
@@ -179,7 +181,13 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onSuccess(Nutzer result) {
-			nutzerausdb = result;
+			if (result == null) {
+				Window.alert("Bitte geben Sie eine gültige E-Mail ein");
+
+			} else {
+				nutzerausdb = result;
+
+			}
 
 		}
 
@@ -187,27 +195,47 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 	public class NutzerHinzufuegenKeyPressHandler implements KeyPressHandler {
 
-
 		@Override
 		public void onKeyPress(KeyPressEvent event) {
 			// TODO Auto-generated method stub
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-				if(box.getValue() == ""){
+				if (box.getValue() == "") {
 					Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
 				} else {
-					
-					Nutzer nutzer = new Nutzer();
-					nutzer.setMail(box.getValue());
-					
-					nutzerSuggestbox.add(nutzer);
-					box.setValue("");
-					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+
+					kontaktmanagerVerwaltung.checkEmail(box.getValue(), new CheckNutzerByEmail());
+
 				}
 			}
-			
+
 		}
-		
+
+	}
+
+	public class CheckNutzerByEmail implements AsyncCallback<Nutzer> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			Window.alert("Bitte geben Sie eine gültige E-Mail ein");
+
+		}
+
+		@Override
+		public void onSuccess(Nutzer result) {
+			// TODO Auto-generated method stub
+
+			if (result != null) {
+			
+			nutzerSuggestbox.add(result);
+			box.setValue("");
+			selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
+			selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+		}
+			else {
+				Window.alert("Die eingegebene E-Mail ist nicht gültig.");
+			}
+		}
 
 	}
 
@@ -223,6 +251,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 			}
 		}
 	}
+
 	public class PreviewClickHander implements Handler<EigenschaftsAuspraegungHybrid> {
 		@Override
 		public void onCellPreview(CellPreviewEvent<EigenschaftsAuspraegungHybrid> event) {
@@ -246,15 +275,16 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onSuccess(Vector<EigenschaftsAuspraegungHybrid> result) {
-			
-			//TODO
-//			for (EigenschaftsAuspraegungHybrid eigenschaftsAuspraegungHybrid : result) {
-//				
-//				hybridListe.add(eigenschaftsAuspraegungHybrid);
-//			}
+
+			// TODO
+			// for (EigenschaftsAuspraegungHybrid eigenschaftsAuspraegungHybrid
+			// : result) {
+			//
+			// hybridListe.add(eigenschaftsAuspraegungHybrid);
+			// }
 			kt.setRowData(0, result);
 			kt.setRowCount(result.size(), true);
-//			kt.redraw();
+			// kt.redraw();
 
 		}
 
@@ -281,7 +311,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 			}
 			for (int i = 0; i < eListe.size(); i++) {
 				for (int o = 0; o < nutzerSuggestbox.size(); o++) {
-					
+
 					kontaktmanagerVerwaltung.checkEmail(nutzerSuggestbox.get(o).getMail(), new FindNutzerByEmail());
 					kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(),
 							eListe.get(i).getAuspraegungid(), nutzerausdb.getId(), nutzer.getId(),
