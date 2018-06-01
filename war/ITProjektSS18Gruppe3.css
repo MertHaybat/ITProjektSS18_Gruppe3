@@ -81,13 +81,26 @@ html {
 	background-color: white;
 	box-shadow: 3px 2px 2px grey;
 }
-
+.kontaktDecoratorPanel{
+	position: absolute;
+    top: 205px;
+    left: 640px;
+    border-radius: 12px;
+    width: 1px;
+    line-height: 1px;
+    border: 2px solid #bbb;
+    font-size: 1px;
+}
 .addButton {
 	text-align: center;
     margin: 2px 4px;
     border-radius: 80px;
     width: 33px;
     height: 30px;
+}
+#content .suchTextbox{
+    position: absolute;
+    left: 684px;
 }
 
 #content .headline {

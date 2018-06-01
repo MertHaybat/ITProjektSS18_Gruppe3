@@ -2,7 +2,9 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -36,6 +38,10 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private HorizontalPanel hPanel2 = new HorizontalPanel();
 	
+	private HorizontalPanel treeContainer = new HorizontalPanel();
+
+	private Kontaktliste kontaktliste = new Kontaktliste();
+	
 	/**
 	 * Instanziierung vom Label "kontaktlisteLabel" welches als Hilfe für die TextBox dient, damit erkenntlich ist welche Angabe in die TextBox eingetragen werden soll
 	 */
@@ -57,6 +63,15 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 	 * Non-Argument-Konstruktor
 	 */
 	public NewKontaktlisteDialogBox() {
+		run();
+	}
+	
+//	public NewKontaktlisteDialogBox(Kontaktliste kontaktliste) {
+//		this.kontaktliste = kontaktliste;
+//		run();
+//	}
+	public void run(){
+		
 		setText("Gib eine Bezeichnung für die neue Kontaktliste an");
 		hPanel.add(kontaktlisteLabel);
 		hPanel.add(tkontaktliste);
@@ -70,7 +85,6 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 		
 		bspeichern.addClickHandler(new insertKontaktlisteClickHandler());
 		babbrechen.addClickHandler(new closeKontaktlisteClickHandler());
-		
 	}
 	
 	public class createKontaktlisteCallback implements AsyncCallback<Kontaktliste> {
@@ -84,10 +98,10 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 		@Override
 		public void onSuccess(Kontaktliste result) {
 			hide();
-			KontaktlistView kontaktlisteBox = new KontaktlistView();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(kontaktlisteBox);
 			
+//			KontaktlistView klV = new KontaktlistView(kontaktliste);
+//			RootPanel.get("content").clear();
+//			RootPanel.get("content").add(klV);			
 		}
 	}
 	

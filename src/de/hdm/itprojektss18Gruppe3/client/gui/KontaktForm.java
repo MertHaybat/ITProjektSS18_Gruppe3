@@ -12,6 +12,8 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.Cookies;
@@ -39,6 +41,7 @@ import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 /**
@@ -72,7 +75,7 @@ public class KontaktForm extends MainFrame {
 	private Label erstellungsdatum = new Label("Erstellungsdatum: ");
 	private Label kontaktNameLabel = new Label("Kontaktname: ");
 	private TextBox kontaktNameBox = new TextBox();
-
+	private Kontaktliste kontaktliste = new Kontaktliste();
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
 
 	private final NoSelectionModel<EigenschaftsAuspraegungHybrid> ssmAuspraegung = new NoSelectionModel<EigenschaftsAuspraegungHybrid>();
@@ -89,9 +92,9 @@ public class KontaktForm extends MainFrame {
 		
 		super.onLoad();
 	}
-
 	public KontaktForm(Kontakt kontakt) {
-		k = kontakt;
+		this.k = kontakt;
+	
 		kontaktNameBox.setValue(kontakt.getName());
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
 		modifikationsdatum.setText("Zuletzt geändert am: " + kontakt.getModifikationsdatum());
@@ -102,6 +105,15 @@ public class KontaktForm extends MainFrame {
 		vPanel2.add(erstellungsdatum);
 		super.onLoad();
 		
+	}
+
+
+	public CellTable<EigenschaftsAuspraegungHybrid> getCelltable() {
+		return celltable;
+	}
+
+	public void setCelltable(CellTable<EigenschaftsAuspraegungHybrid> celltable) {
+		this.celltable = celltable;
 	}
 
 	public void run() {
@@ -166,6 +178,8 @@ public class KontaktForm extends MainFrame {
 				auspraegung.setId(object.getAuspraegungid());
 			}
 		});
+		
+		kontaktNameBox.addKeyPressHandler(new KontaktTextBoxKeyPressHandler());
 
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
 		saveChanges.addClickHandler(new UpdateAuspraegungClickHandler());
@@ -187,11 +201,26 @@ public class KontaktForm extends MainFrame {
 		vPanel.add(addAuspraegung);
 		vPanel.add(deleteContact);	
 	
-		
+		this.add(vPanel);
+		this.add(vPanel2);
 		RootPanel.get("menubar").add(hPanel);
 		RootPanel.get("content").add(vPanel);
 		RootPanel.get("content").add(vPanel2);
 
+	}
+	private class KontaktTextBoxKeyPressHandler implements KeyPressHandler{
+
+		@Override
+		public void onKeyPress(KeyPressEvent event) {
+			if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER){
+				k.setName(kontaktNameBox.getValue());
+				kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
+				KontaktlistView klV = new KontaktlistView(kontaktliste);
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(klV);
+			}
+		}
+		
 	}
 	private class ZurueckClickHandler implements ClickHandler{
 

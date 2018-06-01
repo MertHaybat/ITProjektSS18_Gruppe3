@@ -887,8 +887,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		// gefiltert nach Wert und EigenschaftID
 		Vector<Eigenschaftsauspraegung> auspraegungen = findAllEigenschaftsauspraegungByWertAndEigenschaft(auspraegung,
 				eigenschaft);
-		// Eigenschaftsauspraegung mit der Tabelle Eigenschaft vergleichen
-		// (eigenschaftID - id)
 
 		// In Teilhaberschaft nach den geteilten Auspraegungen suchen. Wenn es
 		// nicht geteilte Ausprägungen gibt, nicht anzeigen.
