@@ -9,6 +9,8 @@ import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+//import com.google.gwt.event.dom.client.DoubleClickHandler;
+//import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -16,6 +18,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -28,12 +31,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
-
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 
 /**
@@ -95,8 +98,8 @@ public class TeilhaberschaftKontakte extends MainFrame {
 
 		contentHeadline.setStylePrimaryName("h2");
 
-		allKontakteCellTable.setHeight("600px");
-		allKontakteCellTable.setWidth("1000px");
+//		allKontakteCellTable.setHeight("600px");
+//		allKontakteCellTable.setWidth("1000px");
 
 		// Set the message to display when the table is empty.
 		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte in Teilhaberschaften"));
@@ -160,9 +163,10 @@ public class TeilhaberschaftKontakte extends MainFrame {
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.PX);
 
 		// allKontakteCellTable.setRowCount(CONTACTS.size(), true);
-
+		Nutzer nutzer = new Nutzer();
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		// Push the data into the widget.
-		kontaktmanagerVerwaltung.findAllKontakteByTeilhabenderID(2, new AllKontakteByTeilhabenderCallback());
+		kontaktmanagerVerwaltung.findAllKontakteByTeilhabenderID(nutzer.getId(), new AllKontakteByTeilhabenderCallback());
 		// .findAllKontaktByNutzerID(2, new AllKontaktByNutzerCallback());
 
 		vPanel.add(contentHeadline);
@@ -177,6 +181,7 @@ public class TeilhaberschaftKontakte extends MainFrame {
 
 		showKontaktButton.addClickHandler(new ShowKontaktClickHandler());
 
+		
 		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
 		menuBarContainerFlowPanel.add(box);
 
@@ -189,13 +194,25 @@ public class TeilhaberschaftKontakte extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			KontaktForm kForm = new KontaktForm(kontakt);
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(kForm);
 		}
 
 	}
+	
+	
+//	public class KontaktBearbeitenDoubleClickHandler implements DoubleClickHandler{
+//
+//		@Override
+//		public void onDoubleClick(DoubleClickEvent event) {
+//			// TODO Auto-generated method stub
+//			KontaktForm kForm = new KontaktForm(kontakt);
+//			RootPanel.get("content").clear();
+//			RootPanel.get("content").add(kForm);
+//		}
+//		
+//	}
 
 	public class AllKontakteByTeilhabenderCallback implements AsyncCallback<Vector<Kontakt>> {
 
