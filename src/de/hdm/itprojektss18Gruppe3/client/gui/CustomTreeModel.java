@@ -35,14 +35,14 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class CustomTreeModel implements TreeViewModel{
 
 
-	private VerticalPanel vPanel = new VerticalPanel();
+//	private VerticalPanel vPanel = new VerticalPanel();
 	DecoratorPanel treeContainer = new DecoratorPanel();
-	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
-	private HTML instructionMessage = new HTML("<br>Hier kannst du deine Kontakte verwalten.");
+//	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
+//	private HTML instructionMessage = new HTML("<br>Hier kannst du deine Kontakte verwalten.");
 	Nutzer nutzerKontaktliste = new Nutzer();
 	Tree navigationTree = new Tree();
 	Label navigationHeadline = new Label("Navigation");
-	VerticalPanel navigationTreePanel = new VerticalPanel();
+//	VerticalPanel navigationTreePanel = new VerticalPanel();
 	private SingleSelectionModel<Kontaktliste> selectionModel = null;
 	private BusinessObjectKeyProvider kontaktlistenKeyProvider = null;
 	private Kontaktliste selectedKontaktliste;
@@ -127,17 +127,17 @@ public class CustomTreeModel implements TreeViewModel{
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
 
 
-		welcomeMessage.addStyleName("headline");
-		vPanel.setStylePrimaryName("headlinePanel");
-		vPanel.add(welcomeMessage);
-		instructionMessage.setStylePrimaryName("landingpageText");
-		vPanel.add(instructionMessage);
-		vPanel.add(kontakte);
-		vPanel.add(teilhaberschaften);
-
-
-		RootPanel.get("content").clear();
-		RootPanel.get("content").add(vPanel);
+//		welcomeMessage.addStyleName("headline");
+//		vPanel.setStylePrimaryName("headlinePanel");
+//		vPanel.add(welcomeMessage);
+//		instructionMessage.setStylePrimaryName("landingpageText");
+//		vPanel.add(instructionMessage);
+//		vPanel.add(kontakte);
+//		vPanel.add(teilhaberschaften);
+//
+//
+//		RootPanel.get("content").clear();
+//		RootPanel.get("content").add(vPanel);
 
 
 	}
@@ -188,8 +188,23 @@ public class CustomTreeModel implements TreeViewModel{
 				@Override
 				public void render(Context context, Kontaktliste value, SafeHtmlBuilder sb) {
 					if (value != null) {
+						
+						sb.appendHtmlConstant("<table><td>");
 						sb.appendEscaped(value.getBezeichnung());
-					}
+						sb.appendHtmlConstant("</td><td>");
+						sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+						sb.appendHtmlConstant("</td></table>");
+						}
+
+//						if (value.getStatus() == 0) {
+//							sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+//
+//						} else if (value.getStatus() == 1) {
+//
+//							sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
+//						}
+
+					
 				}
 			};
 

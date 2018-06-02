@@ -17,6 +17,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
 import de.hdm.itprojektss18Gruppe3.client.gui.CustomTreeModel;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.LoginService;
@@ -36,7 +38,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private HorizontalPanel treeContainer = new HorizontalPanel();
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the Kontaktmanager application.");
-	private Label instructionMessage = new Label("Clientauswahl");
+//	private Label instructionMessage = new Label("Clientauswahl");
 	private Anchor signInLink = new Anchor("Sign In");
 	private Anchor signOutLink = new Anchor("Sign Out");
 
@@ -44,10 +46,10 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			.getKontaktVerwaltung();
 
 	private Button logoutButton = new Button("Ausloggen");
-	private Button zumReportGenerator = new Button("Report-Generator");
-	private Button zumKontaktmanager = new Button("Kontaktmanager");
+//	private Button zumReportGenerator = new Button("Report-Generator");
+//	private Button zumKontaktmanager = new Button("Kontaktmanager");
 	private Button loginButton = new Button("Login");
-	private Button zurClientAuswahl = new Button("Zurück zur Client-Auswahl");
+//	private Button zurClientAuswahl = new Button("Zurück zur Client-Auswahl");
 
 	@Override
 	public void onModuleLoad() {
@@ -67,17 +69,15 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	}
 
 	private void loadKontaktmanager() {
-		zurClientAuswahl.addClickHandler(new ClientAuswahlClickHandler());
+		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
 		logoutButton.addClickHandler(new logoutClickHandler());
-		zurClientAuswahl.setStylePrimaryName("mainButton");
-		zurClientAuswahl.setWidth("150px");
 		logoutButton.setStylePrimaryName("logoutButton");
-		hPanelBar.add(zurClientAuswahl);
 		hPanelBar.add(logoutButton);
-		RootPanel.get("content").clear();
 		RootPanel.get("leftmenutree").clear();
-		RootPanel.get("menubar").add(hPanelBar);
+		RootPanel.get("menubar").clear();
+//		RootPanel.get("menubar").add(hPanelBar);
 		
+		AllKontaktView kontaktView = new AllKontaktView();
 		
 		//AUFRUF DES BAUMS
 		CustomTreeModel ctm = new CustomTreeModel();
@@ -124,8 +124,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			RootPanel.get("menubar").clear();
-			loadKontaktmanager();
+			
 		}
 
 	}
@@ -170,19 +169,9 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		@Override
 		public void onSuccess(Nutzer result) {
 			if (result != null) {
-				RootPanel.get("menubar").add(instructionMessage);
-				instructionMessage.setStylePrimaryName("menuBarLabel");
-				RootPanel.get("content").clear();
-				selectPanel.add(zumKontaktmanager);
-				selectPanel.add(zumReportGenerator);
-				zumKontaktmanager.setStylePrimaryName("clientAuswahlButton");
-				zumReportGenerator.setStylePrimaryName("clientAuswahlButton");
-				selectPanel.setStylePrimaryName("clientAuswahlPanel");
-				zumKontaktmanager.addClickHandler(new zumKontaktmanagerClickHandler());
-				zumReportGenerator.addClickHandler(new zumReportClickHandler());
-				RootPanel.get("content").add(selectPanel);
 				Cookies.setCookie("email", result.getMail());
 				Cookies.setCookie("id", result.getId() + "");
+				loadKontaktmanager();
 			} else {
 				CreateNutzerDialogBox dialogbox = new CreateNutzerDialogBox(loginInfo.getEmailAddress());
 				dialogbox.center();

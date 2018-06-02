@@ -630,5 +630,56 @@ public class KontaktMapper extends PersonMapper{
 		}
 		return k;
 	}
+	public Vector<Kontakt> findKontaktByNameUndNutzerID(Kontakt kontakt) {
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+
+		Vector<Kontakt> result = new Vector<Kontakt>();
+
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM `kontakt` "
+					+ "WHERE `name` LIKE '"+kontakt.getName()+"' "
+							+ "AND `nutzerid` = "+kontakt.getNutzerID()+"");
+				
+			ResultSet rs = stmt.executeQuery();
+			/**
+			 * Für jeden Eintrag Kontakt ein
+			 * Kontakt-Objekt erstellt.
+			 */
+			while (rs.next()) {
+				Kontakt k1 = new Kontakt();
+
+				k1.setId(rs.getInt("id"));
+				k1.setName(rs.getString("name"));
+				k1.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
+				k1.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				k1.setStatus(rs.getInt("status"));
+				k1.setNutzerID(rs.getInt("nutzerid"));
+
+				/**
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 */
+
+				result.addElement(k1);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		} finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		return result;
+	}
 
 }
+

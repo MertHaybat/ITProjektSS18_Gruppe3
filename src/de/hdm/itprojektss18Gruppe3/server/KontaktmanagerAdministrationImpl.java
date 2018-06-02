@@ -219,6 +219,24 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	public Teilhaberschaft createTeilhaberschaft(int kontaktlisteID, int kontaktID, int eigenschaftsauspraegungID,
 			int teilhabenderID, int eigentuemerID) throws IllegalArgumentException {
 
+		if(kontaktID != 0){
+			Kontakt k = new Kontakt();
+			k.setId(kontaktID);
+			k.setStatus(1);
+			saveKontakt(k);
+		}
+		
+		if(eigenschaftsauspraegungID != 0){
+			Eigenschaftsauspraegung e = new Eigenschaftsauspraegung();
+			e.setId(eigenschaftsauspraegungID);
+			e.setStatus(1);
+			saveEigenschaftsauspraegung(e);
+		}
+		//TODO
+//		if(kontaktlisteID != 0){
+//			Kontaktliste k = new Kontaktliste();
+//			k.set
+//		}
 		Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 
 		teilhaberschaft.setEigenschaftsauspraegungID(eigenschaftsauspraegungID);
@@ -1173,6 +1191,83 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	public Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return this.kontaktlisteMapper.findKontaktlisteByID(kontaktlisteID);
+	}
+
+	@Override
+	public Vector<Kontakt> findKontaktByName(Kontakt k) throws IllegalArgumentException {
+
+		char a = k.getName().charAt(0);
+		String b = "*";
+		char c = b.charAt(0);
+		char d = k.getName().charAt(k.getName().length() - 1);
+
+		Vector<Kontakt> kontaktVector = new Vector<Kontakt>();
+		
+
+		if (a == c) {
+			k.setName(k.getName().replace("*", "%"));
+			kontaktVector = this.kontaktMapper.findKontaktByNameUndNutzerID(k);
+		} else if (c == d) {
+			k.setName(k.getName().replace("*", "%"));
+			kontaktVector = this.kontaktMapper.findKontaktByNameUndNutzerID(k);
+		} else {
+			kontaktVector = this.kontaktMapper.findKontaktByNameUndNutzerID(k);
+		}
+
+		return kontaktVector;
+	}
+
+	@Override
+	public Vector<Kontakt> findEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException {
+		Eigenschaft eigenschaftAusDB = findEigenschaftByBezeichnung(eigenschaft);
+			Vector<Eigenschaftsauspraegung> allAuspraegungen = findAllEigenschaftsauspraegungByWertAndEigenschaft(eigenschaftsauspraegung, eigenschaftAusDB);
+			Vector<Kontakt> allKontakteByNutzer = findAllKontaktByNutzerID(nutzer.getId());
+			Vector<Kontakt> filteredKontakte = new Vector<Kontakt>();
+			for(int i = 0; i<allAuspraegungen.size(); i++){
+				for(int o = 0; o<allKontakteByNutzer.size(); o++){
+					if(allAuspraegungen.elementAt(i).getPersonID() == allKontakteByNutzer.elementAt(o).getId()){
+						filteredKontakte.add(allKontakteByNutzer.elementAt(o));
+					}
+				}
+			}
+			return filteredKontakte;
+	}
+
+	@Override
+	public Vector<Kontakt> findTeilhaberschaftKontakteBySuche(Nutzer nutzer,
+		Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException {
+		Eigenschaft eigenschaftAusDB = findEigenschaftByBezeichnung(eigenschaft);
+		Vector<Eigenschaftsauspraegung> allAuspraegungen = findAllEigenschaftsauspraegungByWertAndEigenschaft(eigenschaftsauspraegung, eigenschaftAusDB);
+		Vector<Teilhaberschaft> teilhaberschaftVector = findAllTeilhaberschaftenByTeilhabenderID(nutzer.getId());
+
+		Vector<Kontakt> kontakteByTeilhaberschaft = new Vector<Kontakt>();
+		Vector<Kontakt> filteredKontakte = new Vector<Kontakt>();
+		
+		for (Teilhaberschaft teilhaberschaft : teilhaberschaftVector) {
+			kontakteByTeilhaberschaft.add(findKontaktByID(teilhaberschaft.getKontaktID()));
+		}
+		for(int i = 0; i<allAuspraegungen.size(); i++){
+			for(int o = 0; o<kontakteByTeilhaberschaft.size(); o++){
+				if(allAuspraegungen.elementAt(i).getPersonID() == kontakteByTeilhaberschaft.elementAt(o).getId()){
+					filteredKontakte.add(kontakteByTeilhaberschaft.elementAt(o));
+				}
+			}
+		}
+		
+		
+		return filteredKontakte;
+	}
+
+	@Override
+	public Vector<Kontakt> findTeilhaberUndEigeneKontakteBySuche(Nutzer nutzer,
+			Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException {
+		Vector<Kontakt> eigeneKontakte = findEigeneKontakteBySuche(nutzer, eigenschaftsauspraegung, eigenschaft);
+		Vector<Kontakt> teilhabendeKontakte = findTeilhaberschaftKontakteBySuche(nutzer, eigenschaftsauspraegung, eigenschaft);
+		Vector<Kontakt> alleKontakte = new Vector<Kontakt>();
+		alleKontakte.addAll(eigeneKontakte);
+		alleKontakte.addAll(teilhabendeKontakte);
+		
+		return alleKontakte;
 	}
 
 	// @Override

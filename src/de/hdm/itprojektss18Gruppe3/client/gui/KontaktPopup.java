@@ -108,6 +108,7 @@ public class KontaktPopup extends PopupPanel{
 		public void onSuccess(Kontakt result) {
 			hide();
 			kontaktmanagerVerwaltung.createKontaktKontaktliste(result.getId(), kontaktliste.getId(), new CreateKontaktKontaktlisteCallback());
+			KontaktForm kontaktForm = new KontaktForm(result);
 		
 			
 		}
@@ -121,10 +122,7 @@ public class KontaktPopup extends PopupPanel{
 
 			@Override
 			public void onSuccess(KontaktKontaktliste result) {
-				Window.alert("Kontakt wurde erfolgreich in der Kontaktliste erstellt.");
-				KontaktlistView klV = new KontaktlistView(kontaktliste);
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(klV);
+				hide();
 			}
 			
 		}

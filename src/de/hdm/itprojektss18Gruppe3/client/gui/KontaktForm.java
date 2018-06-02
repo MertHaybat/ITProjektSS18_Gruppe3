@@ -208,10 +208,7 @@ public class KontaktForm extends MainFrame {
 		public void onKeyPress(KeyPressEvent event) {
 			if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER){
 				k.setName(kontaktNameBox.getValue());
-				kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
-				KontaktlistView klV = new KontaktlistView(kontaktliste);
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(klV);
+				kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());			
 			}
 		}
 		
