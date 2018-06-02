@@ -474,5 +474,12 @@ public interface KontaktmanagerAdministration extends RemoteService {
 
 	Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException;
 
+	public Vector<Kontakt> findKontaktByName(Kontakt k) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> findEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> findTeilhaberschaftKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> findTeilhaberUndEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException;
 
 }

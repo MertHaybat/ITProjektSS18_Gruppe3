@@ -14,6 +14,7 @@ import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
@@ -30,6 +31,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -56,6 +58,7 @@ public class KontaktlistView extends MainFrame {
 	private Button addKontaktToKontaktlisteButton = new Button("Kontakt hinzufügen");
 	private Button deleteKontaktFromKontaktlisteButton = new Button("Kontakt entfernen");
 	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
+	private Button addTeilhaberschaftKontaktlisteButton = new Button("Kontaktliste teilen");
 	private CellList<Kontakt> kontaktCellList = new CellList<Kontakt>(new KontaktCell(), CellListResources.INSTANCE);
 	// private CellTable<Kontakt> kontaktCellTable = new CellTable<Kontakt>(13,
 	// CellTableResources.INSTANCE, keyProvider);
@@ -101,12 +104,14 @@ public class KontaktlistView extends MainFrame {
 		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
 		deleteKontaktFromKontaktlisteButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
+		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
 		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
 		menuBarContainerFlowPanel.add(addKontaktlisteButton);
 		menuBarContainerFlowPanel.add(deleteKontaktlisteButton);
 		menuBarContainerFlowPanel.add(addKontaktToKontaktlisteButton);
 		menuBarContainerFlowPanel.add(deleteKontaktFromKontaktlisteButton);
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
+		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
 		menuBarContainerFlowPanel.setStylePrimaryName("menuBarContainerFlowPanel");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
 
@@ -176,13 +181,19 @@ public class KontaktlistView extends MainFrame {
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
 		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(kontaktlisteSelectedInTree));
 		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
-//		deleteKontaktFromKontaktlisteButton.addClickHandler(new);
+		deleteKontaktFromKontaktlisteButton.addClickHandler(new KontaktAusKontaktlisteDeleteClickHandler());
 		// deleteKontaktFromKontaktlisteClickHandler(selectedKontakteInCellTable));
 		addTeilhaberschaftKontaktButton
 				.addClickHandler(new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable));
+		addTeilhaberschaftKontaktlisteButton.addClickHandler(new ClickHandler(){
 
-		// new
-		// addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable)
+			@Override
+			public void onClick(ClickEvent event) {
+			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontaktlisteSelectedInTree);
+			dialogbox.center();
+			}
+			
+		});
 
 		// RootPanel.get("content").clear();
 		RootPanel.get("content").add(contentViewContainer);
@@ -239,40 +250,36 @@ public class KontaktlistView extends MainFrame {
 		}
 	}
 
-	// class deleteKontaktFromKontaktlisteClickHandler implements ClickHandler {
-	//
-	// ArrayList<Kontakt> kontakteToRemoveFromKontaktliste;
-	//
-	// public deleteKontaktFromKontaktlisteClickHandler(ArrayList<Kontakt>
-	// selectedKontakteInCellTable) {
-	// kontakteToRemoveFromKontaktliste = selectedKontakteInCellTable;
-	// }
-	//
-	// @Override
-	// public void onClick(ClickEvent event) {
-	// if(kontakteToRemoveFromKontaktliste.size() == 0) {
-	// Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du
-	// löschen möchtest");
-	// } else {
-	// KontaktFromKontaktlisteLoeschenDialogBox kontaktFromKKontaktlisteLoeschen
-	// = new
-	// KontaktFromKontaktlisteLoeschenDialogBox(kontakteToRemoveFromKontaktliste,
-	// selectionModel.getSelectedObject());
-	// kontaktFromKKontaktlisteLoeschen.center();
-	//
-	//
-	// }
-	// }
-	// }
 	class KontaktAusKontaktlisteDeleteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			
+			KontaktKontaktliste kliste = new KontaktKontaktliste();
+			kliste.setKontaktID(selectedKontakt.getId());
+			kliste.setKontaktlisteID(kontaktliste.getId());
+			kontaktmanagerVerwaltung.deleteKontaktKontaktliste(kliste, new KontaktausKontaktlisteCallback());
 		}
-		
+
+		class KontaktausKontaktlisteCallback implements AsyncCallback<Void> {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("Kontakt wurde aus der Kontaktliste entfernt");
+				KontaktlistView klV = new KontaktlistView(kontaktliste);
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(klV);
+			}
+
+		}
+
 	}
+
 	class AnsehenClickHandler implements ClickHandler {
 
 		@Override
@@ -321,6 +328,18 @@ public class KontaktlistView extends MainFrame {
 
 	}
 
+	class AddTeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			if (kontaktliste == null) {
+				Window.alert("Bitte wähle zuerst eine Kontaktliste");
+			} else {
+				
+			}
+		}
+		
+	}
 	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {
 
 		ArrayList<Kontakt> selectedKontakteInCellTable;
@@ -331,13 +350,16 @@ public class KontaktlistView extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			if (selectedKontakteInCellTable.size() == 0) {
+			if (selectedKontakt == null) {
 				Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du teilen möchtest");
 			} else {
-				TeilhaberschaftDialogBox dialogBox = new TeilhaberschaftDialogBox(selectedKontakteInCellTable);
-				dialogBox.center();
+//				TeilhaberschaftDialogBox dialogBox = new TeilhaberschaftDialogBox(selectedKontakteInCellTable);
+//				dialogBox.center();
+			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(selectedKontakt);
+			dialogbox.center();
 			}
 		}
+		
 	}
 
 	static class KontaktCell extends AbstractCell<Kontakt> {
@@ -348,21 +370,19 @@ public class KontaktlistView extends MainFrame {
 			if (value == null) {
 				return;
 			}
-			 sb.appendHtmlConstant("<table>");
-			   sb.appendHtmlConstant("<td style='font-size:95%;'>");
-			   sb.appendEscaped(value.getName());
-			   sb.appendHtmlConstant("</td></tr><tr><td>");
-			   if(value.getStatus() == 0){
-				   sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+			sb.appendHtmlConstant("<table>");
+			sb.appendHtmlConstant("<td style='font-size:95%;'>");
+			sb.appendEscaped(value.getName());
+			sb.appendHtmlConstant("</td><td>");
+			if (value.getStatus() == 0) {
+				sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
 
-			   } else if (value.getStatus() == 1){
-				   
-				   sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
-			   }
-//			   sb.appendEscaped(String.valueOf(value.getStatus()));
-			   sb.appendHtmlConstant("</td></tr></table>");
-			   sb.appendHtmlConstant("</table>");
-				
+			} else if (value.getStatus() == 1) {
+
+				sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
+			}
+			sb.appendHtmlConstant("</td></table>");
+
 		}
 	}
 

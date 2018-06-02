@@ -9,9 +9,6 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.CellTree;
-import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
-import com.google.gwt.user.cellview.client.TreeNode;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -39,10 +36,10 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 
-	private VerticalPanel vPanel = new VerticalPanel();
+//	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel treeContainer = new HorizontalPanel();
-	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
-	private HTML instructionMessage = new HTML("<br>Hier kannst du deine Kontakte verwalten.");
+//	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
+//	private HTML instructionMessage = new HTML("<br>Hier kannst du deine Kontakte verwalten.");
 	private Nutzer nutzerKontaktliste = new Nutzer();
 	private Tree navigationTree = new Tree();
 	private Label navigationHeadline = new Label("Navigation");
@@ -55,7 +52,6 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	private Button kontakte = new Button("Kontakte");
 	private Button teilhaberschaften = new Button("Teilhaberschaften");
 	private CustomTreeModel customTreeModel;
-	private CellTree navigationCellTree;
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
@@ -163,8 +159,23 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				@Override
 				public void render(Context context, Kontaktliste value, SafeHtmlBuilder sb) {
 					if (value != null) {
+						
+						sb.appendHtmlConstant("<table><td>");
 						sb.appendEscaped(value.getBezeichnung());
-					}
+						sb.appendHtmlConstant("</td><td>");
+						sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+						sb.appendHtmlConstant("</td></table>");
+						}
+
+//						if (value.getStatus() == 0) {
+//							sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+//
+//						} else if (value.getStatus() == 1) {
+//
+//							sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
+//						}
+
+					
 				}
 			};
 			// Return a node info that pairs the data with a cell.
@@ -184,32 +195,5 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		}
 	}
 
-
-	public void onLoad() {
-
-		customTreeModel = new CustomTreeModel();
-		navigationCellTree = new CellTree(customTreeModel, "Root");
-		navigationCellTree.setAnimationEnabled(true);
-		treeContainer.add(navigationCellTree);
-		navigationCellTree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-
-		//KÖNNEN DANN WEG WENN TREE KLAPPT
-		kontakte.addClickHandler(new kontakteClickHandler());
-		teilhaberschaften.addClickHandler(new teilhaberschaftClickHandler());
-
-
-		welcomeMessage.addStyleName("headline");
-		vPanel.setStylePrimaryName("headlinePanel");
-		vPanel.add(welcomeMessage);
-		instructionMessage.setStylePrimaryName("landingpageText");
-		vPanel.add(instructionMessage);
-		vPanel.add(kontakte);
-		vPanel.add(teilhaberschaften);
-
-		RootPanel.get("leftmenutree").clear();
-		RootPanel.get("leftmenutree").add(treeContainer);
-		RootPanel.get("content").clear();
-		RootPanel.get("content").add(vPanel);
-	}
 
 }
