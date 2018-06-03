@@ -45,7 +45,7 @@ public abstract class Report implements Serializable {
   /**
    * Datum der Erstellung des Berichts.
    */
-  private Date created = new Date();
+  private String created = "";
 
   /**
    * Auslesen des Impressums.
@@ -106,7 +106,7 @@ public abstract class Report implements Serializable {
    * 
    * @return Datum der Erstellung des Berichts
    */
-  public Date getCreated() {
+  public String getCreated() {
     return this.created;
   }
 
@@ -117,7 +117,7 @@ public abstract class Report implements Serializable {
    * 
    * @param created Zeitpunkt der Erstellung
    */
-  public void setCreated(Date created) {
+  public void setCreated(String created) {
     this.created = created;
   }
 

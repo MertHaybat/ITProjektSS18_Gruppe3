@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
-import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
+import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -147,7 +147,7 @@ public interface KontaktmanagerAdministrationAsync {
 	void findAllNutzer(AsyncCallback<Vector<Nutzer>> callback);
 
 	void findEigenschaftHybrid(Person person,
-			  AsyncCallback<Vector<EigenschaftsAuspraegungHybrid>> callback);
+			  AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> callback);
 
 	void deleteKontaktByID(Kontakt k, AsyncCallback<Void> callback);
 
@@ -172,6 +172,11 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findTeilhaberUndEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung,
 			String eigenschaft, AsyncCallback<Vector<Kontakt>> callback);
+
+	void findAllKontakteByEigentuemerID(int eigentuemerID, AsyncCallback<Vector<Kontakt>> callback);
+
+	void findEigenschaftsauspraegungById(int eigenschaftsauspraegungID,
+			AsyncCallback<Eigenschaftsauspraegung> callback);
 
 	
 	

@@ -8,9 +8,15 @@ import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.dom.client.BrowserEvents;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -30,14 +36,21 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
+import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
+import de.hdm.itprojektss18Gruppe3.client.gui.TeilhaberschaftDialogBox.EigenschaftPreviewClickHander;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -49,7 +62,6 @@ public class AllKontaktView extends MainFrame {
 	private Label menuBarHeadlineLabel = new Label("Kontakte");
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
-	private Button logoutButton = new Button("Ausloggen");
 	private Button addKontaktButton = new Button("Neuer Kontakt");
 	private Button deleteKontaktButton = new Button("Kontakt löschen");
 	private Button addKontaktToKontaktlistButton = new Button("+ Kontaktliste");
@@ -69,17 +81,8 @@ public class AllKontaktView extends MainFrame {
 	private MultiSelectionModel<Kontakt> selectionModelCellTable = new MultiSelectionModel<Kontakt>(keyProvider);
 	private Nutzer nutzerausdb = null;
 	private Kontaktliste kontaktliste = new Kontaktliste();
-	/**
-	 * The list of data to display.
-	 */
-
-	private Kontakt kontakt = null;
-
-	// public AllKontaktView(){
-	//
-	//
-	// }
-	//
+	private final Handler<Kontakt> selectionEventManager = DefaultSelectionEventManager
+			.createCheckboxManager();
 	public AllKontaktView() {
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
@@ -103,8 +106,7 @@ public class AllKontaktView extends MainFrame {
 		};
 
 		
-		allKontakteCellTable.setSelectionModel(selectionModelCellTable,
-				DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
+		allKontakteCellTable.setSelectionModel(selectionModelCellTable, selectionEventManager);
 		selectionModelCellTable.addSelectionChangeHandler(new SelectionChangeHandlerCellTable());
 
 		/*
@@ -117,7 +119,6 @@ public class AllKontaktView extends MainFrame {
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 
 		suchenButton.setStylePrimaryName("mainButton");
-		logoutButton.setStylePrimaryName("mainButton");
 		addKontaktButton.setStylePrimaryName("mainButton");
 		deleteKontaktButton.setStylePrimaryName("mainButton");
 		addKontaktToKontaktlistButton.setStylePrimaryName("mainButton");
@@ -174,7 +175,6 @@ public class AllKontaktView extends MainFrame {
 				}
 			}
 		};
-
 		ButtonCell visitProfileButton = new ButtonCell();
 		Column<Kontakt, String> visitProfileButtonColumn = new Column<Kontakt, String>(visitProfileButton) {
 			public String getValue(Kontakt object) {
@@ -193,21 +193,22 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.addColumn(iconColumn, "Status");
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
 		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
-
+		
 		allKontakteCellTableContainer.add(allKontakteCellTable);
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.add(contentHeadline);
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.add(allKontakteCellTableContainer);
 
-		logoutButton.addClickHandler(new LogoutClickHandler());
 		deleteKontaktButton.addClickHandler(new KontaktDeleteClickHandler());
 		addKontaktToKontaktlistButton.addClickHandler(new AddKontaktToKontaktlisteClickHandler());
 		addTeilhaberschaftKontaktButton
 				.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
 		addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
 		suchenButton.addClickHandler(new SuchenClickHandler());
+
 		
+	
 		
 		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
 		menuBarContainerFlowPanel.add(addKontaktButton);
@@ -216,7 +217,6 @@ public class AllKontaktView extends MainFrame {
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 //		menuBarContainerFlowPanel.add(box);
 		menuBarContainerFlowPanel.add(suchenButton);
-		menuBarContainerFlowPanel.add(logoutButton);
 		RootPanel.get("menubar").add(menuBarContainerPanel);
 		RootPanel.get("content").add(vPanel);
 
@@ -306,6 +306,7 @@ public class AllKontaktView extends MainFrame {
 		}
 		
 	}
+
 	public class SelectionChangeHandlerCellTable implements SelectionChangeEvent.Handler{
 
 		public void onSelectionChange(SelectionChangeEvent event) {

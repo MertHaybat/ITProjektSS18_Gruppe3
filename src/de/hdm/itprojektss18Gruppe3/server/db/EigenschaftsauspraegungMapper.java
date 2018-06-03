@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 /**
  * Die Mapper-Klasse "EigenschaftsauspraegungMapper" ermöglicht das Abbilden von Objekten "Eigenschaftsauspraegung" in einer relationalen Datenbank. 
@@ -56,6 +57,56 @@ public class EigenschaftsauspraegungMapper {
 		return eigenschaftsauspraegungMapper;
 		}
 	
+	public Eigenschaftsauspraegung findEigenschaftsauspraegungByID(int eigenschaftsauspraegungID){
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+
+		Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
+
+		try {
+
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM eigenschaftsauspraegung WHERE `id` = ?");
+
+			stmt.setInt(1, eigenschaftsauspraegungID);
+			ResultSet rs = stmt.executeQuery();
+
+			/**
+			 * Für jeden Eintrag im Suchergebnis wird nun ein Nutzer-Objekt
+			 * erstellt.
+			 */
+			if (rs.next()) {
+				Eigenschaftsauspraegung eigenschaftsauspraegung = new Eigenschaftsauspraegung();
+
+				eigenschaftsauspraegung.setId(rs.getInt("id"));
+				eigenschaftsauspraegung.setEigenschaftID(rs.getInt("eigenschaftid"));
+				eigenschaftsauspraegung.setPersonID(rs.getInt("personid"));
+				eigenschaftsauspraegung.setStatus(rs.getInt("status"));
+				eigenschaftsauspraegung.setWert(rs.getString("wert"));
+				
+				
+				auspraegung = eigenschaftsauspraegung;
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return auspraegung;
+		
+	}
 	/**
 	 * Die Methode "createEigenschaftsauspraegung" ermöglicht das Einfügen von Objekten "Eigenschaftsauspraegung".
 	 *

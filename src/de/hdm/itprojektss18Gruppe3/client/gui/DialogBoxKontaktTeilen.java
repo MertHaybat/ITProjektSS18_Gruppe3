@@ -208,8 +208,17 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				nutzer.setMail(Cookies.getCookie("mail"));
-				kontaktmanagerVerwaltung.createTeilhaberschaft(0, soloKontakt.getId(), 0, result.getId(),
-						nutzer.getId(), new createTeilhaberschaftCallback());
+				if (kontakt.size() > 0) {
+					for (Kontakt kontakt : kontakt) {
+						kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontakt.getId(), 0, result.getId(),
+								nutzer.getId(), new createTeilhaberschaftCallback());
+
+					}
+				} else {
+					kontaktmanagerVerwaltung.createTeilhaberschaft(0, soloKontakt.getId(), 0, result.getId(),
+							nutzer.getId(), new createTeilhaberschaftCallback());
+
+				}
 			}
 
 		}

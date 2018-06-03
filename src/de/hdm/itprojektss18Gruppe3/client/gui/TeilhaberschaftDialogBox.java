@@ -35,10 +35,10 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
+import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktTeilen.CreateKontaktTeilhaberschaftClickHandler.KontaktFindNutzerByMailCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
-import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
@@ -54,7 +54,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 
-	private final MultiSelectionModel<EigenschaftsAuspraegungHybrid> ssmAuspraegung = new MultiSelectionModel<EigenschaftsAuspraegungHybrid>();
+	private final MultiSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = new MultiSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private final MultiSelectionModel<Eigenschaft> eigenschaftModel = new MultiSelectionModel<Eigenschaft>();
 
 	private final CheckboxCell cbCell = new CheckboxCell(false, true);
@@ -75,7 +75,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 	private KontaktCellTable kt = new KontaktCellTable(kontaktNeu);
 
-	private final Handler<EigenschaftsAuspraegungHybrid> selectionEventManager = DefaultSelectionEventManager
+	private final Handler<EigenschaftsAuspraegungWrapper> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
 
 	private final Handler<Eigenschaft> eigenschaftSelectionEventManager = DefaultSelectionEventManager
@@ -101,7 +101,6 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	}
 
 	public void run() {
-
 		setText("Wählen Sie die zu teilenden Eigenschaften aus sowie die Person, mit der Sie den Kontakt teilen möchten");
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
 		ftTeilhaberschaft.setWidget(1, 0, kt);
@@ -111,10 +110,10 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		ftTeilhaberschaft.setWidget(5, 1, b1);
 		ftTeilhaberschaft.setWidget(5, 2, b2);
 
-		Column<EigenschaftsAuspraegungHybrid, Boolean> cbColumn = new Column<EigenschaftsAuspraegungHybrid, Boolean>(
+		Column<EigenschaftsAuspraegungWrapper, Boolean> cbColumn = new Column<EigenschaftsAuspraegungWrapper, Boolean>(
 				cbCell) {
 			@Override
-			public Boolean getValue(EigenschaftsAuspraegungHybrid object) {
+			public Boolean getValue(EigenschaftsAuspraegungWrapper object) {
 				return ssmAuspraegung.isSelected(object);
 			}
 		};
@@ -222,12 +221,12 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		}
 	}
 
-	public class PreviewClickHander implements Handler<EigenschaftsAuspraegungHybrid> {
+	public class PreviewClickHander implements Handler<EigenschaftsAuspraegungWrapper> {
 		@Override
-		public void onCellPreview(CellPreviewEvent<EigenschaftsAuspraegungHybrid> event) {
+		public void onCellPreview(CellPreviewEvent<EigenschaftsAuspraegungWrapper> event) {
 			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
 
-				final EigenschaftsAuspraegungHybrid value = event.getValue();
+				final EigenschaftsAuspraegungWrapper value = event.getValue();
 				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
 				event.getDisplay().getSelectionModel().setSelected(value, state);
 				event.setCanceled(true);
@@ -235,7 +234,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		}
 	}
 
-	public class EigenschaftAuspraegungCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungHybrid>> {
+	public class EigenschaftAuspraegungCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -244,7 +243,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		}
 
 		@Override
-		public void onSuccess(Vector<EigenschaftsAuspraegungHybrid> result) {
+		public void onSuccess(Vector<EigenschaftsAuspraegungWrapper> result) {
 
 			// TODO
 			// for (EigenschaftsAuspraegungHybrid eigenschaftsAuspraegungHybrid
@@ -294,15 +293,16 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				nutzer.setMail(Cookies.getCookie("mail"));
 
-				List<EigenschaftsAuspraegungHybrid> eListe = new ArrayList<>();
+				List<EigenschaftsAuspraegungWrapper> eListe = new ArrayList<>();
 
-				for (EigenschaftsAuspraegungHybrid auspraegung : ssmAuspraegung.getSelectedSet()) {
+				for (EigenschaftsAuspraegungWrapper auspraegung : ssmAuspraegung.getSelectedSet()) {
 					eListe.add(auspraegung);
 				}
 				for (int i = 0; i < eListe.size(); i++) {
 
-					kontaktmanagerVerwaltung.createTeilhaberschaft(0, 0, eListe.get(i).getAuspraegungid(),
-							result.getId(), nutzer.getId(), new createTeilhaberschaftCallback());
+					kontaktmanagerVerwaltung.createTeilhaberschaft(0, 0,
+							eListe.get(i).getIDEigenschaftsauspraegungValue(), result.getId(), nutzer.getId(),
+							new createTeilhaberschaftCallback());
 
 				}
 
