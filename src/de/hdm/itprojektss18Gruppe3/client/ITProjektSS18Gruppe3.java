@@ -72,7 +72,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
 		logoutButton.addClickHandler(new logoutClickHandler());
 		logoutButton.setStylePrimaryName("logoutButton");
-		hPanelBar.add(logoutButton);
+		RootPanel.get("logout").add(logoutButton);//hPanelBar.add(logoutButton);
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("menubar").clear();
 //		RootPanel.get("menubar").add(hPanelBar);

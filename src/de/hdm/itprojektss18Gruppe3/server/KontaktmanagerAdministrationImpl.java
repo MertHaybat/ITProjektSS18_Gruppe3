@@ -16,7 +16,7 @@ import de.hdm.itprojektss18Gruppe3.server.db.PersonMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.TeilhaberschaftMapper;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministration;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
-import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
+import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -220,15 +220,13 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			int teilhabenderID, int eigentuemerID) throws IllegalArgumentException {
 
 		if(kontaktID != 0){
-			Kontakt k = new Kontakt();
-			k.setId(kontaktID);
+			Kontakt k = findKontaktByID(kontaktID);
 			k.setStatus(1);
 			saveKontakt(k);
 		}
 		
 		if(eigenschaftsauspraegungID != 0){
-			Eigenschaftsauspraegung e = new Eigenschaftsauspraegung();
-			e.setId(eigenschaftsauspraegungID);
+			Eigenschaftsauspraegung e = findEigenschaftsauspraegungById(eigenschaftsauspraegungID);
 			e.setStatus(1);
 			saveEigenschaftsauspraegung(e);
 		}
@@ -1022,7 +1020,17 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			throws IllegalArgumentException {
 
 		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		for(int i = 0; i<teilhabenderVector.size(); i++){
+			if(teilhabenderVector.elementAt(i).getKontaktID() == 0){
+				teilhabenderVector.removeElementAt(i);
+			}
+		}
 		Vector<Teilhaberschaft> eigentuemerVector = findTeilhaberschaftByEigentuemerID(eigentuemerID);
+		for(int o = 0; o<eigentuemerVector.size(); o++){
+			if(eigentuemerVector.elementAt(o).getKontaktID() == 0){
+				eigentuemerVector.removeElementAt(o);
+			}
+		}
 		Vector<Teilhaberschaft> filteredTeilhaberschaften = new Vector<Teilhaberschaft>();
 
 		for (int i = 0; i < teilhabenderVector.size(); i++) {
@@ -1038,6 +1046,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		for (Teilhaberschaft teilhaberschaft : filteredTeilhaberschaften) {
 			kontakte.add(findKontaktByID(teilhaberschaft.getKontaktID()));
 		}
+	
+		
 		return kontakte;
 	}
 
@@ -1076,7 +1086,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	@Override
-	public Vector<EigenschaftsAuspraegungHybrid> findEigenschaftHybrid(Person person) throws IllegalArgumentException {
+	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftHybrid(Person person) throws IllegalArgumentException {
 		Vector<Eigenschaftsauspraegung> auspraegung = findAllEigenschaftsauspraegungByPersonID(person);
 
 		Vector<Eigenschaft> eigenschaft = new Vector<Eigenschaft>();
@@ -1085,7 +1095,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			eigenschaft.add(findEigenschaftByEigenschaftID(eigenschaftsauspraegung.getEigenschaftID()));
 		}
 
-		Vector<EigenschaftsAuspraegungHybrid> eigenschaftAuspraegung = new Vector<EigenschaftsAuspraegungHybrid>();
+		Vector<EigenschaftsAuspraegungWrapper> eigenschaftAuspraegung = new Vector<EigenschaftsAuspraegungWrapper>();
 
 		Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
 
@@ -1102,7 +1112,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			for (int p = 0; p < eigenschaft.size(); p++) {
 				for (int z = 0; z < eigenschaft.size(); z++) {
 					if (eigenschaft.elementAt(p).getId() == auspraegungVector.elementAt(z).getEigenschaftID()) {
-						eigenschaftAuspraegung.add(new EigenschaftsAuspraegungHybrid(eigenschaft.elementAt(p),
+						eigenschaftAuspraegung.add(new EigenschaftsAuspraegungWrapper(eigenschaft.elementAt(p),
 								auspraegungVector.elementAt(z)));
 					}
 
@@ -1116,7 +1126,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			for (int x = 0; x < auspraegung.size(); x++) {
 				if (auspraegung.elementAt(i).getEigenschaftID() == eigenschaft.elementAt(x).getId()) {
 					eigenschaftAuspraegung
-							.add(new EigenschaftsAuspraegungHybrid(eigenschaft.elementAt(x), auspraegung.elementAt(i)));
+							.add(new EigenschaftsAuspraegungWrapper(eigenschaft.elementAt(x), auspraegung.elementAt(i)));
 
 				}
 
@@ -1268,6 +1278,29 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		alleKontakte.addAll(teilhabendeKontakte);
 		
 		return alleKontakte;
+	}
+
+	@Override
+	public Vector<Kontakt> findAllKontakteByEigentuemerID(int eigentuemerID) throws IllegalArgumentException {
+		Vector<Teilhaberschaft> eigentuemerVector = findTeilhaberschaftByEigentuemerID(eigentuemerID);
+		Vector<Kontakt> eigentumKontakt = new Vector<Kontakt>();
+		for(int i = 0; i<eigentuemerVector.size(); i++){
+			if(eigentuemerVector.elementAt(i).getKontaktID() == 0){
+				eigentuemerVector.removeElementAt(i);
+			}
+		}
+		
+		for (Teilhaberschaft teilhaberschaft : eigentuemerVector) {
+			eigentumKontakt.add(findKontaktByID(teilhaberschaft.getKontaktID()));
+		}
+		
+		return eigentumKontakt;
+	}
+
+	@Override
+	public Eigenschaftsauspraegung findEigenschaftsauspraegungById(int eigenschaftsauspraegungID)
+			throws IllegalArgumentException {
+		return this.eigenschaftsauspraegungMapper.findEigenschaftsauspraegungByID(eigenschaftsauspraegungID);
 	}
 
 	// @Override

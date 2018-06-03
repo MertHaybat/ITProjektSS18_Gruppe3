@@ -26,7 +26,10 @@ public class EigenschaftsAuspraegungWrapper  {
 		this.eigenschaft = eigenschaft;
 		this.auspraegung = auspraegung;
 	}
-
+	public Eigenschaftsauspraegung getEigenschaftsauspraegungObject(int auspraegungID){
+		auspraegung.setId(auspraegungID);
+		return auspraegung;
+	}
 	public String getBezeichnungEigenschaftValue(){
 		return this.eigenschaft.getBezeichnung();
 	}

@@ -32,6 +32,11 @@ html {
 	text-shadow: 1.5px 1.5px grey;
 	letter-spacing: 0.01em;
 }
+#logout {
+	position: relative;
+    top: -44px;
+    left: 1176px;
+}
 
 #menubar {
 	height: 40px;
@@ -233,18 +238,7 @@ border: double;
   font-size: 16pt;
 }
 
-.clientAuswahlButton {
-	width: 180px;
-	height: 60px;
-	color: white;
-	letter-spacing: 0.5px;;
-	text-shadow:1px 1px 1px black;
-	background: linear-gradient(to bottom right, #b3e6ff 0%, #66ccff 100%);
-	border-radius:6px;
-	border:1px solid #b3e6ff;
-	font-size: 1.4em;
-	margin-left: 10px;
-}
+
 
 .clientAuswahlButton:hover {
 	background: white;

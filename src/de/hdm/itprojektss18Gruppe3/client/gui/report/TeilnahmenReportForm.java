@@ -66,6 +66,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 			// TODO
 			for (Nutzer nutzer : result) {
 				lbNutzerEigentuemer.addItem(nutzer.getMail());
+				lbNutzerTeilhabender.addItem("Alle");
 				lbNutzerTeilhabender.addItem(nutzer.getMail());
 			}
 		}

@@ -1,5 +1,6 @@
 package de.hdm.itprojektss18Gruppe3.server.report;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
@@ -31,7 +32,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	   * da diese den Zugriff auf die BusinessObjects hat.
 	   */
 	private KontaktmanagerAdministration kontaktmanagerAdministration = null;
-	
+
 	
 	public ReportGeneratorImpl() throws IllegalArgumentException{
 	}
@@ -62,8 +63,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		AlleKontakteReport result = new AlleKontakteReport();
 		
 		result.setTitle("Alle Kontakte im Kontaktmanager");
-		
-		result.setCreated(new Date());
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
+		result.setCreated(simpleDateFormat.format(new Date()));
 		
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));
@@ -103,12 +104,13 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 		Nutzer nutzerA = findNutzerByMail(a);
 		Nutzer nutzerB = findNutzerByMail(b);
-		
+		String alle = "Alle";
+		Vector<Kontakt> alleKontakteByTeilhaberschaft = new Vector<Kontakt>();
 		AlleKontakteByTeilhaberschaftReport result = new AlleKontakteByTeilhaberschaftReport();
 
 		result.setTitle("Alle Kontakte der Teilhaberschaften zwischen zwei Nutzern");
-
-		result.setCreated(new Date());
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
+		result.setCreated(simpleDateFormat.format(new Date()));
 
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));
@@ -118,9 +120,13 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		headline.addColumn(new Column("Ersteller"));
 
 		result.addRow(headline);
-
-		Vector<Kontakt> alleKontakteByTeilhaberschaft = this.getKontaktVerwaltung()
-				.findAllKontaktByTeilhaberschaften(nutzerA.getId(), nutzerB.getId());
+		
+		if(b.equals(alle)){
+			alleKontakteByTeilhaberschaft= this.getKontaktVerwaltung().findAllKontakteByEigentuemerID(nutzerA.getId());
+		} else {
+			alleKontakteByTeilhaberschaft = this.getKontaktVerwaltung()
+					.findAllKontaktByTeilhaberschaften(nutzerA.getId(), nutzerB.getId());
+		}
 
 		for (Kontakt kontakt : alleKontakteByTeilhaberschaft) {
 			Row kontakte = new Row();
@@ -154,8 +160,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport result = new KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport();
 
 		result.setTitle("Kontakte mit angegebenen Eigenschaften und Ausprägungen");
-
-		result.setCreated(new Date());
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
+		result.setCreated(simpleDateFormat.format(new Date()));
 
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));

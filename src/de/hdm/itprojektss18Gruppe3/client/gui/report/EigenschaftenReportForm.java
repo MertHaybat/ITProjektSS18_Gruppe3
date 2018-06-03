@@ -50,17 +50,19 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 
 		RootPanel.get("content").add(this);
 
-		btAllAuspraegungen.addClickHandler(new ClickHandler() {
+		btAllAuspraegungen.addClickHandler(new AllAuspraegungenClickHandler());
+	}
+	
+	class AllAuspraegungenClickHandler implements ClickHandler{
 
-			@Override
-			public void onClick(ClickEvent event) {
-				vpanel.clear();
-				vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(listboxEigenschaften.getSelectedValue(),
-						tbAuspraegung.getValue()));
-				RootPanel.get("content").add(vpanel);
-			}
-		});
-
+		@Override
+		public void onClick(ClickEvent event) {
+			vpanel.clear();
+			vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(listboxEigenschaften.getSelectedValue(),
+					tbAuspraegung.getValue()));
+			RootPanel.get("content").add(vpanel);
+		}
+		
 	}
 
 	class EigenschaftenCallback implements AsyncCallback<Vector<Eigenschaft>> {

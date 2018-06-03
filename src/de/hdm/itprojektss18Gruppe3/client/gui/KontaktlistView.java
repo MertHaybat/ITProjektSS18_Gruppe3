@@ -12,7 +12,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
-import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
+import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
@@ -289,7 +289,7 @@ public class KontaktlistView extends MainFrame {
 
 	}
 
-	class EigenschaftAuspraegungCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungHybrid>> {
+	class EigenschaftAuspraegungCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -298,25 +298,25 @@ public class KontaktlistView extends MainFrame {
 		}
 
 		@Override
-		public void onSuccess(Vector<EigenschaftsAuspraegungHybrid> result) {
-			for (EigenschaftsAuspraegungHybrid eigenschaftsAuspraegungHybrid : result) {
-				switch (eigenschaftsAuspraegungHybrid.getEigenschaftid()) {
+		public void onSuccess(Vector<EigenschaftsAuspraegungWrapper> result) {
+			for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : result) {
+				switch (eigenschaftsAuspraegungWrapper.getEigenschaftIdValue()){
 
 				case 1:
-					vornameBox.setValue(eigenschaftsAuspraegungHybrid.getAuspraegung());
+					vornameBox.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
 
 					break;
 				case 2:
-					nachnameBox.setValue(eigenschaftsAuspraegungHybrid.getAuspraegung());
+					nachnameBox.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
 					break;
 				case 3:
-					geburtsdatum.setValue(eigenschaftsAuspraegungHybrid.getAuspraegung());
+					geburtsdatum.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
 					break;
 				case 4:
-					telefonnummer.setValue(eigenschaftsAuspraegungHybrid.getAuspraegung());
+					telefonnummer.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
 					break;
 				case 5:
-					mail.setValue(eigenschaftsAuspraegungHybrid.getAuspraegung());
+					mail.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
 					break;
 
 				default:

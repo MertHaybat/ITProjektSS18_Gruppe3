@@ -27,7 +27,6 @@ import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm.CreateKontaktCallback;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm.UpdateAuspraegungCallback;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm.UpdateKontaktCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
-import de.hdm.itprojektss18Gruppe3.shared.bo.EigenschaftsAuspraegungHybrid;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
