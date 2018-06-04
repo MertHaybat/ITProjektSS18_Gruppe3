@@ -9,6 +9,8 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.cellview.client.CellTree;
+import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -36,12 +38,12 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 
-//	private VerticalPanel vPanel = new VerticalPanel();
-	private HorizontalPanel treeContainer = new HorizontalPanel();
+	private VerticalPanel vPanel = new VerticalPanel();
+	private VerticalPanel treeContainer = new VerticalPanel();
 //	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
 //	private HTML instructionMessage = new HTML("<br>Hier kannst du deine Kontakte verwalten.");
 	private Nutzer nutzerKontaktliste = new Nutzer();
-	private Tree navigationTree = new Tree();
+	private CellTree navigationCellTree;
 	private Label navigationHeadline = new Label("Navigation");
 	private VerticalPanel navigationTreePanel = new VerticalPanel();
 	private SingleSelectionModel<Kontaktliste> selectionModel = null;
@@ -115,7 +117,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 
 	/*
-	 * AsybcCallback zum Abfragen aller Kontaktlisten des eingeloggten Nutzers. Das Ergebnis wird dem 
+	 * AsyncCallback zum Abfragen aller Kontaktlisten des eingeloggten Nutzers. Das Ergebnis wird dem 
 	 * DataListProvider übergeben, wodurch die Anzeige der einzelnen Kontaktlisten im CellTree
 	 * ermöglicht wird
 	 */
@@ -194,6 +196,32 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			return false;
 		}
 	}
+	
+	public void onLoad() {
 
+		customTreeModel = new CustomTreeModel();
+		navigationCellTree = new CellTree(customTreeModel, "Root");
+		navigationCellTree.setAnimationEnabled(true);
+		treeContainer.add(navigationHeadline);
+		navigationHeadline .setStylePrimaryName("navigationPanelHeadline");
+		treeContainer.add(navigationCellTree);
+		navigationCellTree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+
+		//KÖNNEN DANN WEG WENN TREE KLAPPT
+		kontakte.addClickHandler(new kontakteClickHandler());
+		teilhaberschaften.addClickHandler(new teilhaberschaftClickHandler());
+
+		vPanel.add(kontakte);
+		vPanel.add(teilhaberschaften);
+
+
+		RootPanel.get("leftmenutree").clear();
+		RootPanel.get("leftmenutree").add(treeContainer);
+		RootPanel.get("content").clear();
+		RootPanel.get("content").add(vPanel);
+	}
 
 }
+
+
+

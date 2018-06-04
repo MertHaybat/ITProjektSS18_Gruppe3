@@ -152,7 +152,7 @@ html {
 	font-size: 1.5em;
 	font-weight: bold;
 	color: #606060;
-	margin: 20px 10px 20px 20px;
+	margin: 20px 0px 20px 10px;
 }
 
 
@@ -202,7 +202,7 @@ html {
   white-space: nowrap;
   cursor: hand;
   cursor: pointer;
-	line-height: 20px;  	
+  line-height: 10px;  	
 	
 }
 
