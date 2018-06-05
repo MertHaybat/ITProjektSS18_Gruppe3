@@ -149,7 +149,7 @@ public class KontaktCellList extends MainFrame{
 
 		@Override
 		public void onClick(ClickEvent event) {
-			KontaktForm kontaktForm = new KontaktForm(selectedKontakt);
+			KontaktForm kontaktForm = new KontaktForm(selectedKontakt, kontaktliste);
 		}
 
 	}

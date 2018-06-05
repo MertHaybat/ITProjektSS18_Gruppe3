@@ -225,6 +225,7 @@ public class AllKontaktView extends MainFrame {
 		// menuBarContainerFlowPanel.add(box);
 		menuBarContainerFlowPanel.add(suchenButton);
 		menuBarContainerFlowPanel.add(logoutButton);
+		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menuBarContainerPanel);
 		RootPanel.get("content").add(vPanel);
 
@@ -432,7 +433,7 @@ public class AllKontaktView extends MainFrame {
 					});
 		}
 	}
-	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {
+	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {	
 
 		ArrayList<Kontakt> selectedKontakteInCellTable;
 
@@ -451,7 +452,7 @@ public class AllKontaktView extends MainFrame {
 				DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(selectedKontakteInCellTable);
 				dialogbox.center();
 			}
-		}
+		} 
 	}
 
 }

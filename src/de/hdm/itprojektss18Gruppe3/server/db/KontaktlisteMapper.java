@@ -83,13 +83,14 @@ public class KontaktlisteMapper {
 				 * Durchführen der Einfüge Operation via Prepared Statement
 				 */				
 				PreparedStatement stmt1 = con.prepareStatement(
-						"INSERT INTO kontaktliste(id, bezeichnung, nutzerid) "
-						+ "VALUES(?, ?, ?) ",
+						"INSERT INTO kontaktliste(id, bezeichnung, nutzerid, status) "
+						+ "VALUES(?, ?, ?, ?) ",
 								
 				Statement.RETURN_GENERATED_KEYS);
 				stmt1.setInt(1, kontaktliste.getId());
 				stmt1.setString(2, kontaktliste.getBezeichnung());
 				stmt1.setInt(3, kontaktliste.getNutzerID());
+				stmt1.setInt(1, kontaktliste.getStatus());
 				
 				System.out.println(stmt);
 				stmt1.executeUpdate();			
@@ -117,7 +118,6 @@ public class KontaktlisteMapper {
 	 * @return kontaktliste vom Objekt Kontaktliste
 	 */
 	public Kontaktliste updateKontaktliste(Kontaktliste kontaktliste) {
-		String sql = "UPDATE kontaktliste SET bezeichnung= ? WHERE id= ? ";
 		
 		/**
 		 * Verbindung zur DB Connection
@@ -125,12 +125,12 @@ public class KontaktlisteMapper {
 		Connection con = DBConnection.connection();
 			
 		try {
-			PreparedStatement stmt = con.prepareStatement(sql);
+			PreparedStatement stmt = con.prepareStatement("UPDATE kontaktliste SET bezeichnung= ?, status= ? WHERE id= ? ");
 			
 			stmt.setString(1, kontaktliste.getBezeichnung());
-			
-			
 			stmt.setInt(2, kontaktliste.getId());
+			stmt.setInt(0, kontaktliste.getStatus());
+			
 			stmt.executeUpdate();
 			
 			System.out.println("Update complete");
@@ -251,6 +251,7 @@ public class KontaktlisteMapper {
 				kontaktliste.setId(rs.getInt("id"));
 				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
 				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
+				kontaktliste.setStatus(rs.getInt("status"));
 				
 				/**
 				 * Hinzufügen des neuen Objektes zum Ergebnisvektor
@@ -293,6 +294,7 @@ public class KontaktlisteMapper {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE nutzerid= ?");
 			
 			stmt.setInt(1, nutzerID);
+			
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -416,6 +418,7 @@ public class KontaktlisteMapper {
 				kontaktliste.setId(rs.getInt("id"));
 				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
 				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
+				kontaktliste.setStatus(rs.getInt("status"));
 				
 				/**
 				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
@@ -469,6 +472,7 @@ public class KontaktlisteMapper {
 				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
 				kontaktliste.setId(rs.getInt("id"));
 				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
+				kontaktliste.setStatus(rs.getInt("status"));
 				k = kontaktliste;
 			}
 		} catch (SQLException e2) {

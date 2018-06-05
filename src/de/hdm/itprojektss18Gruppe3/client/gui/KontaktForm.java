@@ -62,7 +62,7 @@ public class KontaktForm extends MainFrame {
 	private Button addAuspraegung = new Button("+");
 	private Button saveChanges = new Button("Speichern");
 	private Button deleteContact = new Button("Abbrechen");
-	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
+	private Button zurueckZuAllKontaktView = new Button("Zurück");
 
 	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel vPanel2 = new VerticalPanel();
@@ -76,7 +76,7 @@ public class KontaktForm extends MainFrame {
 
 	private final NoSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = new NoSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private Kontakt k = new Kontakt();
-
+	private Kontaktliste kontaktliste = new Kontaktliste();
 	private Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
 
 	public KontaktForm() {
@@ -90,7 +90,8 @@ public class KontaktForm extends MainFrame {
 
 	public KontaktForm(Kontakt kontakt) {
 		this.k = kontakt;
-
+		
+		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
 		kontaktNameBox.setValue(kontakt.getName());
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
 		modifikationsdatum.setText("Zuletzt geändert am: " + kontakt.getModifikationsdatum());
@@ -100,6 +101,21 @@ public class KontaktForm extends MainFrame {
 		vPanel2.add(erstellungsdatum);
 		super.onLoad();
 
+	}
+	
+	public KontaktForm(Kontakt kontakt, Kontaktliste kontaktliste){
+		this.k = kontakt;
+		this.kontaktliste = kontaktliste;
+
+		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktlisteClickHandler());
+		kontaktNameBox.setValue(kontakt.getName());
+		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
+		modifikationsdatum.setText("Zuletzt geändert am: " + kontakt.getModifikationsdatum());
+		erstellungsdatum.setText("Erstellt am: " + kontakt.getErzeugungsdatum());
+
+		vPanel2.add(modifikationsdatum);
+		vPanel2.add(erstellungsdatum);
+		super.onLoad();		
 	}
 
 	public CellTable<EigenschaftsAuspraegungWrapper> getCelltable() {
@@ -200,7 +216,7 @@ public class KontaktForm extends MainFrame {
 		saveChanges.addClickHandler(new UpdateAuspraegungClickHandler());
 		deleteContact.addClickHandler(new DeleteChangesClickHandler());
 
-		zurueckZuAllKontaktView.addClickHandler(new ZurueckClickHandler());
+		
 
 		celltable.addColumn(wertEigenschaft, "");
 		celltable.addColumn(wertAuspraegung, "");
@@ -247,14 +263,20 @@ public class KontaktForm extends MainFrame {
 		}
 
 	}
-
-	private class ZurueckClickHandler implements ClickHandler {
-
+private class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
+		
 		@Override
 		public void onClick(ClickEvent event) {
-			AllKontaktView allKontaktView = new AllKontaktView();
-		}
+			KontaktlistView allKontaktlistView = new KontaktlistView();
+		}		
+	}
+	private class ZurueckZuKontaktClickHandler implements ClickHandler {
 		
+		@Override
+		public void onClick(ClickEvent event) {
+			RootPanel.get("content").clear();
+			AllKontaktView allKontaktView = new AllKontaktView();
+		}		
 	}
 
 //	class DeleteKontakt implements AsyncCallback<Void> {

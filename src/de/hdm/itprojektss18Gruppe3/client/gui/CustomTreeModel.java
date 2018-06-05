@@ -165,17 +165,17 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 						sb.appendHtmlConstant("<table><td>");
 						sb.appendEscaped(value.getBezeichnung());
 						sb.appendHtmlConstant("</td><td>");
-						sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+						if (value.getStatus() == 0) {
+							sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+
+						} else if (value.getStatus() == 1) {
+
+							sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
+						}
 						sb.appendHtmlConstant("</td></table>");
 						}
 
-//						if (value.getStatus() == 0) {
-//							sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
-//
-//						} else if (value.getStatus() == 1) {
-//
-//							sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
-//						}
+						
 
 					
 				}
@@ -217,8 +217,8 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("leftmenutree").add(treeContainer);
-		RootPanel.get("content").clear();
-		RootPanel.get("content").add(vPanel);
+	//		RootPanel.get("content").clear();
+	//		RootPanel.get("content").add(vPanel);
 	}
 
 }

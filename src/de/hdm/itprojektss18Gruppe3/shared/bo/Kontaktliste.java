@@ -26,6 +26,11 @@ public class Kontaktliste extends BusinessObject{
 	private String bezeichnung = "";
 
 	/**
+	 * Status der Kontaktliste
+	 */
+	private int status = 0;
+	
+	/**
 	 * Auslesen der Fremdschlüsselbeziehung zum Nutzer 
 	 * @return nutzerID
 	 */
@@ -55,6 +60,23 @@ public class Kontaktliste extends BusinessObject{
 	 */
 	public void setBezeichnung(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
+	}
+
+	
+	/**
+	 * Auslesen des Status der Kontaktliste
+	 * @return status
+	 */
+	public int getStatus() {
+		return status;
+	}
+
+	/**
+	 * Setzen des Status der Kontaktliste
+	 * @param status
+	 */
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	
 	
