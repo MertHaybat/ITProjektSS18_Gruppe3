@@ -48,7 +48,6 @@ public class KontaktlistView extends MainFrame {
 	private Label menuBarHeadlineLabel = new Label("Kontaktlisten");
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
-	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
 	private Button deleteKontaktlisteButton = new Button("Kontaktliste löschen");
 	private Button addKontaktToKontaktlisteButton = new Button("Kontakt hinzufügen");
 	private Button deleteKontaktFromKontaktlisteButton = new Button("Kontakt entfernen");
@@ -102,14 +101,12 @@ public class KontaktlistView extends MainFrame {
 		kontaktCellList.getKontaktCell().setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 		//-----
 		menuBarHeadlineLabel.setStylePrimaryName("menuBarLabel");
-		addKontaktlisteButton.setStylePrimaryName("mainButton");
 		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
 		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
 		deleteKontaktFromKontaktlisteButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
 		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
-		menuBarContainerFlowPanel.add(addKontaktlisteButton);
 		menuBarContainerFlowPanel.add(deleteKontaktlisteButton);
 		menuBarContainerFlowPanel.add(addKontaktToKontaktlisteButton);
 		menuBarContainerFlowPanel.add(deleteKontaktFromKontaktlisteButton);
@@ -124,7 +121,7 @@ public class KontaktlistView extends MainFrame {
 		 */
 		
 		//-------//
-		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
+		
 		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(kontaktlisteSelectedInTree));
 		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
 		deleteKontaktFromKontaktlisteButton.addClickHandler(new KontaktAusKontaktlisteDeleteClickHandler());
@@ -151,16 +148,7 @@ public class KontaktlistView extends MainFrame {
 
 
 
-	class addKontaktlisteClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			NewKontaktlisteDialogBox dbox = new NewKontaktlisteDialogBox();
-			dbox.center();
-
-		}
-	}
+	
 
 	class deleteKontaktlisteClickHandler implements ClickHandler {
 

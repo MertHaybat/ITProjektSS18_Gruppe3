@@ -32,7 +32,7 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void createKontakt(String name, int status, int nutzerID, AsyncCallback<Kontakt> callback);
 
-	void createKontaktliste(String bezeichnung, int nutzerID, AsyncCallback<Kontaktliste> callback);
+	void createKontaktliste(String bezeichnung, int nutzerID, int status, AsyncCallback<Kontaktliste> callback);
 
 	void findAllKontaktlisteByNutzerID(int nutzerID, AsyncCallback<Vector<Kontaktliste>> callback);
 
@@ -180,7 +180,9 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findKontakteByTeilhabenderID(int teilhabenderID, AsyncCallback<Vector<Kontakt>> callback);
 
-	void findKontaktlisteByTeilhabenderID(int teilhabenderID, AsyncCallback<Vector<Kontakt>> callback);
+	void findKontaktlisteByTeilhabenderID(int teilhabenderID, AsyncCallback<Vector<Kontaktliste>> callback);
+
+	void findKontaktlistByName(String bezeichnung, int nutzerid, AsyncCallback<Kontaktliste> callback);
 
 	
 	

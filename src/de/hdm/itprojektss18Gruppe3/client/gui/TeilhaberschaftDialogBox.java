@@ -300,7 +300,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 				}
 				for (int i = 0; i < eListe.size(); i++) {
 
-					kontaktmanagerVerwaltung.createTeilhaberschaft(0, 0,
+					kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(),
 							eListe.get(i).getIDEigenschaftsauspraegungValue(), result.getId(), nutzer.getId(),
 							new createTeilhaberschaftCallback());
 
