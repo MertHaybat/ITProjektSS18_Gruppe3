@@ -195,15 +195,20 @@ html {
 	margin: 30px auto;
 }
 
+.treeContainerPanel {
+	height: 500px;
+	width: 150px;
+	overflow: scrollable;
+}
+
 
 /* MENÜBAUM FORMATIERUNG GWT TREE */
-.gwt-Tree {
+.gwt-Tree .gwt-TreeItem {
   padding: 1px 0px;
   white-space: nowrap;
   cursor: hand;
   cursor: pointer;
-  line-height: 10px;  	
-	
+  height: 5px;
 }
 
 .gwt-Tree .gwt-TreeItem-selected {
@@ -213,9 +218,11 @@ html {
 
 .gwt-TreeItem {
 	font-size: 1.2em;
-
 }
 
+.com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItem {
+
+}
 
 /* REPORT GENERATOR FORMATIERUNG */
 .listbox-report {

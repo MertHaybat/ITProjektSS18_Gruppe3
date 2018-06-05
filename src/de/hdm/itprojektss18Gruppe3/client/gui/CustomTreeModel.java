@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -31,41 +32,36 @@ import com.google.gwt.view.client.TreeViewModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 
 public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
-
-	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel treeContainer = new VerticalPanel();
-//	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
-//	private HTML instructionMessage = new HTML("<br>Hier kannst du deine Kontakte verwalten.");
 	private Nutzer nutzerKontaktliste = new Nutzer();
 	private CellTree navigationCellTree;
 	private Label navigationHeadline = new Label("Navigation");
-	private VerticalPanel navigationTreePanel = new VerticalPanel();
+	private ScrollPanel navigationTreePanel = new ScrollPanel();
 	private SingleSelectionModel<Kontaktliste> selectionModel = null;
+	private SingleSelectionModel<Kontakt> kontaktSelectionModel = null;
 	private Kontaktliste selectedKontaktliste;
-	private List<String> menuList;
-	private ListDataProvider<String> dataProvider;
+	private Kontakt selectedKontakt;
+	private ListDataProvider<Kontakt> kontaktDataProvider = new ListDataProvider<Kontakt>();
 	private ListDataProvider<Kontaktliste> kontaktlistenDataProvider = new ListDataProvider<Kontaktliste>();
-	private Button kontakte = new Button("Kontakte");
-	private Button teilhaberschaften = new Button("Teilhaberschaften");
 	private CustomTreeModel customTreeModel;
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
 
 	public CustomTreeModel() {
-		menuList = new ArrayList<String>();
-		menuList.add("Alle Kontaktlisten");
-		menuList.add("Kontakte");
-		menuList.add("Teilhaberschaften");
-		dataProvider = new ListDataProvider<String>(menuList);
+
 		selectionModel = new SingleSelectionModel<Kontaktliste>();
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
+		
+		kontaktSelectionModel = new SingleSelectionModel<Kontakt>();
+		kontaktSelectionModel.addSelectionChangeHandler(new KontaktSelectionChangeEventHandler());
 
 		nutzerKontaktliste.setId(Integer.parseInt(Cookies.getCookie("id")));
 		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzerKontaktliste.getId(), new FindAllKontaktlisteAsyncCallback());
@@ -87,40 +83,36 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	SelectionChangeEvent.Handler {
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
-			Kontaktliste selection = selectionModel.getSelectedObject();
+			Kontaktliste selection = new Kontaktliste();
+			selection = selectionModel.getSelectedObject();
 			setSelectedKontaktliste((Kontaktliste) selection);
+			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(selection, new FindAllKontakteByKontaktlisteAsyncCallback());
 			KontaktlistView klV = new KontaktlistView(selection);
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(klV);
 		}
 	}
-
-
-	//BEIDE CLICKHANDLER NUR ZUM ÜBERGANG, DA KA WIE MAN ANDERE PUNKTE IN DEN TREE BEKOMMT
-	public class kontakteClickHandler implements ClickHandler {
-
+	
+	private class KontaktSelectionChangeEventHandler implements
+	SelectionChangeEvent.Handler {
 		@Override
-		public void onClick(ClickEvent event) {
-			AllKontaktView akv = new AllKontaktView();
-		}	
-	}
-
-	public class teilhaberschaftClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			TeilhaberschaftenAlle teilhaberschaftenAlle = new TeilhaberschaftenAlle();
+		public void onSelectionChange(SelectionChangeEvent event) {
+			Kontakt selection = new Kontakt();
+			selection = kontaktSelectionModel.getSelectedObject();
+			KontaktForm kontaktForm = new KontaktForm(selection);
 			RootPanel.get("content").clear();
-			RootPanel.get("content").add(teilhaberschaftenAlle);
+			RootPanel.get("content").add(kontaktForm);
 		}
 	}
-
+	
 
 	/*
 	 * AsyncCallback zum Abfragen aller Kontaktlisten des eingeloggten Nutzers. Das Ergebnis wird dem 
 	 * DataListProvider übergeben, wodurch die Anzeige der einzelnen Kontaktlisten im CellTree
 	 * ermöglicht wird
 	 */
+	
+
 
 	public class FindAllKontaktlisteAsyncCallback implements AsyncCallback<Vector<Kontaktliste>> {
 
@@ -133,8 +125,27 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		@Override
 		public void onSuccess(Vector<Kontaktliste> result) {
 			kontaktlistenDataProvider.getList().addAll(result);
+
 		}
 
+	}
+	
+	
+	public class FindAllKontakteByKontaktlisteAsyncCallback implements AsyncCallback<Vector<Kontakt>> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Vector<Kontakt> result) {
+			kontaktDataProvider.getList().clear();
+			kontaktDataProvider.getList().addAll(result);
+			Window.alert(Integer.toString(kontaktDataProvider.getList().size()));
+		}
+		
 	}
 
 
@@ -144,26 +155,25 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 		if(value.equals("Root")) {
 
-			Cell<String> cell = new AbstractCell<String>() {
-				@Override
-				public void render(Context context, String value, SafeHtmlBuilder sb) {
-					if (value != null) {
-						sb.appendEscaped(value);
-					}
-				}
-			};
-			// Return a node info that pairs the data with a cell.
-			return new DefaultNodeInfo<String>(dataProvider, cell);   
-
-		} else {
-
 			Cell<Kontaktliste> kontaktlistenCell = new AbstractCell<Kontaktliste>() {
 				@Override
 				public void render(Context context, Kontaktliste value, SafeHtmlBuilder sb) {
 					if (value != null) {
-						
-						sb.appendHtmlConstant("<table><td>");
 						sb.appendEscaped(value.getBezeichnung());
+					}
+				}
+			};
+			// Return a node info that pairs the data with a cell.
+			return new DefaultNodeInfo<Kontaktliste>(kontaktlistenDataProvider, kontaktlistenCell, selectionModel, null);   
+
+		} else {
+
+			Cell<Kontakt> kontaktCell = new AbstractCell<Kontakt>() {
+				@Override
+				public void render(Context context, Kontakt value, SafeHtmlBuilder sb) {
+					if (value != null) {
+						sb.appendHtmlConstant("<table><td>");
+						sb.appendEscaped(value.getName());
 						sb.appendHtmlConstant("</td><td>");
 						if (value.getStatus() == 0) {
 							sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
@@ -174,14 +184,10 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 						}
 						sb.appendHtmlConstant("</td></table>");
 						}
-
-						
-
-					
 				}
 			};
 			// Return a node info that pairs the data with a cell.
-			return new DefaultNodeInfo<Kontaktliste>(kontaktlistenDataProvider, kontaktlistenCell, selectionModel, null);
+			return new DefaultNodeInfo<Kontakt>(kontaktDataProvider, kontaktCell, kontaktSelectionModel, null);
 
 		}
 	}
@@ -190,11 +196,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	// cannot be opened.
 	@Override
 	public boolean isLeaf(Object value) {
-		if(value instanceof Kontaktliste) {
-			return true;
-		} else {
-			return false;
-		}
+		return value instanceof Kontakt; 
 	}
 	
 	public void onLoad() {
@@ -202,17 +204,13 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		customTreeModel = new CustomTreeModel();
 		navigationCellTree = new CellTree(customTreeModel, "Root");
 		navigationCellTree.setAnimationEnabled(true);
+		navigationTreePanel.add(navigationCellTree);
+		
 		treeContainer.add(navigationHeadline);
+		navigationTreePanel.setStylePrimaryName("treeContainerPanel");
 		navigationHeadline .setStylePrimaryName("navigationPanelHeadline");
-		treeContainer.add(navigationCellTree);
+		treeContainer.add(navigationTreePanel);
 		navigationCellTree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-
-		//KÖNNEN DANN WEG WENN TREE KLAPPT
-		kontakte.addClickHandler(new kontakteClickHandler());
-		teilhaberschaften.addClickHandler(new teilhaberschaftClickHandler());
-
-		vPanel.add(kontakte);
-		vPanel.add(teilhaberschaften);
 
 
 		RootPanel.get("leftmenutree").clear();
