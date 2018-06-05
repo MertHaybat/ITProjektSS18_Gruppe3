@@ -58,7 +58,6 @@ public class KontaktlistView extends MainFrame {
 	// CellTableResources.INSTANCE, keyProvider);
 	// private KontaktForm kontaktForm = null;
 
-
 	private ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
 	private static Kontaktliste kontaktlisteSelectedInTree = null;
 	private Kontakt selectedKontakt;

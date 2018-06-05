@@ -90,7 +90,7 @@ public class KontaktlisteMapper {
 				stmt1.setInt(1, kontaktliste.getId());
 				stmt1.setString(2, kontaktliste.getBezeichnung());
 				stmt1.setInt(3, kontaktliste.getNutzerID());
-				stmt1.setInt(1, kontaktliste.getStatus());
+				stmt1.setInt(4, kontaktliste.getStatus());
 				
 				System.out.println(stmt);
 				stmt1.executeUpdate();			
@@ -128,8 +128,8 @@ public class KontaktlisteMapper {
 			PreparedStatement stmt = con.prepareStatement("UPDATE kontaktliste SET bezeichnung= ?, status= ? WHERE id= ? ");
 			
 			stmt.setString(1, kontaktliste.getBezeichnung());
-			stmt.setInt(2, kontaktliste.getId());
-			stmt.setInt(0, kontaktliste.getStatus());
+			stmt.setInt(2, kontaktliste.getStatus());
+			stmt.setInt(3, kontaktliste.getId());
 			
 			stmt.executeUpdate();
 			
