@@ -178,6 +178,10 @@ public interface KontaktmanagerAdministrationAsync {
 	void findEigenschaftsauspraegungById(int eigenschaftsauspraegungID,
 			AsyncCallback<Eigenschaftsauspraegung> callback);
 
+	void findKontakteByTeilhabenderID(int teilhabenderID, AsyncCallback<Vector<Kontakt>> callback);
+
+	void findKontaktlisteByTeilhabenderID(int teilhabenderID, AsyncCallback<Vector<Kontakt>> callback);
+
 	
 	
 }

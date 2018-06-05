@@ -3,6 +3,8 @@ package de.hdm.itprojektss18Gruppe3.server;
 import java.util.Date;
 import java.util.Vector;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -1302,6 +1304,42 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			throws IllegalArgumentException {
 		return this.eigenschaftsauspraegungMapper.findEigenschaftsauspraegungByID(eigenschaftsauspraegungID);
 	}
+
+	@Override
+	public Vector<Kontakt> findKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
+		Vector<Teilhaberschaft> eigentuemerVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Kontakt> kontakteVector = new Vector<Kontakt>();
+		
+		for(int i = 0; i<eigentuemerVector.size(); i++){
+			if(eigentuemerVector.elementAt(i).getKontaktID() == 0){
+				eigentuemerVector.removeElementAt(i);
+			}
+		}
+		for (Teilhaberschaft teilhabender : eigentuemerVector) {
+			kontakteVector.add(findKontaktByID(teilhabender.getKontaktID()));
+		}
+		
+		return kontakteVector;
+	}
+
+	@Override
+	public Vector<Kontakt> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
+		Vector<Teilhaberschaft> eigentuemerVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Kontaktliste> kontaktlisteVector = new Vector<Kontaktliste>();
+		Vector<Kontakt> kontaktVector = new Vector<Kontakt>();
+		Kontaktliste kontaktliste = new Kontaktliste();
+		for(int i = 0; i<eigentuemerVector.size(); i++){
+			if(eigentuemerVector.elementAt(i).getKontaktlisteID() == 0){
+				eigentuemerVector.removeElementAt(i);
+			}
+		}
+		for (Teilhaberschaft teilhabender : eigentuemerVector) {
+			kontaktliste.setId(teilhabender.getKontaktlisteID());
+			kontaktVector.addAll(findAllKontakteByKontaktlisteID(kontaktliste));
+		}
+		return kontaktVector;
+	}
+	
 
 	// @Override
 	// public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int

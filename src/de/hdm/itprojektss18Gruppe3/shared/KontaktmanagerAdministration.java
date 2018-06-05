@@ -485,4 +485,9 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Vector<Kontakt> findAllKontakteByEigentuemerID(int eigentuemerID) throws IllegalArgumentException;
 	
 	public Eigenschaftsauspraegung findEigenschaftsauspraegungById(int eigenschaftsauspraegungID) throws IllegalArgumentException;
+
+	public Vector<Kontakt> findKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
+	
 }

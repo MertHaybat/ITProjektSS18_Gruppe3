@@ -34,9 +34,12 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
+import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.SelectionChangeEvent;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
@@ -76,6 +79,8 @@ public class AllKontaktView extends MainFrame {
 	/**
 	 * The list of data to display.
 	 */
+	private KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
+	private static Kontaktliste kontaktlisteSelectedInTree = null;
 
 	private Kontakt kontakt = null;
 
@@ -96,18 +101,19 @@ public class AllKontaktView extends MainFrame {
 		kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
 		run();
 	}
-
+	public void setKontaktlisteSelectedInTree(Kontaktliste kontaktlisteSelectedInTree) {
+		this.kontaktlisteSelectedInTree = kontaktlisteSelectedInTree;
+	}
+	public static Kontaktliste getKontaktlisteSelectedInTree() {
+		return kontaktlisteSelectedInTree;
+	}
 	public void run() {
 
-		keyProvider = new ProvidesKey<Kontakt>() {
-			public Object getKey(Kontakt item) {
-				// Always do a null check.
-				return item == null ? null : item.getId();
-			}
-		};
+		KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
 
+		
 		allKontakteCellTable.setSelectionModel(selectionModelCellTable,
-				DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
+		DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
 		selectionModelCellTable.addSelectionChangeHandler(new SelectionChangeHandlerCellTable());
 
 		/*
@@ -338,10 +344,14 @@ public class AllKontaktView extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			KontaktPopup k = new KontaktPopup();
-			k.center();
-
-		}
+//			KontaktPopup k = new KontaktPopup();
+//			k.center();
+			Kontaktliste kontakt = new Kontaktliste();
+			
+			kontakt.setId(1);
+//			TeilhaberschaftKontaktliste kontaktlist  = new TeilhaberschaftKontaktliste(kontakt);
+			KontaktlistView kv = new KontaktlistView(kontakt);
+			}
 
 	}
 
@@ -395,6 +405,33 @@ public class AllKontaktView extends MainFrame {
 
 	}
 
+	private static class KontaktDataProvider extends AsyncDataProvider<Kontakt> {
+
+		@Override
+		protected void onRangeChanged(HasData<Kontakt> display) {
+			Nutzer nutzerKontaktliste = new Nutzer();
+			nutzerKontaktliste.setId(Integer.parseInt(Cookies.getCookie("id")));
+			final Range range = display.getVisibleRange();
+			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(getKontaktlisteSelectedInTree(),
+					new AsyncCallback<Vector<Kontakt>>() {
+						int start = range.getStart();
+
+						ArrayList<Kontakt> kontaktToDisplay = new ArrayList<Kontakt>();
+
+						@Override
+						public void onFailure(Throwable caught) {
+							Window.alert("Fehler beim Auslesen aller Kontakte");
+
+						}
+
+						@Override
+						public void onSuccess(Vector<Kontakt> result) {
+							kontaktToDisplay.addAll(result);
+							updateRowData(start, kontaktToDisplay);
+						}
+					});
+		}
+	}
 	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {
 
 		ArrayList<Kontakt> selectedKontakteInCellTable;

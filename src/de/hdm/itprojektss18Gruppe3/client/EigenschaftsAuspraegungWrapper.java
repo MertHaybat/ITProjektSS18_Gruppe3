@@ -5,7 +5,7 @@ import java.io.Serializable;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 
-public class EigenschaftsAuspraegungWrapper  {
+public class EigenschaftsAuspraegungWrapper implements Serializable {
 	
 	/**
 	 * 

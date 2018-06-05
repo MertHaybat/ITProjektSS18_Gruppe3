@@ -46,11 +46,6 @@ import com.google.gwt.user.client.ui.TextBox;
 public class KontaktlistView extends MainFrame {
 
 	private Label menuBarHeadlineLabel = new Label("Kontaktlisten");
-	private VerticalPanel allKontaktViewPanel = new VerticalPanel();
-	private HorizontalPanel contentViewContainer = new HorizontalPanel();
-	private HorizontalPanel kontaktInfoViewContainer = new HorizontalPanel();
-	private ScrollPanel kontaktlistViewPanel = new ScrollPanel();
-	private HorizontalPanel treeContainer = new HorizontalPanel();
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
@@ -59,14 +54,10 @@ public class KontaktlistView extends MainFrame {
 	private Button deleteKontaktFromKontaktlisteButton = new Button("Kontakt entfernen");
 	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
 	private Button addTeilhaberschaftKontaktlisteButton = new Button("Kontaktliste teilen");
-	private CellList<Kontakt> kontaktCellList = new CellList<Kontakt>(new KontaktCell(), CellListResources.INSTANCE);
 	// private CellTable<Kontakt> kontaktCellTable = new CellTable<Kontakt>(13,
 	// CellTableResources.INSTANCE, keyProvider);
 	// private KontaktForm kontaktForm = null;
 
-	private Button kontaktBearbeitenButton = new Button("Ansehen");
-	private FlexTable kontaktInfoLayout = new FlexTable();
-	private DecoratorPanel kontaktInfo = new DecoratorPanel();
 
 	private ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
 	private static Kontaktliste kontaktlisteSelectedInTree = null;
@@ -77,27 +68,39 @@ public class KontaktlistView extends MainFrame {
 	private TextBox telefonnummer = new TextBox();
 	private TextBox mail = new TextBox();
 	private Kontaktliste kontaktliste = new Kontaktliste();
-
-	private SingleSelectionModel<Kontakt> selectionModel = new SingleSelectionModel<Kontakt>();
-
+	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 
 	public KontaktlistView() {
+		run();
 	}
 
 	public KontaktlistView(Kontaktliste selection) {
 		this.kontaktliste = selection;
-		setKontaktlisteSelectedInTree(selection);
+		this.setKontaktlisteSelectedInTree(selection);
+
+		run();
+	}
+	public static Kontaktliste getKontaktlisteSelectedInTree() {
+		return kontaktlisteSelectedInTree;
+	}
+
+	public void setKontaktlisteSelectedInTree(Kontaktliste kontaktlisteSelectedInTree) {
+		this.kontaktlisteSelectedInTree = kontaktlisteSelectedInTree;
 	}
 
 	public void run() {
-
+		KontaktCellList kontaktCellList = new KontaktCellList(kontaktliste);
 		/*
 		 * Menüleiste mit den Buttons für die Anlage von einer neuen
 		 * Kontaktliste und dem Löschen einer Kontaktliste erzeugen und dem
 		 * Panel zuweisen
 		 */
+		KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
+		kontaktDataProvider.addDataDisplay(kontaktCellList.getKontaktCell());
+		kontaktCellList.getKontaktCell().setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+		//-----
 		menuBarHeadlineLabel.setStylePrimaryName("menuBarLabel");
 		addKontaktlisteButton.setStylePrimaryName("mainButton");
 		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
@@ -114,75 +117,17 @@ public class KontaktlistView extends MainFrame {
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
 		menuBarContainerFlowPanel.setStylePrimaryName("menuBarContainerFlowPanel");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
+		//----
 
 		/*
 		 * CellList für die Anzeige der Kontaktlisten eines Users wird umgesetzt
 		 */
-		kontaktCellList.setEmptyListWidget(new HTML("<b>Du hast keine Kontaktlisten</b>"));
-		KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
-		kontaktDataProvider.addDataDisplay(kontaktCellList);
-		kontaktCellList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-
-		vornameBox.setEnabled(false);
-		nachnameBox.setEnabled(false);
-		geburtsdatum.setEnabled(false);
-		telefonnummer.setEnabled(false);
-		mail.setEnabled(false);
-
-		kontaktInfoLayout.setHTML(1, 0, "Vorname: ");
-		kontaktInfoLayout.setWidget(1, 1, vornameBox);
-		kontaktInfoLayout.setHTML(2, 0, "Nachname: ");
-		kontaktInfoLayout.setWidget(2, 1, nachnameBox);
-		kontaktInfoLayout.setHTML(3, 0, "Geburtsdatum: ");
-		kontaktInfoLayout.setWidget(3, 1, geburtsdatum);
-		kontaktInfoLayout.setHTML(4, 0, "Telefonnummer: ");
-		kontaktInfoLayout.setWidget(4, 1, telefonnummer);
-		kontaktInfoLayout.setHTML(5, 0, "E-Mail: ");
-		kontaktInfoLayout.setWidget(5, 1, mail);
-		kontaktInfoLayout.setWidget(6, 0, kontaktBearbeitenButton);
-
-		kontaktInfo.setWidget(kontaktInfoLayout);
-
-		/*
-		 * SelectionHandler für CellList und CellTable hinzufügen. In der
-		 * CellList wird damit getrackt, welche Kontaktliste der Nutzer
-		 * anklickt. Im CellTable, in dem dann alle Kontakte innerhalb der
-		 * Kontaktliste angezeigt werden, dient der MultiSelectionHandler dazu,
-		 * die Checkbox Auswahl des Nutzers zu tracken. Die ausgewählten Kontakt
-		 * Objekte werden dann in einem ArrayList Objekt gespeichert.
-		 */
-		kontaktCellList.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-			public void onSelectionChange(SelectionChangeEvent event) {
-				selectedKontakt = selectionModel.getSelectedObject();
-
-				kontaktInfoViewContainer.clear();
-				kontaktInfoViewContainer.add(kontaktInfo);
-
-				kontaktmanagerVerwaltung.findEigenschaftHybrid(selectedKontakt, new EigenschaftAuspraegungCallback());
-			}
-		});
-
-		kontaktInfoLayout.setCellSpacing(6);
-		FlexCellFormatter cellFormatter = kontaktInfoLayout.getFlexCellFormatter();
-
-		kontaktInfoLayout.setHTML(0, 0, "Kontakt Info");
-		cellFormatter.setColSpan(0, 0, 2);
-		cellFormatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-
-		kontaktlistViewPanel.add(kontaktCellList);
-
-		kontaktInfo.setStylePrimaryName("kontaktDecoratorPanel");
-		allKontaktViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
-		kontaktlistViewPanel.setStylePrimaryName("kontaktlistenViewPanel");
-		contentViewContainer.add(kontaktlistViewPanel);
-		contentViewContainer.add(kontaktInfoViewContainer);
-		kontaktBearbeitenButton.addClickHandler(new AnsehenClickHandler());
+		
+		//-------//
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
 		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(kontaktlisteSelectedInTree));
 		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
 		deleteKontaktFromKontaktlisteButton.addClickHandler(new KontaktAusKontaktlisteDeleteClickHandler());
-		// deleteKontaktFromKontaktlisteClickHandler(selectedKontakteInCellTable));
 		addTeilhaberschaftKontaktButton
 				.addClickHandler(new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable));
 		addTeilhaberschaftKontaktlisteButton.addClickHandler(new ClickHandler(){
@@ -196,18 +141,15 @@ public class KontaktlistView extends MainFrame {
 		});
 
 		// RootPanel.get("content").clear();
-		RootPanel.get("content").add(contentViewContainer);
+		//---/
+//		RootPanel.get("content").clear();
 		// RootPanel.get("menubar").clear();
+		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
+		
 	}
 
-	public static Kontaktliste getKontaktlisteSelectedInTree() {
-		return kontaktlisteSelectedInTree;
-	}
 
-	public void setKontaktlisteSelectedInTree(Kontaktliste kontaktlisteSelectedInTree) {
-		this.kontaktlisteSelectedInTree = kontaktlisteSelectedInTree;
-	}
 
 	class addKontaktlisteClickHandler implements ClickHandler {
 
@@ -362,29 +304,29 @@ public class KontaktlistView extends MainFrame {
 		
 	}
 
-	static class KontaktCell extends AbstractCell<Kontakt> {
-
-		@Override
-		public void render(Context context, Kontakt value, SafeHtmlBuilder sb) {
-
-			if (value == null) {
-				return;
-			}
-			sb.appendHtmlConstant("<table>");
-			sb.appendHtmlConstant("<td style='font-size:95%;'>");
-			sb.appendEscaped(value.getName());
-			sb.appendHtmlConstant("</td><td>");
-			if (value.getStatus() == 0) {
-				sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
-
-			} else if (value.getStatus() == 1) {
-
-				sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
-			}
-			sb.appendHtmlConstant("</td></table>");
-
-		}
-	}
+//	static class KontaktCell extends AbstractCell<Kontakt> {
+//
+//		@Override
+//		public void render(Context context, Kontakt value, SafeHtmlBuilder sb) {
+//
+//			if (value == null) {
+//				return;
+//			}
+//			sb.appendHtmlConstant("<table>");
+//			sb.appendHtmlConstant("<td style='font-size:95%;'>");
+//			sb.appendEscaped(value.getName());
+//			sb.appendHtmlConstant("</td><td>");
+//			if (value.getStatus() == 0) {
+//				sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+//
+//			} else if (value.getStatus() == 1) {
+//
+//				sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
+//			}
+//			sb.appendHtmlConstant("</td></table>");
+//
+//		}
+//	}
 
 	private static class KontaktDataProvider extends AsyncDataProvider<Kontakt> {
 
