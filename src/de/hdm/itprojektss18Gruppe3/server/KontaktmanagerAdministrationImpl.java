@@ -176,14 +176,21 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 *         Kontaktliste
 	 */
 	@Override
-	public Kontaktliste createKontaktliste(String bezeichnung, int nutzerID) throws IllegalArgumentException {
-
-		Kontaktliste kontaktliste = new Kontaktliste();
-
-		kontaktliste.setBezeichnung(bezeichnung);
-		kontaktliste.setNutzerID(nutzerID);
-
-		return this.kontaktlisteMapper.createKontaktliste(kontaktliste);
+	public Kontaktliste createKontaktliste(String bezeichnung, int nutzerID, int status) throws IllegalArgumentException {
+		
+		Kontaktliste kliste = findKontaktlistByName(bezeichnung, nutzerID);
+		
+		if (kliste.getId() == 0){
+			Kontaktliste kontaktliste = new Kontaktliste();
+			
+			kontaktliste.setBezeichnung(bezeichnung);
+			kontaktliste.setNutzerID(nutzerID);
+			kontaktliste.setStatus(status);
+			
+			return this.kontaktlisteMapper.createKontaktliste(kontaktliste);
+			
+		}
+		return null;
 	}
 
 	/**
@@ -232,11 +239,11 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			e.setStatus(1);
 			saveEigenschaftsauspraegung(e);
 		}
-		//TODO
-//		if(kontaktlisteID != 0){
-//			Kontaktliste k = new Kontaktliste();
-//			k.set
-//		}
+		if(kontaktlisteID != 0){
+			Kontaktliste k = findKontaktlisteByID(kontaktlisteID);
+			k.setStatus(1);
+			saveKontaktliste(k);
+		}
 		Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 
 		teilhaberschaft.setEigenschaftsauspraegungID(eigenschaftsauspraegungID);
@@ -1307,15 +1314,17 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	@Override
 	public Vector<Kontakt> findKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
-		Vector<Teilhaberschaft> eigentuemerVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Teilhaberschaft> kontaktTeilhabenderVector = new Vector<Teilhaberschaft>();
 		Vector<Kontakt> kontakteVector = new Vector<Kontakt>();
-		
-		for(int i = 0; i<eigentuemerVector.size(); i++){
-			if(eigentuemerVector.elementAt(i).getKontaktID() == 0){
-				eigentuemerVector.removeElementAt(i);
+		for (Teilhaberschaft teilhaberschaft : teilhabenderVector) {
+			if(teilhaberschaft.getKontaktID() != 0){
+				kontaktTeilhabenderVector.add(teilhaberschaft);
 			}
 		}
-		for (Teilhaberschaft teilhabender : eigentuemerVector) {
+
+	
+		for (Teilhaberschaft teilhabender : kontaktTeilhabenderVector) {
 			kontakteVector.add(findKontaktByID(teilhabender.getKontaktID()));
 		}
 		
@@ -1323,22 +1332,31 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	@Override
-	public Vector<Kontakt> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
-		Vector<Teilhaberschaft> eigentuemerVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+	public Vector<Kontaktliste> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
+		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Teilhaberschaft> kontaktlisteTeilhabenderVector = new Vector<Teilhaberschaft>();
 		Vector<Kontaktliste> kontaktlisteVector = new Vector<Kontaktliste>();
-		Vector<Kontakt> kontaktVector = new Vector<Kontakt>();
 		Kontaktliste kontaktliste = new Kontaktliste();
-		for(int i = 0; i<eigentuemerVector.size(); i++){
-			if(eigentuemerVector.elementAt(i).getKontaktlisteID() == 0){
-				eigentuemerVector.removeElementAt(i);
+
+		for (Teilhaberschaft teilhaberschaft : teilhabenderVector) {
+			if (teilhaberschaft.getKontaktlisteID() != 0) {
+				kontaktlisteTeilhabenderVector.add(teilhaberschaft);
 			}
 		}
-		for (Teilhaberschaft teilhabender : eigentuemerVector) {
-			kontaktliste.setId(teilhabender.getKontaktlisteID());
-			kontaktVector.addAll(findAllKontakteByKontaktlisteID(kontaktliste));
+
+		for (Teilhaberschaft teilhabender : kontaktlisteTeilhabenderVector) {
+			kontaktlisteVector.add(findKontaktlisteByID(teilhabender.getKontaktlisteID()));
+
 		}
-		return kontaktVector;
+
+		return kontaktlisteVector;
 	}
+
+	@Override
+	public Kontaktliste findKontaktlistByName(String bezeichnung, int nutzerid) throws IllegalArgumentException {
+		return this.kontaktlisteMapper.findKontaktlisteByBezeichnung(bezeichnung, nutzerid);
+	}
+
 	
 
 	// @Override

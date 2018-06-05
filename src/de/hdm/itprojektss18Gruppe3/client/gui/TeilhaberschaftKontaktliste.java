@@ -63,7 +63,7 @@ public class TeilhaberschaftKontaktliste extends MainFrame {
 			nutzerKontaktliste.setId(Integer.parseInt(Cookies.getCookie("id")));
 			final Range range = display.getVisibleRange();
 
-			kontaktmanagerVerwaltung.findKontaktlisteByTeilhabenderID(getKontaktlisteSelectedInTree().getId(),
+			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(getKontaktlisteSelectedInTree(),
 					new AsyncCallback<Vector<Kontakt>>() {
 						int start = range.getStart();
 

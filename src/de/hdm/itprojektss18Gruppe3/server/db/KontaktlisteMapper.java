@@ -492,6 +492,55 @@ public class KontaktlisteMapper {
 		}
 		return k;
 	}
+	public Kontaktliste findKontaktlisteByBezeichnung(String bezeichnung, int nutzerID) {
+		// TODO Auto-generated method stub
+		
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+
+		Kontaktliste k = new Kontaktliste();
+
+		try {
+			
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontaktliste WHERE `bezeichnung` = ? AND `nutzerid` = ?");
+
+			stmt.setString(1, bezeichnung);
+			stmt.setInt(2, nutzerID);
+			ResultSet rs = stmt.executeQuery();
+
+			/**
+			 * Für jeden Eintrag im Suchergebnis wird nun ein Kontaktlisten-Objekt
+			 * erstellt.
+			 */
+			if (rs.next()) {
+				Kontaktliste kontaktliste = new Kontaktliste();
+				
+				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
+				kontaktliste.setId(rs.getInt("id"));
+				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
+				kontaktliste.setStatus(rs.getInt("status"));
+				k = kontaktliste;
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return k;
+	}
 
 //	/**
 //	 * Die Methode "findAllKontakteByKontaktlisteID" ermöglicht

@@ -55,7 +55,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Kontaktlistenobjekt
 	 * @throws IllegalArgumentException
 	 */
-	public Kontaktliste createKontaktliste(String bezeichnung, int nutzerID) throws IllegalArgumentException;
+	public Kontaktliste createKontaktliste(String bezeichnung, int nutzerID, int status) throws IllegalArgumentException;
 	
 	/**
 	 * Auslesen aller Kontaktlistenobjekte eines Nutzers.
@@ -488,6 +488,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 
 	public Vector<Kontakt> findKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
 	
-	public Vector<Kontakt> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
+	public Vector<Kontaktliste> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
 	
+	public Kontaktliste findKontaktlistByName(String bezeichnung, int nutzerid) throws IllegalArgumentException;
 }

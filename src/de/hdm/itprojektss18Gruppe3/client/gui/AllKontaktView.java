@@ -15,6 +15,8 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -31,8 +33,10 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
@@ -53,24 +57,26 @@ public class AllKontaktView extends MainFrame {
 
 	private VerticalPanel vPanel = new VerticalPanel();
 	private ScrollPanel allKontakteCellTableContainer = new ScrollPanel();
-	private Label menuBarHeadlineLabel = new Label("Kontakte");
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
-	private Button logoutButton = new Button("Ausloggen");
+//	private Button logoutButton = new Button("Ausloggen");
 	private Button addKontaktButton = new Button("Neuer Kontakt");
 	private Button deleteKontaktButton = new Button("Kontakt löschen");
 	private Button addKontaktToKontaktlistButton = new Button("+ Kontaktliste");
 	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
+	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
 	private Button suchenButton = new Button("Suchen");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private CellTable<Kontakt> allKontakteCellTable = new CellTable<Kontakt>(11, CellTableResources.INSTANCE);
 	private ArrayList<Kontakt> allKontakteSelectedArrayList = new ArrayList<>();
 	private ArrayList<Kontakt> allKontakteByUserArrayList = new ArrayList<>();
 	private List<Kontakt> allSelectedKontakte = new ArrayList<>();
+	private CellTable<Kontaktliste> kontaktlisteCelltable = new CellTable<Kontaktliste>();
 	private static ProvidesKey<Kontakt> keyProvider;
+	private TextBox textBox = new TextBox();
 	// private SuggestBox box = new SuggestBox(oracle);
 	private Anchor signOutLink = new Anchor();
-	private Label contentHeadline = new Label("Die Liste aller deiner Kontakte");
+//	private Label contentHeadline = new Label("Die Liste aller deiner Kontakte");
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 	private MultiSelectionModel<Kontakt> selectionModelCellTable = new MultiSelectionModel<Kontakt>(keyProvider);
@@ -84,6 +90,11 @@ public class AllKontaktView extends MainFrame {
 
 	private Kontakt kontakt = null;
 
+	private RadioButton rb0 = new RadioButton("auswahlRadio", "Alle eigenen Kontakte");
+	private RadioButton rb1 = new RadioButton("auswahlRadio", "Alle geteilten Kontakte");
+	private RadioButton rb2 = new RadioButton("auswahlRadio", "Alle geteilten Kontaktlisten");
+	private FlowPanel radioFlowPanel = new FlowPanel();
+	
 	// public AllKontaktView(){
 	//
 	//
@@ -108,7 +119,11 @@ public class AllKontaktView extends MainFrame {
 		return kontaktlisteSelectedInTree;
 	}
 	public void run() {
-
+		radioFlowPanel.add(rb0);
+		radioFlowPanel.add(rb1);
+		radioFlowPanel.add(rb2);
+		rb0.setValue(true);
+		
 		KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
 
 		
@@ -121,21 +136,20 @@ public class AllKontaktView extends MainFrame {
 		 * Kontaktliste und dem Löschen einer Kontaktliste erzeugen und dem
 		 * Panel zuweisen
 		 */
-		menuBarHeadlineLabel.setStylePrimaryName("menuBarLabel");
-		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 
 		suchenButton.setStylePrimaryName("mainButton");
-		logoutButton.setStylePrimaryName("mainButton");
+//		logoutButton.setStylePrimaryName("mainButton");
 		addKontaktButton.setStylePrimaryName("mainButton");
 		deleteKontaktButton.setStylePrimaryName("mainButton");
 		addKontaktToKontaktlistButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
+		addKontaktlisteButton.setStylePrimaryName("mainButton");
 
 		// box.setStylePrimaryName("gwt-SuggestBox");
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
-		contentHeadline.setStylePrimaryName("h2");
+//		contentHeadline.setStylePrimaryName("h2");
 
 		// Set the message to display when the table is empty.
 		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));
@@ -190,6 +204,69 @@ public class AllKontaktView extends MainFrame {
 				return "Ansehen";
 			}
 		};
+		Column<Kontaktliste, String> kontaktlisteNameColumn = new Column<Kontaktliste, String>(new TextCell()) {
+			@Override
+			public String getValue(Kontaktliste object) {
+				return object.getBezeichnung();
+			}
+		};
+
+		Column<Kontaktliste, String> iconKontaktlisteColumn = new Column<Kontaktliste, String>(new TextCell() {
+			public void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
+				sb.appendHtmlConstant("<img width=\"20\" src=\"images/" + value.asString() + "\">");
+			}
+		}) {
+			@Override
+			public String getValue(Kontaktliste object) {
+				if (object.getStatus() == 1) {
+					return "group.svg";
+				} else {
+					return "singleperson.svg";
+				}
+			}
+		};
+		
+		textBox.addKeyPressHandler(new KeyPressHandler(){
+
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				// TODO Auto-generated method stub
+			}
+		});
+		rb0.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				allKontakteCellTableContainer.clear();
+				allKontakteCellTableContainer.add(allKontakteCellTable);
+				Nutzer nutzer = new Nutzer();
+				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+				kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
+			}
+			
+		});
+		rb1.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				allKontakteCellTableContainer.clear();
+				allKontakteCellTableContainer.add(allKontakteCellTable);
+				Nutzer nutzer = new Nutzer();
+				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+				kontaktmanagerVerwaltung.findKontakteByTeilhabenderID(nutzer.getId(), new AllKontaktByNutzerCallback());
+			}
+		});
+		rb2.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				allKontakteCellTableContainer.clear();
+				allKontakteCellTableContainer.add(kontaktlisteCelltable);
+				Nutzer nutzer = new Nutzer();
+				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+				kontaktmanagerVerwaltung.findKontaktlisteByTeilhabenderID(nutzer.getId(), new AllKontaktlisteCallback());
+			}
+		});
 
 		visitProfileButtonColumn.setFieldUpdater(new VisitProfileUpdate());
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
@@ -202,33 +279,69 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.addColumn(iconColumn, "Status");
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
 		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
-
+		
+		kontaktlisteCelltable.addColumn(kontaktlisteNameColumn, "Kontaktliste");
+		kontaktlisteCelltable.setColumnWidth(kontaktlisteNameColumn, 50, Unit.EM);
+		kontaktlisteCelltable.addColumn(iconKontaktlisteColumn, "");
+		kontaktlisteCelltable.setColumnWidth(iconKontaktlisteColumn, 5, Unit.EM);
+		allKontakteCellTableContainer.clear();
 		allKontakteCellTableContainer.add(allKontakteCellTable);
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
-		vPanel.add(contentHeadline);
+//		vPanel.add(contentHeadline);
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
+		vPanel.add(radioFlowPanel);
 		vPanel.add(allKontakteCellTableContainer);
 
-		logoutButton.addClickHandler(new LogoutClickHandler());
+//		logoutButton.addClickHandler(new LogoutClickHandler());
 		deleteKontaktButton.addClickHandler(new KontaktDeleteClickHandler());
 		addKontaktToKontaktlistButton.addClickHandler(new AddKontaktToKontaktlisteClickHandler());
 		addTeilhaberschaftKontaktButton
 				.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
 		addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
 		suchenButton.addClickHandler(new SuchenClickHandler());
-
-		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
+		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
+		
 		menuBarContainerFlowPanel.add(addKontaktButton);
 		menuBarContainerFlowPanel.add(deleteKontaktButton);
+		menuBarContainerFlowPanel.add(addKontaktlisteButton);
 		menuBarContainerFlowPanel.add(addKontaktToKontaktlistButton);
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 		// menuBarContainerFlowPanel.add(box);
+		menuBarContainerFlowPanel.add(textBox);
 		menuBarContainerFlowPanel.add(suchenButton);
-		menuBarContainerFlowPanel.add(logoutButton);
+//		menuBarContainerFlowPanel.add(logoutButton);
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menuBarContainerPanel);
 		RootPanel.get("content").add(vPanel);
 
+	}
+	class AllKontaktlisteCallback implements AsyncCallback<Vector<Kontaktliste>>{
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Vector<Kontaktliste> result) {
+			Range range = new Range(0, result.size());
+			kontaktlisteCelltable.setVisibleRangeAndClearData(range, true);
+			kontaktlisteCelltable.setRowCount(result.size(), true);
+			kontaktlisteCelltable.setRowData(0, result);
+		}
+		
+	}
+	
+	class addKontaktlisteClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			NewKontaktlisteDialogBox dbox = new NewKontaktlisteDialogBox();
+			dbox.center();
+
+		}
 	}
 
 	public class SuchenClickHandler implements ClickHandler {
@@ -345,13 +458,9 @@ public class AllKontaktView extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-//			KontaktPopup k = new KontaktPopup();
-//			k.center();
-			Kontaktliste kontakt = new Kontaktliste();
-			
-			kontakt.setId(1);
-//			TeilhaberschaftKontaktliste kontaktlist  = new TeilhaberschaftKontaktliste(kontakt);
-			KontaktlistView kv = new KontaktlistView(kontakt);
+			KontaktPopup k = new KontaktPopup();
+			k.center();
+	
 			}
 
 	}
@@ -366,6 +475,8 @@ public class AllKontaktView extends MainFrame {
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
 			// int id = 0;
+			Range range = new Range(0, result.size());
+			allKontakteCellTable.setVisibleRangeAndClearData(range, true);
 			for (Kontakt k : result) {
 				// k.setId(id);
 				allKontakteByUserArrayList.add(k);
