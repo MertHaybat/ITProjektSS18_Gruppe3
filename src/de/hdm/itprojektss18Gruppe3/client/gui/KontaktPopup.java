@@ -41,17 +41,22 @@ public class KontaktPopup extends PopupPanel{
 	private Button speichern = new Button("Hinzufügen");
 	private Kontaktliste kontaktliste = new Kontaktliste();
 	
+	
 	public KontaktPopup(){
 		super(true);
 		speichern.addClickHandler(new SpeichernOhneKontaktlisteClickHandler());
 		run();
 	}
+	
+	
 	public KontaktPopup(Kontaktliste kontaktliste){
 		super(true);
 		this.kontaktliste = kontaktliste;
 		speichern.addClickHandler(new SpeichernMitKontaktlisteClickHandler());
 		run();
 	}
+	
+	
 	public void run(){
 		setAnimationEnabled(true);
 		ktNameTa.setReadOnly(true);
@@ -61,6 +66,7 @@ public class KontaktPopup extends PopupPanel{
 		vPanel.add(speichern);
 		this.add(vPanel);
 	}
+	
 	
 	class SpeichernMitKontaktlisteClickHandler implements ClickHandler{
 
@@ -75,6 +81,7 @@ public class KontaktPopup extends PopupPanel{
 		
 	}
 	
+	
 	class SpeichernOhneKontaktlisteClickHandler implements ClickHandler{
 
 		@Override
@@ -87,6 +94,8 @@ public class KontaktPopup extends PopupPanel{
 		}
 		
 	}
+	
+	
 	class KontaktClickHandler implements ClickHandler{
 
 		@Override
@@ -96,6 +105,8 @@ public class KontaktPopup extends PopupPanel{
 		}
 		
 	}
+	
+	
 	class CreateKontaktMitKontaktlisteCallback implements AsyncCallback<Kontakt> {
 
 		@Override
@@ -108,9 +119,9 @@ public class KontaktPopup extends PopupPanel{
 			hide();
 			kontaktmanagerVerwaltung.createKontaktKontaktliste(result.getId(), kontaktliste.getId(), new CreateKontaktKontaktlisteCallback());
 			KontaktForm kontaktForm = new KontaktForm(result);
-		
-			
 		}
+		
+		
 		class CreateKontaktKontaktlisteCallback implements AsyncCallback<KontaktKontaktliste>{
 
 			@Override

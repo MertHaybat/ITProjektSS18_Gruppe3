@@ -172,7 +172,6 @@ public class KontaktlistView extends MainFrame {
 				KontaktPopup k = new KontaktPopup();
 				k.center();
 			} else if (kontaktliste != null) {
-
 				KontaktPopup k = new KontaktPopup(kontaktliste);
 				k.center();
 			}
