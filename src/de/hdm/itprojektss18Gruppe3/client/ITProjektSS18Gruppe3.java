@@ -4,25 +4,28 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.cellview.client.CellTree;
-import com.google.gwt.user.cellview.client.TreeNode;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
 import de.hdm.itprojektss18Gruppe3.client.gui.CustomTreeModel;
+import de.hdm.itprojektss18Gruppe3.client.gui.DisclosurePanelSuche;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.LoginService;
 import de.hdm.itprojektss18Gruppe3.shared.LoginServiceAsync;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 /**
@@ -31,11 +34,6 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private HorizontalPanel hPanelBar = new HorizontalPanel();
-	private HorizontalPanel hPanelLogout = new HorizontalPanel();
-	private HorizontalPanel selectPanel = new HorizontalPanel();
-	private VerticalPanel vPanelBar = new VerticalPanel();
-	private HorizontalPanel treeContainer = new HorizontalPanel();
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the Kontaktmanager application.");
 //	private Label instructionMessage = new Label("Clientauswahl");
@@ -45,6 +43,8 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 
+	private TextBox textBox = new TextBox();
+	private Button suchenButton = new Button("Suchen");
 	private Button logoutButton = new Button("Ausloggen");
 //	private Button zumReportGenerator = new Button("Report-Generator");
 //	private Button zumKontaktmanager = new Button("Kontaktmanager");
@@ -69,10 +69,27 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	}
 
 	private void loadKontaktmanager() {
+		textBox.addKeyPressHandler(new KeyPressHandler(){
+
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+					Kontakt k = new Kontakt();
+					k.setName(textBox.getValue());
+					DisclosurePanelSuche panelSuche = new DisclosurePanelSuche(k);
+				}			
+			}
+		});
+		FlowPanel flowpanel = new FlowPanel();
 		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
 		logoutButton.addClickHandler(new logoutClickHandler());
 		logoutButton.setStylePrimaryName("logoutButton");
-		RootPanel.get("logout").add(logoutButton);//hPanelBar.add(logoutButton);
+		suchenButton.setStylePrimaryName("mainButton");
+		suchenButton.addClickHandler(new SuchenClickHandler());
+		flowpanel.add(textBox);
+		flowpanel.add(suchenButton);
+		flowpanel.add(logoutButton);
+		RootPanel.get("logout").add(flowpanel);//hPanelBar.add(logoutButton);
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("menubar").clear();
 //		RootPanel.get("menubar").add(hPanelBar);
@@ -102,7 +119,6 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			signInLink.setHref(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html");
 			Window.open(signInLink.getHref(), "_self", "");
 		}
@@ -240,4 +256,15 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 		}
 	}
+
+	public class SuchenClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(new DisclosurePanelSuche());
+		}
+
+	}
+
 }

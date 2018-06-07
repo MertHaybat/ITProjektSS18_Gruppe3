@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -40,6 +41,7 @@ import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 public class KontaktCellList extends MainFrame{
 	private HorizontalPanel kontaktInfoViewContainer = new HorizontalPanel();
@@ -51,7 +53,7 @@ public class KontaktCellList extends MainFrame{
 	
 	private CellList<Kontakt> kontaktCell = new CellList<Kontakt>(new KontaktCell(), CellListResources.INSTANCE);
 	
-	 private TextBox vornameBox = new TextBox();
+	private TextBox vornameBox = new TextBox();
 	private TextBox nachnameBox = new TextBox();
 	private TextBox geburtsdatum = new TextBox();
 	private TextBox telefonnummer = new TextBox();
@@ -60,7 +62,8 @@ public class KontaktCellList extends MainFrame{
 	private Button kontaktBearbeitenButton = new Button("Ansehen");
 	private FlexTable kontaktInfoLayout = new FlexTable();
 	private DecoratorPanel kontaktInfo = new DecoratorPanel();
-	
+	private Label geteiltMitLabel = new Label();
+	private Teilhaberschaft teilhaberschaft = null;
 	
 	
 	private Kontakt selectedKontakt = null;
@@ -80,6 +83,11 @@ public class KontaktCellList extends MainFrame{
 		this.kontaktliste = selection;
 		run();
 	}
+	public KontaktCellList(Kontaktliste selection, Teilhaberschaft teilhaberschaft) {
+		this.kontaktliste = selection;
+		this.teilhaberschaft = teilhaberschaft;
+		run();
+	}
 	
 	
 	public CellList<Kontakt> getKontaktCell() {
@@ -88,6 +96,21 @@ public class KontaktCellList extends MainFrame{
 
 	public void setKontaktCell(CellList<Kontakt> kontaktCell) {
 		this.kontaktCell = kontaktCell;
+	}
+
+	private void addRow(FlexTable flexTable, String nutzer) {
+		geteiltMitLabel.setText(nutzer);
+	    int numRows = kontaktInfoLayout.getRowCount();
+	    kontaktInfoLayout.setWidget(6, 1, geteiltMitLabel);
+	    kontaktInfoLayout.getFlexCellFormatter().setRowSpan(0, 1, 6);
+	  }
+	
+	public HorizontalPanel getContentViewContainer() {
+		return contentViewContainer;
+	}
+
+	public void setContentViewContainer(HorizontalPanel contentViewContainer) {
+		this.contentViewContainer = contentViewContainer;
 	}
 
 	@Override
@@ -111,18 +134,21 @@ public class KontaktCellList extends MainFrame{
 		kontaktInfoLayout.setWidget(4, 1, telefonnummer);
 		kontaktInfoLayout.setHTML(5, 0, "E-Mail: ");
 		kontaktInfoLayout.setWidget(5, 1, mail);
-		kontaktInfoLayout.setWidget(6, 0, kontaktBearbeitenButton);
+		kontaktInfoLayout.setHTML(6, 0, "Geteilt mit: ");
+		kontaktInfoLayout.setWidget(7, 0, kontaktBearbeitenButton);
 
 		kontaktInfo.setWidget(kontaktInfoLayout);
 		kontaktCell.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event) {
 				selectedKontakt = selectionModel.getSelectedObject();
-
+				geteiltMitLabel.setText("");
 				kontaktInfoViewContainer.clear();
 				kontaktInfoViewContainer.add(kontaktInfo);
 
 				kontaktmanagerVerwaltung.findEigenschaftHybrid(selectedKontakt, new EigenschaftAuspraegungCallback());
+				
+				kontaktmanagerVerwaltung.findNutzerByKontaktID(selectedKontakt.getId(), new NutzerCallback());
 			}
 		});
 
@@ -138,11 +164,11 @@ public class KontaktCellList extends MainFrame{
 		kontaktInfo.setStylePrimaryName("kontaktDecoratorPanel");
 		allKontaktViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		kontaktlistViewPanel.setStylePrimaryName("kontaktlistenViewPanel");
-		contentViewContainer.add(kontaktlistViewPanel);
-		contentViewContainer.add(kontaktInfoViewContainer);
+		this.add(kontaktlistViewPanel);
+		this.add(kontaktInfoViewContainer);
 		kontaktBearbeitenButton.addClickHandler(new AnsehenClickHandler());
-		RootPanel.get("content").clear();
-		RootPanel.get("content").add(contentViewContainer);
+//		RootPanel.get("content").clear();
+//		RootPanel.get("content").add(contentViewContainer);
 		
 	}
 	class AnsehenClickHandler implements ClickHandler {
@@ -213,6 +239,29 @@ public class KontaktCellList extends MainFrame{
 			}
 		}
 
+	}
+	
+	class NutzerCallback implements AsyncCallback <Vector<Nutzer>>{
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Vector<Nutzer> result) {
+			if(result != null){
+				for (Nutzer nutzer : result) {
+					addRow(kontaktInfoLayout, nutzer.getMail());
+					
+				}
+				
+			} else if(result == null){
+				addRow(kontaktInfoLayout, "-");
+			}
+		}
+		
 	}
 	
 

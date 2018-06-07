@@ -8,13 +8,10 @@ import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.cell.client.Cell.Context;
-import com.google.gwt.dom.client.BrowserEvents;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -42,16 +39,22 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 public class AllKontaktView extends MainFrame {
 
@@ -65,7 +68,9 @@ public class AllKontaktView extends MainFrame {
 	private Button addKontaktToKontaktlistButton = new Button("+ Kontaktliste");
 	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
 	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
-	private Button suchenButton = new Button("Suchen");
+	
+	private Teilhaberschaft teilhaberschaft = null;
+	private NoSelectionModel<Kontaktliste> ssmKontaktliste = new NoSelectionModel<Kontaktliste>();
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private CellTable<Kontakt> allKontakteCellTable = new CellTable<Kontakt>(11, CellTableResources.INSTANCE);
 	private ArrayList<Kontakt> allKontakteSelectedArrayList = new ArrayList<>();
@@ -73,7 +78,7 @@ public class AllKontaktView extends MainFrame {
 	private List<Kontakt> allSelectedKontakte = new ArrayList<>();
 	private CellTable<Kontaktliste> kontaktlisteCelltable = new CellTable<Kontaktliste>();
 	private static ProvidesKey<Kontakt> keyProvider;
-	private TextBox textBox = new TextBox();
+	
 	// private SuggestBox box = new SuggestBox(oracle);
 	private Anchor signOutLink = new Anchor();
 //	private Label contentHeadline = new Label("Die Liste aller deiner Kontakte");
@@ -93,17 +98,19 @@ public class AllKontaktView extends MainFrame {
 	private RadioButton rb0 = new RadioButton("auswahlRadio", "Alle eigenen Kontakte");
 	private RadioButton rb1 = new RadioButton("auswahlRadio", "Alle geteilten Kontakte");
 	private RadioButton rb2 = new RadioButton("auswahlRadio", "Alle geteilten Kontaktlisten");
+	private RadioButton rb3 = new RadioButton("auswahlRadio", "Alle geteilten Eigenschaftsausprägungen");
 	private FlowPanel radioFlowPanel = new FlowPanel();
-	
+	private ButtonCell visitProfileButton = new ButtonCell();
 	// public AllKontaktView(){
 	//
 	//
 	// }
 	//
 	public AllKontaktView() {
-		Nutzer nutzer = new Nutzer();
-		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
+		RootPanel.get("content").clear();
+//		Nutzer nutzer = new Nutzer();
+//		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+//		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
 		run();
 	}
 
@@ -122,11 +129,12 @@ public class AllKontaktView extends MainFrame {
 		radioFlowPanel.add(rb0);
 		radioFlowPanel.add(rb1);
 		radioFlowPanel.add(rb2);
-		rb0.setValue(true);
+		radioFlowPanel.add(rb3);
+	
 		
 		KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
 
-		
+		kontaktlisteCelltable.setSelectionModel(ssmKontaktliste);
 		allKontakteCellTable.setSelectionModel(selectionModelCellTable,
 		DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
 		selectionModelCellTable.addSelectionChangeHandler(new SelectionChangeHandlerCellTable());
@@ -138,7 +146,7 @@ public class AllKontaktView extends MainFrame {
 		 */
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 
-		suchenButton.setStylePrimaryName("mainButton");
+		
 //		logoutButton.setStylePrimaryName("mainButton");
 		addKontaktButton.setStylePrimaryName("mainButton");
 		deleteKontaktButton.setStylePrimaryName("mainButton");
@@ -146,26 +154,11 @@ public class AllKontaktView extends MainFrame {
 		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
 		addKontaktlisteButton.setStylePrimaryName("mainButton");
 
-		// box.setStylePrimaryName("gwt-SuggestBox");
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
-//		contentHeadline.setStylePrimaryName("h2");
-
-		// Set the message to display when the table is empty.
 		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));
 
-		// Add a selection model so we can select cells.
-
-		/**
-		 * Add the columns to the table.
-		 */
-		// private void initTableColumns(final SelectionModel<Kontakt>
-		// selectionModel) {
-		// Checkbox column. This table will uses a checkbox column for
-		// selection.
-		// Alternatively, you can call dataGrid.setSelectionEnabled(true) to
-		// enable
-		// mouse selection.
+		
 		Column<Kontakt, Boolean> checkColumn = new Column<Kontakt, Boolean>(new CheckboxCell(true, false)) {
 			@Override
 			public Boolean getValue(Kontakt object) {
@@ -198,7 +191,7 @@ public class AllKontaktView extends MainFrame {
 			}
 		};
 
-		ButtonCell visitProfileButton = new ButtonCell();
+		
 		Column<Kontakt, String> visitProfileButtonColumn = new Column<Kontakt, String>(visitProfileButton) {
 			public String getValue(Kontakt object) {
 				return "Ansehen";
@@ -209,39 +202,27 @@ public class AllKontaktView extends MainFrame {
 			public String getValue(Kontaktliste object) {
 				return object.getBezeichnung();
 			}
-		};
-
-		Column<Kontaktliste, String> iconKontaktlisteColumn = new Column<Kontaktliste, String>(new TextCell() {
-			public void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
-				sb.appendHtmlConstant("<img width=\"20\" src=\"images/" + value.asString() + "\">");
-			}
-		}) {
-			@Override
-			public String getValue(Kontaktliste object) {
-				if (object.getStatus() == 1) {
-					return "group.svg";
-				} else {
-					return "singleperson.svg";
-				}
-			}
-		};
+		};	
 		
-		textBox.addKeyPressHandler(new KeyPressHandler(){
-
-			@Override
-			public void onKeyPress(KeyPressEvent event) {
-				// TODO Auto-generated method stub
-			}
-		});
+		String cookieCB0 = Cookies.getCookie("checkbox0Cookie");
+		String cookieCB1 = Cookies.getCookie("checkbox1Cookie");
+		String cookieCB2 = Cookies.getCookie("checkbox2Cookie");
+		String cookieCB3 = Cookies.getCookie("checkbox3Cookie");
 		rb0.addClickHandler(new ClickHandler(){
 
 			@Override
 			public void onClick(ClickEvent event) {
+				RootPanel.get("menubar").clear();
+				RootPanel.get("menubar").add(menuBarContainerPanel);
 				allKontakteCellTableContainer.clear();
 				allKontakteCellTableContainer.add(allKontakteCellTable);
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
+				Cookies.setCookie("checkbox0Cookie", "1");
+				Cookies.setCookie("checkbox1Cookie", "0");
+				Cookies.setCookie("checkbox2Cookie", "0");
+				Cookies.setCookie("checkbox3Cookie", "0");
 			}
 			
 		});
@@ -249,11 +230,18 @@ public class AllKontaktView extends MainFrame {
 			
 			@Override
 			public void onClick(ClickEvent event) {
+				KontaktTeilhaberschaftCellTable ktc = new KontaktTeilhaberschaftCellTable();
 				allKontakteCellTableContainer.clear();
-				allKontakteCellTableContainer.add(allKontakteCellTable);
-				Nutzer nutzer = new Nutzer();
-				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-				kontaktmanagerVerwaltung.findKontakteByTeilhabenderID(nutzer.getId(), new AllKontaktByNutzerCallback());
+				RootPanel.get("menubar").clear();
+				RootPanel.get("menubar").add(ktc.getMenubar());
+				allKontakteCellTableContainer.add(ktc.getCellTableTeilhaberschaft());
+//				Nutzer nutzer = new Nutzer();
+//				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+//				kontaktmanagerVerwaltung.findKontakteByTeilhabenderID(nutzer.getId(), new AllKontaktByNutzerCallback());
+				Cookies.setCookie("checkbox0Cookie", "0");
+				Cookies.setCookie("checkbox1Cookie", "1");
+				Cookies.setCookie("checkbox2Cookie", "0");
+				Cookies.setCookie("checkbox3Cookie", "0");
 			}
 		});
 		rb2.addClickHandler(new ClickHandler() {
@@ -261,13 +249,96 @@ public class AllKontaktView extends MainFrame {
 			@Override
 			public void onClick(ClickEvent event) {
 				allKontakteCellTableContainer.clear();
+				RootPanel.get("menubar").clear();
 				allKontakteCellTableContainer.add(kontaktlisteCelltable);
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				kontaktmanagerVerwaltung.findKontaktlisteByTeilhabenderID(nutzer.getId(), new AllKontaktlisteCallback());
+				Cookies.setCookie("checkbox0Cookie", "0");
+				Cookies.setCookie("checkbox1Cookie", "1");
+				Cookies.setCookie("checkbox2Cookie", "0");
+				Cookies.setCookie("checkbox3Cookie", "0");
 			}
 		});
+		rb3.addClickHandler(new ClickHandler(){
 
+			@Override
+			public void onClick(ClickEvent event) {
+				EigenschaftsauspraegungTeilhaberschaftCellTable etc = new EigenschaftsauspraegungTeilhaberschaftCellTable();
+				allKontakteCellTableContainer.clear();
+				RootPanel.get("menubar").clear();
+				RootPanel.get("menubar").add(etc.getMenubar());
+				allKontakteCellTableContainer.clear();
+				allKontakteCellTableContainer.add(etc.getCellTableTeilhaberschaft());
+				// Nutzer nutzer = new Nutzer();
+				// nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+				// kontaktmanagerVerwaltung.findKontakteByTeilhabenderID(nutzer.getId(),
+				// new AllKontaktByNutzerCallback());
+				Cookies.setCookie("checkbox0Cookie", "0");
+				Cookies.setCookie("checkbox1Cookie", "0");
+				Cookies.setCookie("checkbox2Cookie", "0");
+				Cookies.setCookie("checkbox3Cookie", "1");
+
+			}
+			
+		});
+
+		
+		
+		if(cookieCB0 == "0" && cookieCB1 == "0" && cookieCB2 =="0" && cookieCB3 =="0"){
+			rb0.setValue(true);
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
+			RootPanel.get("menubar").clear();
+			RootPanel.get("menubar").add(menuBarContainerPanel);
+			allKontakteCellTableContainer.clear();
+			allKontakteCellTableContainer.add(allKontakteCellTable);
+		} else if (cookieCB0 == "0" && cookieCB1 == "1" && cookieCB2 =="0" && cookieCB3 =="0"){
+			rb1.setValue(true);
+			KontaktTeilhaberschaftCellTable ktc = new KontaktTeilhaberschaftCellTable();
+			RootPanel.get("menubar").clear();
+			RootPanel.get("menubar").add(ktc.getMenubar());
+			allKontakteCellTableContainer.clear();
+			allKontakteCellTableContainer.add(ktc.getCellTableTeilhaberschaft());
+			
+		} else if (cookieCB0 == "0" && cookieCB1 == "0" && cookieCB2 =="1" && cookieCB3 =="0"){
+			rb2.setValue(true);
+			allKontakteCellTableContainer.clear();
+			RootPanel.get("menubar").clear();
+			allKontakteCellTableContainer.add(kontaktlisteCelltable);
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			kontaktmanagerVerwaltung.findKontaktlisteByTeilhabenderID(nutzer.getId(), new AllKontaktlisteCallback());
+		} else if (cookieCB0 == "1" && cookieCB1 == "0" && cookieCB2 =="0" && cookieCB3 =="0"){
+			rb0.setValue(true);
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
+			RootPanel.get("menubar").clear();
+			RootPanel.get("menubar").add(menuBarContainerPanel);
+			allKontakteCellTableContainer.clear();
+			allKontakteCellTableContainer.add(allKontakteCellTable);
+
+		} else if (cookieCB0 == "0" && cookieCB1 == "0" && cookieCB2 =="0" && cookieCB3 =="1"){
+			rb3.setValue(true);
+			EigenschaftsauspraegungTeilhaberschaftCellTable etc = new EigenschaftsauspraegungTeilhaberschaftCellTable();
+			RootPanel.get("menubar").clear();
+			RootPanel.get("menubar").add(etc.getMenubar());
+			allKontakteCellTableContainer.clear();
+			allKontakteCellTableContainer.add(etc.getCellTableTeilhaberschaft());
+		}
+//		ssmKontaktliste.addSelectionChangeHandler(new Handler(){
+//
+//			@Override
+//			public void onSelectionChange(SelectionChangeEvent event) {
+//				// TODO Auto-generated method stub
+//				KontaktCellList klv = new KontaktCellList(ssmKontaktliste.getLastSelectedObject(), teilhaberschaft);
+//				allKontakteCellTableContainer.add(klv);
+//				
+//			}
+//			
+//		});
 		visitProfileButtonColumn.setFieldUpdater(new VisitProfileUpdate());
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
 		// allKontakteCellTable.addCellPreviewHandler(new
@@ -281,16 +352,12 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
 		
 		kontaktlisteCelltable.addColumn(kontaktlisteNameColumn, "Kontaktliste");
-		kontaktlisteCelltable.setColumnWidth(kontaktlisteNameColumn, 50, Unit.EM);
-		kontaktlisteCelltable.addColumn(iconKontaktlisteColumn, "");
-		kontaktlisteCelltable.setColumnWidth(iconKontaktlisteColumn, 5, Unit.EM);
-		allKontakteCellTableContainer.clear();
-		allKontakteCellTableContainer.add(allKontakteCellTable);
+		kontaktlisteCelltable.setColumnWidth(kontaktlisteNameColumn, 10, Unit.EM);
+	
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
 //		vPanel.add(contentHeadline);
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
-		vPanel.add(radioFlowPanel);
-		vPanel.add(allKontakteCellTableContainer);
+		
 
 //		logoutButton.addClickHandler(new LogoutClickHandler());
 		deleteKontaktButton.addClickHandler(new KontaktDeleteClickHandler());
@@ -298,7 +365,7 @@ public class AllKontaktView extends MainFrame {
 		addTeilhaberschaftKontaktButton
 				.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
 		addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
-		suchenButton.addClickHandler(new SuchenClickHandler());
+		
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
 		
 		menuBarContainerFlowPanel.add(addKontaktButton);
@@ -307,19 +374,18 @@ public class AllKontaktView extends MainFrame {
 		menuBarContainerFlowPanel.add(addKontaktToKontaktlistButton);
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 		// menuBarContainerFlowPanel.add(box);
-		menuBarContainerFlowPanel.add(textBox);
-		menuBarContainerFlowPanel.add(suchenButton);
+		
 //		menuBarContainerFlowPanel.add(logoutButton);
-		RootPanel.get("menubar").clear();
-		RootPanel.get("menubar").add(menuBarContainerPanel);
+		vPanel.add(radioFlowPanel);
+		vPanel.add(allKontakteCellTableContainer);
 		RootPanel.get("content").add(vPanel);
-
 	}
+	
 	class AllKontaktlisteCallback implements AsyncCallback<Vector<Kontaktliste>>{
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
+			Window.alert("Fehler beim Laden der Daten aus der Datenbank");
 			
 		}
 
@@ -337,21 +403,10 @@ public class AllKontaktView extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			NewKontaktlisteDialogBox dbox = new NewKontaktlisteDialogBox();
 			dbox.center();
 
 		}
-	}
-
-	public class SuchenClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(new DisclosurePanelSuche());
-		}
-
 	}
 
 	public class LogoutClickHandler implements ClickHandler {
@@ -435,6 +490,7 @@ public class AllKontaktView extends MainFrame {
 
 	}
 
+	
 	public class SelectionChangeHandlerCellTable implements SelectionChangeEvent.Handler {
 
 		public void onSelectionChange(SelectionChangeEvent event) {
@@ -487,21 +543,6 @@ public class AllKontaktView extends MainFrame {
 		}
 
 	}
-
-	// public class PreviewClickHandler implements Handler<Kontakt>{
-	// @Override
-	// public void onCellPreview(CellPreviewEvent<Kontakt> event) {
-	// if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
-	//
-	// final Kontakt value = event.getValue();
-	// final Boolean state =
-	// !event.getDisplay().getSelectionModel().isSelected(value);
-	// event.getDisplay().getSelectionModel().setSelected(value, state);
-	// event.setCanceled(true);
-	// }
-	// }
-	//
-	// }
 
 	/*
 	 * Diverse ClickHandler um die Klicks auf die Menübuttons zu erfassen und zu
@@ -564,6 +605,213 @@ public class AllKontaktView extends MainFrame {
 				dialogbox.center();
 			}
 		} 
+	}
+	public class EigenschaftsauspraegungTeilhaberschaftCellTable {
+		
+		private SingleSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> ssmModel = new SingleSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>();
+		private CellTable<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> cellTableTeilhaberschaft = new CellTable<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>();
+		private FlowPanel menubar = new FlowPanel();
+		private Button teilhaberschaftButton = new Button("Teilhaberschaft Löschen");
+		
+		
+		public EigenschaftsauspraegungTeilhaberschaftCellTable(){
+			run();
+		}
+		
+		public SingleSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> getSsmModel() {
+			return ssmModel;
+		}
+		public void setSsmModel(SingleSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> ssmModel) {
+			this.ssmModel = ssmModel;
+		}
+		public CellTable<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> getCellTableTeilhaberschaft() {
+			return cellTableTeilhaberschaft;
+		}
+		public void setCellTableTeilhaberschaft(
+				CellTable<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> cellTableTeilhaberschaft) {
+			this.cellTableTeilhaberschaft = cellTableTeilhaberschaft;
+		}
+		public FlowPanel getMenubar() {
+			return menubar;
+		}
+		public void setMenubar(FlowPanel menubar) {
+			this.menubar = menubar;
+		}
+		void run(){
+			menubar.add(teilhaberschaftButton);
+			teilhaberschaftButton.addClickHandler(new DeleteTeilhaberschaftClickHandler());
+			Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String> nutzerColumn = new Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>(new TextCell()) {
+				@Override
+				public String getValue(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper object) {
+					return object.getNutzer().getMail();
+				}
+			};
+		
+			Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String> kontaktnameColumn = new Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>(new TextCell()) {
+				@Override
+				public String getValue(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper object) {
+					return object.getKontakt().getName();
+				}
+			};
+			Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String> eigenschaftColumn = new Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>(new TextCell()) {
+				@Override
+				public String getValue(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper object) {
+					return object.getEigenschaft().getBezeichnung();
+				}
+			};
+			Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String> auspraegungColumn = new Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>(new TextCell()) {
+				@Override
+				public String getValue(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper object) {
+					return object.getEigenschaftsauspraegung().getWert();
+				}
+			};
+			Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String> modifikationsColumn = new Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>(new TextCell()) {
+				@Override
+				public String getValue(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper object) {
+					return String.valueOf(object.getKontakt().getModifikationsdatum());
+				}
+			};
+			cellTableTeilhaberschaft.setSelectionModel(ssmModel);
+			
+			cellTableTeilhaberschaft.addColumn(nutzerColumn, "Eigentümer");
+			cellTableTeilhaberschaft.addColumn(kontaktnameColumn, "Kontaktname");
+			cellTableTeilhaberschaft.addColumn(eigenschaftColumn, "");
+			cellTableTeilhaberschaft.addColumn(auspraegungColumn, "");
+
+			cellTableTeilhaberschaft.addColumn(modifikationsColumn, "Modifikationsdatum");
+			
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			kontaktmanagerVerwaltung.findAuspraegungTeilhaberschaftKontaktWrapperByTeilhaberschaft(nutzer.getId(), new TeilhaberschaftCallback());
+		}
+		private class DeleteTeilhaberschaftClickHandler implements ClickHandler{
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if(ssmModel == null){
+					Window.alert("Sie müssen eine Teilhaberschaft auswählen");
+				} else {
+					
+					kontaktmanagerVerwaltung.deleteTeilhaberschaftById(ssmModel.getSelectedObject().getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
+				}
+			}
+			private class DeleteTeilhaberschaftCallback implements AsyncCallback<Void>{
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Die Teilhaberschaft konnte nicht gelöscht werden");
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					Window.alert("Die Teilhaberschaft wurde erfolgreich gelöscht");
+				}
+				
+			}
+		}
+		private class TeilhaberschaftCallback implements AsyncCallback<Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>>{
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Fehler beim Laden der Teilhaberschaften");
+				
+			}
+
+			@Override
+			public void onSuccess(Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> result) {
+				cellTableTeilhaberschaft.setRowCount(result.size(), true);
+				cellTableTeilhaberschaft.setRowData(0, result);
+			}
+			
+		}
+	}
+	public class KontaktTeilhaberschaftCellTable {
+		
+		private SingleSelectionModel<NutzerTeilhaberschaftKontaktWrapper> ssmModel = new SingleSelectionModel<NutzerTeilhaberschaftKontaktWrapper>();
+		private CellTable<NutzerTeilhaberschaftKontaktWrapper> cellTableTeilhaberschaft = new CellTable<NutzerTeilhaberschaftKontaktWrapper>();
+		private FlowPanel menubar = new FlowPanel();
+		private Button teilhaberschaftButton = new Button("Kontakt Verwalten");
+		
+		public KontaktTeilhaberschaftCellTable(){
+			run();
+		}
+		
+		public CellTable<NutzerTeilhaberschaftKontaktWrapper> getCellTableTeilhaberschaft() {
+			return cellTableTeilhaberschaft;
+		}
+
+		public void setCellTableTeilhaberschaft(CellTable<NutzerTeilhaberschaftKontaktWrapper> cellTableTeilhaberschaft) {
+			this.cellTableTeilhaberschaft = cellTableTeilhaberschaft;
+		}
+		
+		public FlowPanel getMenubar() {
+			return menubar;
+		}
+
+		public void setMenubar(FlowPanel menubar) {
+			this.menubar = menubar;
+		}
+		void run() {
+			menubar.add(teilhaberschaftButton);
+			teilhaberschaftButton.addClickHandler(new KontaktFormClickHandler());
+			Column<NutzerTeilhaberschaftKontaktWrapper, String> nutzerColumn = new Column<NutzerTeilhaberschaftKontaktWrapper, String>(new TextCell()) {
+				@Override
+				public String getValue(NutzerTeilhaberschaftKontaktWrapper object) {
+					return object.getNutzerMail();
+				}
+			};
+		
+			Column<NutzerTeilhaberschaftKontaktWrapper, String> kontaktnameColumn = new Column<NutzerTeilhaberschaftKontaktWrapper, String>(new TextCell()) {
+				@Override
+				public String getValue(NutzerTeilhaberschaftKontaktWrapper object) {
+					return object.getKontaktName();
+				}
+			};
+			Column<NutzerTeilhaberschaftKontaktWrapper, String> modifikationsColumn = new Column<NutzerTeilhaberschaftKontaktWrapper, String>(new TextCell()) {
+				@Override
+				public String getValue(NutzerTeilhaberschaftKontaktWrapper object) {
+					return String.valueOf(object.getKontakt().getModifikationsdatum());
+				}
+			};
+			cellTableTeilhaberschaft.setSelectionModel(ssmModel);
+			
+			cellTableTeilhaberschaft.addColumn(nutzerColumn, "Eigentümer");
+			cellTableTeilhaberschaft.addColumn(kontaktnameColumn, "Kontaktname");
+			cellTableTeilhaberschaft.addColumn(modifikationsColumn, "Modifikationsdatum");
+			
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(nutzer.getId(), new TeilhaberschaftenCallback());
+		}
+	
+		public class KontaktFormClickHandler implements ClickHandler{
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if(ssmModel.getSelectedObject() == null){
+					Window.alert("Bitte wählen Sie eine Teilhaberschaft aus");
+				} else {
+					
+					KontaktForm kontaktform= new KontaktForm(ssmModel.getSelectedObject().getKontakt(),ssmModel.getSelectedObject().getTeilhaberschaft());
+				}
+			}
+			
+		}
+		public class TeilhaberschaftenCallback implements AsyncCallback <Vector<NutzerTeilhaberschaftKontaktWrapper>>{
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Fehler beim Laden der Teilhaberschaften");
+				
+			}
+			
+			@Override
+			public void onSuccess(Vector<NutzerTeilhaberschaftKontaktWrapper> result) {
+				cellTableTeilhaberschaft.setRowCount(result.size(), true);
+				cellTableTeilhaberschaft.setRowData(0, result);
+			}
+			
+		}
 	}
 
 }

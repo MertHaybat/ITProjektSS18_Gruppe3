@@ -6,6 +6,8 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -491,4 +493,12 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Vector<Kontaktliste> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
 	
 	public Kontaktliste findKontaktlistByName(String bezeichnung, int nutzerid) throws IllegalArgumentException;
+	
+	public Vector<Nutzer> findNutzerByKontaktID(int kontaktID) throws IllegalArgumentException;
+	
+	public Vector<Teilhaberschaft> findTeilhaberschaftByKontaktID(int kontaktID) throws IllegalArgumentException;
+	
+	public Vector<NutzerTeilhaberschaftKontaktWrapper> findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(int teilhabenderID) throws IllegalArgumentException;
+	
+	public Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftKontaktWrapperByTeilhaberschaft(int teilhabenderID) throws IllegalArgumentException;
 }
