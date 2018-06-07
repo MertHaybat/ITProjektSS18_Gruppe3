@@ -3,9 +3,6 @@ package de.hdm.itprojektss18Gruppe3.server;
 import java.util.Date;
 import java.util.Vector;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
-
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss18Gruppe3.server.db.EigenschaftMapper;
@@ -19,6 +16,8 @@ import de.hdm.itprojektss18Gruppe3.server.db.TeilhaberschaftMapper;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministration;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -227,7 +226,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	@Override
 	public Teilhaberschaft createTeilhaberschaft(int kontaktlisteID, int kontaktID, int eigenschaftsauspraegungID,
 			int teilhabenderID, int eigentuemerID) throws IllegalArgumentException {
-
+		
 		if(kontaktID != 0){
 			Kontakt k = findKontaktByID(kontaktID);
 			k.setStatus(1);
@@ -245,7 +244,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			saveKontaktliste(k);
 		}
 		Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
-
+		
+		
 		teilhaberschaft.setEigenschaftsauspraegungID(eigenschaftsauspraegungID);
 		teilhaberschaft.setEigentuemerID(eigentuemerID);
 		teilhaberschaft.setKontaktID(kontaktID);
@@ -1318,15 +1318,17 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		Vector<Teilhaberschaft> kontaktTeilhabenderVector = new Vector<Teilhaberschaft>();
 		Vector<Kontakt> kontakteVector = new Vector<Kontakt>();
 		for (Teilhaberschaft teilhaberschaft : teilhabenderVector) {
-			if(teilhaberschaft.getKontaktID() != 0){
+			if(teilhaberschaft.getKontaktID() != 0 && teilhaberschaft.getEigenschaftsauspraegungID() == 0){
 				kontaktTeilhabenderVector.add(teilhaberschaft);
 			}
 		}
+		
 
-	
 		for (Teilhaberschaft teilhabender : kontaktTeilhabenderVector) {
 			kontakteVector.add(findKontaktByID(teilhabender.getKontaktID()));
-		}
+		}  
+		
+		
 		
 		return kontakteVector;
 	}
@@ -1357,6 +1359,66 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return this.kontaktlisteMapper.findKontaktlisteByBezeichnung(bezeichnung, nutzerid);
 	}
 
+	@Override
+	public Vector<Nutzer> findNutzerByKontaktID(int kontaktID) throws IllegalArgumentException {
+		Vector<Teilhaberschaft> teilhaberschaftVector = findTeilhaberschaftByKontaktID(kontaktID);
+		Vector<Nutzer> kontaktVector = new Vector<Nutzer>();
+		for (Teilhaberschaft teilhaberschaft : teilhaberschaftVector) {
+			kontaktVector.add(findNutzerByID(teilhaberschaft.getTeilhabenderID()));
+		}
+		return kontaktVector;
+	}
+
+	@Override
+	public Vector<Teilhaberschaft> findTeilhaberschaftByKontaktID(int kontaktID) throws IllegalArgumentException {
+		return this.teilhaberschaftMapper.findTeilhaberschaftByKontaktID(kontaktID);
+	}
+
+	@Override
+	public Vector<NutzerTeilhaberschaftKontaktWrapper> findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(
+			int teilhabenderID) throws IllegalArgumentException {
+		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Teilhaberschaft> kontaktTeilhabenderVector = new Vector<Teilhaberschaft>();
+		Vector<Kontakt> kontakteVector = new Vector<Kontakt>();
+		Vector<NutzerTeilhaberschaftKontaktWrapper> wrapperVector = new Vector<NutzerTeilhaberschaftKontaktWrapper>();
+
+		for (Teilhaberschaft teilhaberschaft : teilhabenderVector) {
+			if (teilhaberschaft.getKontaktID() != 0 && teilhaberschaft.getEigenschaftsauspraegungID() == 0) {
+				kontaktTeilhabenderVector.add(teilhaberschaft);
+			}
+		}
+		for (Teilhaberschaft teilhabender : kontaktTeilhabenderVector) {
+			wrapperVector.add(new NutzerTeilhaberschaftKontaktWrapper(findNutzerByID(teilhabender.getEigentuemerID()),
+					teilhabender, findKontaktByID(teilhabender.getKontaktID())));
+		}
+
+		return wrapperVector;
+	}
+
+	@Override
+	public Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftKontaktWrapperByTeilhaberschaft(
+			int teilhabenderID) throws IllegalArgumentException {
+		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
+		Vector<Teilhaberschaft> auspraegungTeilhabenderVector = new Vector<Teilhaberschaft>();
+		Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> wrapperVector = new Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>();
+		
+		for (Teilhaberschaft teilhaberschaft : teilhabenderVector) {
+			if(teilhaberschaft.getEigenschaftsauspraegungID() != 0 && teilhaberschaft.getKontaktID() != 0){
+				
+				auspraegungTeilhabenderVector.add(teilhaberschaft); 
+			}
+		}
+		
+		for (Teilhaberschaft teilhabender : auspraegungTeilhabenderVector) {
+			Eigenschaftsauspraegung e = findEigenschaftsauspraegungById(teilhabender.getEigenschaftsauspraegungID());
+			wrapperVector.add(new NutzerTeilhaberschaftEigenschaftAuspraegungWrapper(findNutzerByID(teilhabender.getEigentuemerID()),
+					teilhabender, findEigenschaftByEigenschaftIDFromPerson(e), findEigenschaftsauspraegungById(e.getId()), findKontaktByID(e.getPersonID())));
+		}
+
+		
+		return wrapperVector;
+	}
+
 	
 
 	// @Override
@@ -1366,5 +1428,5 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	// // TODO Auto-generated method stub
 	// return null;
 	// }
-
+	
 }

@@ -87,25 +87,29 @@ public class TeilhaberschaftMapper {
 				 */
 
 				Statement stmt1 = con.createStatement();
-						// stmt1.setInt(1, teilhaberschaft.getId());
+				// stmt1.setInt(1, teilhaberschaft.getId());
 				if (teilhaberschaft.getKontaktlisteID() == 0 && teilhaberschaft.getEigenschaftsauspraegungID() == 0) {
 					stmt1.executeUpdate("INSERT INTO `teilhaberschaft`"
 							+ "(`id`, `kontaktlisteid`, `kontaktid`, `eigenschaftsauspraegungid`, `teilhabenderid`, `eigentuemerid`)"
-							+ "VALUES(NULL,NULL,"+teilhaberschaft.getKontaktID()+",NULL,"+teilhaberschaft.getTeilhabenderID()+","+teilhaberschaft.getEigentuemerID()+") ", Statement.RETURN_GENERATED_KEYS);
-					
+							+ "VALUES(NULL,NULL," + teilhaberschaft.getKontaktID() + ",NULL,"
+							+ teilhaberschaft.getTeilhabenderID() + "," + teilhaberschaft.getEigentuemerID() + ") ",
+							Statement.RETURN_GENERATED_KEYS);
 
-				} else if(teilhaberschaft.getKontaktID() == 0 && teilhaberschaft.getEigenschaftsauspraegungID() == 0){
+				} else if (teilhaberschaft.getKontaktID() == 0 && teilhaberschaft.getEigenschaftsauspraegungID() == 0) {
 					stmt1.executeUpdate("INSERT INTO `teilhaberschaft`"
 							+ "(`id`, `kontaktlisteid`, `kontaktid`, `eigenschaftsauspraegungid`, `teilhabenderid`, `eigentuemerid`)"
-							+ "VALUES(NULL,"+teilhaberschaft.getKontaktlisteID()+",NULL,NULL,"+teilhaberschaft.getTeilhabenderID()+","+teilhaberschaft.getEigentuemerID()+") ", Statement.RETURN_GENERATED_KEYS);
-					
-				} else if(teilhaberschaft.getKontaktlisteID() == 0 && teilhaberschaft.getKontaktID() == 0 ){
+							+ "VALUES(NULL," + teilhaberschaft.getKontaktlisteID() + ",NULL,NULL,"
+							+ teilhaberschaft.getTeilhabenderID() + "," + teilhaberschaft.getEigentuemerID() + ") ",
+							Statement.RETURN_GENERATED_KEYS);
+
+				} else if (teilhaberschaft.getKontaktlisteID() == 0) {
 					stmt1.executeUpdate("INSERT INTO `teilhaberschaft`"
 							+ "(`id`, `kontaktlisteid`, `kontaktid`, `eigenschaftsauspraegungid`, `teilhabenderid`, `eigentuemerid`)"
-							+ "VALUES(NULL,NULL,NULL,"+teilhaberschaft.getEigenschaftsauspraegungID()+","+teilhaberschaft.getTeilhabenderID()+","+teilhaberschaft.getEigentuemerID()+") ", Statement.RETURN_GENERATED_KEYS);
-						
-					
-				}
+							+ "VALUES(NULL,NULL," + teilhaberschaft.getKontaktID() + ","
+							+ teilhaberschaft.getEigenschaftsauspraegungID() + "," + teilhaberschaft.getTeilhabenderID()
+							+ "," + teilhaberschaft.getEigentuemerID() + ") ", Statement.RETURN_GENERATED_KEYS);
+
+				} 
 			}
 
 		} catch (SQLException e2) {
@@ -470,6 +474,57 @@ public class TeilhaberschaftMapper {
 					e.printStackTrace();
 				}
 		}
+	}
+	public Vector<Teilhaberschaft> findTeilhaberschaftByKontaktID(int kontaktID) {
+
+		/**
+		 * Verbindung zur Datenbank
+		 */
+		Connection con = DBConnection.connection();
+
+		Vector<Teilhaberschaft> result = new Vector<Teilhaberschaft>();
+
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE kontaktid= ?");
+
+			stmt.setInt(1, kontaktID);
+			ResultSet rs = stmt.executeQuery();
+
+			/**
+			 * Für jeden Eintrag Teilhabender wird ein Teilhaberschaft-Objekt
+			 * erstellt.
+			 */
+			while (rs.next()) {
+				Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+
+				teilhaberschaft.setId(rs.getInt("id"));
+				teilhaberschaft.setEigenschaftsauspraegungID(rs.getInt("eigenschaftsauspraegungid"));
+				teilhaberschaft.setKontaktID(rs.getInt("kontaktid"));
+				teilhaberschaft.setKontaktlisteID(rs.getInt("kontaktlisteid"));
+				teilhaberschaft.setTeilhabenderID(rs.getInt("teilhabenderid"));
+				teilhaberschaft.setEigentuemerID(rs.getInt("eigentuemerid"));
+
+				/**
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 */
+				result.addElement(teilhaberschaft);
+			}
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		} finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		return result;
 	}
 
 }

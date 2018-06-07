@@ -5,6 +5,8 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -14,11 +16,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 /**
-<<<<<<< HEAD
  * Das asynchrone Gegenstück des Interface {@link KontaktmanagerAdministration}.
-=======
- * Das asynchrone Gegenst�ck des Interface {@link KontaktmanagerAdministration}.
->>>>>>> refs/heads/Mert
  * Es wird semiautomatisch durch das Google Plugin erstellt und gepflegt.
  * 
  * @version 1.30 11 May 2018
@@ -183,6 +181,16 @@ public interface KontaktmanagerAdministrationAsync {
 	void findKontaktlisteByTeilhabenderID(int teilhabenderID, AsyncCallback<Vector<Kontaktliste>> callback);
 
 	void findKontaktlistByName(String bezeichnung, int nutzerid, AsyncCallback<Kontaktliste> callback);
+
+	void findNutzerByKontaktID(int kontaktID, AsyncCallback<Vector<Nutzer>> callback);
+
+	void findTeilhaberschaftByKontaktID(int kontaktID, AsyncCallback<Vector<Teilhaberschaft>> callback);
+
+	void findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(int teilhabenderID,
+			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>> callback);
+
+	void findAuspraegungTeilhaberschaftKontaktWrapperByTeilhaberschaft(int teilhabenderID,
+			AsyncCallback<Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>> callback);
 
 	
 	

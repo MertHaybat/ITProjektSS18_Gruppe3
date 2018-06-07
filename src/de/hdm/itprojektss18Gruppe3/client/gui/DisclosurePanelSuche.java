@@ -72,8 +72,14 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 	private String checkedCheckbox = "";
 	private Kontaktliste kontaktliste = new Kontaktliste();
+	private Kontakt kontaktNeu = new Kontakt();
 
 	public DisclosurePanelSuche() {
+		run();
+	}
+	public DisclosurePanelSuche(Kontakt kontakt){
+		kontaktNeu=kontakt;
+		
 		run();
 	}
 
@@ -185,7 +191,6 @@ public class DisclosurePanelSuche extends VerticalPanel {
 			Kontakt k = new Kontakt();
 			k.setName(kontaktTextbox.getValue());
 			k.setNutzerID(nutzer.getId());
-
 			// eigenschaft.setBezeichnung(eigenschaftTextbox.getSelectedValue());
 			auspraegung.setWert(auspraegungTextbox.getValue());
 

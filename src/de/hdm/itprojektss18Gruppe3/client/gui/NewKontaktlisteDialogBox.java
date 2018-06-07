@@ -97,6 +97,9 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 
 		@Override
 		public void onSuccess(Kontaktliste result) {
+			if(result == null){
+				Window.alert("Diese Kontaktliste existiert bereits");
+			}
 			hide();
 			
 //			KontaktlistView klV = new KontaktlistView(kontaktliste);

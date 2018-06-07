@@ -45,9 +45,9 @@ import com.google.gwt.user.client.ui.TextBox;
 
 public class KontaktlistView extends MainFrame {
 
-	private Label menuBarHeadlineLabel = new Label("Kontaktlisten");
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
+	private Button zurueckButton = new Button("Zurück");
 	private Button deleteKontaktlisteButton = new Button("Kontaktliste löschen");
 	private Button addKontaktToKontaktlisteButton = new Button("Kontakt hinzufügen");
 	private Button deleteKontaktFromKontaktlisteButton = new Button("Kontakt entfernen");
@@ -75,8 +75,23 @@ public class KontaktlistView extends MainFrame {
 	}
 
 	public KontaktlistView(Kontaktliste selection) {
+		
 		this.kontaktliste = selection;
 		this.setKontaktlisteSelectedInTree(selection);
+		zurueckButton.setStylePrimaryName("mainButton");
+		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
+		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
+		deleteKontaktFromKontaktlisteButton.setStylePrimaryName("mainButton");
+		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
+		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
+		menuBarContainerFlowPanel.add(zurueckButton);
+		menuBarContainerFlowPanel.add(deleteKontaktlisteButton);
+		menuBarContainerFlowPanel.add(addKontaktToKontaktlisteButton);
+		menuBarContainerFlowPanel.add(deleteKontaktFromKontaktlisteButton);
+		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
+		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
+		menuBarContainerFlowPanel.setStylePrimaryName("menuBarContainerFlowPanel");
+		menuBarContainerPanel.add(menuBarContainerFlowPanel);
 
 		run();
 	}
@@ -98,55 +113,45 @@ public class KontaktlistView extends MainFrame {
 		KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
 		kontaktDataProvider.addDataDisplay(kontaktCellList.getKontaktCell());
 		kontaktCellList.getKontaktCell().setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-		//-----
-		menuBarHeadlineLabel.setStylePrimaryName("menuBarLabel");
-		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
-		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
-		deleteKontaktFromKontaktlisteButton.setStylePrimaryName("mainButton");
-		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
-		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
-		menuBarContainerFlowPanel.add(menuBarHeadlineLabel);
-		menuBarContainerFlowPanel.add(deleteKontaktlisteButton);
-		menuBarContainerFlowPanel.add(addKontaktToKontaktlisteButton);
-		menuBarContainerFlowPanel.add(deleteKontaktFromKontaktlisteButton);
-		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
-		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
-		menuBarContainerFlowPanel.setStylePrimaryName("menuBarContainerFlowPanel");
-		menuBarContainerPanel.add(menuBarContainerFlowPanel);
+		//----
+		
 		//----
 
 		/*
 		 * CellList für die Anzeige der Kontaktlisten eines Users wird umgesetzt
 		 */
 		
-		//-------//
 		
 		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(kontaktlisteSelectedInTree));
 		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
 		deleteKontaktFromKontaktlisteButton.addClickHandler(new KontaktAusKontaktlisteDeleteClickHandler());
 		addTeilhaberschaftKontaktButton
 				.addClickHandler(new addTeilhaberschaftKontaktClickHandler(selectedKontakteInCellTable));
-		addTeilhaberschaftKontaktlisteButton.addClickHandler(new ClickHandler(){
+		addTeilhaberschaftKontaktlisteButton.addClickHandler(new TeilhaberschaftKontaktlisteClickHandler());
+		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
 
-			@Override
-			public void onClick(ClickEvent event) {
-			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontaktlisteSelectedInTree);
-			dialogbox.center();
-			}
-			
-		});
-
-		// RootPanel.get("content").clear();
-		//---/
-//		RootPanel.get("content").clear();
-		// RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
 		
 	}
+	class ZurueckButtonClickHandler implements ClickHandler {
 
+		@Override
+		public void onClick(ClickEvent event) {
+			
+			AllKontaktView akw = new AllKontaktView();
+		}
+		
+	}
 
-
+	class TeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
+		
+		@Override
+		public void onClick(ClickEvent event) {
+		DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontaktlisteSelectedInTree);
+		dialogbox.center();
+		}
+	}
 	
 
 	class deleteKontaktlisteClickHandler implements ClickHandler {
