@@ -38,7 +38,7 @@ public interface ReportGenerator extends RemoteService {
 	   * @return Alle Kontakte
 	   * @throws IllegalArgumentException
 	   */
-	  public abstract AlleKontakteReport createAlleKontakteReport() 
+	  public abstract AlleKontakteReport createAlleKontakteReport(String lbEmail) 
 			  throws IllegalArgumentException;
 	  
 	  /**
@@ -66,4 +66,5 @@ public interface ReportGenerator extends RemoteService {
 	  public Vector<Eigenschaft> findAllEigenschaften() throws IllegalArgumentException;
 
 	  public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) throws IllegalArgumentException;
+
 }

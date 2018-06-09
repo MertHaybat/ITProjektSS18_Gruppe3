@@ -8,11 +8,11 @@ import de.hdm.itprojektss18Gruppe3.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.HTMLReportWriter;
 
-public class AllKontakteReport extends HTMLResultPanel{
+public class AllKontakte extends HTMLResultPanel{
 	ReportGeneratorAsync reportverwaltung = ClientsideSettings.getReportGenerator();
 
-	public AllKontakteReport() {
-		reportverwaltung.createAlleKontakteReport(new CreateAlleKontakteReportCallback());
+	public AllKontakte(String listboxKontakte) {
+		reportverwaltung.createAlleKontakteReport(listboxKontakte, new CreateAlleKontakteReportCallback());
 	}
 	
 	

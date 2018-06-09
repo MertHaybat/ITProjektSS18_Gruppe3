@@ -15,7 +15,7 @@ public interface ReportGeneratorAsync {
 
 	void init(AsyncCallback<Void> callback);
 
-	void createAlleKontakteReport(AsyncCallback<AlleKontakteReport> callback);
+	void createAlleKontakteReport(String lbEmail, AsyncCallback<AlleKontakteReport> callback);
 
 	void createAlleKontakteByTeilhaberschaftReport(String a, String b,
 			AsyncCallback<AlleKontakteByTeilhaberschaftReport> callback);
@@ -30,5 +30,6 @@ public interface ReportGeneratorAsync {
 	void findAllEigenschaften(AsyncCallback<Vector<Eigenschaft>> callback);
 
 	void findEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Eigenschaft> callback);
+
 
 }
