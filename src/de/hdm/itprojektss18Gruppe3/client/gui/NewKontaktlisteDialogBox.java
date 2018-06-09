@@ -29,7 +29,7 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 public class NewKontaktlisteDialogBox extends DialogBox {
 	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
-
+	private CustomTreeModel ctm = null;
 	/**
 	 * Instanziierung vom VerticalPanel 
 	 */
@@ -100,6 +100,9 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 			if(result == null){
 				Window.alert("Diese Kontaktliste existiert bereits");
 			}
+			ctm = new CustomTreeModel();
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
 			hide();
 			
 //			KontaktlistView klV = new KontaktlistView(kontaktliste);

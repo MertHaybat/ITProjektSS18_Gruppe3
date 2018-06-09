@@ -1,6 +1,7 @@
 package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -42,7 +43,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	private CustomTreeModel customTreeModel;
 	private Map<Kontaktliste, ListDataProvider<Kontakt>> kontaktDataProvider = null;
 
-	
+
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
 
@@ -173,7 +174,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		return (value instanceof Kontakt); 
 	}
 
-	
+
 	private class KontaktlistenCell extends AbstractCell<Kontaktliste> {
 
 		@Override
@@ -207,8 +208,8 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			}
 		}
 	};
-	
-	
+
+
 	public void onLoad() {
 
 		customTreeModel = new CustomTreeModel();
