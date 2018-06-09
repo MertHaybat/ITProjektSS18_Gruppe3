@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -68,10 +69,11 @@ public class KontaktForm extends MainFrame {
 	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel vPanel2 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
-
+	
 	private Label modifikationsdatum = new Label("Modifikationsdatum: ");
 	private Label erstellungsdatum = new Label("Erstellungsdatum: ");
 	private Label kontaktNameLabel = new Label("Kontaktname: ");
+	private Button timer = new Button("Änderungen wurden durchgeführt.");
 	private TextBox kontaktNameBox = new TextBox();
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
 	
@@ -423,7 +425,7 @@ private class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
 		@Override
 		public void onSuccess(Void result) {
 			// TODO Auto-generated method stub
-			Window.alert("Kontakt wurde erfolgreich abgespeichert");
+//			Window.alert("Kontakt wurde erfolgreich abgespeichert");
 			// RootPanel.get("content").clear();
 			// KontaktForm kontaktForm = new KontaktForm(k);
 			// RootPanel.get("content").add(kontaktForm);
@@ -511,5 +513,7 @@ private class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
 		}
 
 	}
+	
+
 
 }
