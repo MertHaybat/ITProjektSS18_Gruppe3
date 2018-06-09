@@ -18,7 +18,6 @@ import de.hdm.itprojektss18Gruppe3.client.AllKontaktEigenschaftenAndAuspraegunge
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 public class EigenschaftenReportForm extends HorizontalPanel {
 

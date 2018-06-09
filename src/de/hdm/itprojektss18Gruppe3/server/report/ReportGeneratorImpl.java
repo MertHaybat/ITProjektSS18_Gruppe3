@@ -55,12 +55,17 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	  }
 	
 	@Override
-	public AlleKontakteReport createAlleKontakteReport() throws IllegalArgumentException {
+	public AlleKontakteReport createAlleKontakteReport(String lbEmail) throws IllegalArgumentException {
 		if(this.getKontaktVerwaltung() == null){
 			return null;
 		}
+		else{
+			
+		
 		
 		AlleKontakteReport result = new AlleKontakteReport();
+		
+		Vector<Kontakt> allContacts = new Vector<Kontakt>();
 		
 		result.setTitle("Alle Kontakte im Kontaktmanager");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
@@ -74,7 +79,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		headline.addColumn(new Column("Ersteller"));
 		
 		result.addRow(headline);
-		Vector<Kontakt> allContacts = this.getKontaktVerwaltung().findAllKontakte();
+		if (lbEmail == "Alle") {
+		allContacts = this.getKontaktVerwaltung().findAllKontakte();
+		}
+		else {
+			
+			Nutzer nutzer = this.getKontaktVerwaltung().checkEmail(lbEmail);
+			allContacts =	this.getKontaktVerwaltung().findAllKontaktByNutzerID(nutzer.getId());
+		}
 		
 		for (Kontakt kontakt : allContacts) {
 			Row kontakte = new Row();
@@ -92,7 +104,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		}
 		
 		return result;
-	}
+	}}
 
 	@Override
 	public AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(String a, String b)
@@ -230,4 +242,5 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 		return this.getKontaktVerwaltung().findEigenschaftByBezeichnung(bezeichnung);
 	}
+
 }
