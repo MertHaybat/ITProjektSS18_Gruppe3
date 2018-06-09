@@ -1,7 +1,6 @@
 package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -55,12 +54,12 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	}
 
 
-	private void setSelectedKontaktliste(Kontaktliste selection) {
+	void setSelectedKontaktliste(Kontaktliste selection) {
 		selectedKontaktliste = selection;
 	}
 
-	private void setSelectedKontakt(Kontakt selection) {
-		selectedKontakt = selection;
+	void setSelectedKontakt(Kontakt selection) {
+			selectedKontakt = selection;
 	}
 
 	Kontaktliste getSelectedKontaktliste() {
@@ -87,16 +86,13 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			BusinessObject selection = selectionModel.getSelectedObject();
-			setSelectedKontaktliste((Kontaktliste) selection);
-
+			KontaktlistView.getMenuBarContainerFlowPanel();
 			if (selection instanceof Kontaktliste) {
 				setSelectedKontaktliste((Kontaktliste) selection);
 			} else if (selection instanceof Kontakt) {
 				setSelectedKontakt((Kontakt) selection);
-				KontaktlistView klV = new KontaktlistView((Kontaktliste) selection);
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(klV);
 			}
+			KontaktForm kontaktForm = new KontaktForm(getSelectedKontakt(), getSelectedKontaktliste());
 		}
 	}
 
@@ -180,7 +176,17 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		@Override
 		public void render(Context context, Kontaktliste value, SafeHtmlBuilder sb) {
 			if (value != null) {
+				sb.appendHtmlConstant("<table><td>");
 				sb.appendEscaped(value.getBezeichnung());
+				sb.appendHtmlConstant("</td><td>");
+				if (value.getStatus() == 0) {
+					sb.appendHtmlConstant("<img width=\"19\" src=\"images/singleperson.svg\">");
+
+				} else if (value.getStatus() == 1) {
+
+					sb.appendHtmlConstant("<img width=\"19\" src=\"images/group.svg\">");
+				}
+				sb.appendHtmlConstant("</td></table>");
 			}
 		}
 	};
@@ -194,11 +200,11 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				sb.appendEscaped(value.getName());
 				sb.appendHtmlConstant("</td><td>");
 				if (value.getStatus() == 0) {
-					sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+					sb.appendHtmlConstant("<img width=\"16\" src=\"images/singleperson.svg\">");
 
 				} else if (value.getStatus() == 1) {
 
-					sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
+					sb.appendHtmlConstant("<img width=\"16\" src=\"images/group.svg\">");
 				}
 				sb.appendHtmlConstant("</td></table>");
 			} else if(value == null){
@@ -223,7 +229,6 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		navigationHeadline .setStylePrimaryName("navigationPanelHeadline");
 		treeContainer.add(navigationTreePanel);
 		navigationCellTree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-
 
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("leftmenutree").add(treeContainer);

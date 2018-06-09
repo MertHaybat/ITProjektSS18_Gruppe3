@@ -11,6 +11,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
+import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm.DeleteKontaktDialogBox;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
@@ -46,7 +47,7 @@ import com.google.gwt.user.client.ui.TextBox;
 public class KontaktlistView extends MainFrame {
 
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
-	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
+	private static FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private Button zurueckButton = new Button("Zurück");
 	private Button deleteKontaktlisteButton = new Button("Kontaktliste löschen");
 	private Button addKontaktToKontaktlisteButton = new Button("Kontakt hinzufügen");
@@ -66,6 +67,7 @@ public class KontaktlistView extends MainFrame {
 	private TextBox telefonnummer = new TextBox();
 	private TextBox mail = new TextBox();
 	private Kontaktliste kontaktliste = new Kontaktliste();
+	private Kontakt kontakt = new Kontakt();
 	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
@@ -74,16 +76,17 @@ public class KontaktlistView extends MainFrame {
 		run();
 	}
 
-	public KontaktlistView(Kontaktliste selection) {
-		
-		this.kontaktliste = selection;
-		this.setKontaktlisteSelectedInTree(selection);
+	public KontaktlistView(Kontakt kontakt, Kontaktliste kontaktliste) {
+		this.kontakt = kontakt;
+		this.kontaktliste = kontaktliste;
+		this.setKontaktlisteSelectedInTree(kontaktliste);
 		zurueckButton.setStylePrimaryName("mainButton");
 		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
 		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
 		deleteKontaktFromKontaktlisteButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
+		menuBarContainerFlowPanel.clear();
 		menuBarContainerFlowPanel.add(zurueckButton);
 		menuBarContainerFlowPanel.add(deleteKontaktlisteButton);
 		menuBarContainerFlowPanel.add(addKontaktToKontaktlisteButton);
@@ -98,21 +101,29 @@ public class KontaktlistView extends MainFrame {
 	public static Kontaktliste getKontaktlisteSelectedInTree() {
 		return kontaktlisteSelectedInTree;
 	}
+	
+	public static FlowPanel getMenuBarContainerFlowPanel() {
+		return menuBarContainerFlowPanel;
+	}
+
+	public void setMenuBarContainerFlowPanel(FlowPanel menuBarContainerFlowPanel) {
+		this.menuBarContainerFlowPanel = menuBarContainerFlowPanel;
+	}
 
 	public void setKontaktlisteSelectedInTree(Kontaktliste kontaktlisteSelectedInTree) {
 		this.kontaktlisteSelectedInTree = kontaktlisteSelectedInTree;
 	}
 
 	public void run() {
-		KontaktCellList kontaktCellList = new KontaktCellList(kontaktliste);
+//		KontaktCellList kontaktCellList = new KontaktCellList(kontaktliste);
 		/*
 		 * Menüleiste mit den Buttons für die Anlage von einer neuen
 		 * Kontaktliste und dem Löschen einer Kontaktliste erzeugen und dem
 		 * Panel zuweisen
 		 */
-		KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
-		kontaktDataProvider.addDataDisplay(kontaktCellList.getKontaktCell());
-		kontaktCellList.getKontaktCell().setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+//		KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
+//		kontaktDataProvider.addDataDisplay(kontaktCellList.getKontaktCell());
+//		kontaktCellList.getKontaktCell().setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 		//----
 		
 		//----
@@ -131,7 +142,7 @@ public class KontaktlistView extends MainFrame {
 		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
 
 		RootPanel.get("menubar").clear();
-		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
+//		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
 		
 	}
 	class ZurueckButtonClickHandler implements ClickHandler {
@@ -187,10 +198,8 @@ public class KontaktlistView extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			KontaktKontaktliste kliste = new KontaktKontaktliste();
-			kliste.setKontaktID(selectedKontakt.getId());
-			kliste.setKontaktlisteID(kontaktliste.getId());
-			kontaktmanagerVerwaltung.deleteKontaktKontaktliste(kliste, new KontaktausKontaktlisteCallback());
+			KontaktFromKontaktlisteLoeschenDialogBox deleteKontakt = new KontaktFromKontaktlisteLoeschenDialogBox(kontakt, kontaktliste);
+			deleteKontakt.center();
 		}
 
 		class KontaktausKontaktlisteCallback implements AsyncCallback<Void> {
@@ -204,7 +213,7 @@ public class KontaktlistView extends MainFrame {
 			@Override
 			public void onSuccess(Void result) {
 				Window.alert("Kontakt wurde aus der Kontaktliste entfernt");
-				KontaktlistView klV = new KontaktlistView(kontaktliste);
+				KontaktlistView klV = new KontaktlistView(null, kontaktliste);
 				RootPanel.get("content").clear();
 				RootPanel.get("content").add(klV);
 			}

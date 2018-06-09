@@ -45,15 +45,15 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	 */
 	private Button bBestaetigen = new Button("Bestätigen");
 	private Button bAbbrechen = new Button("Abbrechen");
-	private Kontaktliste kliste = new Kontaktliste();
-	ArrayList<Kontakt> kontakteToRemoveFromKontaktliste;
+	private Kontaktliste kontaktliste = new Kontaktliste();
+	private Kontakt kontaktToRemoveFromKontaktliste;
+	private KontaktKontaktliste kontaktKontaktlisteObject = new KontaktKontaktliste();
+	private ArrayList<Kontakt> kontakteToRemoveFromKontaktliste;
 	
 	public KontaktFromKontaktlisteLoeschenDialogBox(ArrayList<Kontakt> kontakteToRemoveFromKontaktliste, Kontaktliste kontaktliste) {
 		
-		
-		
 		this.kontakteToRemoveFromKontaktliste = kontakteToRemoveFromKontaktliste;
-		this.kliste = kontaktliste;
+		this.kontaktliste = kontaktliste;
 		StringBuilder listOfNames = new StringBuilder();
 		for(Kontakt k:kontakteToRemoveFromKontaktliste) {
 			listOfNames.append(k.getName() + ", ");
@@ -74,30 +74,36 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		/**
 		 * ClickHandler
 		 */
+		bBestaetigen.addClickHandler(new deleteKontakteFromKontaktlisteClickHandler());
+		bAbbrechen.addClickHandler(new closeKontaktKontaktlisteClickHandler());	
+	}
+	
+	public KontaktFromKontaktlisteLoeschenDialogBox(Kontakt kontaktToRemoveFromKontaktliste, Kontaktliste kontaktliste) {
+		
+		this.kontaktToRemoveFromKontaktliste = kontaktToRemoveFromKontaktliste;
+		this.kontaktliste = kontaktliste;
+		
+		/**
+		 * Anordnung der Buttons in der DialogBox durch die Panels
+		 */
+		setText("Möchtest du " + kontaktToRemoveFromKontaktliste.getName() + " aus der Kontaktliste entfernen?");
+		hPanel2.add(bBestaetigen);
+		hPanel2.add(bAbbrechen);
+		setGlassEnabled(true);
+		
+		vPanel.add(hPanel1);
+		vPanel.add(hPanel2);
+		this.add(vPanel);
+		
+		/**
+		 * ClickHandler
+		 */
 		bBestaetigen.addClickHandler(new deleteKontaktKontaktlisteClickHandler());
 		bAbbrechen.addClickHandler(new closeKontaktKontaktlisteClickHandler());	
 	}
 
-
-	public class deleteKontaktKontaktlisteCallback implements AsyncCallback<Void> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onSuccess(Void result) {
-			// TODO Auto-generated method stub
-			hide();
-			KontaktlistView kontaktlisteBox = new KontaktlistView();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(kontaktlisteBox);
-		}
-
-	}
 	
-	class deleteKontaktKontaktlisteClickHandler implements ClickHandler {
+	class deleteKontakteFromKontaktlisteClickHandler implements ClickHandler {
 		KontaktKontaktliste k = new KontaktKontaktliste();
 
 		@Override	
@@ -105,10 +111,23 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 			// TODO Auto-generated method stub
 				for (Kontakt kontakt : kontakteToRemoveFromKontaktliste) {
 					k.setKontaktID(kontakt.getId());
-					k.setKontaktlisteID(kliste.getId());
+					k.setKontaktlisteID(kontaktliste.getId());
 					kontaktmanagerVerwaltung.deleteKontaktKontaktliste(k, new deleteKontaktKontaktlisteCallback());
 				
 			}
+			
+		}
+	}
+	
+	class deleteKontaktKontaktlisteClickHandler implements ClickHandler {
+		
+		KontaktKontaktliste kkl = new KontaktKontaktliste();
+		
+		@Override
+		public void onClick(ClickEvent event) {
+			kkl.setKontaktID(kontaktToRemoveFromKontaktliste.getId());
+			kkl.setKontaktlisteID(kontaktliste.getId());
+			kontaktmanagerVerwaltung.deleteKontaktKontaktliste(kkl, new deleteKontaktKontaktlisteCallback());
 			
 		}
 	}
@@ -121,5 +140,23 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 			hide();
 		}
 		
+	}
+	
+
+	public class deleteKontaktKontaktlisteCallback implements AsyncCallback<Void> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("ERROR");
+		}
+
+		@Override
+		public void onSuccess(Void result) {
+			hide();
+			CustomTreeModel ctm = new CustomTreeModel();
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
+		}
+
 	}
 }

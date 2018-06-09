@@ -40,6 +40,7 @@ public class KontaktPopup extends PopupPanel{
 	private TextArea ktNameTa = new TextArea();
 	private Button speichern = new Button("Hinzufügen");
 	private Kontaktliste kontaktliste = new Kontaktliste();
+	private CustomTreeModel ctm = new CustomTreeModel();
 	
 	
 	public KontaktPopup(){
@@ -119,6 +120,8 @@ public class KontaktPopup extends PopupPanel{
 			hide();
 			kontaktmanagerVerwaltung.createKontaktKontaktliste(result.getId(), kontaktliste.getId(), new CreateKontaktKontaktlisteCallback());
 			KontaktForm kontaktForm = new KontaktForm(result);
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
 		}
 		
 		
@@ -150,6 +153,8 @@ public class KontaktPopup extends PopupPanel{
 			hide();
 			Window.alert("Kontakt wurde erfolgreich erstellt.");
 			KontaktForm kontaktForm = new KontaktForm(result);
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
 		}
 
 	}
