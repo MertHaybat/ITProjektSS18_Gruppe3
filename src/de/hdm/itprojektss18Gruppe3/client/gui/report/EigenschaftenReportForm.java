@@ -57,10 +57,15 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			if (tbAuspraegung.getValue()==""){
+				Window.alert("Bitte geben Sie eine Eigenschaftsausprägung ein.");
+			}
+			else {
 			vpanel.clear();
 			vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(listboxEigenschaften.getSelectedValue(),
 					tbAuspraegung.getValue()));
 			RootPanel.get("content").add(vpanel);
+			}
 		}
 		
 	}

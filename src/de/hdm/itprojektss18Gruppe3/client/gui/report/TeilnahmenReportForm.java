@@ -41,6 +41,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 
 		lbNutzerTeilhabender.setStylePrimaryName("listbox-report");
 		lbNutzerEigentuemer.setStylePrimaryName("listbox-report");
+		lbNutzerTeilhabender.addItem("Alle");
 
 		this.add(lbEigentuemer);
 		this.add(lbNutzerEigentuemer);
@@ -66,7 +67,6 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 			// TODO
 			for (Nutzer nutzer : result) {
 				lbNutzerEigentuemer.addItem(nutzer.getMail());
-				lbNutzerTeilhabender.addItem("Alle");
 				lbNutzerTeilhabender.addItem(nutzer.getMail());
 			}
 		}
@@ -78,6 +78,10 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 			vpanel.clear();
+//			if (lbNutzerTeilhabender.getSelectedValue() == "Alle") {
+//				vpanel.add();
+//				
+//			}
 			vpanel.add(new AllKontaktTeilhaberschaften(lbNutzerEigentuemer.getSelectedValue(),
 					lbNutzerTeilhabender.getSelectedValue()));
 			RootPanel.get("content").add(vpanel);
