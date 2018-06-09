@@ -45,6 +45,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	private String kontaktLabel = "Kontaktname: ";
 	private String eigenschaftLabel = "Eigenschaft: ";
 	private String auspraegungLabel = "Eigenschaftsausprägung: ";
+	private String textboxValue = "";
 	// private String kontaktlisteLabel = "Kontaktliste: ";
 
 	// private ListBox kontaktlisteTextbox = new ListBox();
@@ -77,8 +78,15 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	public DisclosurePanelSuche() {
 		run();
 	}
+	
 	public DisclosurePanelSuche(Kontakt kontakt){
 		kontaktNeu=kontakt;
+		
+		run();
+	}
+	
+	public DisclosurePanelSuche(String textboxValue){
+		this.textboxValue=textboxValue;
 		
 		run();
 	}
@@ -147,8 +155,17 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		disc.addOpenHandler(new DiscOpenHandler());
 		disc.addCloseHandler(new DiscCloseHandler());
 
+		
+		if(textboxValue != ""){
+			Kontakt kontakt = new Kontakt();
+			kontakt.setName(textboxValue);
+			kontaktmanagerVerwaltung.findKontaktByName(kontakt, new SuchAllKontakteCallback());
+		}
+		
 		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzer.getId(), new AllKontaktlisteCallback());
 		kontaktmanagerVerwaltung.findAllEigenschaften(new AllEigenschaftenCallback());
+		kontaktmanagerVerwaltung.findAllKontakte(new SuchAllKontakteCallback());
+//		kontaktmanagerVerwaltung.findAllEigenschaftsauspraegungByPersonID(kontakt, new FindKontaktByAuspraegungCallback());
 		// kontaktmanagerVerwaltung.suchFunktion(nutzer, eigenschaft,
 		// auspraegung, new suchenCallback());
 
@@ -158,7 +175,28 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		this.add(layout);
 		this.add(suchErgebnisPanel);
 	}
+	
+	public class SuchAllKontakteCallback implements AsyncCallback<Vector<Kontakt>> {
 
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Vector<Kontakt> result) {
+			// TODO Auto-generated method stub
+			if(result == null){
+				
+			}
+			else{
+				
+			}
+		}
+	}
+	
+		
 	public class DiscOpenHandler implements OpenHandler<DisclosurePanel> {
 
 		@Override
@@ -303,7 +341,5 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 			}
 		}
-
 	}
-
 }
