@@ -12,6 +12,8 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -345,6 +347,7 @@ public class AllKontaktView extends MainFrame {
 //			}
 //			
 //		});
+		
 		visitProfileButtonColumn.setFieldUpdater(new VisitProfileUpdate());
 		statusColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
 		// allKontakteCellTable.addCellPreviewHandler(new

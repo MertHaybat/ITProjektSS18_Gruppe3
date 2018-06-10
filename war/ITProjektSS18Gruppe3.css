@@ -295,6 +295,13 @@ border: double;
     margin-left: 2px;
 }
 
+.searchTextBox {
+	background-image:url("/images/search.svg");
+    background-repeat:no-repeat;
+    background-position: right;
+    height: 20px;
+}
+
 .mainButton {
 	width: 110px;
 	border-radius:6px;

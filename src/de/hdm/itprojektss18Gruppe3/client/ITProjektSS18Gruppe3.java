@@ -44,7 +44,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			.getKontaktVerwaltung();
 
 	private TextBox textBox = new TextBox();
-	private Button suchenButton = new Button("");
+	private Button suchenButton = new Button("Suchen");
 	private Button logoutButton = new Button("Ausloggen");
 //	private Button zumReportGenerator = new Button("Report-Generator");
 //	private Button zumKontaktmanager = new Button("Kontaktmanager");
@@ -84,8 +84,10 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
 		logoutButton.addClickHandler(new logoutClickHandler());
 		logoutButton.setStylePrimaryName("logoutButton");
-		suchenButton.setStylePrimaryName("searchButton");
+		suchenButton.setStylePrimaryName("logoutButton");
 		suchenButton.addClickHandler(new SuchenClickHandler());
+		textBox.setMaxLength(15);
+		textBox.setStylePrimaryName("searchTextBox");
 		flowpanel.add(textBox);
 		flowpanel.add(suchenButton);
 		flowpanel.add(logoutButton);
