@@ -74,6 +74,9 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	private String checkedCheckbox = "";
 	private Kontaktliste kontaktliste = new Kontaktliste();
 	private Kontakt kontaktNeu = new Kontakt();
+	
+	private Button zurStartseiteButton = new Button("Startseite");
+
 
 	public DisclosurePanelSuche() {
 		run();
@@ -86,8 +89,17 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	}
 	
 	public DisclosurePanelSuche(String textboxValue){
+		Nutzer nutzer = new Nutzer();
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+		nutzer.setMail(Cookies.getCookie("mail"));
+		
 		this.textboxValue=textboxValue;
 		
+		Kontakt k = new Kontakt();
+		k.setName(textboxValue);
+		k.setNutzerID(nutzer.getId());
+		
+		kontaktmanagerVerwaltung.findKontaktByName(k, new KontaktVollSuche());
 		run();
 	}
 
@@ -265,11 +277,44 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
+			Window.alert(""+result.size());
 			suchErgebnisCellTable.setRowData(0, result);
 			suchErgebnisCellTable.setRowCount(result.size(), true);
 			suchErgebnisCellTable.redraw();
 
 			suchErgebnisPanel.add(suchErgebnisCellTable);
+
+		}
+
+	}
+	
+	public class KontaktVollSuche implements AsyncCallback<Vector<Kontakt>> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onSuccess(Vector<Kontakt> result) {
+			if (result.size()>=1){
+				
+				suchErgebnisCellTable.setRowData(0, result);
+				suchErgebnisCellTable.setRowCount(result.size(), true);
+				suchErgebnisCellTable.redraw();
+				
+				suchErgebnisPanel.add(suchErgebnisCellTable);
+			} else if (result.size() == 0){
+				Window.alert("Vollsuche funktioniert nur für Kontaktnamen bisher!");
+//				Eigenschaftsauspraegung e = new Eigenschaftsauspraegung();
+//				e.setWert(textboxValue);
+//				Nutzer nutzer = new Nutzer();
+//				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+//				nutzer.setMail(Cookies.getCookie("mail"));
+//				kontaktmanagerVerwaltung.findEigeneKontakteBySuche(nutzer, e, textboxValue, new FindKontaktByNameCallback());
+			}
+			
 
 		}
 

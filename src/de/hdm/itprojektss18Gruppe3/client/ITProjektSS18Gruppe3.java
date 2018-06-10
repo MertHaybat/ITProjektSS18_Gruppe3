@@ -74,9 +74,9 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			@Override
 			public void onKeyPress(KeyPressEvent event) {
 				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-					Kontakt k = new Kontakt();
-					k.setName(textBox.getValue());
-					DisclosurePanelSuche panelSuche = new DisclosurePanelSuche(k);
+					DisclosurePanelSuche panelSuche = new DisclosurePanelSuche(textBox.getValue());
+					RootPanel.get("content").clear();
+					RootPanel.get("content").add(panelSuche);
 				}			
 			}
 		});
@@ -263,8 +263,9 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			DisclosurePanelSuche panelSuche = new DisclosurePanelSuche();
 			RootPanel.get("content").clear();
-			RootPanel.get("content").add(new DisclosurePanelSuche());
+			RootPanel.get("content").add(panelSuche);
 		}
 
 	}
