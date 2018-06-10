@@ -209,42 +209,6 @@ html {
 }
 
 
-/* MEN�BAUM FORMATIERUNG GWT TREE */
-.gwt-Tree .gwt-TreeItem {
-  padding: 1px 0px;
-  white-space: nowrap;
-  cursor: hand;
-  cursor: pointer;
-  height: 5px;
-}
-
-.gwt-Tree .gwt-TreeItem-selected {
-  background: #ebeff9;
-  font-style: italic;
-}
-
-.gwt-CellTree .gwt-cellTreeItem {
-  padding-top: 8px;
-  padding-bottom: 4px;
-  cursor: hand;
-  cursor: pointer;
-  zoom: 1;
-}
-
-.cellTreeItem {
-  padding-top: 8px;
-  padding-bottom: 4px;
-  cursor: hand;
-  cursor: pointer;
-  zoom: 1;
-  font-size: 30px;
-}
-
-.gwt-TreeItem {
-	font-size: 1.2em;
-}
-
-
 /* REPORT GENERATOR FORMATIERUNG */
 .listbox-report {
 position: relative;
