@@ -18,6 +18,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -98,20 +99,26 @@ public class KontaktlistView extends MainFrame {
 
 		run();
 	}
+	
+	public KontaktlistView(Kontaktliste selection, Teilhaberschaft teilhaberschaft){
+		this.kontaktliste = selection;
+		this.setKontaktlisteSelectedInTree(selection);
+		run();
+	}
 	public static Kontaktliste getKontaktlisteSelectedInTree() {
 		return kontaktlisteSelectedInTree;
 	}
 	
-	public static FlowPanel getMenuBarContainerFlowPanel() {
+	public void setKontaktlisteSelectedInTree(Kontaktliste kontaktlisteSelectedInTree) {
+		this.kontaktlisteSelectedInTree = kontaktlisteSelectedInTree;
+	}
+	
+	public FlowPanel getMenuBarContainerFlowPanel() {
 		return menuBarContainerFlowPanel;
 	}
 
 	public void setMenuBarContainerFlowPanel(FlowPanel menuBarContainerFlowPanel) {
 		this.menuBarContainerFlowPanel = menuBarContainerFlowPanel;
-	}
-
-	public void setKontaktlisteSelectedInTree(Kontaktliste kontaktlisteSelectedInTree) {
-		this.kontaktlisteSelectedInTree = kontaktlisteSelectedInTree;
 	}
 
 	public void run() {

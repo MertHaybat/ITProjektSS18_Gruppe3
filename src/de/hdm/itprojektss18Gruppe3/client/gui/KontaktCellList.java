@@ -35,6 +35,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktlistView.AnsehenClickHandler;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktlistView.EigenschaftAuspraegungCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
@@ -44,6 +45,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 public class KontaktCellList extends MainFrame{
+	private HorizontalPanel hPanel = new HorizontalPanel();
 	private HorizontalPanel kontaktInfoViewContainer = new HorizontalPanel();
 	private ScrollPanel kontaktlistViewPanel = new ScrollPanel();
 	private VerticalPanel allKontaktViewPanel = new VerticalPanel();
@@ -64,7 +66,8 @@ public class KontaktCellList extends MainFrame{
 	private DecoratorPanel kontaktInfo = new DecoratorPanel();
 	private Label geteiltMitLabel = new Label();
 	private Teilhaberschaft teilhaberschaft = null;
-	
+    private MyDataProvider dataProvider = new MyDataProvider();
+
 	
 	private Kontakt selectedKontakt = null;
 
@@ -76,16 +79,26 @@ public class KontaktCellList extends MainFrame{
 	private Kontaktliste kontaktliste = new Kontaktliste();
 	
 	public KontaktCellList() {
+		kontaktBearbeitenButton.addClickHandler(new AnsehenClickHandler());
 		run();
 	}
-
+  
 	public KontaktCellList(Kontaktliste selection) {
 		this.kontaktliste = selection;
+		kontaktBearbeitenButton.addClickHandler(new AnsehenClickHandler());
 		run();
 	}
-	public KontaktCellList(Kontaktliste selection, Teilhaberschaft teilhaberschaft) {
+	public KontaktCellList(Kontaktliste selection, final Teilhaberschaft teilhaberschaft) {
 		this.kontaktliste = selection;
 		this.teilhaberschaft = teilhaberschaft;
+		kontaktBearbeitenButton.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				KontaktForm kontaktform = new KontaktForm(selectionModel.getSelectedObject(), teilhaberschaft);
+			}
+			
+		});
 		run();
 	}
 	
@@ -98,12 +111,12 @@ public class KontaktCellList extends MainFrame{
 		this.kontaktCell = kontaktCell;
 	}
 
-	private void addRow(FlexTable flexTable, String nutzer) {
-		geteiltMitLabel.setText(nutzer);
-	    int numRows = kontaktInfoLayout.getRowCount();
-	    kontaktInfoLayout.setWidget(6, 1, geteiltMitLabel);
-	    kontaktInfoLayout.getFlexCellFormatter().setRowSpan(0, 1, 6);
-	  }
+//	private void addRow(FlexTable flexTable, String nutzer) {
+//		geteiltMitLabel.setText(nutzer);
+//	    int numRows = kontaktInfoLayout.getRowCount();
+//	    kontaktInfoLayout.setWidget(6, 1, geteiltMitLabel);
+//	    kontaktInfoLayout.getFlexCellFormatter().setRowSpan(0, 1, 6);
+//	  }
 	
 	public HorizontalPanel getContentViewContainer() {
 		return contentViewContainer;
@@ -117,7 +130,8 @@ public class KontaktCellList extends MainFrame{
 	protected void run() {
 		kontaktCell.setEmptyListWidget(new HTML("<b>Du hast keine Kontaktlisten</b>"));
 		kontaktCell.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-
+		dataProvider.addDataDisplay(kontaktCell);
+		
 		vornameBox.setEnabled(false);
 		nachnameBox.setEnabled(false);
 		geburtsdatum.setEnabled(false);
@@ -134,8 +148,7 @@ public class KontaktCellList extends MainFrame{
 		kontaktInfoLayout.setWidget(4, 1, telefonnummer);
 		kontaktInfoLayout.setHTML(5, 0, "E-Mail: ");
 		kontaktInfoLayout.setWidget(5, 1, mail);
-		kontaktInfoLayout.setHTML(6, 0, "Geteilt mit: ");
-		kontaktInfoLayout.setWidget(7, 0, kontaktBearbeitenButton);
+		kontaktInfoLayout.setWidget(6, 0, kontaktBearbeitenButton);
 
 		kontaktInfo.setWidget(kontaktInfoLayout);
 		kontaktCell.setSelectionModel(selectionModel);
@@ -148,7 +161,7 @@ public class KontaktCellList extends MainFrame{
 
 				kontaktmanagerVerwaltung.findEigenschaftHybrid(selectedKontakt, new EigenschaftAuspraegungCallback());
 				
-				kontaktmanagerVerwaltung.findNutzerByKontaktID(selectedKontakt.getId(), new NutzerCallback());
+//				kontaktmanagerVerwaltung.findNutzerByKontaktID(selectedKontakt.getId(), new NutzerCallback());
 			}
 		});
 
@@ -159,16 +172,54 @@ public class KontaktCellList extends MainFrame{
 		cellFormatter.setColSpan(0, 0, 2);
 		cellFormatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
+		
 		kontaktlistViewPanel.add(kontaktCell);
 
-		kontaktInfo.setStylePrimaryName("kontaktDecoratorPanel");
-		allKontaktViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
-		kontaktlistViewPanel.setStylePrimaryName("kontaktlistenViewPanel");
-		this.add(kontaktlistViewPanel);
-		this.add(kontaktInfoViewContainer);
-		kontaktBearbeitenButton.addClickHandler(new AnsehenClickHandler());
+//		kontaktInfo.setStylePrimaryName("kontaktDecoratorPanel");
+//		allKontaktViewPanel.setStylePrimaryName("cellListWidgetContainerPanel");
+//		kontaktlistViewPanel.setStylePrimaryName("kontaktlistenViewPanel");
+		contentViewContainer.add(kontaktlistViewPanel);
+		contentViewContainer.add(kontaktInfoViewContainer);
 //		RootPanel.get("content").clear();
 //		RootPanel.get("content").add(contentViewContainer);
+		
+	}
+	private class MyDataProvider extends AsyncDataProvider<Kontakt> {
+
+		@Override
+		protected void onRangeChanged(HasData<Kontakt> display) {
+			 final Range range = display.getVisibleRange();
+			 
+
+			 Nutzer nutzer = new Nutzer();
+			 	kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(kontaktliste, new AsyncCallback<Vector<Kontakt>>(){
+			 		 int start = range.getStart();
+			          int length = range.getLength();
+			          ArrayList<Kontakt> kontaktlistenToDisplay = new ArrayList<Kontakt>();
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Fehler beim Auslesen aller Kontakte");
+
+					}
+
+					@Override
+					public void onSuccess(Vector<Kontakt> result) {
+						kontaktlistenToDisplay.addAll(result);
+						updateRowData(start, kontaktlistenToDisplay);
+					}
+			 	
+				});
+			   
+		}
+		
+	}
+	class TeilhaberschaftAnsehenClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 	class AnsehenClickHandler implements ClickHandler {
@@ -187,17 +238,8 @@ public class KontaktCellList extends MainFrame{
 			if (value == null) {
 				return;
 			}
-			sb.appendHtmlConstant("<table>");
-			sb.appendHtmlConstant("<td style='font-size:95%;'>");
+			sb.appendHtmlConstant("<table><td style='font-size:95%;'>");
 			sb.appendEscaped(value.getName());
-			sb.appendHtmlConstant("</td><td>");
-			if (value.getStatus() == 0) {
-				sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
-
-			} else if (value.getStatus() == 1) {
-
-				sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
-			}
 			sb.appendHtmlConstant("</td></table>");
 
 		}
@@ -241,28 +283,28 @@ public class KontaktCellList extends MainFrame{
 
 	}
 	
-	class NutzerCallback implements AsyncCallback <Vector<Nutzer>>{
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onSuccess(Vector<Nutzer> result) {
-			if(result != null){
-				for (Nutzer nutzer : result) {
-					addRow(kontaktInfoLayout, nutzer.getMail());
-					
-				}
-				
-			} else if(result == null){
-				addRow(kontaktInfoLayout, "-");
-			}
-		}
-		
-	}
+//	class NutzerCallback implements AsyncCallback <Vector<Nutzer>>{
+//
+//		@Override
+//		public void onFailure(Throwable caught) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		@Override
+//		public void onSuccess(Vector<Nutzer> result) {
+//			if(result != null){
+//				for (Nutzer nutzer : result) {
+//					addRow(kontaktInfoLayout, nutzer.getMail());
+//					
+//				}
+//				
+//			} else if(result == null){
+//				addRow(kontaktInfoLayout, "-");
+//			}
+//		}
+//		
+//	}
 	
 
 }

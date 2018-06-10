@@ -7,6 +7,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -191,6 +192,9 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findAuspraegungTeilhaberschaftKontaktWrapperByTeilhaberschaft(int teilhabenderID,
 			AsyncCallback<Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>> callback);
+
+	void findNutzerTeilhaberschaftKontaktlisteWrapper(int teilhabenderID,
+			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktlisteWrapper>> callback);
 
 	
 	

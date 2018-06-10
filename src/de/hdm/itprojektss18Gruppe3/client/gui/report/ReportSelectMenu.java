@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.itprojektss18Gruppe3.client.AllKontakteReport;
+import de.hdm.itprojektss18Gruppe3.client.AllKontakte;
 
 public class ReportSelectMenu extends VerticalPanel{
 
@@ -35,7 +35,7 @@ public class ReportSelectMenu extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent event) {
-			AllKontakteReport allKontakteReport = new AllKontakteReport();
+			KontakteReportForm allKontakteReport = new KontakteReportForm();
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(allKontakteReport);
 		}

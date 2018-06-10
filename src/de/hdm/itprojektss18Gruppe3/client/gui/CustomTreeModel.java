@@ -86,7 +86,8 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			BusinessObject selection = selectionModel.getSelectedObject();
-			KontaktlistView.getMenuBarContainerFlowPanel();
+			KontaktlistView kontaktlistView = new KontaktlistView();
+			kontaktlistView.getMenuBarContainerFlowPanel();
 			if (selection instanceof Kontaktliste) {
 				setSelectedKontaktliste((Kontaktliste) selection);
 			} else if (selection instanceof Kontakt) {
@@ -180,11 +181,11 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				sb.appendEscaped(value.getBezeichnung());
 				sb.appendHtmlConstant("</td><td>");
 				if (value.getStatus() == 0) {
-					sb.appendHtmlConstant("<img width=\"19\" src=\"images/singleperson.svg\">");
+					sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
 
 				} else if (value.getStatus() == 1) {
 
-					sb.appendHtmlConstant("<img width=\"19\" src=\"images/group.svg\">");
+					sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
 				}
 				sb.appendHtmlConstant("</td></table>");
 			}
