@@ -132,6 +132,7 @@ public class KontaktForm extends MainFrame {
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
 		modifikationsdatum.setText("Zuletzt geändert am: " + kontakt.getModifikationsdatum());
 		erstellungsdatum.setText("Erstellt am: " + kontakt.getErzeugungsdatum());
+		
 		deleteContact.addClickHandler(new DeleteTeilhaberschaftClickHandler());
 		vPanel2.add(modifikationsdatum);
 		vPanel2.add(erstellungsdatum);
