@@ -69,11 +69,10 @@ public class KontaktForm extends MainFrame {
 	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel vPanel2 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
-	
+
 	private Label modifikationsdatum = new Label("Modifikationsdatum: ");
 	private Label erstellungsdatum = new Label("Erstellungsdatum: ");
 	private Label kontaktNameLabel = new Label("Kontaktname: ");
-	private Button timer = new Button("Änderungen wurden durchgeführt.");
 	private TextBox kontaktNameBox = new TextBox();
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
 	
@@ -194,9 +193,9 @@ public class KontaktForm extends MainFrame {
 				super.onBrowserEvent(context, elem, object, event);
 
 				if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
-					k.setName(kontaktNameBox.getValue());
+//					k.setName(kontaktNameBox.getValue());
 					kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
-					kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
+//					kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
 				}
 				if (object.getWertEigenschaftsauspraegungValue() == "") {
 					kontaktmanagerVerwaltung.deleteEigenschaftsauspraegungById(
@@ -234,7 +233,7 @@ public class KontaktForm extends MainFrame {
 		kontaktNameBox.addKeyPressHandler(new KontaktTextBoxKeyPressHandler());
 
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
-		saveChanges.addClickHandler(new UpdateAuspraegungClickHandler());
+//		saveChanges.addClickHandler(new UpdateAuspraegungClickHandler());
 		
 
 		
@@ -277,9 +276,11 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onKeyPress(KeyPressEvent event) {
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-				k.setName(kontaktNameBox.getValue());
-				kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
+				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+					k.setName(kontaktNameBox.getValue());
+					kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
+				
+				
 			}
 		}
 
@@ -404,16 +405,16 @@ private class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
 		}
 
 	}
-	class UpdateAuspraegungClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			k.setName(kontaktNameBox.getValue());
-			kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
-			kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
-		}
-
-	}
+//	class UpdateAuspraegungClickHandler implements ClickHandler{
+//	
+//		@Override
+//		public void onClick(ClickEvent event) {
+//			k.setName(kontaktNameBox.getValue());
+//			kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+//			kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
+//		}
+//
+//	}
 
 	class UpdateKontaktCallback implements AsyncCallback<Void> {
 
@@ -424,6 +425,15 @@ private class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
 
 		@Override
 		public void onSuccess(Void result) {
+			Label gespeichert = new Label("Änderungen gespeichert");
+			vPanel.add(gespeichert);
+			Timer timer = new Timer() {
+			     @Override
+			     public void run() {
+			    	 vPanel.clear();
+			     }
+			 }; 
+			 timer.schedule(10000);
 			// TODO Auto-generated method stub
 //			Window.alert("Kontakt wurde erfolgreich abgespeichert");
 			// RootPanel.get("content").clear();
@@ -444,6 +454,15 @@ private class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
 		@Override
 		public void onSuccess(Void result) {
 			// TODO
+//			Window.alert("hallo");
+			vPanel.add(new Label("Änderungen gespeichert"));
+			Timer timer = new Timer() {
+			     @Override
+			     public void run() {
+			    	 vPanel.clear();
+			     }
+			 }; 
+			 timer.schedule(1000);
 
 		}
 
@@ -513,7 +532,5 @@ private class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
 		}
 
 	}
-	
-
 
 }
