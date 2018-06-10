@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
@@ -176,7 +177,7 @@ public class AllKontaktView extends MainFrame {
 			}
 		};
 
-		Column<Kontakt, String> iconColumn = new Column<Kontakt, String>(new TextCell() {
+		Column<Kontakt, String> statusColumn = new Column<Kontakt, String>(new TextCell() {
 			public void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
 				sb.appendHtmlConstant("<img width=\"20\" src=\"images/" + value.asString() + "\">");
 			}
@@ -192,11 +193,16 @@ public class AllKontaktView extends MainFrame {
 		};
 
 		
-		Column<Kontakt, String> visitProfileButtonColumn = new Column<Kontakt, String>(visitProfileButton) {
+		Column<Kontakt, String> visitProfileButtonColumn = new Column<Kontakt, String>(new ButtonCell() {
+			public void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
+				sb.appendHtmlConstant("<button type=\"button\" class=\"viewProfileIcon\" tabindex=\"-1\">");
+			}
+		}) {
 			public String getValue(Kontakt object) {
-				return "Ansehen";
+				return "";
 			}
 		};
+		
 		Column<Kontaktliste, String> kontaktlisteNameColumn = new Column<Kontaktliste, String>(new TextCell()) {
 			@Override
 			public String getValue(Kontaktliste object) {
@@ -340,15 +346,15 @@ public class AllKontaktView extends MainFrame {
 //			
 //		});
 		visitProfileButtonColumn.setFieldUpdater(new VisitProfileUpdate());
-		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
+		statusColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
 		// allKontakteCellTable.addCellPreviewHandler(new
 		// PreviewClickHandler());
 		allKontakteCellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		allKontakteCellTable.setColumnWidth(checkColumn, 20, Unit.PX);
 		allKontakteCellTable.addColumn(kontaktnameColumn, "Kontaktname");
 		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
-		allKontakteCellTable.addColumn(iconColumn, "Status");
-		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
+		allKontakteCellTable.addColumn(statusColumn, "");
+		allKontakteCellTable.setColumnWidth(statusColumn, 5, Unit.EM);
 		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
 		
 		kontaktlisteCelltable.addColumn(kontaktlisteNameColumn, "Kontaktliste");

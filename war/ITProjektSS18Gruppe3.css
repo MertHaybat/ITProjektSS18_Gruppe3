@@ -316,9 +316,16 @@ border: double;
   margin: 15px 6px 6px;
 }
 
-.visitProfileButton {
-	font-size: 2em;
-	
+.viewProfileIcon {
+	height: 20px;
+	background-image:url("/images/eye.svg");
+    background-repeat:no-repeat;
+    background-position: center;
+    background-color: transparent;
+	cursor:pointer;
+	height: 25px;
+	width: 25px;
+	border: 0px;
 }
 
 

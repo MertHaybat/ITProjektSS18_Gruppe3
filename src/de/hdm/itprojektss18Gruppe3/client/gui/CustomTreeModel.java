@@ -180,11 +180,11 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				sb.appendEscaped(value.getBezeichnung());
 				sb.appendHtmlConstant("</td><td>");
 				if (value.getStatus() == 0) {
-					sb.appendHtmlConstant("<img width=\"19\" src=\"images/singleperson.svg\">");
+					sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
 
 				} else if (value.getStatus() == 1) {
 
-					sb.appendHtmlConstant("<img width=\"19\" src=\"images/group.svg\">");
+					sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
 				}
 				sb.appendHtmlConstant("</td></table>");
 			}
