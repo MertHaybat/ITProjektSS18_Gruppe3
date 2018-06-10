@@ -200,15 +200,13 @@ public class AllKontaktView extends MainFrame {
 			}
 		};
 
-		Column<Kontakt, String> visitProfileButtonColumn = new Column<Kontakt, String>(visitProfileButton) {
-			public String getValue(Kontakt object) {
-				return "Ansehen";
+		Column<Kontakt, String> visitProfileButtonColumn = new Column<Kontakt, String>(new ButtonCell() {
+			public void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
+				sb.appendHtmlConstant("<button type=\"button\" class=\"viewProfileIcon\" tabindex=\"-1\">");
 			}
-		};
-		Column<Kontaktliste, String> kontaktlisteNameColumn = new Column<Kontaktliste, String>(new TextCell()) {
-			@Override
-			public String getValue(Kontaktliste object) {
-				return object.getBezeichnung();
+		}) {
+			public String getValue(Kontakt object) {
+				return "";
 			}
 		};
 
@@ -289,12 +287,9 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.setColumnWidth(checkColumn, 20, Unit.PX);
 		allKontakteCellTable.addColumn(kontaktnameColumn, "Kontaktname");
 		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
-		allKontakteCellTable.addColumn(iconColumn, "Status");
+		allKontakteCellTable.addColumn(iconColumn, "");
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
 		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
-
-		kontaktlisteCelltable.addColumn(kontaktlisteNameColumn, "Kontaktliste");
-		kontaktlisteCelltable.setColumnWidth(kontaktlisteNameColumn, 10, Unit.EM);
 
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");

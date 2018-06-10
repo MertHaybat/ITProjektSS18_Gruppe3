@@ -44,7 +44,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			.getKontaktVerwaltung();
 
 	private TextBox textBox = new TextBox();
-	private Button suchenButton = new Button("Suchen");
+	private Button suchenButton = new Button("Detailsuche");
 	private Button logoutButton = new Button("Ausloggen");
 //	private Button zumReportGenerator = new Button("Report-Generator");
 //	private Button zumKontaktmanager = new Button("Kontaktmanager");

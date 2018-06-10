@@ -223,16 +223,27 @@ html {
   font-style: italic;
 }
 
+.gwt-CellTree .gwt-cellTreeItem {
+  padding-top: 8px;
+  padding-bottom: 4px;
+  cursor: hand;
+  cursor: pointer;
+  zoom: 1;
+}
+
+.cellTreeItem {
+  padding-top: 8px;
+  padding-bottom: 4px;
+  cursor: hand;
+  cursor: pointer;
+  zoom: 1;
+  font-size: 30px;
+}
+
 .gwt-TreeItem {
 	font-size: 1.2em;
 }
 
-.com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItem {
-}
-
-/* .com-google-gwt-user-cellview-client-CellTree-Style-cellTreeEmptyMessage { */
-/*     display: none; */
-/* } */
 
 /* REPORT GENERATOR FORMATIERUNG */
 .listbox-report {
@@ -379,9 +390,6 @@ border: double;
 	text-align: center;
 }
 
-.gwt-SimplePager {
-	margin: 5px auto;
-}
 
 .gwt-SuggestBox {
 	margin-left: 20px;
@@ -392,4 +400,6 @@ border: double;
 .serverResponseLabelError {
   color: red;
 }
+
+
 
