@@ -217,8 +217,8 @@ public class KontaktCellList extends MainFrame{
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			
+			KontaktForm kontaktform = new KontaktForm(selectionModel.getSelectedObject(), teilhaberschaft);
+
 		}
 		
 	}

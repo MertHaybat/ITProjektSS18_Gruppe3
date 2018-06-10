@@ -90,6 +90,12 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			kontaktlistView.getMenuBarContainerFlowPanel();
 			if (selection instanceof Kontaktliste) {
 				setSelectedKontaktliste((Kontaktliste) selection);
+				AllKontaktView allkontaktView = new AllKontaktView();
+				allkontaktView.getAllKontakteCellTableContainer().clear();
+				allkontaktView.getRb0().setValue(false);
+				allkontaktView.getRb1().setValue(false);
+				allkontaktView.getRb2().setValue(false);
+				allkontaktView.getRb3().setValue(false);
 			} else if (selection instanceof Kontakt) {
 				setSelectedKontakt((Kontakt) selection);
 			}

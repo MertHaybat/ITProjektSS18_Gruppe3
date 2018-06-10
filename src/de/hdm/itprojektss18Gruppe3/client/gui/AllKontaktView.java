@@ -128,7 +128,45 @@ public class AllKontaktView extends MainFrame {
 	public static Kontaktliste getKontaktlisteSelectedInTree() {
 		return kontaktlisteSelectedInTree;
 	}
+	public RadioButton getRb0() {
+		return rb0;
+	}
 
+	public void setRb0(RadioButton rb0) {
+		this.rb0 = rb0;
+	}
+
+	public RadioButton getRb1() {
+		return rb1;
+	}
+
+	public void setRb1(RadioButton rb1) {
+		this.rb1 = rb1;
+	}
+
+	public RadioButton getRb2() {
+		return rb2;
+	}
+
+	public void setRb2(RadioButton rb2) {
+		this.rb2 = rb2;
+	}
+
+	public RadioButton getRb3() {
+		return rb3;
+	}
+
+	public void setRb3(RadioButton rb3) {
+		this.rb3 = rb3;
+	}
+
+	public HorizontalPanel getAllKontakteCellTableContainer() {
+		return allKontakteCellTableContainer;
+	}
+
+	public void setAllKontakteCellTableContainer(HorizontalPanel allKontakteCellTableContainer) {
+		this.allKontakteCellTableContainer = allKontakteCellTableContainer;
+	}
 	public void run() {
 		radioFlowPanel.add(rb0);
 		radioFlowPanel.add(rb1);

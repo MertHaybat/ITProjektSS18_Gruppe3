@@ -103,8 +103,7 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 		// TODO Auto-generated method stub
 		hide();
 		KontaktForm kForm = new KontaktForm(kontakt);
-		RootPanel.get("content").clear();
-		RootPanel.get("content").add(kForm);
+		
 		
 	}
 		

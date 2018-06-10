@@ -68,6 +68,7 @@ public class KontaktForm extends MainFrame {
 
 	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel vPanel2 = new VerticalPanel();
+	private VerticalPanel vPanel3 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 
 	private Label modifikationsdatum = new Label("Modifikationsdatum: ");
@@ -113,7 +114,7 @@ public class KontaktForm extends MainFrame {
 		this.k = kontakt;
 		this.kontaktliste = kontaktliste;
 		deleteContact = new Button("Löschen");
-		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktlisteClickHandler());
+		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
 		kontaktNameBox.setValue(kontakt.getName());
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
 		modifikationsdatum.setText("Zuletzt geändert am: " + kontakt.getModifikationsdatum());
@@ -176,6 +177,7 @@ public class KontaktForm extends MainFrame {
 					}
 
 				}
+				
 			}
 		};
 
@@ -206,6 +208,7 @@ public class KontaktForm extends MainFrame {
 
 			}
 		};
+		
 
 		wertEigenschaft.setFieldUpdater(new FieldUpdater<EigenschaftsAuspraegungWrapper, String>() {
 
@@ -253,9 +256,11 @@ public class KontaktForm extends MainFrame {
 		vPanel.add(deleteContact);
 
 		this.add(vPanel);
+		this.add(vPanel3);
 		this.add(vPanel2);
 		RootPanel.get("menubar").add(hPanel);
 		RootPanel.get("content").add(vPanel);
+		RootPanel.get("content").add(vPanel3);
 		RootPanel.get("content").add(vPanel2);
 
 	}
@@ -427,11 +432,11 @@ private class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
 		@Override
 		public void onSuccess(Void result) {
 			Label gespeichert = new Label("Änderungen gespeichert");
-			vPanel.add(gespeichert);
+			vPanel3.add(gespeichert);
 			Timer timer = new Timer() {
 			     @Override
 			     public void run() {
-			    	 vPanel.clear();
+			    	 vPanel3.clear();
 			     }
 			 }; 
 			 timer.schedule(10000);
@@ -456,11 +461,11 @@ private class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
 		public void onSuccess(Void result) {
 			// TODO
 //			Window.alert("hallo");
-			vPanel.add(new Label("Änderungen gespeichert"));
+			vPanel3.add(new Label("Änderungen gespeichert"));
 			Timer timer = new Timer() {
 			     @Override
 			     public void run() {
-			    	 vPanel.clear();
+			    	 vPanel3.clear();
 			     }
 			 }; 
 			 timer.schedule(1000);
