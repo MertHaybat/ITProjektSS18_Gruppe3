@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
@@ -36,7 +37,7 @@ import com.google.gwt.view.client.MultiSelectionModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
-import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktTeilen.CreateKontaktTeilhaberschaftClickHandler.KontaktFindNutzerByMailCallback;
+import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktTeilen.createTeilhaberschaftCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
@@ -64,7 +65,9 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private SuggestBox box = new SuggestBox(oracle);
 	private List<Nutzer> nutzerListe = new ArrayList<>();
 	private List<Nutzer> nutzerSuggestbox = new ArrayList<>();
-
+	private CheckBox kontaktTeilenCB = new CheckBox("Gesamten Kontakt teilen");
+	
+	
 	private Nutzer nutzerausdb = null;
 	private Label lb1 = new Label("Wählen Sie die Eigenschaften aus, die Sie teilen möchten: ");
 	private Label lb2 = new Label("Mit wem möchten Sie diese Eigenschaften teilen: ");
@@ -104,11 +107,12 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		setText("Wählen Sie die zu teilenden Eigenschaften aus sowie die Person, mit der Sie den Kontakt teilen möchten");
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
 		ftTeilhaberschaft.setWidget(1, 0, kt);
-		ftTeilhaberschaft.setWidget(2, 0, lb2);
-		ftTeilhaberschaft.setWidget(3, 0, box);
-		ftTeilhaberschaft.setWidget(4, 0, selectedNutzerCT);
-		ftTeilhaberschaft.setWidget(5, 1, b1);
-		ftTeilhaberschaft.setWidget(5, 2, b2);
+		ftTeilhaberschaft.setWidget(2, 0, kontaktTeilenCB);
+		ftTeilhaberschaft.setWidget(3, 0, lb2);
+		ftTeilhaberschaft.setWidget(4, 0, box);
+		ftTeilhaberschaft.setWidget(5, 0, selectedNutzerCT);
+		ftTeilhaberschaft.setWidget(6, 1, b1);
+		ftTeilhaberschaft.setWidget(6, 2, b2);
 
 		Column<EigenschaftsAuspraegungWrapper, Boolean> cbColumn = new Column<EigenschaftsAuspraegungWrapper, Boolean>(
 				cbCell) {
@@ -292,7 +296,12 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				nutzer.setMail(Cookies.getCookie("mail"));
-
+				
+				if (kontaktTeilenCB.getValue() == true){
+					kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(), 0, result.getId(),
+							nutzer.getId(), new createTeilhaberschaftCallback());
+				}
+				
 				List<EigenschaftsAuspraegungWrapper> eListe = new ArrayList<>();
 
 				for (EigenschaftsAuspraegungWrapper auspraegung : ssmAuspraegung.getSelectedSet()) {
@@ -305,7 +314,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 							new createTeilhaberschaftCallback());
 
 				}
-
+				
 			}
 		}
 	}

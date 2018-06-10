@@ -86,7 +86,8 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			BusinessObject selection = selectionModel.getSelectedObject();
-			KontaktlistView.getMenuBarContainerFlowPanel();
+			KontaktlistView kontaktlistView = new KontaktlistView();
+			kontaktlistView.getMenuBarContainerFlowPanel();
 			if (selection instanceof Kontaktliste) {
 				setSelectedKontaktliste((Kontaktliste) selection);
 			} else if (selection instanceof Kontakt) {
