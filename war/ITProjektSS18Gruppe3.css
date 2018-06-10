@@ -37,9 +37,11 @@ html {
 	letter-spacing: 0.01em;
 }
 #logout {
+	width: 30%;
 	position: relative;
-    top: -44px;
-	left: 931px;
+    top: -2.8rem;
+	margin-left: 72%;
+	height: 0px;
 }
 
 #menubar {
@@ -52,6 +54,7 @@ html {
 	background: white;
 	box-shadow: 5px 5px 2.5px grey;
 }
+
 
 #menubar .menuBarLabelContainer {
 	height: 40px;
@@ -261,9 +264,10 @@ border: double;
 	color: #595959;
 	text-shadow:0px 0.5px 0.5px black;
 }
-#menubar .logoutButton {
+
+.logoutButton {
 	background-color: gainsboro;
-	width: 110px;
+	width: 80px;
     border-radius: 6px;
     border: 1px solid #dcdcdc;
     display: inline-block;
@@ -274,12 +278,24 @@ border: double;
     padding: 8px 0px 8px 0px;
     text-shadow: 0px 1px 0px #ffffff;
     text-align: center;
-    margin-left: 918px;
-    margin-top: 4.5px;
-    vertical-align: super;	
+    margin-left: 5px;
 }
 
-#menubar .mainButton {
+.searchButton {
+	background-image:url("/images/search.svg");
+    background-repeat:no-repeat;
+    background-position: center;
+    background-color: white;
+	width: 40px;
+	height: 30px;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 2px;
+}
+
+.mainButton {
 	width: 110px;
 	border-radius:6px;
 	border:1px solid #dcdcdc;
