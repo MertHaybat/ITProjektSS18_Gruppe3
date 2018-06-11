@@ -171,7 +171,9 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * @param bezeichnung;
 	 *            bezeichnung sagt aus, wie die Kontaktliste benannt wurde
 	 * @param nutzerID;
-	 *            Übergabeparameter des Fremdschlüssels in der Kontaktliste
+	 *				Übergabeparameter des Fremdschlüssels in der Kontaktliste
+	 * @param status: 
+	 * 				Übergibt den Status der Kontaktliste, ob geteilt oder nicht 	 
 	 * @return Kontaktliste; Zurückgegeben wird ein Objekt der Klasse
 	 *         Kontaktliste
 	 */
@@ -655,13 +657,25 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		this.kontaktMapper.deleteKontakt(k);
 	}
 
+	/**
+	 * Löschen einer Teilhaberschaft über den Kontakt
+	 * @param k;
+	 * 			Objekt der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public void deleteTeilhaberschaftByKontakt(Kontakt k) throws IllegalArgumentException {
 		Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 		teilhaberschaft.setKontaktID(k.getId());
 		this.teilhaberschaftMapper.deleteTeilhaberschaftByKontaktID(teilhaberschaft);
 	}
-
+	
+	/**
+	 * Löschen einer Eigenschaftsausprägung über den Kontakt
+	 * @param k;
+	 * 			Objekt der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public void deleteEigenschaftsauspraegungByKontakt(Kontakt k) throws IllegalArgumentException {
 		deleteTeilhaberschaftByKontakt(k);
@@ -671,6 +685,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		this.eigenschaftsauspraegungMapper.deleteEigenschaftsauspraegungByPersonID(eigenschaftsauspraegung);
 	}
 
+	/**
+	 * Löschen einer KontaktKontaktliste über den Kontakt
+	 * @param k;
+	 * 			Objekt der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public void deleteKontaktKontaktlisteByKontakt(Kontakt k) throws IllegalArgumentException {
 		KontaktKontaktliste kliste = new KontaktKontaktliste();
@@ -804,6 +824,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
+	 * Löschen der Teilhaberschaft über die ID
 	 * @param t
 	 *            - Übergabeparameter der ID von Teilhaberschaft
 	 * @throws IllegalArgumentException
@@ -814,7 +835,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * 
+	 * Methode zur Bearbeitung einer Eigenschaft
 	 * @param eig
 	 *            - Übergabeparameter der Eigenschaft, die geändert werden soll
 	 * @throws IllegalArgumentException
@@ -825,7 +846,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * 
+	 * Methode zur Bearbeitung einer Eigenschaftsausprägung
 	 * @param aus
 	 *            - Übergabeparameter der Eigenschaftsausprägung, die geändert
 	 *            werden soll
@@ -844,7 +865,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * 
+	 * Methode zur Bearbeitung eines Kontaktes
 	 * @param k
 	 *            - Übergabeparameter von Kontakt, der geändert werden soll
 	 * @throws IllegalArgumentException
@@ -856,7 +877,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * 
+	 * Methode zur Bearbeitung einer Kontaktliste 
 	 * @param kliste
 	 *            - Übergabeparameter von Kontaktliste, die geändert werden soll
 	 * @throws IllegalArgumentException
@@ -866,7 +887,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * 
+	 * Methode zur Bearbeitung eines Nutzers 
 	 * @param n
 	 *            - Übergabeparameter von Nutzer, der geändert werden soll
 	 * @throws IllegalArgumentException
@@ -877,7 +898,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * 
+	 * Methode zur Bearbeitung einer Person 
 	 * @param p
 	 *            - Übergabeparamater von Person, die geändert werden soll
 	 * @throws IllegalArgumentException
@@ -888,7 +909,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * 
+	 * Methode zur Bearbeitung einer Teilhaberschaft
 	 * @param t
 	 *            - Übergabeparameter von Teilhaberschaft, die geändert werden
 	 *            soll
@@ -959,11 +980,23 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return allFilteredContacts;
 	}
 
+	/**
+	 * Methode um alle Kontakte eines Nutzers zurückgeben
+	 * @param: nutzerID
+	 * 			Übergabeparameter der ID des Nutzers
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Kontakt> findAllKontaktByNutzerID(int nutzerID) throws IllegalArgumentException {
 		return this.kontaktMapper.findAllKontaktByNutzerID(nutzerID);
 	}
 
+	/**
+	 * Methode um alle Kontakte aus einer Teilhebrschaft zurückgeben
+	 * @param: teilhabenderID
+	 * 			Übergabeparameter der ID des Teilhabenden
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
 		// TODO
@@ -1061,6 +1094,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return kontakte;
 	}
 
+	/**
+	 * Methode um alle Nutzer über den Primärschlüssel zurückgeben
+	 * @param: nutzerID
+	 * 			Übergabeparameter der ID des Nutzers
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Nutzer findNutzerByID(int nutzerID) throws IllegalArgumentException {
 		return this.nutzerMapper.findNutzerByID(nutzerID);
@@ -1090,6 +1129,11 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktlisteID(kk);
 	}
 
+	/**
+	 * Methode um alle Nutzer zurückzugeben
+	 *
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Nutzer> findAllNutzer() throws IllegalArgumentException {
 		return this.nutzerMapper.findAllNutzer();
@@ -1146,6 +1190,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return eigenschaftAuspraegung;
 	}
 
+	/**
+	 * Methode um einen Kontakt über seine ID zu löschen
+	 * @param: k
+	 * 			Übergabeparameter der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public void deleteKontaktByID(Kontakt k) throws IllegalArgumentException {
 		deleteKontaktKontaktlisteByKontakt(k);
@@ -1154,24 +1204,47 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		this.kontaktMapper.deleteKontakt(k);
 	}
 
+	/**
+	 * Methode um alle Nutzer über die Mail zurückgeben
+	 * @param: mail
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Nutzer> findAllNutzerByEmail(String mail) throws IllegalArgumentException {
 
 		return null;
 	}
-
+	
+	/**
+	 * Methode um KontaktKontaktliste zu löschen
+	 * @param: kon
+	 * 			Übergabeparameter der Klasse KontaktKontaktliste 
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public void deleteKontaktKontaktliste(KontaktKontaktliste kon) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktKontaktliste(kon);
 	}
 
+	/**
+	 * Methode um alle Eigenschaften eines Kontaktes zurückzugeben
+	 * @param: k
+	 * 			Übergabeparameter der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Eigenschaft> findAllEigenschaftByKontakt(Kontakt k) throws IllegalArgumentException {
 
 		return null;
 	}
 
+	/**
+	 * Methode um eine Teilhaberschaft einer Kontaktliste zu löschen 
+	 * @param: t
+	 * 			Übergabeparameter der Klasse Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
 	public void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 
