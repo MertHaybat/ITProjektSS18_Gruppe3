@@ -41,8 +41,8 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	private ListDataProvider<Kontaktliste> kontaktlistenDataProvider = null;
 	private CustomTreeModel customTreeModel;
 	private Map<Kontaktliste, ListDataProvider<Kontakt>> kontaktDataProvider = null;
-
-
+	
+	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
 
@@ -53,7 +53,9 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		nutzerKontaktliste.setId(Integer.parseInt(Cookies.getCookie("id")));
 	}
 
-
+/*
+ * Setter und Getter um die vom Nutzer ausgewählte Kontaktliste bzw. Kontakt zu speichern
+ */
 	void setSelectedKontaktliste(Kontaktliste selection) {
 		selectedKontaktliste = selection;
 	}
@@ -74,10 +76,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	/*
 	 * SelectionChangeEventHandler um die Selektion des Nutzers auf eine Kontaktliste
 	 * erfassen zu können und die einzelnen Kontakte innerhalb der angeklickten Kontaktliste
-	 * anzeigen zu können. Dies geschieht in der Klasse KontaktlistView, an die die Selektion übergeben wird.
-	 *
-	 *
-	 * Nested Class für die Reaktion auf Selektionsereignisse. Als Folge einer
+	 * anzeigen zu können. Dies geschieht in der Klasse KontaktlistView, an die die Selektion übergeben wird. Als Folge einer
 	 * Baumknotenauswahl wird je nach Typ des Business-Objekts der
 	 * "selectedKontaktliste" bzw. das "selectedKontakt" gesetzt.
 	 */
@@ -226,8 +225,21 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	public void onLoad() {
 
 		customTreeModel = new CustomTreeModel();
-		navigationCellTree = new CellTree(customTreeModel, "Root", CellTreeResources.INSTANCE);
+		navigationCellTree = new CellTree(customTreeModel, "Root", CellTreeResources.INSTANCE, new CellTree.CellTreeMessages() {
 
+			@Override
+			public String showMore() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String emptyTree() {
+				// TODO Auto-generated method stub
+				return "Leere Kontaktliste";
+			}
+		});
+		
 		navigationCellTree.setAnimationEnabled(true);
 		navigationTreePanel.add(navigationCellTree);
 
