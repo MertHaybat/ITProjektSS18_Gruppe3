@@ -61,8 +61,8 @@ public class KontakteReportForm extends HorizontalPanel{
 		@Override
 		public void onSuccess(Vector<Nutzer> result) {
 			// TODO Auto-generated method stub
+			listboxNutzer.addItem("Alle");
 			for (Nutzer nutzer : result) {
-				listboxNutzer.addItem("Alle");
 				listboxNutzer.addItem(nutzer.getMail());
 			}
 		}

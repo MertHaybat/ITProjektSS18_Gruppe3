@@ -10,9 +10,9 @@ import de.hdm.itprojektss18Gruppe3.client.AllKontakte;
 
 public class ReportSelectMenu extends VerticalPanel{
 
-	private Button bt1 = new Button("Report 1");
-	private Button bt2 = new Button("Report 2");
-	private Button bt3 = new Button("Report 3");
+	private Button bt1 = new Button("Alle Kontakte Report");
+	private Button bt2 = new Button("Alle Teilhaberschaften Report");
+	private Button bt3 = new Button("Alle Eigenschaften Report");
 
 	public ReportSelectMenu() {
 		bt1.setStylePrimaryName("reportmenubutton");
