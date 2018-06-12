@@ -118,6 +118,7 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			kontaktmanagerVerwaltung.createKontaktliste(tkontaktliste.getValue(), nutzer.getId(), 0, new createKontaktlisteCallback());
+			hide();
 		}
 	}
 	

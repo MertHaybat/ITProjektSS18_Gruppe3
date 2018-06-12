@@ -77,6 +77,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
+				
 			vpanel.clear();
 //			if (lbNutzerTeilhabender.getSelectedValue() == "Alle") {
 //				vpanel.add();
@@ -85,6 +86,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 			vpanel.add(new AllKontaktTeilhaberschaften(lbNutzerEigentuemer.getSelectedValue(),
 					lbNutzerTeilhabender.getSelectedValue()));
 			RootPanel.get("content").add(vpanel);
+			
 		}
 		
 	}
