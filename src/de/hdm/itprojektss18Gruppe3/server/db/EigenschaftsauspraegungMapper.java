@@ -421,9 +421,14 @@ public class EigenschaftsauspraegungMapper {
 		Connection con = DBConnection.connection();
 
 		Vector<Eigenschaftsauspraegung> result = new Vector<Eigenschaftsauspraegung>();
+		PreparedStatement stmt = null;
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE '"+eig.getWert()+"' AND `eigenschaftid` = "+eig.getEigenschaftID()+"");
+			if(eig.getEigenschaftID() != 0){
+				stmt = con.prepareStatement("SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE '"+eig.getWert()+"' AND `eigenschaftid` = "+eig.getEigenschaftID()+"");				
+			} else {
+				stmt = con.prepareStatement("SELECT * FROM `eigenschaftsauspraegung` WHERE `wert` LIKE '"+eig.getWert()+"'");
+			}
 				
 			ResultSet rs = stmt.executeQuery();
 			/**

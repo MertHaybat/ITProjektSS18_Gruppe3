@@ -197,5 +197,4 @@ public interface KontaktmanagerAdministrationAsync {
 			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktlisteWrapper>> callback);
 
 	
-	
 }

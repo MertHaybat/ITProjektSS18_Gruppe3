@@ -19,6 +19,7 @@ import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
+import de.hdm.itprojektss18Gruppe3.client.gui.DisclosurePanelSuche.FindKontaktByNameCallback;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -521,8 +522,10 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		char d = e.getWert().charAt(e.getWert().length() - 1);
 
 		Vector<Eigenschaftsauspraegung> auspraegungen = new Vector<Eigenschaftsauspraegung>();
-
-		e.setEigenschaftID(eigenschaft.getId());
+		if (eigenschaft != null){
+			
+			e.setEigenschaftID(eigenschaft.getId());
+		}
 
 		if (a == c) {
 			e.setWert(e.getWert().replace("*", "%"));
@@ -856,7 +859,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		Kontakt k = findKontaktByID(aus.getPersonID());
 
 		k.setModifikationsdatum(new Date());
-
 		saveKontakt(k);
 
 		eigenschaftsauspraegungMapper.updateEigenschaftsauspraegung(aus);
@@ -1176,16 +1178,13 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 			}
 		}
-
-		for (int i = 0; i < auspraegung.size(); i++) {
-
-			for (int x = 0; x < auspraegung.size(); x++) {
-				if (auspraegung.elementAt(i).getEigenschaftID() == eigenschaft.elementAt(x).getId()) {
+		for (Eigenschaftsauspraegung eigenschaftsauspraegung : auspraegung) {
+			for (Eigenschaft eigenschaftvergleich : eigenschaft) {
+				if (eigenschaftsauspraegung.getEigenschaftID() == eigenschaftvergleich.getId()) {
 					eigenschaftAuspraegung
-							.add(new EigenschaftsAuspraegungWrapper(eigenschaft.elementAt(x), auspraegung.elementAt(i)));
-
+							.add(new EigenschaftsAuspraegungWrapper(eigenschaftvergleich, eigenschaftsauspraegung));
+					break;
 				}
-
 			}
 		}
 
@@ -1364,6 +1363,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException {
 		Vector<Kontakt> eigeneKontakte = findEigeneKontakteBySuche(nutzer, eigenschaftsauspraegung, eigenschaft);
 		Vector<Kontakt> teilhabendeKontakte = findTeilhaberschaftKontakteBySuche(nutzer, eigenschaftsauspraegung, eigenschaft);
+		
 		Vector<Kontakt> alleKontakte = new Vector<Kontakt>();
 		alleKontakte.addAll(eigeneKontakte);
 		alleKontakte.addAll(teilhabendeKontakte);
@@ -1547,6 +1547,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 		return wrapperVector;
 	}
+
 
 	
 

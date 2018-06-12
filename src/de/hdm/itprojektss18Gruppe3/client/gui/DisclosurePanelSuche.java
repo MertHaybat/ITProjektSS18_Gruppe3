@@ -24,7 +24,9 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -40,15 +42,14 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 	private DisclosurePanel disc = new DisclosurePanel("Eigenschaftsausprägung Suche: ");
 	private VerticalPanel suchErgebnisPanel = new VerticalPanel();
+	private HorizontalPanel hPanel = new HorizontalPanel();
 
 	private String eingabeText = "Geben Sie die Suchkriterien ein";
 	private String kontaktLabel = "Kontaktname: ";
 	private String eigenschaftLabel = "Eigenschaft: ";
 	private String auspraegungLabel = "Eigenschaftsausprägung: ";
 	private String textboxValue = "";
-	// private String kontaktlisteLabel = "Kontaktliste: ";
-
-	// private ListBox kontaktlisteTextbox = new ListBox();
+	
 	private ListBox eigenschaftTextbox = new ListBox();
 	private TextBox auspraegungTextbox = new TextBox();
 	private TextBox kontaktTextbox = new TextBox();
@@ -61,7 +62,8 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 	private Button startButton = new Button("Start");
 	private Button filterLoeschenButton = new Button("Filter löschen");
-
+	private Button zurueck = new Button("Alle Kontakte");
+	
 	private Kontakt kontakt = new Kontakt();
 	private Eigenschaft eigenschaft = new Eigenschaft();
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
@@ -104,6 +106,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	}
 
 	void run() {
+		zurueck.setStylePrimaryName("mainButton");
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		nutzer.setMail(Cookies.getCookie("mail"));
@@ -163,51 +166,34 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		filterLoeschenButton.addClickHandler(new FilterLoeschenClickHandler());
 		startButton.addClickHandler(new StartClickHandler());
-
+		zurueck.addClickHandler(new ZuruckClickHandler());
+		
 		disc.addOpenHandler(new DiscOpenHandler());
 		disc.addCloseHandler(new DiscCloseHandler());
 
 		
-		if(textboxValue != ""){
-			Kontakt kontakt = new Kontakt();
-			kontakt.setName(textboxValue);
-			kontaktmanagerVerwaltung.findKontaktByName(kontakt, new SuchAllKontakteCallback());
-		}
-		
+	
 		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzer.getId(), new AllKontaktlisteCallback());
 		kontaktmanagerVerwaltung.findAllEigenschaften(new AllEigenschaftenCallback());
-		kontaktmanagerVerwaltung.findAllKontakte(new SuchAllKontakteCallback());
-//		kontaktmanagerVerwaltung.findAllEigenschaftsauspraegungByPersonID(kontakt, new FindKontaktByAuspraegungCallback());
-		// kontaktmanagerVerwaltung.suchFunktion(nutzer, eigenschaft,
-		// auspraegung, new suchenCallback());
+
 
 		suchErgebnisCellTable.addColumn(kontaktnameColumn, "Kontaktname");
 		suchErgebnisCellTable.addColumn(iconColumn, "");
-
+		hPanel.add(zurueck);
+		RootPanel.get("menubar").clear();
+		RootPanel.get("menubar").add(hPanel);
 		this.add(layout);
 		this.add(suchErgebnisPanel);
 	}
-	
-	public class SuchAllKontakteCallback implements AsyncCallback<Vector<Kontakt>> {
+	public class ZuruckClickHandler implements ClickHandler{
 
 		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			
+		public void onClick(ClickEvent event) {
+			RootPanel.get("content").clear();
+			AllKontaktView allKontaktView = new AllKontaktView();
 		}
-
-		@Override
-		public void onSuccess(Vector<Kontakt> result) {
-			// TODO Auto-generated method stub
-			if(result == null){
-				
-			}
-			else{
-				
-			}
-		}
+		
 	}
-	
 		
 	public class DiscOpenHandler implements OpenHandler<DisclosurePanel> {
 
@@ -277,7 +263,6 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
-			Window.alert(""+result.size());
 			suchErgebnisCellTable.setRowData(0, result);
 			suchErgebnisCellTable.setRowCount(result.size(), true);
 			suchErgebnisCellTable.redraw();
@@ -298,6 +283,11 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			nutzer.setMail(Cookies.getCookie("mail"));
+			Eigenschaftsauspraegung eigenschaftsauspraegung = new Eigenschaftsauspraegung();
+			eigenschaftsauspraegung.setWert(textboxValue);
 			if (result.size()>=1){
 				
 				suchErgebnisCellTable.setRowData(0, result);
@@ -306,20 +296,30 @@ public class DisclosurePanelSuche extends VerticalPanel {
 				
 				suchErgebnisPanel.add(suchErgebnisCellTable);
 			} else if (result.size() == 0){
-				Window.alert("Vollsuche funktioniert nur für Kontaktnamen bisher!");
-//				Eigenschaftsauspraegung e = new Eigenschaftsauspraegung();
-//				e.setWert(textboxValue);
-//				Nutzer nutzer = new Nutzer();
-//				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-//				nutzer.setMail(Cookies.getCookie("mail"));
-//				kontaktmanagerVerwaltung.findEigeneKontakteBySuche(nutzer, e, textboxValue, new FindKontaktByNameCallback());
-			}
+				kontaktmanagerVerwaltung.findTeilhaberUndEigeneKontakteBySuche(nutzer, eigenschaftsauspraegung, "", new VollSucheCallback());	}
 			
 
 		}
 
 	}
+	public class VollSucheCallback implements AsyncCallback<Vector<Kontakt>>{
 
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Vector<Kontakt> result) {
+			suchErgebnisCellTable.setRowData(0, result);
+			suchErgebnisCellTable.setRowCount(result.size(), true);
+			suchErgebnisCellTable.redraw();
+			
+			suchErgebnisPanel.add(suchErgebnisCellTable);
+		}
+		
+	}
 	public class AllKontaktlisteCallback implements AsyncCallback<Vector<Kontaktliste>> {
 
 		@Override
