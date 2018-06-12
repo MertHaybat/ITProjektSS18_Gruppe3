@@ -12,6 +12,7 @@ public class AllKontaktTeilhaberschaften extends HTMLResultPanel{
 	ReportGeneratorAsync reportverwaltung = ClientsideSettings.getReportGenerator();
 	
 	public AllKontaktTeilhaberschaften(String lbNutzerEigentuemer, String lbNutzerTeilhabender) {
+		
 	
 		reportverwaltung.createAlleKontakteByTeilhaberschaftReport(lbNutzerEigentuemer, lbNutzerTeilhabender,
 				new CreateAlleKontakteByTeilhaberschaftCallback());
@@ -24,7 +25,7 @@ public class AllKontaktTeilhaberschaften extends HTMLResultPanel{
 
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("Fehler beim Laden der Seite ist aufgetreten" + caught.getMessage());
+			Window.alert("Es liegen keine Teilhaberschaften für den angegeben Nutzer vor.");
 		}
 
 		@Override
