@@ -101,9 +101,9 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 				Window.alert("Diese Kontaktliste existiert bereits");
 			}
 			ctm = new CustomTreeModel();
+			hide();
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
-			hide();
 			
 //			KontaktlistView klV = new KontaktlistView(kontaktliste);
 //			RootPanel.get("content").clear();

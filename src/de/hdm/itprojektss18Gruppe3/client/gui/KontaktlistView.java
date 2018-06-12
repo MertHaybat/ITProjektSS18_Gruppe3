@@ -148,8 +148,8 @@ public class KontaktlistView extends MainFrame {
 		addTeilhaberschaftKontaktlisteButton.addClickHandler(new TeilhaberschaftKontaktlisteClickHandler());
 		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
 
-		RootPanel.get("menubar").clear();
-//		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
+//		RootPanel.get("menubar").clear();
+		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
 		
 	}
 	class ZurueckButtonClickHandler implements ClickHandler {

@@ -185,6 +185,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			Window.alert("hallo");
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("mail"));

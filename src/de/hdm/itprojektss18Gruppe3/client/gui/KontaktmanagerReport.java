@@ -116,12 +116,13 @@ public class KontaktmanagerReport implements EntryPoint {
 		}
 	}
 	private void loadReportgenerator() {
-		RootPanel.get("menubar").add(vPanelBar);
-		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
-		RootPanel.get("logout").add(logoutButton);
+//		vPanelBar.add(logoutButton);
+//		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
+//		RootPanel.get("logout").add(logoutButton);
 		logoutButton.addClickHandler(new logoutClickHandler());
 		logoutButton.setStylePrimaryName("logoutButton");
 		hPanelBar.add(logoutButton);
+		RootPanel.get("logout").add(hPanelBar);
 		ReportSelectMenu reportMenu = new ReportSelectMenu();
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("leftmenutree").add(reportMenu);
