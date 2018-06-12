@@ -1,5 +1,4 @@
 /** Set ids using widget.getElement().setId("idOfElement") */
-
 /*SEITENAUFBAU*/
 html {
 	background-image: url("/images/backgroundimg.jpg");
@@ -18,7 +17,7 @@ body {
 	margin-left: 5%;
 	margin-bottom: 20px;
 	border: 2px solid black;
-	background: 	linear-gradient(to bottom, #3399ff 0%, #99ccff 100%);
+	background: linear-gradient(to bottom, #3399ff 0%, #99ccff 100%);
 	box-shadow: 5px 5px 2.5px grey;
 	background-size: contain;
 	display: flex;
@@ -43,7 +42,8 @@ body {
 	background-position: right;
 	height: 100px;
 	width: 100px;
-	background-size: 85%
+	background-size: 80%;
+	margin-right: 15px;
 }
 
 #logout {
@@ -59,22 +59,21 @@ body {
 	margin-left: 5%;
 	margin-bottom: 10px;
 	border: 2px solid black;
-	background: white;
+	background-color: rgba(255, 255, 255, 0.8);
 	box-shadow: 5px 5px 2.5px grey;
 }
-
 
 #menubar .menuBarLabelContainer {
 	height: 40px;
 	display: inline-block;
-
 }
+
 #menubar .menuBarLabel {
 	padding-top: 6px;
 	padding-left: 10px;
 	width: 12em;
 	font-size: 1.7em;
-	color: 	#606060;
+	color: #606060;
 	display: inline-block;
 }
 
@@ -85,7 +84,7 @@ body {
 	border: 2px solid black;
 	margin-left: 5%;
 	margin-right: 1%;
-	background-color: white;
+	background-color: rgba(255, 255, 255, 0.8);
 	box-shadow: 3px 2px 2px grey;
 }
 
@@ -95,32 +94,35 @@ body {
 
 #content {
 	height: 650px;
-	width: 73.1%;
+	width: 73.3%;
 	display: inline-block;
 	border: 2px solid black;
-	background-color: white;
+	background-color: rgba(255, 255, 255, 0.7);
 	box-shadow: 3px 2px 2px grey;
 }
-.kontaktDecoratorPanel{
+
+.kontaktDecoratorPanel {
 	position: absolute;
-    top: 205px;
-    left: 640px;
-    border-radius: 12px;
-    width: 1px;
-    line-height: 1px;
-    border: 2px solid #bbb;
-    font-size: 1px;
+	top: 205px;
+	left: 640px;
+	border-radius: 12px;
+	width: 1px;
+	line-height: 1px;
+	border: 2px solid #bbb;
+	font-size: 1px;
 }
+
 .addButton {
 	text-align: center;
-    margin: 2px 4px;
-    border-radius: 80px;
-    width: 33px;
-    height: 30px;
+	margin: 2px 4px;
+	border-radius: 80px;
+	width: 33px;
+	height: 30px;
 }
-#content .suchTextbox{
-    position: absolute;
-    left: 684px;
+
+#content .suchTextbox {
+	position: absolute;
+	left: 684px;
 }
 
 #content .headline {
@@ -141,20 +143,19 @@ body {
 	box-shadow: 5px 5px 2.5px grey;
 }
 
-
 /* TEXT FORMATIERUNGEN */
 .h1 {
-  font-size: 2.4em;
-  font-weight: bold;
-  color: #777777;
-  margin-left: 200px;
-  text-align: center;
+	font-size: 2.4em;
+	font-weight: bold;
+	color: #777777;
+	margin-left: 200px;
+	text-align: center;
 }
 
 .h2 {
 	font-size: 1.3em;
 	margin: 10px 0px 20px 10px;
-	color: 	#484848;
+	color: #484848;
 	font-style: italic;
 }
 
@@ -170,9 +171,7 @@ body {
 	margin: 20px 0px 20px 10px;
 }
 
-
 /** WIDGET & PANEL FORMATIERUNGEN*/
-
 .menuBarContainerFlowPanel {
 	width: 90%;
 }
@@ -203,7 +202,7 @@ body {
 }
 
 .dialogVPanel {
-  margin: 5px;
+	margin: 5px;
 }
 
 .clientAuswahlPanel {
@@ -216,155 +215,141 @@ body {
 	overflow: scrollable;
 }
 
-
 /* REPORT GENERATOR FORMATIERUNG */
 .listbox-report {
-position: relative;
-width: 200px;
-padding: 10px;
-margin: 0 auto;
-color: #fff;
-outline: none;
-font-weight: bold;
-cursor: pointer;
-background: darkgrey;
-border: double;
+	position: relative;
+	width: 200px;
+	padding: 10px;
+	margin: 0 auto;
+	color: #fff;
+	outline: none;
+	font-weight: bold;
+	cursor: pointer;
+	background: darkgrey;
+	border: double;
 }
-
 
 /* BUTTON FORMATIERUNGEN */
-.sendButton {
-  display: block;
-  font-size: 16pt;
-}
-
-
-
-.clientAuswahlButton:hover {
-	background: white;
-	border-radius:6px;
-	border:4px solid #b3e6ff;
-	color: #595959;
-	text-shadow:0px 0.5px 0.5px black;
-}
-
-.logoutButton {
-	background-color: gainsboro;
-	width: 80px;
-    border-radius: 6px;
-    border: 1px solid #dcdcdc;
-    display: inline-block;
-    cursor: pointer;
-    color: #666666;
-    font-size: 10px;
-    font-weight: bold;
-    padding: 8px 0px 8px 0px;
-    text-shadow: 0px 1px 0px #ffffff;
-    text-align: center;
-    margin-left: 5px;
-    margin-top: 4.5px;
-}
-
-.searchButton {
-	background-image:url("/images/search.svg");
-    background-repeat:no-repeat;
-    background-position: center;
-    background-color: white;
-	width: 40px;
-	height: 30px;
-    border-radius: 6px;
-    border: 1px solid #dcdcdc;
-    display: inline-block;
-    cursor: pointer;
-    margin-left: 2px;
-}
-
 .searchTextBox {
-	background-image:url("/images/search.svg");
-    background-repeat:no-repeat;
-    background-position: right;
-    height: 25px;
-    margin-top: 4.5px;
-    font-size: 1.1em;
+	background-image: url("/images/search.svg");
+	background-repeat: no-repeat;
+	background-position: right;
+	height: 25px;
+	margin-top: 2.5px;
+	font-size: 1.1em;
+}
+
+.searchTextBox:hover {
+	background-size: 18%;
 }
 
 .mainButton {
-	width: 110px;
-	border-radius:6px;
-	border:1px solid #dcdcdc;
+	width: auto;
+	border-radius: 6px;
+	border: 1px solid #d9d9d9;
 	display: inline-block;
-	cursor:pointer;
-	color:#666666;
-	font-size:10px;
-	font-weight:bold;
-	padding:8px 0px 8px 0px;
-	text-shadow:0px 1px 0px #ffffff;
+	cursor: pointer;
+	color: #666666;
+	background-color: #e6e6e6;
+	font-size: 11px;
+	font-weight: bold;
+	padding: 8px 8px 8px 8px;
+	text-shadow: 0px 1px 0px #ffffff;
 	text-align: center;
 	margin-left: 5px;
 	margin-top: 4.5px;
 	vertical-align: super;
 }
 
+.mainButton:hover {
+	transform: scale(1.02);
+	box-shadow: inset 0 0 0 1px #f2f2f2;
+	border: 1px solid #e6e6e6;
+	background-color: #f2f2f2;
+}
+
+.logoutButton {
+	background-color: #d9d9d9;
+	width: 80px;
+	border-radius: 6px;
+	border: 1px solid #f2f2f2;
+	display: inline-block;
+	cursor: pointer;
+	color: #595959;
+	font-size: 11px;
+	font-weight: bold;
+	padding: 8px 0px 8px 0px;
+	text-shadow: 0px 1px 0px #ffffff;
+	text-align: center;
+	margin-left: 5px;
+}
+
+.logoutButton:hover {
+	transform: scale(1.02);
+	box-shadow: inset 0 0 0 1px #f2f2f2;
+	border: 1px solid #f2f2f2;
+	background-color: #e6e6e6;
+}
+
 #closeButton {
-  margin: 15px 6px 6px;
+	margin: 15px 6px 6px;
 }
 
 .viewProfileIcon {
 	height: 20px;
-	background-image:url("/images/eye.svg");
-    background-repeat:no-repeat;
-    background-position: center;
-    background-color: transparent;
-	cursor:pointer;
+	background-image: url("/images/eye.svg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color: transparent;
+	cursor: pointer;
 	height: 25px;
 	width: 25px;
 	border: 0px;
 }
 
+.viewProfileIcon:hover {
+	transform: scale(1.1);
+}
 
 /* .GWT WIDGET FORMATIERUNGEN */
 .gwt-DialogBox .Caption {
-   background: white;
-   cursor: default;
-   border-bottom: 1px solid #bbbbbb;
-   border-top: 5px solid #d0e4f6;
-   text-align: center;
+	background: white;
+	cursor: default;
+	border-bottom: 1px solid #bbbbbb;
+	border-top: 5px solid #d0e4f6;
+	text-align: center;
 }
 
 .gwt-DialogBox {
-  width: 400px;
-  height: 400px;
+	width: 400px;
+	height: 400px;
 }
 
 .gwt-DialogBox .dialogContent {
 	width: auto;
-  margin: auto auto;
-  padding: 20px 20px 20px 20px;
+	margin: auto auto;
+	padding: 20px 20px 20px 20px;
 	margin-left: 50px;
 	margin-right: 50px;
-   	
 }
 
-
 .gwt-DialogBox .dialogMiddleCenter {
-   padding: 15px;
-   background: white;
-   margin-left: 60px;
-	
+	padding: 15px;
+	background: white;
+	margin-left: 60px;
 }
 
 .gwt-Button {
 	font-size: 1em;
 	width: 110px;
-	border-radius:6px;
-	border:1px solid #dcdcdc;
+	border-radius: 6px;
+	border: 1px solid #dcdcdc;
 	cursor: pointer;
-	color:black;
-	padding:8px 0px 8px 0px;
-	text-shadow:0px 1px 0px #ffffff;
+	color: black;
+	padding: 8px 0px 8px 0px;
+	text-shadow: 0px 1px 0px #ffffff;
 	text-align: center;
 }
-
 
 .gwt-SuggestBox {
 	margin-left: 20px;
@@ -373,7 +358,7 @@ border: double;
 }
 
 .serverResponseLabelError {
-  color: red;
+	color: red;
 }
 
 

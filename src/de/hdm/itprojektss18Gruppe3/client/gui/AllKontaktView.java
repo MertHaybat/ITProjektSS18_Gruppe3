@@ -943,7 +943,7 @@ public class AllKontaktView extends MainFrame {
 		private SingleSelectionModel<NutzerTeilhaberschaftKontaktWrapper> ssmModel = new SingleSelectionModel<NutzerTeilhaberschaftKontaktWrapper>();
 		private CellTable<NutzerTeilhaberschaftKontaktWrapper> cellTableTeilhaberschaft = new CellTable<NutzerTeilhaberschaftKontaktWrapper>();
 		private FlowPanel menubar = new FlowPanel();
-		private Button teilhaberschaftButton = new Button("Kontakt Verwalten");
+		private Button teilhaberschaftButton = new Button("Kontakt verwalten");
 
 		public KontaktTeilhaberschaftCellTable() {
 			run();
