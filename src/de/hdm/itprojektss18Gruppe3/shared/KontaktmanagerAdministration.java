@@ -504,4 +504,5 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftKontaktWrapperByTeilhaberschaft(int teilhabenderID) throws IllegalArgumentException;
 
 	public Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findNutzerTeilhaberschaftKontaktlisteWrapper(int teilhabenderID) throws IllegalArgumentException; 
+
 }

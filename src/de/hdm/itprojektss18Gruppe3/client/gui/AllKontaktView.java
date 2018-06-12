@@ -13,6 +13,7 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -100,7 +101,9 @@ public class AllKontaktView extends MainFrame {
 	private RadioButton rb3 = new RadioButton("auswahlRadio", "Alle geteilten Eigenschaftsausprägungen");
 	private FlowPanel radioFlowPanel = new FlowPanel();
 	private ButtonCell visitProfileButton = new ButtonCell();
+	private DateTimeFormat dtf = DateTimeFormat.getFormat("dd.MMMM.yyyy");
 
+	
 	// public AllKontaktView(){
 	//
 	//
@@ -683,6 +686,7 @@ public class AllKontaktView extends MainFrame {
 		void run() {
 			
 			menubar.add(teilhaberschaftButton);
+			teilhaberschaftButton.setStylePrimaryName("mainButton");
 			teilhaberschaftButton.addClickHandler(new DeleteTeilhaberschaftClickHandler());
 			Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String> nutzerColumn = new Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>(
 					new TextCell()) {
@@ -717,7 +721,7 @@ public class AllKontaktView extends MainFrame {
 					new TextCell()) {
 				@Override
 				public String getValue(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper object) {
-					return String.valueOf(object.getKontakt().getModifikationsdatum());
+					return String.valueOf(dtf.format(object.getKontakt().getModifikationsdatum()));
 				}
 			};
 			cellTableTeilhaberschaft.setSelectionModel(ssmModel);
@@ -815,7 +819,7 @@ public class AllKontaktView extends MainFrame {
 		void run(){
 			menubar.add(teilhaberschaftButton);
 		    
-		
+			teilhaberschaftButton.setStylePrimaryName("mainButton");
 		    
 		    dataProvider.addDataDisplay(cellList);
 			cellList.setSelectionModel(selectionModel);
@@ -964,6 +968,7 @@ public class AllKontaktView extends MainFrame {
 
 		void run() {
 			menubar.add(teilhaberschaftButton);
+			teilhaberschaftButton.setStylePrimaryName("mainButton");
 			teilhaberschaftButton.addClickHandler(new KontaktFormClickHandler());
 			Column<NutzerTeilhaberschaftKontaktWrapper, String> nutzerColumn = new Column<NutzerTeilhaberschaftKontaktWrapper, String>(
 					new TextCell()) {
@@ -984,7 +989,7 @@ public class AllKontaktView extends MainFrame {
 					new TextCell()) {
 				@Override
 				public String getValue(NutzerTeilhaberschaftKontaktWrapper object) {
-					return String.valueOf(object.getKontakt().getModifikationsdatum());
+					return String.valueOf(dtf.format(object.getKontakt().getModifikationsdatum()));
 				}
 			};
 			cellTableTeilhaberschaft.setSelectionModel(ssmModel);
