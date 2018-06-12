@@ -201,7 +201,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 	class CreateNutzerDialogBox extends DialogBox {
 		private Label frage = new Label(
-				"Sie haben noch keinen Nutzer auf diesem Kontaktmanager. Möchten Sie eins erstellen?");
+				"Sie haben noch keinen Nutzer auf diesem Kontaktmanager. Möchten Sie einen neuen Nutzer anlegen?");
 		private Button ja = new Button("Ja");
 		private Button nein = new Button("Nein");
 		private String googleMail = "";
@@ -227,7 +227,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 			@Override
 			public void onSuccess(Nutzer result) {
-				Window.alert("Ihr Nutzer wurde erfolgreich erstellt");
+				Window.alert("Ihr Nutzer wurde erfolgreich angelegt");
 				Cookies.setCookie("email", result.getMail());
 				Cookies.setCookie("id", result.getId() + "");
 				loadKontaktmanager();
