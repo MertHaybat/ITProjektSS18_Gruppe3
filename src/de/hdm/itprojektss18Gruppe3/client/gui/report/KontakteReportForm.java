@@ -80,19 +80,20 @@ public class KontakteReportForm extends HorizontalPanel{
 				
 			}
 			else{
-				
+				if (listboxNutzer.getSelectedValue() == null){
+					Window.alert("Für diesen Nutzer liegen keine gespeicherten Kontakte vor.");
+				}
+					else{
+						
+					
+			
 				vpanel.clear();
 				vpanel.add(new AllKontakte(listboxNutzer.getSelectedValue()));
 				RootPanel.get("content").add(vpanel);
-
+				
+					}
 			}
 		}
 	
 	}
-
-		
-
-
-
-	
 }
