@@ -76,12 +76,13 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 			vPanel.remove(abortButton);
 			vPanel.clear();
 			vPanel.add(okButton);
-			okButton.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					hide();
-				}
-			});
+//			okButton.addClickHandler(new ClickHandler() {
+//				@Override
+//				public void onClick(ClickEvent event) {
+//					
+//				}
+//			});
+			hide();
 			KontaktlistView kontaktlisteBox = new KontaktlistView();
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(kontaktlisteBox);	

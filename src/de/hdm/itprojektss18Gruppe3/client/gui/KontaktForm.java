@@ -105,6 +105,7 @@ public class KontaktForm extends MainFrame {
 	public KontaktForm(Kontakt kontakt) {
 		this.k = kontakt;
 		deleteContact = new Button("Löschen");
+		hPanel.add(zurueckZuAllKontaktView);
 		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
 		kontaktNameBox.setValue(kontakt.getName());
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
@@ -136,6 +137,7 @@ public class KontaktForm extends MainFrame {
 		this.k = kontakt;
 		this.teilhaberschaft = teilhaberschaft;
 		deleteContact = new Button("Löschen");
+		hPanel.add(zurueckZuAllKontaktView);
 		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
 		kontaktNameBox.setValue(kontakt.getName());
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
@@ -279,7 +281,7 @@ public class KontaktForm extends MainFrame {
 		celltable.addColumn(iconColumn, "");
 		celltable.setSelectionModel(ssmAuspraegung);
 
-		hPanel.add(zurueckZuAllKontaktView);
+		
 
 		vPanel.add(kontaktNameLabel);
 		vPanel.add(kontaktNameBox);

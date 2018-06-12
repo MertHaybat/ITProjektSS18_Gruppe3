@@ -81,7 +81,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			}
 		});
 		FlowPanel flowpanel = new FlowPanel();
-		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
+//		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
 		logoutButton.addClickHandler(new logoutClickHandler());
 		logoutButton.setStylePrimaryName("logoutButton");
 		suchenButton.setStylePrimaryName("logoutButton");
@@ -117,35 +117,35 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		}
 	}
 
-	class ClientAuswahlClickHandler implements ClickHandler {
+//	class ClientAuswahlClickHandler implements ClickHandler {
+//
+//		@Override
+//		public void onClick(ClickEvent event) {
+//			signInLink.setHref(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html");
+//			Window.open(signInLink.getHref(), "_self", "");
+//		}
+//
+//	}
 
-		@Override
-		public void onClick(ClickEvent event) {
-			signInLink.setHref(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html");
-			Window.open(signInLink.getHref(), "_self", "");
-		}
-
-	}
-
-	class zumReportClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			RootPanel.get("menubar").clear();
-			signInLink.setHref(GWT.getHostPageBaseURL() + "KontaktmanagerReport.html");
-			Window.open(signInLink.getHref(), "_self", "");
-		}
-
-	}
-
-	class zumKontaktmanagerClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			
-		}
-
-	}
+//	class zumReportClickHandler implements ClickHandler {
+//
+//		@Override
+//		public void onClick(ClickEvent event) {
+//			RootPanel.get("menubar").clear();
+//			signInLink.setHref(GWT.getHostPageBaseURL() + "KontaktmanagerReport.html");
+//			Window.open(signInLink.getHref(), "_self", "");
+//		}
+//
+//	}
+//
+//	class zumKontaktmanagerClickHandler implements ClickHandler {
+//
+//		@Override
+//		public void onClick(ClickEvent event) {
+//			
+//		}
+//
+//	}
 
 	class loginButtonClickHandler implements ClickHandler {
 

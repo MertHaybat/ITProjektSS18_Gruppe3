@@ -21,6 +21,10 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
+import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.NutzerTeilhaberschaftKontaktlisteCellTable.TeilhaberschaftenCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.BusinessObject;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
@@ -99,6 +103,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				setSelectedKontakt((Kontakt) selection);
 			}
 			KontaktForm kontaktForm = new KontaktForm(getSelectedKontakt(), getSelectedKontaktliste());
+			KontaktlistView klisteView = new KontaktlistView(getSelectedKontakt(), getSelectedKontaktliste());
 		}
 	}
 
@@ -118,9 +123,36 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 		@Override
 		public void onSuccess(Vector<Kontaktliste> result) {
+			Kontaktliste kontaktliste = new Kontaktliste();
+			kontaktliste.setBezeichnung("Geteilt bekommene Kontakte");
+			result.add(kontaktliste);
 			for(Kontaktliste kL : result) {
 				kontaktlistenDataProvider.getList().add(kL);
 			}
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktlisteWrapper(nutzer.getId(), new FindAllKontaktlisteByTeilhaberschaftCallback());
+		
+		}
+		public class FindAllKontaktlisteByTeilhaberschaftCallback implements AsyncCallback<Vector<NutzerTeilhaberschaftKontaktlisteWrapper>>{
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onSuccess(Vector<NutzerTeilhaberschaftKontaktlisteWrapper> result) {
+				Vector<Kontaktliste> kontaktlisteVector = new Vector<Kontaktliste>();
+				for (NutzerTeilhaberschaftKontaktlisteWrapper wrapper : result) {
+					kontaktlisteVector.add(wrapper.getKontaktliste());
+					}
+				for(Kontaktliste kL : kontaktlisteVector) {
+					kontaktlistenDataProvider.getList().add(kL);
+				}
+			}
+			
 		}
 	}
 
@@ -140,8 +172,38 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			return new DefaultNodeInfo<Kontaktliste>(kontaktlistenDataProvider, new KontaktlistenCell(), selectionModel, null);   
 
 		} else if(value instanceof Kontaktliste){
-
 			final ListDataProvider<Kontakt> kontaktProvider = new ListDataProvider<Kontakt>();
+			if (((Kontaktliste) value).getBezeichnung().equals("Geteilt bekommene Kontakte")){
+				Nutzer nutzer = new Nutzer();
+				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+				kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(nutzer.getId(),
+						new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>(){
+
+							@Override
+							public void onFailure(Throwable caught) {
+								// TODO Auto-generated method stub
+								
+							}
+
+							@Override
+							public void onSuccess(Vector<NutzerTeilhaberschaftKontaktWrapper> result) {
+								Vector<Kontakt> kontakt = new Vector<Kontakt>();
+								for (NutzerTeilhaberschaftKontaktWrapper wrapper : result) {
+									kontakt.add(wrapper.getKontakt());
+									
+								}
+								for(Kontakt k : kontakt) {
+									kontaktProvider.getList().add(k);
+								}
+							}
+					
+				});
+			}
+			
+			
+			
+			
+			
 			kontaktDataProvider.put((Kontaktliste) value, kontaktProvider); 
 
 			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID((Kontaktliste) value, 
@@ -223,7 +285,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 
 	public void onLoad() {
-
+		
 		customTreeModel = new CustomTreeModel();
 		navigationCellTree = new CellTree(customTreeModel, "Root", CellTreeResources.INSTANCE, new CellTree.CellTreeMessages() {
 
