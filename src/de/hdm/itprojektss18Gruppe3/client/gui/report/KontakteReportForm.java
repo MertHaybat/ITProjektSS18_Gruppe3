@@ -36,6 +36,7 @@ public class KontakteReportForm extends HorizontalPanel{
 		
 		listboxNutzer.setVisibleItemCount(1);
 		listboxNutzer.setStylePrimaryName("listbox-report");
+		btAllNutzer.setStylePrimaryName("reportButton");
 		
 		this.add(labelbNutzer);
 		this.add(listboxNutzer);

@@ -40,6 +40,7 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 		listboxEigenschaften.setVisibleItemCount(1);
 
 		listboxEigenschaften.setStylePrimaryName("listbox-report");
+		btAllAuspraegungen.setStylePrimaryName("reportButton");
 
 		this.add(labelbEigenschaft);
 		this.add(listboxEigenschaften);

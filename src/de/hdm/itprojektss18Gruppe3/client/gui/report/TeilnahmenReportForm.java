@@ -41,6 +41,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 
 		lbNutzerTeilhabender.setStylePrimaryName("listbox-report");
 		lbNutzerEigentuemer.setStylePrimaryName("listbox-report");
+		btAllKontaktTeilhaberschaften.setStylePrimaryName("reportButton");
 		lbNutzerTeilhabender.addItem("Alle");
 
 		this.add(lbEigentuemer);
