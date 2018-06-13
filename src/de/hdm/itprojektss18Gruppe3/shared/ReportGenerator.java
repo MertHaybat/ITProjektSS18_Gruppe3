@@ -34,7 +34,9 @@ public interface ReportGenerator extends RemoteService {
 	  
 	  /**
 	   * Diese Methode sucht alle Kontakte und gibt diese zurück.
-	   * @param
+	   * 
+	   * @param lbEmail;
+	   * 			die Emailadresse des Nutzers zu dem alle Kontakte ausgegeben werden sollen.
 	   * @return Alle Kontakte
 	   * @throws IllegalArgumentException
 	   */
@@ -43,7 +45,10 @@ public interface ReportGenerator extends RemoteService {
 	  
 	  /**
 	   * Diese Methode sucht alle Kontakte anhand einer Teilhaberschaft und gibt diese zurück.
-	   * @param
+	   * 
+	   * @param a, b;
+	   * 			die Emailadressen der Nutzer, die miteinander Kontakte geteilt haben.
+	   * 
 	   * @return Alle Kontakte einer bestimmten Teilhaberschaft
 	   * @throws IllegalArgumentException
 	   */
@@ -52,7 +57,10 @@ public interface ReportGenerator extends RemoteService {
 	
 	  /**
 	   * Diese Methode sucht Kontakte mit übergebenen Eigenschaften und Ausprägungen.
-	   * @param
+	   * 
+	   * @param eig; die Eigenschaft, nach der gesucht werden soll
+	   * 		auspraegung; die Eigenschaftsausprägung, nach der gesucht werden soll
+	   * 
 	   * @return Kontakte, die bestimmte Eigenschaften und Eigenschaftsausprägungen besitzen
 	   * @throws IllegalArgumentException
 	   */
