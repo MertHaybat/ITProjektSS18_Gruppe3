@@ -71,10 +71,11 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Erstellen von <code>AlleKontakteReport</code>-Objekten
 	 * 
-	 * @param lbEmail, die Email des Kontakts, zu dem alle Kontakte ausgegeben
-	 * 			werden sollen.
+	 * @param lbEmail;
+	 * 				die Email des Kontakts, zu dem alle Kontakte ausgegeben werden 
+	 * 				sollen.
 	 * @return AlleKontakteReport-Objekt, der Report, der alle Kontakte
-	 * 			ausgibt.
+	 * 				ausgibt.
 	 */
 	@Override
 	public AlleKontakteReport createAlleKontakteReport(String lbEmail) throws IllegalArgumentException {
@@ -131,7 +132,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Erstellen von <code>AlleKontakteByTeilhaberschaftReport</code>-Objekten
 	 * 
-	 * @param a, b, die Email der Nutzer, zu denen alle miteinander geteilten 
+	 * @param a, b; 
+	 * 			die Emailadressen der Nutzer, zu denen alle miteinander geteilten 
 	 * 			Kontakte ausgegeben	werden sollen.
 	 * @return AlleKontakteByTeilhaberschaftReport-Objekt, der Report, der alle,
 	 * 			zwischen den beiden geteilten, Kontakte ausgibt.
@@ -189,8 +191,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Erstellen von <code>KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport</code>-Objekten
 	 * 
-	 * @param eig, die Eigenschaft über die gesucht werden soll
-	 * 		  auspraegung, die Eigenschaftsausprägung nach der gesucht werden soll
+	 * @param eig;
+	 * 			die Eigenschaft über die gesucht werden soll 
+	 * 		  auspraegung;
+	 * 			die Eigenschaftsausprägung nach der gesucht werden soll
 	 * 
 	 * @return KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport, der Report,
 	 * 			der alle Kontakte mit den Eigenschaften und Eigenschaftsausprägungen ausgibt,
