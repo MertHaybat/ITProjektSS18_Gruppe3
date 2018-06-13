@@ -27,6 +27,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -76,6 +77,7 @@ public class KontaktForm extends MainFrame {
 	private VerticalPanel vPanel3 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	
+	private FlexTable flextable = new FlexTable();
 	
 	private Label modifikationsdatum = new Label("Modifikationsdatum: ");
 	private Label erstellungsdatum = new Label("Erstellungsdatum: ");
@@ -281,14 +283,14 @@ public class KontaktForm extends MainFrame {
 		celltable.addColumn(iconColumn, "");
 		celltable.setSelectionModel(ssmAuspraegung);
 
-		
+		flextable.setWidget(10, 2, addAuspraegung);
+		flextable.setWidget(10, 8, deleteContact);
 
 		vPanel.add(kontaktNameLabel);
 		vPanel.add(kontaktNameBox);
 		vPanel.add(celltable);
 
-		vPanel.add(addAuspraegung);
-		vPanel.add(deleteContact);
+		vPanel.add(flextable);
 
 		this.add(vPanel);
 		this.add(vPanel3);
