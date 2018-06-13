@@ -34,10 +34,23 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	private KontaktmanagerAdministration kontaktmanagerAdministration = null;
 
 	
+	/**
+	 * Ein No-Argument-Konstruktor für die Client-seitige Erzeugung von
+	 * GWT.create
+	 * 
+	 * @see #init()
+	 * @throws IllegalArgumentException
+	 */
 	public ReportGeneratorImpl() throws IllegalArgumentException{
 	}
 	
 
+	/**
+	 * Initialisierungsmethode. Diese Methode muss für jede Instanz von
+	 * ReportGeneratorImpl aufgerufen werden.
+	 * 
+	 * @see ReportGeneratorImpl()
+	 */
 	@Override
 	public void init() throws IllegalArgumentException {
 		/*
@@ -54,6 +67,15 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	    return this.kontaktmanagerAdministration;
 	  }
 	
+	
+	/**
+	 * Erstellen von <code>AlleKontakteReport</code>-Objekten
+	 * 
+	 * @param lbEmail, die Email des Kontakts, zu dem alle Kontakte ausgegeben
+	 * 			werden sollen.
+	 * @return AlleKontakteReport-Objekt, der Report, der alle Kontakte
+	 * 			ausgibt.
+	 */
 	@Override
 	public AlleKontakteReport createAlleKontakteReport(String lbEmail) throws IllegalArgumentException {
 		if(this.getKontaktVerwaltung() == null){
@@ -106,6 +128,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return result;
 	}}
 
+	/**
+	 * Erstellen von <code>AlleKontakteByTeilhaberschaftReport</code>-Objekten
+	 * 
+	 * @param a, b, die Email der Nutzer, zu denen alle miteinander geteilten 
+	 * 			Kontakte ausgegeben	werden sollen.
+	 * @return AlleKontakteByTeilhaberschaftReport-Objekt, der Report, der alle,
+	 * 			zwischen den beiden geteilten, Kontakte ausgibt.
+	 */
 	@Override
 	public AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(String a, String b)
 			throws IllegalArgumentException {
@@ -156,6 +186,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return result;
 	}
 
+	/**
+	 * Erstellen von <code>KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport</code>-Objekten
+	 * 
+	 * @param eig, die Eigenschaft über die gesucht werden soll
+	 * 		  auspraegung, die Eigenschaftsausprägung nach der gesucht werden soll
+	 * 
+	 * @return KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport, der Report,
+	 * 			der alle Kontakte mit den Eigenschaften und Eigenschaftsausprägungen ausgibt,
+	 * 			die in der Suche angegeben wurden.
+	 */
 	@Override
 	public KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(
 			String eig, String auspraegung) throws IllegalArgumentException {
