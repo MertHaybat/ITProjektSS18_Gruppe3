@@ -21,17 +21,21 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
-import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
-import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.NutzerTeilhaberschaftKontaktlisteCellTable.TeilhaberschaftenCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.BusinessObject;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
-
+/*
+ * Die Implementierung des TreeViewModel ermöglicht die Anzeige von Kontaktlisten und
+ * den zugehörigen Kontakten durch eine Baumstruktur in dem linken seitlichen Panel.
+ * 
+ * @author Kevin, Mert, Rathke
+ * 
+ */
 public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 	private VerticalPanel treeContainer = new VerticalPanel();
@@ -44,12 +48,23 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	private Kontakt selectedKontakt = null;
 	private ListDataProvider<Kontaktliste> kontaktlistenDataProvider = null;
 	private CustomTreeModel customTreeModel;
+	/*
+	 * Durch die Map werden die ListDataProvider mit den Kontakten, die sich in
+	 * einer einer Kontaktliste befinden, gespeichert, wodurch die Anzeige als
+	 * Baumknoten realisiert werden kann..
+	 * 
+	 */
 	private Map<Kontaktliste, ListDataProvider<Kontakt>> kontaktDataProvider = null;
-	
-	
-	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
+	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
+			.getKontaktVerwaltung();
 
+	/*
+	 * Im Konstruktor werden sowohl das SingleSelectionModel, das die Selektion
+	 * des Nutzers registiert als auch die Map initialisiert. Auch wird aus dem
+	 * Cookie die ID des Nutzers ausgelesen, was dann dazu verwendet werden
+	 * kann, die Kontaktlisten des Nutzers laden zu können.
+	 */
 	public CustomTreeModel() {
 		selectionModel = new SingleSelectionModel<BusinessObject>();
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
@@ -57,15 +72,16 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		nutzerKontaktliste.setId(Integer.parseInt(Cookies.getCookie("id")));
 	}
 
-/*
- * Setter und Getter um die vom Nutzer ausgewählte Kontaktliste bzw. Kontakt zu speichern
- */
+	/*
+	 * Setter und Getter um die vom Nutzer ausgewählte Kontaktliste bzw. Kontakt
+	 * zu speichern
+	 */
 	void setSelectedKontaktliste(Kontaktliste selection) {
 		selectedKontaktliste = selection;
 	}
 
 	void setSelectedKontakt(Kontakt selection) {
-			selectedKontakt = selection;
+		selectedKontakt = selection;
 	}
 
 	Kontaktliste getSelectedKontaktliste() {
@@ -76,16 +92,15 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		return selectedKontakt;
 	}
 
-
 	/*
-	 * SelectionChangeEventHandler um die Selektion des Nutzers auf eine Kontaktliste
-	 * erfassen zu können und die einzelnen Kontakte innerhalb der angeklickten Kontaktliste
-	 * anzeigen zu können. Dies geschieht in der Klasse KontaktlistView, an die die Selektion übergeben wird. Als Folge einer
-	 * Baumknotenauswahl wird je nach Typ des Business-Objekts der
+	 * SelectionChangeEventHandler um die Selektion des Nutzers auf eine
+	 * Kontaktliste erfassen zu können und die einzelnen Kontakte innerhalb der
+	 * angeklickten Kontaktliste anzeigen zu können. Dies geschieht in der
+	 * Klasse KontaktlistView, an die die Selektion übergeben wird. Als Folge
+	 * einer Baumknotenauswahl wird je nach Typ des Business-Objekts der
 	 * "selectedKontaktliste" bzw. das "selectedKontakt" gesetzt.
 	 */
-	private class SelectionChangeEventHandler implements
-	SelectionChangeEvent.Handler {
+	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			BusinessObject selection = selectionModel.getSelectedObject();
@@ -107,11 +122,10 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		}
 	}
 
-
 	/*
-	 * AsyncCallback zum Abfragen aller Kontaktlisten des eingeloggten Nutzers. Das Ergebnis wird dem 
-	 * DataListProvider übergeben, wodurch die Anzeige der einzelnen Kontaktlisten im CellTree
-	 * ermöglicht wird
+	 * AsyncCallback zum Abfragen aller Kontaktlisten des eingeloggten Nutzers.
+	 * Das Ergebnis wird dem DataListProvider übergeben, wodurch die Anzeige der
+	 * einzelnen Kontaktlisten im CellTree ermöglicht wird
 	 */
 	public class FindAllKontaktlisteAsyncCallback implements AsyncCallback<Vector<Kontaktliste>> {
 
@@ -126,63 +140,65 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			Kontaktliste kontaktliste = new Kontaktliste();
 			kontaktliste.setBezeichnung("Geteilt bekommene Kontakte");
 			result.add(kontaktliste);
-			for(Kontaktliste kL : result) {
+			for (Kontaktliste kL : result) {
 				kontaktlistenDataProvider.getList().add(kL);
 			}
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-			kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktlisteWrapper(nutzer.getId(), new FindAllKontaktlisteByTeilhaberschaftCallback());
-		
+			kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktlisteWrapper(nutzer.getId(),
+					new FindAllKontaktlisteByTeilhaberschaftCallback());
+
 		}
-		public class FindAllKontaktlisteByTeilhaberschaftCallback implements AsyncCallback<Vector<NutzerTeilhaberschaftKontaktlisteWrapper>>{
-			
+
+		public class FindAllKontaktlisteByTeilhaberschaftCallback
+				implements AsyncCallback<Vector<NutzerTeilhaberschaftKontaktlisteWrapper>> {
+
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onSuccess(Vector<NutzerTeilhaberschaftKontaktlisteWrapper> result) {
 				Vector<Kontaktliste> kontaktlisteVector = new Vector<Kontaktliste>();
 				for (NutzerTeilhaberschaftKontaktlisteWrapper wrapper : result) {
 					kontaktlisteVector.add(wrapper.getKontaktliste());
-					}
-				for(Kontaktliste kL : kontaktlisteVector) {
+				}
+				for (Kontaktliste kL : kontaktlisteVector) {
 					kontaktlistenDataProvider.getList().add(kL);
 				}
 			}
-			
+
 		}
 	}
-
 
 	// Get the NodeInfo that provides the children of the specified value.
 	@Override
 	public <T> NodeInfo<?> getNodeInfo(T value) {
 
-		if(value.equals("Root")) {
+		if (value.equals("Root")) {
 
 			kontaktlistenDataProvider = new ListDataProvider<Kontaktliste>();
-			kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzerKontaktliste.getId(), new FindAllKontaktlisteAsyncCallback());
-
-
+			kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzerKontaktliste.getId(),
+					new FindAllKontaktlisteAsyncCallback());
 
 			// Return a node info that pairs the data with a cell.
-			return new DefaultNodeInfo<Kontaktliste>(kontaktlistenDataProvider, new KontaktlistenCell(), selectionModel, null);   
+			return new DefaultNodeInfo<Kontaktliste>(kontaktlistenDataProvider, new KontaktlistenCell(), selectionModel,
+					null);
 
-		} else if(value instanceof Kontaktliste){
+		} else if (value instanceof Kontaktliste) {
 			final ListDataProvider<Kontakt> kontaktProvider = new ListDataProvider<Kontakt>();
-			if (((Kontaktliste) value).getBezeichnung().equals("Geteilt bekommene Kontakte")){
+			if (((Kontaktliste) value).getBezeichnung().equals("Geteilt bekommene Kontakte")) {
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(nutzer.getId(),
-						new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>(){
+						new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>() {
 
 							@Override
 							public void onFailure(Throwable caught) {
 								// TODO Auto-generated method stub
-								
+
 							}
 
 							@Override
@@ -190,39 +206,34 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 								Vector<Kontakt> kontakt = new Vector<Kontakt>();
 								for (NutzerTeilhaberschaftKontaktWrapper wrapper : result) {
 									kontakt.add(wrapper.getKontakt());
-									
+
 								}
-								for(Kontakt k : kontakt) {
+								for (Kontakt k : kontakt) {
 									kontaktProvider.getList().add(k);
 								}
 							}
-					
-				});
-			}
-			
-			
-			
-			
-			
-			kontaktDataProvider.put((Kontaktliste) value, kontaktProvider); 
 
-			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID((Kontaktliste) value, 
+						});
+			}
+
+			kontaktDataProvider.put((Kontaktliste) value, kontaktProvider);
+
+			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID((Kontaktliste) value,
 					new AsyncCallback<Vector<Kontakt>>() {
 
-				@Override
-				public void onFailure(Throwable caught) {
-					// TODO Auto-generated method stub
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
 
-				}
+						}
 
-				@Override
-				public void onSuccess(Vector<Kontakt> result) {
-					for(Kontakt k : result) {
-						kontaktProvider.getList().add(k);
-					}
-				}
-			});
-
+						@Override
+						public void onSuccess(Vector<Kontakt> result) {
+							for (Kontakt k : result) {
+								kontaktProvider.getList().add(k);
+							}
+						}
+					});
 
 			// Return a node info that pairs the data with a cell.
 			return new DefaultNodeInfo<Kontakt>(kontaktProvider, new KontaktCell(), selectionModel, null);
@@ -235,10 +246,15 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	// cannot be opened.
 	@Override
 	public boolean isLeaf(Object value) {
-		return (value instanceof Kontakt); 
+		return (value instanceof Kontakt);
 	}
 
-
+	/*
+	 * Klasse zur Darstellung von Kontaktlisten Objekten in einer Zelle. Hier
+	 * wird zu der jeweiligen Kontaktliste noch überprüft, ob diese geteilt
+	 * wurde (Status 0 bzw. 1). Dies wird mit einem Icon hinter der
+	 * Kontaktlistenbezeichnung visualisiert.
+	 */
 	private class KontaktlistenCell extends AbstractCell<Kontaktliste> {
 
 		@Override
@@ -259,7 +275,11 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		}
 	};
 
-
+	/*
+	 * Klasse zur Darstellung von Kontakt Objekten in einer Zelle. Hier wird zu
+	 * dem jeweiligen Kontakt noch überprüft, ob dieser geteilt wurde (Status 0
+	 * bzw. 1). Dies wird mit einem Icon hinter dem Kontaktnamen visualisiert.
+	 */
 	private class KontaktCell extends AbstractCell<Kontakt> {
 		@Override
 		public void render(Context context, Kontakt value, SafeHtmlBuilder sb) {
@@ -275,7 +295,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 					sb.appendHtmlConstant("<img width=\"16\" src=\"images/group.svg\">");
 				}
 				sb.appendHtmlConstant("</td></table>");
-			} else if(value == null){
+			} else if (value == null) {
 				sb.appendHtmlConstant("<table><td>");
 				sb.appendHtmlConstant("Leere Liste");
 				sb.appendHtmlConstant("</td><td>");
@@ -283,31 +303,38 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		}
 	};
 
-
+	/*
+	 * onLoad Methode, in der letzlich das CustomTreeModel und der eigentliche
+	 * CellTree initialisiert werden. Dem Baum werden dann noch die
+	 * CellTreeResource, die auf den für den CellTree definierten Stylesheet
+	 * verweist, sowie das Interface CellTreeMessages , womit die emptyTree
+	 * Message ("Empty") abgeändert werden kann, als Parameter übergeben.
+	 */
 	public void onLoad() {
-		
+
 		customTreeModel = new CustomTreeModel();
-		navigationCellTree = new CellTree(customTreeModel, "Root", CellTreeResources.INSTANCE, new CellTree.CellTreeMessages() {
+		navigationCellTree = new CellTree(customTreeModel, "Root", CellTreeResources.INSTANCE,
+				new CellTree.CellTreeMessages() {
 
-			@Override
-			public String showMore() {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public String showMore() {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public String emptyTree() {
-				// TODO Auto-generated method stub
-				return "Leere Kontaktliste";
-			}
-		});
-		
+					@Override
+					public String emptyTree() {
+						// TODO Auto-generated method stub
+						return "Leere Kontaktliste";
+					}
+				});
+
 		navigationCellTree.setAnimationEnabled(true);
 		navigationTreePanel.add(navigationCellTree);
 
 		treeContainer.add(navigationHeadline);
 		navigationTreePanel.setStylePrimaryName("treeContainerPanel");
-		navigationHeadline .setStylePrimaryName("navigationPanelHeadline");
+		navigationHeadline.setStylePrimaryName("navigationPanelHeadline");
 		treeContainer.add(navigationTreePanel);
 		navigationCellTree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 
