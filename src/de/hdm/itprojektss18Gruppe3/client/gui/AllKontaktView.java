@@ -52,7 +52,7 @@ public class AllKontaktView extends MainFrame {
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private Button addKontaktButton = new Button("Neuer Kontakt");
 	private Button deleteKontaktButton = new Button("Kontakt löschen");
-	private Button addKontaktToKontaktlistButton = new Button("+ Kontaktliste");
+	private Button addKontaktToKontaktlistButton = new Button("Kontakt in Kontaktliste");
 	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
 	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
 

@@ -41,7 +41,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	private VerticalPanel treeContainer = new VerticalPanel();
 	private Nutzer nutzerKontaktliste = new Nutzer();
 	private CellTree navigationCellTree;
-	private Label navigationHeadline = new Label("Kontaktlisten");
+	private Label navigationHeadline = new Label("Alle Kontaktlisten");
 	private ScrollPanel navigationTreePanel = new ScrollPanel();
 	private SingleSelectionModel<BusinessObject> selectionModel = null;
 	private Kontaktliste selectedKontaktliste = null;

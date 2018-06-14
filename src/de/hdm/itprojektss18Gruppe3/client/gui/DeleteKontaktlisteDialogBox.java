@@ -83,6 +83,9 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 //				}
 //			});
 			hide();
+			CustomTreeModel ctm = new CustomTreeModel();
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
 			KontaktlistView kontaktlisteBox = new KontaktlistView();
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(kontaktlisteBox);	

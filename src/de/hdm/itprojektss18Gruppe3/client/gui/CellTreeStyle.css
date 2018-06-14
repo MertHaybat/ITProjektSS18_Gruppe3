@@ -1,13 +1,19 @@
 .cellTreeEmptyMessage {
 	padding-left: 14px;
 	font-style: italic;
+	font-family: 'Kalam ', cursive;
 }
 
 .cellTreeItem {
 	cursor: hand;
 	cursor: pointer;
 	zoom: 1;
-	z-index: 5;
+}
+
+.cellTreeItem tr td {
+	font-family: 'Kalam', cursive;
+	font-size: 16px;
+	letter-spacing: 0.3px;
 }
 
 .cellTreeItem:hover {
@@ -27,8 +33,14 @@
 .cellTreeTopItem {
 	font-weight: bold;
 	color: #3f3f3f;
-	margin-top: 20px;
+	margin-top: 15px;
 	padding: 1px 13px 1px 10px !important;
+}
+
+.cellTreeTopItem tr td {
+	font-family: 'Kalam', bold;
+	font-size: 16px;
+	letter-spacing: 0.3px;
 }
 
 .cellTreeTopItemImageValue {
@@ -44,7 +56,6 @@
 	overflow: hidden;
 	background: linear-gradient(to right, #b3ecff 0%, #ffffff 100%);
 	height: auto;
-	font-style: italic;
 	text-shadow: 0px 1px 1px #ffffff;
 	overflow: visible;
 }
@@ -54,7 +65,7 @@
 	outline: none;
 }
 
-.cellTreeOpenItem {
+.cellTreeOpenItem tr td {
 	
 }
 
@@ -62,12 +73,10 @@
 	
 }
 
-.cellTreeWidget {
+.cellTreeWidget tr td {
 	
 }
 
 .cellTreeTopItemImage {
 	margin-top: 7px;
 }
-
-
