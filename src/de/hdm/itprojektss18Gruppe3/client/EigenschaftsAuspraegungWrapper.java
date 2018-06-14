@@ -26,10 +26,30 @@ public class EigenschaftsAuspraegungWrapper implements Serializable {
 		this.eigenschaft = eigenschaft;
 		this.auspraegung = auspraegung;
 	}
+	public Eigenschaft getEigenschaft() {
+		return eigenschaft;
+	}
+	
+	
+	
+	public void setEigenschaft(Eigenschaft eigenschaft) {
+		this.eigenschaft = eigenschaft;
+	}
+	
+	
+	
+	public Eigenschaftsauspraegung getAuspraegung() {
+		return auspraegung;
+	}
+	
+	public void setAuspraegung(Eigenschaftsauspraegung auspraegung) {
+		this.auspraegung = auspraegung;
+	}
 	public Eigenschaftsauspraegung getEigenschaftsauspraegungObject(int auspraegungID){
 		auspraegung.setId(auspraegungID);
 		return auspraegung;
 	}
+
 	public String getBezeichnungEigenschaftValue(){
 		return this.eigenschaft.getBezeichnung();
 	}

@@ -1004,8 +1004,16 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		// TODO
 		Vector<Teilhaberschaft> teilhaberschaftVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
 		Vector<Kontakt> kontakteVector = new Vector<Kontakt>();
-
+		Vector<Teilhaberschaft> filteredTeilhaberschaftenVector = new Vector<Teilhaberschaft>();
+		
 		for (Teilhaberschaft teilhaberschaft : teilhaberschaftVector) {
+			if(teilhaberschaft.getKontaktID() != 0){
+				filteredTeilhaberschaftenVector.add(teilhaberschaft);
+			}
+		}
+		
+
+		for (Teilhaberschaft teilhaberschaft : filteredTeilhaberschaftenVector) {
 			kontakteVector.add(findKontaktByID(teilhaberschaft.getKontaktID()));
 
 		}

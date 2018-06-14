@@ -28,18 +28,11 @@ public class TeilhaberschaftenAlle extends MainFrame{
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 
 
-//	private Button showKontakte = new Button("Kontakte aller Teilhaberschaften ");
-//	private Button showKontaktliste = new Button("Kontaktlisten aller Teilhaberschaften ");
-//	private Label lb1 = new Label("Kontakte aller Teilhaberschaften");
-//	private Label lb2 = new Label("Kontaktlisten aller Teilhaberschaften");
 
 	private VerticalPanel vPanel = new VerticalPanel();
 	private Label menuBarHeadlineLabel = new Label("Teilhaberschaften");
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
-//	final Button teilhaberschaftKontakte = new Button("Kontakte aller Teilhaberschaften");
-//	final Button teilhaberschaftKontaktlisten = new Button("Kontaktlisten aller Teilhaberschaften");
-//	final HorizontalPanel hPanel = new HorizontalPanel();
 	private Kontakt kontakt = new Kontakt();
 	private Kontaktliste kliste = new Kontaktliste();
 	private HorizontalPanel hPanel = new HorizontalPanel();
@@ -51,9 +44,6 @@ public class TeilhaberschaftenAlle extends MainFrame{
 	}
 	@Override
 	protected void run() {
-//		final HorizontalPanel hPanel = new HorizontalPanel();
-//		final Button teilhaberschaftKontakte = new Button("Kontakte aller Teilhaberschaften");
-//		final Button teilhaberschaftKontaktlisten = new Button("Kontaktlisten aller Teilhaberschaften");
 		hPanel.setWidth("600px");
 		hPanel.setBorderWidth(4);
 		

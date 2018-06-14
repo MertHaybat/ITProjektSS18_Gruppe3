@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.dom.client.Element;
@@ -65,34 +66,76 @@ public class KontaktForm extends MainFrame {
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
-	private CellTable<EigenschaftsAuspraegungWrapper> celltable = new CellTable<EigenschaftsAuspraegungWrapper>();
 
-	private Button addAuspraegung = new Button("+");
-	private Button saveChanges = new Button("Speichern");
+	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
+	private Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+	private Kontakt k = null;
+	private Kontaktliste kontaktliste = null;
+
 	private Button deleteContact = null;
+	private Button addAuspraegung = new Button("+");
 	private Button zurueckZuAllKontaktView = new Button("Zurück");
 
+	private FlexTable flextable = new FlexTable();
 	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel vPanel2 = new VerticalPanel();
 	private VerticalPanel vPanel3 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
-	
-	private FlexTable flextable = new FlexTable();
-	
+
 	private Label modifikationsdatum = new Label("Modifikationsdatum: ");
 	private Label erstellungsdatum = new Label("Erstellungsdatum: ");
 	private Label kontaktNameLabel = new Label("Kontaktname: ");
 	private TextBox kontaktNameBox = new TextBox();
-	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
-	
-	private Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
-	private final NoSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = new NoSelectionModel<EigenschaftsAuspraegungWrapper>();
-	private Kontakt k = new Kontakt();
-	private Kontaktliste kontaktliste = new Kontaktliste();
+
 	private Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
-	private EditTextCell editEigenschaft = new EditTextCell();
-	private EditTextCell editAuspraegung = new EditTextCell();
 	private DateTimeFormat dtf = DateTimeFormat.getFormat("dd.MMMM.yyyy");
+
+	private CellTableAuspraegungWrapper celltable = new CellTableAuspraegungWrapper();
+	private EditTextCell editEigenschaft = new EditTextCell();
+	private final NoSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = new NoSelectionModel<EigenschaftsAuspraegungWrapper>();
+
+	private CellTableAuspraegungWrapper.IconColumn iconColumn = celltable.new IconColumn();
+
+	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(
+			editEigenschaft) {
+		@Override
+		public void onBrowserEvent(Context context, Element elem, EigenschaftsAuspraegungWrapper object,
+				NativeEvent event) {
+			super.onBrowserEvent(context, elem, object, event);
+
+			if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
+
+				if (object.getBezeichnungEigenschaftValue() == "") {
+					kontaktmanagerVerwaltung.deleteEigenschaftsauspraegungById(
+							object.getEigenschaftsauspraegungObject(object.getIDEigenschaftsauspraegungValue()),
+							new DeleteEigenschaftsauspraegung());
+				}
+
+			}
+			super.onBrowserEvent(context, elem, object, event);
+
+		}
+
+	};
+
+	private CellTableAuspraegungWrapper.WertAuspraegungColumn wertAuspraegungColumn = celltable.new WertAuspraegungColumn(
+			editEigenschaft) {
+		@Override
+		public void onBrowserEvent(Context context, Element elem, EigenschaftsAuspraegungWrapper object,
+				NativeEvent event) {
+			super.onBrowserEvent(context, elem, object, event);
+
+			if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
+				setFieldUpdater(new WertAuspraegungFieldUpdater());
+			}
+			if (object.getWertEigenschaftsauspraegungValue() == "") {
+				kontaktmanagerVerwaltung.deleteEigenschaftsauspraegungById(
+						object.getEigenschaftsauspraegungObject(object.getIDEigenschaftsauspraegungValue()),
+						new DeleteEigenschaftsauspraegung());
+			}
+
+		}
+	};
 
 	public KontaktForm() {
 		deleteContact = new Button("Abbrechen");
@@ -119,8 +162,8 @@ public class KontaktForm extends MainFrame {
 		super.onLoad();
 
 	}
-	
-	public KontaktForm(Kontakt kontakt, Kontaktliste kontaktliste){
+
+	public KontaktForm(Kontakt kontakt, Kontaktliste kontaktliste) {
 		this.k = kontakt;
 		this.kontaktliste = kontaktliste;
 		deleteContact = new Button("Löschen");
@@ -132,10 +175,10 @@ public class KontaktForm extends MainFrame {
 		deleteContact.addClickHandler(new DeleteChangesClickHandler());
 		vPanel2.add(modifikationsdatum);
 		vPanel2.add(erstellungsdatum);
-		super.onLoad();		
+		super.onLoad();
 	}
-	
-	public KontaktForm(Kontakt kontakt, Teilhaberschaft teilhaberschaft){
+
+	public KontaktForm(Kontakt kontakt, Teilhaberschaft teilhaberschaft) {
 		this.k = kontakt;
 		this.teilhaberschaft = teilhaberschaft;
 		deleteContact = new Button("Löschen");
@@ -145,7 +188,7 @@ public class KontaktForm extends MainFrame {
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakt, new AllAuspraegungenCallback());
 		modifikationsdatum.setText("Zuletzt geändert am: " + dtf.format(kontakt.getModifikationsdatum()));
 		erstellungsdatum.setText("Erstellt am: " + dtf.format(kontakt.getErzeugungsdatum()));
-		
+
 		Button kontaktHinzufuegen = new Button("Eigenen Kontakten Hinzufügen");
 		kontaktHinzufuegen.addClickHandler(new KontaktHinzufuegenClickHandler());
 		vPanel3.add(kontaktHinzufuegen);
@@ -155,140 +198,31 @@ public class KontaktForm extends MainFrame {
 		super.onLoad();
 	}
 
-	public CellTable<EigenschaftsAuspraegungWrapper> getCelltable() {
-		return celltable;
-	}
-
-	public void setCelltable(CellTable<EigenschaftsAuspraegungWrapper> celltable) {
-		this.celltable = celltable;
-	}
-
 	public void run() {
-		celltable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
-		celltable.setStylePrimaryName("kontaktformCelltable");
+
 		addAuspraegung.setStylePrimaryName("addButton");
 		zurueckZuAllKontaktView.setStylePrimaryName("mainButton");
-		// TODO Auto-generated method stub
-		
-		Column<EigenschaftsAuspraegungWrapper, String> wertEigenschaft = new Column<EigenschaftsAuspraegungWrapper, String>(
-				editEigenschaft) {
-			@Override
-			public String getValue(EigenschaftsAuspraegungWrapper object) {
-				
-				object.setEigenschaftIdValue(object.getEigenschaftIdValue());
-				return object.getBezeichnungEigenschaftValue();
-			}
-
-			@Override
-			public void onBrowserEvent(Context context, Element elem, EigenschaftsAuspraegungWrapper object,
-					NativeEvent event) {
-				super.onBrowserEvent(context, elem, object, event);
-
-				if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
-
-					if (object.getBezeichnungEigenschaftValue() == "") {
-						kontaktmanagerVerwaltung.deleteEigenschaftsauspraegungById(
-								object.getEigenschaftsauspraegungObject(object.getIDEigenschaftsauspraegungValue()),
-								new DeleteEigenschaftsauspraegung());
-					}
-
-				}
-				
-			}
-		};
-		
-		Column<EigenschaftsAuspraegungWrapper, String> wertAuspraegung = new Column<EigenschaftsAuspraegungWrapper, String>(
-				editAuspraegung) {
-			@Override
-			public String getValue(EigenschaftsAuspraegungWrapper object) {
-				object.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
-				return object.getWertEigenschaftsauspraegungValue();
-
-			}
-
-			@Override
-			public void onBrowserEvent(Context context, Element elem, EigenschaftsAuspraegungWrapper object,
-					NativeEvent event) {
-				super.onBrowserEvent(context, elem, object, event);
-
-				if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
-//					k.setName(kontaktNameBox.getValue());
-					setFieldUpdater(new FieldUpdater<EigenschaftsAuspraegungWrapper, String>() {
-						
-						@Override
-						public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
-							
-							object.setBezeichnungEigenschaftValue(value);
-							ssmAuspraegung.getLastSelectedObject().setWertEigenschaftsauspraegungValue(value);
-							ssmAuspraegung.getLastSelectedObject()
-							.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
-							auspraegung.setWert(object.getWertEigenschaftsauspraegungValue());
-							auspraegung.setId(object.getIDEigenschaftsauspraegungValue());
-							auspraegung.setPersonID(object.getPersonIdEigenschaftsauspraegungValue());
-							kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
-						}
-					});
-//					kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
-				}
-				if (object.getWertEigenschaftsauspraegungValue() == "") {
-					kontaktmanagerVerwaltung.deleteEigenschaftsauspraegungById(
-							object.getEigenschaftsauspraegungObject(object.getIDEigenschaftsauspraegungValue()),
-							new DeleteEigenschaftsauspraegung());
-				}
-
-			}
-		};
-		
-		TextColumn<EigenschaftsAuspraegungWrapper> iconColumn = new TextColumn<EigenschaftsAuspraegungWrapper>() {
-	        @Override
-	        public String getValue(EigenschaftsAuspraegungWrapper object) {
-	            return "";                          
-	        }
-	        @Override
-	        public void render(Context context, EigenschaftsAuspraegungWrapper object, SafeHtmlBuilder sb) {
-	        	// TODO Auto-generated method stub
-	        	if(object.getStatusValue() == 0){
-	        		sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">"); 
-	        		
-	        	} else {
-	        		sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">"); 
-	        	}
-
-	        	super.render(context, object, sb);
-	        }
-	    };  
-
-		wertEigenschaft.setFieldUpdater(new FieldUpdater<EigenschaftsAuspraegungWrapper, String>() {
-
-			@Override
-			public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
-				object.setBezeichnungEigenschaftValue(value);
-				ssmAuspraegung.getLastSelectedObject().setBezeichnungEigenschaftValue(value);// getSelectedObject().setEigenschaft(value);
-
-			}
-		});
-
+		wertEigenschaftColumn.setFieldUpdater(new WertEigenschaftFieldUpdater());
 
 		kontaktNameBox.addKeyPressHandler(new KontaktTextBoxKeyPressHandler());
-
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
-//		saveChanges.addClickHandler(new UpdateAuspraegungClickHandler());
-		
 
-		
-		celltable.addColumn(wertEigenschaft, "");
-		celltable.setColumnWidth(wertEigenschaft, 5, Unit.EM);
-		celltable.addColumn(wertAuspraegung, "");
-		celltable.setColumnWidth(wertAuspraegung, 12, Unit.EM);
+		celltable.addColumn(wertEigenschaftColumn, "");
+		celltable.setColumnWidth(wertEigenschaftColumn, 5, Unit.EM);
+		celltable.addColumn(wertAuspraegungColumn, "");
+		celltable.setColumnWidth(wertAuspraegungColumn, 12, Unit.EM);
 		celltable.addColumn(iconColumn, "");
 		celltable.setSelectionModel(ssmAuspraegung);
 
-		flextable.setWidget(10, 2, addAuspraegung);
-		flextable.setWidget(10, 8, deleteContact);
+		flextable.setWidget(0, 0, kontaktNameLabel);
+		flextable.setWidget(1, 0, kontaktNameBox);
+		flextable.setWidget(2, 0, celltable);
+		flextable.setWidget(3, 0, deleteContact);
+		flextable.setWidget(3, 1, addAuspraegung);
 
-		vPanel.add(kontaktNameLabel);
-		vPanel.add(kontaktNameBox);
-		vPanel.add(celltable);
+		// vPanel.add(kontaktNameLabel);
+		// vPanel.add(kontaktNameBox);
+		// vPanel.add(celltable);
 
 		vPanel.add(flextable);
 
@@ -301,7 +235,34 @@ public class KontaktForm extends MainFrame {
 		RootPanel.get("content").add(vPanel2);
 
 	}
-	public class KontaktHinzufuegenClickHandler implements ClickHandler{
+
+	public class WertAuspraegungFieldUpdater implements FieldUpdater<EigenschaftsAuspraegungWrapper, String> {
+
+		@Override
+		public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
+
+			object.setBezeichnungEigenschaftValue(value);
+			ssmAuspraegung.getLastSelectedObject().setWertEigenschaftsauspraegungValue(value);
+			ssmAuspraegung.getLastSelectedObject()
+					.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
+			auspraegung.setWert(object.getWertEigenschaftsauspraegungValue());
+			auspraegung.setId(object.getIDEigenschaftsauspraegungValue());
+			auspraegung.setPersonID(object.getPersonIdEigenschaftsauspraegungValue());
+			kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+		}
+
+	}
+
+	public class WertEigenschaftFieldUpdater implements FieldUpdater<EigenschaftsAuspraegungWrapper, String> {
+		@Override
+		public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
+			object.setBezeichnungEigenschaftValue(value);
+			ssmAuspraegung.getLastSelectedObject().setBezeichnungEigenschaftValue(value);// getSelectedObject().setEigenschaft(value);
+
+		}
+	}
+
+	public class KontaktHinzufuegenClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
@@ -310,86 +271,77 @@ public class KontaktForm extends MainFrame {
 			nutzer.setMail(Cookies.getCookie("mail"));
 			kontaktmanagerVerwaltung.createKontakt(k.getName(), 0, nutzer.getId(), new KontaktHinzufuegenCallback());
 		}
-		
+
 	}
-	public class KontaktHinzufuegenCallback implements AsyncCallback<Kontakt>{
+
+	public class KontaktHinzufuegenCallback implements AsyncCallback<Kontakt> {
 
 		@Override
 		public void onFailure(Throwable caught) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void onSuccess(Kontakt result) {
 			Window.alert("Der geteilte Kontakte wurde zu Ihren Kontakten hinzugefügt.");
 		}
-		
+
 	}
-	public class DeleteEigenschaftsauspraegung implements AsyncCallback<Void>{
+
+	public class DeleteEigenschaftsauspraegung implements AsyncCallback<Void> {
 
 		@Override
 		public void onFailure(Throwable caught) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void onSuccess(Void result) {
 			kontaktmanagerVerwaltung.findEigenschaftHybrid(k, new AllAuspraegungenCallback());
 		}
-		
+
 	}
+
 	public class KontaktTextBoxKeyPressHandler implements KeyPressHandler {
 
 		@Override
 		public void onKeyPress(KeyPressEvent event) {
-				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-					k.setName(kontaktNameBox.getValue());
-					kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
-				
-				
+			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+				k.setName(kontaktNameBox.getValue());
+				kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
+
 			}
 		}
 
 	}
+
 	public class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
-		
+
 		@Override
 		public void onClick(ClickEvent event) {
 			KontaktlistView allKontaktlistView = new KontaktlistView();
-		}		
+		}
 	}
+
 	public class ZurueckZuKontaktClickHandler implements ClickHandler {
-		
+
 		@Override
 		public void onClick(ClickEvent event) {
 			RootPanel.get("content").clear();
 			AllKontaktView allKontaktView = new AllKontaktView();
-		}		
+		}
 	}
 
-//	class DeleteKontakt implements AsyncCallback<Void> {
-//
-//		@Override
-//		public void onFailure(Throwable caught) {
-//			Window.alert("Server Fehler: " + caught.getMessage());
-//		}
-//
-//		@Override
-//		public void onSuccess(Void result) {
-//			Window.alert("Kontakt wurde erfolgreich gelöscht");
-//			AllKontaktView allKontaktView = new AllKontaktView();
-//		}
-//
-//	}
 	public class DeleteTeilhaberschaftClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			kontaktmanagerVerwaltung.deleteTeilhaberschaftByID(teilhaberschaft, new DeleteTeilhaberschaftCallBack());
 		}
-		class DeleteTeilhaberschaftCallBack implements AsyncCallback<Void>{
+
+		class DeleteTeilhaberschaftCallBack implements AsyncCallback<Void> {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -401,20 +353,153 @@ public class KontaktForm extends MainFrame {
 				Window.alert("Teilhaberschaft erfolgreich gelöscht");
 				AllKontaktView akw = new AllKontaktView();
 			}
-			
+
 		}
-		
+
 	}
+
 	public class DeleteChangesClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-		
-			
+
 			DeleteKontaktDialogBox db = new DeleteKontaktDialogBox();
 			db.center();
 
-		
+		}
+
+	}
+
+	public class CreateEigenschaftAuspraegungClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			NewEigenschaftsauspraegungDialogBox dialogbox = new NewEigenschaftsauspraegungDialogBox(k);
+			dialogbox.center();
+		}
+
+	}
+
+	public class UpdateKontaktCallback implements AsyncCallback<Void> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Kontakt konnte nicht abgespeichert werden" + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Void result) {
+			Label gespeichert = new Label("Änderungen gespeichert");
+			vPanel3.add(gespeichert);
+			Timer timer = new Timer() {
+				@Override
+				public void run() {
+					vPanel3.clear();
+				}
+			};
+			timer.schedule(10000);
+			// TODO Auto-generated method stub
+			// Window.alert("Kontakt wurde erfolgreich abgespeichert");
+			// RootPanel.get("content").clear();
+			// KontaktForm kontaktForm = new KontaktForm(k);
+			// RootPanel.get("content").add(kontaktForm);
+		}
+
+	}
+
+	public class UpdateAuspraegungCallback implements AsyncCallback<Void> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Speichern der Eigenschaftsauspraegung" + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Void result) {
+			kontaktmanagerVerwaltung.findKontaktByID(auspraegung.getPersonID(), new FindKontaktCallback());
+
+			// TODO
+			// Window.alert("hallo");
+			vPanel3.add(new Label("Änderungen gespeichert"));
+			Timer timer = new Timer() {
+				@Override
+				public void run() {
+					vPanel3.clear();
+				}
+			};
+			timer.schedule(1000);
+
+		}
+
+		public class FindKontaktCallback implements AsyncCallback<Kontakt> {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onSuccess(Kontakt result) {
+
+				modifikationsdatum.setText("Zuletzt geändert am: " + dtf.format(result.getModifikationsdatum()));
+			}
+
+		}
+
+	}
+
+	public class CreateEigenschaftAuspraegungCallback implements AsyncCallback<Eigenschaftsauspraegung> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			Window.alert("Fehler beim Speichern der Eigenschaftsauspraegung" + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Eigenschaftsauspraegung result) {
+			// TODO
+
+		}
+
+	}
+
+	public class AllAuspraegungenCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Laden des Kontaktes" + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Vector<EigenschaftsAuspraegungWrapper> result) {
+			// TODO
+			celltable.setRowData(0, result);
+			celltable.setRowCount(result.size(), true);
+			for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : result) {
+				Eigenschaftsauspraegung e = new Eigenschaftsauspraegung();
+				e.setId(eigenschaftsAuspraegungWrapper.getEigenschaftIdValue());
+				auspraegungVector.add(e);
+
+			}
+
+		}
+
+	}
+
+	public class CreateKontaktCallback implements AsyncCallback<Kontakt> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Erstellen des Kontakts" + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Kontakt result) {
+			kontaktmanagerVerwaltung.findEigenschaftHybrid(result, new AllAuspraegungenCallback());
+			kontaktNameBox.setValue(result.getName());
+			k = result;
 		}
 
 	}
@@ -422,8 +507,8 @@ public class KontaktForm extends MainFrame {
 	public class DeleteKontaktDialogBox extends DialogBox {
 		private VerticalPanel vPanel = new VerticalPanel();
 		private HorizontalPanel hPanel = new HorizontalPanel();
-		private Label abfrage = new Label(
-				"Sind Sie sicher, dass Sie diesen Vorgang abbrechen " + "und Ihre Änderungen verwerfen/den Kontakt löschen möchten?");
+		private Label abfrage = new Label("Sind Sie sicher, dass Sie diesen Vorgang abbrechen "
+				+ "und Ihre Änderungen verwerfen/den Kontakt löschen möchten?");
 		private Button ja = new Button("Ja");
 		private Button nein = new Button("Nein");
 
@@ -470,152 +555,6 @@ public class KontaktForm extends MainFrame {
 				AllKontaktView allKontaktView = new AllKontaktView();
 			}
 
-		}
-
-	}
-//	class UpdateAuspraegungClickHandler implements ClickHandler{
-//	
-//		@Override
-//		public void onClick(ClickEvent event) {
-//			k.setName(kontaktNameBox.getValue());
-//			kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
-//			kontaktmanagerVerwaltung.saveKontakt(k, new UpdateKontaktCallback());
-//		}
-//
-//	}
-
-	public class UpdateKontaktCallback implements AsyncCallback<Void> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			Window.alert("Kontakt konnte nicht abgespeichert werden" + caught.getMessage());
-		}
-
-		@Override
-		public void onSuccess(Void result) {
-			Label gespeichert = new Label("Änderungen gespeichert");
-			vPanel3.add(gespeichert);
-			Timer timer = new Timer() {
-			     @Override
-			     public void run() {
-			    	 vPanel3.clear();
-			     }
-			 }; 
-			 timer.schedule(10000);
-			// TODO Auto-generated method stub
-//			Window.alert("Kontakt wurde erfolgreich abgespeichert");
-			// RootPanel.get("content").clear();
-			// KontaktForm kontaktForm = new KontaktForm(k);
-			// RootPanel.get("content").add(kontaktForm);
-		}
-
-	}
-
-	public class UpdateAuspraegungCallback implements AsyncCallback<Void> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			Window.alert("Fehler beim Speichern der Eigenschaftsauspraegung" + caught.getMessage());
-		}
-
-		@Override
-		public void onSuccess(Void result) {
-			kontaktmanagerVerwaltung.findKontaktByID(auspraegung.getPersonID(), new FindKontaktCallback());
-			
-		
-			// TODO
-//			Window.alert("hallo");
-			vPanel3.add(new Label("Änderungen gespeichert"));
-			Timer timer = new Timer() {
-			     @Override
-			     public void run() {
-			    	 vPanel3.clear();
-			     }
-			 }; 
-			 timer.schedule(1000);
-
-		}
-		public class FindKontaktCallback implements AsyncCallback<Kontakt>{
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onSuccess(Kontakt result) {
-				
-
-				modifikationsdatum.setText("Zuletzt geändert am: " + dtf.format(result.getModifikationsdatum()));
-			}
-			
-		}
-
-	}
-
-	public class CreateEigenschaftAuspraegungClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			NewEigenschaftsauspraegungDialogBox dialogbox = new NewEigenschaftsauspraegungDialogBox(k);
-			dialogbox.center();
-		}
-
-	}
-
-	public class CreateEigenschaftAuspraegungCallback implements AsyncCallback<Eigenschaftsauspraegung> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			Window.alert("Fehler beim Speichern der Eigenschaftsauspraegung" + caught.getMessage());
-		}
-
-		@Override
-		public void onSuccess(Eigenschaftsauspraegung result) {
-			// TODO
-
-		}
-
-	}
-
-	public class AllAuspraegungenCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			Window.alert("Fehler beim Laden des Kontaktes");
-		}
-
-		@Override
-		public void onSuccess(Vector<EigenschaftsAuspraegungWrapper> result) {
-			// TODO
-			celltable.setRowData(0, result);
-			celltable.setRowCount(result.size(), true);
-			for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : result) {
-				Eigenschaftsauspraegung e = new Eigenschaftsauspraegung();
-				e.setId(eigenschaftsAuspraegungWrapper.getEigenschaftIdValue());
-				auspraegungVector.add(e);
-
-			}
-
-		}
-
-	}
-
-	public class CreateKontaktCallback implements AsyncCallback<Kontakt> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			Window.alert("Fehler beim Erstellen des Kontakts" + caught.getMessage());
-		}
-
-		@Override
-		public void onSuccess(Kontakt result) {
-			kontaktmanagerVerwaltung.findEigenschaftHybrid(result, new AllAuspraegungenCallback());
-			kontaktNameBox.setValue(result.getName());
-			k = result;
 		}
 
 	}

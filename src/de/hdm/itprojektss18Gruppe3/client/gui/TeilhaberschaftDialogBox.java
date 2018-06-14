@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.cell.client.Cell.Context;
@@ -58,7 +59,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private final MultiSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = new MultiSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private final MultiSelectionModel<Eigenschaft> eigenschaftModel = new MultiSelectionModel<Eigenschaft>();
 
-	private final CheckboxCell cbCell = new CheckboxCell(false, true);
+	
 	private FlexTable ftTeilhaberschaft = new FlexTable();
 
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
@@ -73,10 +74,8 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private Label lb2 = new Label("Mit wem möchten Sie diese Eigenschaften teilen: ");
 	private Button b1 = new Button("Teilen");
 	private Button b2 = new Button("Abbrechen");
-	private CellTable<Nutzer> selectedNutzerCT = new CellTable<Nutzer>();
+	
 	private Kontakt kontaktNeu = new Kontakt();
-
-	private KontaktCellTable kt = new KontaktCellTable(kontaktNeu);
 
 	private final Handler<EigenschaftsAuspraegungWrapper> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
@@ -87,6 +86,32 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private CellTable<Eigenschaft> eigenschaftCT = new CellTable<Eigenschaft>();
 	private ListDataProvider<Nutzer> nutzerDataProvider = new ListDataProvider<Nutzer>(nutzerSuggestbox);
 
+	private CheckboxCell cbCell = new CheckboxCell(false, true);
+	private ButtonCell btCell = new ButtonCell();
+	private TextCell textCell = new TextCell();
+	private ClickableTextCell clickableCell = new ClickableTextCell();
+	
+	private CellTableNutzer selectedNutzerCT = new CellTableNutzer();
+	private CellTableNutzer.ButtonColumn buttonBox = selectedNutzerCT.new ButtonColumn(btCell){
+		@Override
+		public void onBrowserEvent(Context context, Element elem, Nutzer object, NativeEvent event) {
+			super.onBrowserEvent(context, elem, object, event);
+			if (event.getButton() == NativeEvent.BUTTON_LEFT) {
+				nutzerDataProvider.getList().remove(object);
+				selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
+				selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+				selectedNutzerCT.redraw();
+			}
+		}
+	};
+	
+	private CellTableNutzer.NutzerColumn nutzerBox = selectedNutzerCT.new NutzerColumn(textCell);
+	
+	private CellTableAuspraegungWrapper kt = new CellTableAuspraegungWrapper();
+	private CellTableAuspraegungWrapper.CheckBoxBolumn checkBoxAuspraegung = kt.new CheckBoxBolumn(cbCell);
+	private CellTableAuspraegungWrapper.WertEigenschaftColumn eigenschaftColumn = kt.new WertEigenschaftColumn(clickableCell);
+	private CellTableAuspraegungWrapper.WertAuspraegungColumn auspraegungColumn = kt.new WertAuspraegungColumn(clickableCell);
+	
 	public TeilhaberschaftDialogBox(Kontakt kontakt) {
 		kontaktNeu = kontakt;
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontaktNeu, new EigenschaftAuspraegungCallback());
@@ -114,38 +139,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		ftTeilhaberschaft.setWidget(6, 1, b1);
 		ftTeilhaberschaft.setWidget(6, 2, b2);
 
-		Column<EigenschaftsAuspraegungWrapper, Boolean> cbColumn = new Column<EigenschaftsAuspraegungWrapper, Boolean>(
-				cbCell) {
-			@Override
-			public Boolean getValue(EigenschaftsAuspraegungWrapper object) {
-				return ssmAuspraegung.isSelected(object);
-			}
-		};
-		Column<Nutzer, String> nutzertxtColumn = new Column<Nutzer, String>(new TextCell()) {
 
-			@Override
-			public String getValue(Nutzer object) {
-				return object.getMail();
-			}
-		};
-		Column<Nutzer, String> buttonColumn1 = new Column<Nutzer, String>(new ButtonCell()) {
-			@Override
-			public String getValue(Nutzer x) {
-				return "x";
-
-			}
-
-			@Override
-			public void onBrowserEvent(Context context, Element elem, Nutzer object, NativeEvent event) {
-				super.onBrowserEvent(context, elem, object, event);
-				if (event.getButton() == NativeEvent.BUTTON_LEFT) {
-					nutzerDataProvider.getList().remove(object);
-					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
-					selectedNutzerCT.redraw();
-				}
-			}
-		};
 
 		box.setStylePrimaryName("gwt-SuggestBox");
 
@@ -159,15 +153,18 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		b1.addClickHandler(new insertTeilhaberschaftClickHandler());
 		b2.addClickHandler(new closeDialogBoxClickHandler());
-		kt.insertColumn(0, cbColumn);
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
 		// eigenschaftCT.addColumn(EigenschaftcbColumn, "");
 		// eigenschaftCT.addColumn(eigenschaftColumn, "Eigenschaft");
-		selectedNutzerCT.addColumn(nutzertxtColumn, "");
-		selectedNutzerCT.addColumn(buttonColumn1, "");
+		selectedNutzerCT.addColumn(nutzerBox, "");
+		selectedNutzerCT.addColumn(buttonBox, "");
 
+		kt.addColumn(checkBoxAuspraegung, ""); 
+		kt.addColumn(eigenschaftColumn, "");
+		kt.addColumn(auspraegungColumn, "");
+		
 		this.add(ftTeilhaberschaft);
 
 	}
@@ -180,6 +177,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		}
 
+		
 		@Override
 		public void onSuccess(Nutzer result) {
 			nutzerausdb = result;

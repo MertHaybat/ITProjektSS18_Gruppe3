@@ -108,16 +108,12 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			kontaktlistView.getMenuBarContainerFlowPanel();
 			if (selection instanceof Kontaktliste) {
 				setSelectedKontaktliste((Kontaktliste) selection);
-				AllKontaktView allkontaktView = new AllKontaktView();
-				allkontaktView.getAllKontakteCellTableContainer().clear();
-				allkontaktView.getRb0().setValue(false);
-				allkontaktView.getRb1().setValue(false);
-				allkontaktView.getRb2().setValue(false);
-				allkontaktView.getRb3().setValue(false);
+				AllKontaktView allkontaktView = new AllKontaktView(getSelectedKontaktliste());
+//				allkontaktView.getAllKontakteCellTableContainer().clear();
 			} else if (selection instanceof Kontakt) {
 				setSelectedKontakt((Kontakt) selection);
+				KontaktForm kontaktForm = new KontaktForm(getSelectedKontakt(), getSelectedKontaktliste());
 			}
-			KontaktForm kontaktForm = new KontaktForm(getSelectedKontakt(), getSelectedKontaktliste());
 			KontaktlistView klisteView = new KontaktlistView(getSelectedKontakt(), getSelectedKontaktliste());
 		}
 	}
@@ -138,7 +134,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		@Override
 		public void onSuccess(Vector<Kontaktliste> result) {
 			Kontaktliste kontaktliste = new Kontaktliste();
-			kontaktliste.setBezeichnung("Geteilt bekommene Kontakte");
+			kontaktliste.setBezeichnung("Empfangene Kontakte");
 			result.add(kontaktliste);
 			for (Kontaktliste kL : result) {
 				kontaktlistenDataProvider.getList().add(kL);
@@ -189,7 +185,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 		} else if (value instanceof Kontaktliste) {
 			final ListDataProvider<Kontakt> kontaktProvider = new ListDataProvider<Kontakt>();
-			if (((Kontaktliste) value).getBezeichnung().equals("Geteilt bekommene Kontakte")) {
+			if (((Kontaktliste) value).getBezeichnung().equals("Empfangene Kontakte")) {
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(nutzer.getId(),
@@ -197,14 +193,14 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 							@Override
 							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
-
+								Window.alert("Fehler beim Laden" + caught.getMessage());
 							}
 
 							@Override
 							public void onSuccess(Vector<NutzerTeilhaberschaftKontaktWrapper> result) {
 								Vector<Kontakt> kontakt = new Vector<Kontakt>();
 								for (NutzerTeilhaberschaftKontaktWrapper wrapper : result) {
+								
 									kontakt.add(wrapper.getKontakt());
 
 								}

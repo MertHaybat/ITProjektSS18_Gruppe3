@@ -74,7 +74,8 @@ public class KontaktlistView extends MainFrame {
 			.getKontaktVerwaltung();
 
 	public KontaktlistView() {
-		run();
+		 RootPanel.get("menubar").clear();
+		 run();
 	}
 
 	public KontaktlistView(Kontakt kontakt, Kontaktliste kontaktliste) {
@@ -96,14 +97,15 @@ public class KontaktlistView extends MainFrame {
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
 		menuBarContainerFlowPanel.setStylePrimaryName("menuBarContainerFlowPanel");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
-
-		run();
+		 RootPanel.get("menubar").clear();
+		 run();
 	}
 	
 	public KontaktlistView(Kontaktliste selection, Teilhaberschaft teilhaberschaft){
 		this.kontaktliste = selection;
 		this.setKontaktlisteSelectedInTree(selection);
-		run();
+		 RootPanel.get("menubar").clear();
+		 run();
 	}
 	public static Kontaktliste getKontaktlisteSelectedInTree() {
 		return kontaktlisteSelectedInTree;
@@ -122,18 +124,6 @@ public class KontaktlistView extends MainFrame {
 	}
 
 	public void run() {
-//		KontaktCellList kontaktCellList = new KontaktCellList(kontaktliste);
-		/*
-		 * Menüleiste mit den Buttons für die Anlage von einer neuen
-		 * Kontaktliste und dem Löschen einer Kontaktliste erzeugen und dem
-		 * Panel zuweisen
-		 */
-//		KontaktDataProvider kontaktDataProvider = new KontaktDataProvider();
-//		kontaktDataProvider.addDataDisplay(kontaktCellList.getKontaktCell());
-//		kontaktCellList.getKontaktCell().setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-		//----
-		
-		//----
 
 		/*
 		 * CellList für die Anzeige der Kontaktlisten eines Users wird umgesetzt
@@ -148,7 +138,6 @@ public class KontaktlistView extends MainFrame {
 		addTeilhaberschaftKontaktlisteButton.addClickHandler(new TeilhaberschaftKontaktlisteClickHandler());
 		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
 
-//		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
 		
 	}
