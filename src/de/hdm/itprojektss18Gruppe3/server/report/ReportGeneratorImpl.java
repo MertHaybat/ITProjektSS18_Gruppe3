@@ -90,7 +90,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		
 		Vector<Kontakt> allContacts = new Vector<Kontakt>();
 		
-		result.setTitle("Alle Kontakte im Kontaktmanager");
+		result.setTitle("Alle Kontakte im Kontaktmanager für " + lbEmail);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
 		result.setCreated(simpleDateFormat.format(new Date()));
 		
@@ -99,7 +99,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		headline.addColumn(new Column("Erzeugungsdatum"));
 		headline.addColumn(new Column("Modifkationsdatum"));
 		headline.addColumn(new Column("Status"));
-		headline.addColumn(new Column("Ersteller"));
+		headline.addColumn(new Column("Nutzer"));
 		
 		result.addRow(headline);
 		if (lbEmail == "Alle") {
