@@ -126,6 +126,8 @@ public class KontaktmanagerReport implements EntryPoint {
 		ReportSelectMenu reportMenu = new ReportSelectMenu();
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("leftmenutree").add(reportMenu);
+		RootPanel.get("menubar").clear();
+		RootPanel.get("menubar").add(reportMenu);
 //		RootPanel.get("menubar").clear();
 //		RootPanel.get("menubar").add(hPanelBar);
 		
