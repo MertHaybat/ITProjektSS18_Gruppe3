@@ -21,7 +21,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -94,7 +93,7 @@ public class KontakteReportForm extends HorizontalPanel{
 				}
 			}
 		};
-
+		oracle.add("Allen");
 		box.setStylePrimaryName("gwt-SuggestBox");
 		reportverwaltung.findNutzer(new getNutzerCallback());
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
@@ -168,36 +167,45 @@ public class KontakteReportForm extends HorizontalPanel{
 	
 	
 	
-//	class AllKontakteReport implements AsyncCallback <Vector<Nutzer>> {
-//
-//		@Override
-//		public void onFailure(Throwable caught) {
-//			// TODO Auto-generated method stub
-//			Window.alert("Fehler beim Laden aus der Datenbank" + caught.getMessage());
-//
-//		}
-//
-//		@Override
-//		public void onSuccess(Vector<Nutzer> result) {
-//			// TODO Auto-generated method stub
-//			listboxNutzer.addItem("Alle");
-//			for (Nutzer nutzer : result) {
-//
-//				listboxNutzer.addItem(nutzer.getMail());
-//			}
-//		}
-//
-//
-//		
-//	}
+	class AllKontakteReport implements AsyncCallback <Vector<Nutzer>> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			Window.alert("Fehler beim Laden aus der Datenbank" + caught.getMessage());
+
+		}
+
+		@Override
+		public void onSuccess(Vector<Nutzer> result) {
+			// TODO Auto-generated method stub
+			for (Nutzer nutzer : result) {
+
+				oracle.add(nutzer.getMail());
+			}
+		}
+
+
+		
+	}
 	
 	class AllKontakteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			if (box.getValue() =="Alle") {
+			if (box.getValue() =="Allen") {
+				vpanel.clear();
+				for (Nutzer nutzer : nutzerListe) {
 				
+				
+				vpanel.add(new AllKontakte(nutzer.getMail()));
+
+//				vpanel.add(new AllKontakte(box.getValue()));
+				RootPanel.get("content").add(vpanel);
+				}
+
+
 			}
 			else{
 				if (box.getValue() == null){
