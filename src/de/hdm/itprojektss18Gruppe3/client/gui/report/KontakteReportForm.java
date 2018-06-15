@@ -32,12 +32,12 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
-public class KontakteReportForm extends HorizontalPanel{
+public class KontakteReportForm extends HorizontalPanel {
 
 	ReportGeneratorAsync reportverwaltung = ClientsideSettings.getReportGenerator();
 
 	private Button btAllNutzer = new Button("Report Starten");
-	
+
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox box = new SuggestBox(oracle);
 	private List<Nutzer> nutzerListe = new ArrayList<>();
@@ -46,24 +46,22 @@ public class KontakteReportForm extends HorizontalPanel{
 	private ListDataProvider<Nutzer> nutzerDataProvider = new ListDataProvider<Nutzer>(nutzerSuggestbox);
 	private Nutzer nutzerausdb = null;
 
-
-	
-//	private ListBox listboxNutzer = new ListBox();
+	// private ListBox listboxNutzer = new ListBox();
 	private Label labelbNutzer = new Label("Kontakte von: ");
-	
+
 	private VerticalPanel vpanel = new VerticalPanel();
 
 	public KontakteReportForm() {
-				
-//		listboxNutzer.setVisibleItemCount(1);
-//		listboxNutzer.setStylePrimaryName("listbox-report");
+
+		// listboxNutzer.setVisibleItemCount(1);
+		// listboxNutzer.setStylePrimaryName("listbox-report");
 		btAllNutzer.setStylePrimaryName("reportButton");
-		
+
 		this.add(labelbNutzer);
-//		this.add(listboxNutzer);
+		// this.add(listboxNutzer);
 		this.add(box);
 		this.add(btAllNutzer);
-		
+
 		RootPanel.get("content").add(this);
 
 		btAllNutzer.addClickHandler(new AllKontakteClickHandler());
@@ -102,7 +100,7 @@ public class KontakteReportForm extends HorizontalPanel{
 		this.add(vpanel);
 
 	}
-	
+
 	public class FindNutzerByEmail implements AsyncCallback<Nutzer> {
 
 		@Override
@@ -118,7 +116,7 @@ public class KontakteReportForm extends HorizontalPanel{
 		}
 
 	}
-	
+
 	public class NutzerHinzufuegenKeyPressHandler implements KeyPressHandler {
 
 		@Override
@@ -142,7 +140,7 @@ public class KontakteReportForm extends HorizontalPanel{
 		}
 
 	}
-	
+
 	class getNutzerCallback implements AsyncCallback<Vector<Nutzer>> {
 
 		@Override
@@ -164,10 +162,8 @@ public class KontakteReportForm extends HorizontalPanel{
 		}
 
 	}
-	
-	
-	
-	class AllKontakteReport implements AsyncCallback <Vector<Nutzer>> {
+
+	class AllKontakteReport implements AsyncCallback<Vector<Nutzer>> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -185,43 +181,35 @@ public class KontakteReportForm extends HorizontalPanel{
 			}
 		}
 
-
-		
 	}
-	
+
 	class AllKontakteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			if (box.getValue() =="Allen") {
+			if (box.getValue() == "Allen") {
 				vpanel.clear();
 				for (Nutzer nutzer : nutzerListe) {
-				
-				
-				vpanel.add(new AllKontakte(nutzer.getMail()));
 
-//				vpanel.add(new AllKontakte(box.getValue()));
-				RootPanel.get("content").add(vpanel);
+					vpanel.add(new AllKontakte(nutzer.getMail()));
+
+					// vpanel.add(new AllKontakte(box.getValue()));
+					RootPanel.get("content").add(vpanel);
 				}
 
-
-			}
-			else{
-				if (box.getValue() == null){
+			} else {
+				if (box.getValue() == null) {
 					Window.alert("Für diesen Nutzer liegen keine gespeicherten Kontakte vor.");
+				} else {
+
+					vpanel.clear();
+					vpanel.add(new AllKontakte(box.getValue()));
+					RootPanel.get("content").add(vpanel);
+
 				}
-					else{
-						
-					
-			
-				vpanel.clear();
-				vpanel.add(new AllKontakte(box.getValue()));
-				RootPanel.get("content").add(vpanel);
-				
-					}
 			}
 		}
-	
+
 	}
 }
