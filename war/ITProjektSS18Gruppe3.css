@@ -113,14 +113,6 @@ body {
 	font-size: 1px;
 }
 
-.addButton {
-	text-align: center;
-	margin: 2px 4px;
-	border-radius: 80px;
-	width: 33px;
-	height: 30px;
-}
-
 #content .suchTextbox {
 	position: absolute;
 	left: 684px;
@@ -155,9 +147,18 @@ body {
 
 .h2 {
 	font-size: 1.3em;
-	margin: 10px 0px 20px 10px;
-	color: #484848;
-	font-style: italic;
+	margin: 10px 0px 5px 10px;
+	color: #3d3d3d;
+	font-family: 'Kalam', cursive !important;
+	font-weight: 300;
+	font-size: 1.5em;
+}
+
+
+.kontaktFormText {
+	margin-right: 10px;
+	margin-top: 5px;
+	font-size: 1.2em;
 }
 
 .landingpageText {
@@ -197,6 +198,7 @@ body {
 
 .kontaktCellTableView {
 	margin-left: 20px;
+	margin-top: 20px;
 }
 
 .headlinePanel {
@@ -216,14 +218,8 @@ body {
 .treeContainerPanel {
 	height: 500px;
 	width: 220px;
-	
 	overflow: scrollable;
 }
-/* .treeContainerPanel .com-google-gwt-user-cellview-client-CellTree-Style-cellTreeWidget tr td{ */
-/* 	font-family: "Indie Flower", cursive !important; */
-/* 	font-size: 14px; */
-/* 	letter-spacing: 0.3px; */
-/* } */
 
 /* REPORT GENERATOR FORMATIERUNG */
 .listbox-report {
@@ -240,6 +236,19 @@ body {
 }
 
 /* BUTTON FORMATIERUNGEN */
+
+.addButton {
+	text-align: center;
+	margin-left: 10px;
+	border-radius: 80px;
+	width: 33px;
+	height: 30px;
+}
+
+.addButton:hover {
+	transform: scale(1.02);
+}
+
 .searchTextBox {
 	background-image: url("/images/search.svg");
 	background-repeat: no-repeat;
@@ -360,6 +369,10 @@ body {
 	text-shadow: 0px 1px 0px #ffffff;
 	text-align: center;
 }
+
+.gwt-Button:hover {
+	transform: scale(1.02);
+	}
 
 .gwt-SuggestBox {
 	margin-left: 20px;

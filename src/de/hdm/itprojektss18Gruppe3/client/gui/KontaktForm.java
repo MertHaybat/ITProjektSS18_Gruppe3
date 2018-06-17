@@ -29,6 +29,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -81,7 +82,9 @@ public class KontaktForm extends MainFrame {
 	private VerticalPanel vPanel2 = new VerticalPanel();
 	private VerticalPanel vPanel3 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
-
+	private HorizontalPanel kontaktLabelkontaktName = new HorizontalPanel();
+	private HorizontalPanel tableButtonPanel = new HorizontalPanel();	
+	
 	private Label modifikationsdatum = new Label("Modifikationsdatum: ");
 	private Label erstellungsdatum = new Label("Erstellungsdatum: ");
 	private Label kontaktNameLabel = new Label("Kontaktname: ");
@@ -208,24 +211,25 @@ public class KontaktForm extends MainFrame {
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
 
 		celltable.addColumn(wertEigenschaftColumn, "");
-		celltable.setColumnWidth(wertEigenschaftColumn, 5, Unit.EM);
+		celltable.setColumnWidth(wertEigenschaftColumn, 7, Unit.EM);
 		celltable.addColumn(wertAuspraegungColumn, "");
-		celltable.setColumnWidth(wertAuspraegungColumn, 12, Unit.EM);
+		celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 		celltable.addColumn(iconColumn, "");
 		celltable.setSelectionModel(ssmAuspraegung);
 
-		flextable.setWidget(0, 0, kontaktNameLabel);
-		flextable.setWidget(1, 0, kontaktNameBox);
+		kontaktNameLabel.setStylePrimaryName("kontaktFormText");
+		kontaktLabelkontaktName.add(kontaktNameLabel);
+		kontaktLabelkontaktName.add(kontaktNameBox);
+		tableButtonPanel.add(deleteContact);
+		tableButtonPanel.add(addAuspraegung);
+		flextable.setWidget(0, 0, kontaktLabelkontaktName);
 		flextable.setWidget(2, 0, celltable);
-		flextable.setWidget(3, 0, deleteContact);
-		flextable.setWidget(3, 1, addAuspraegung);
-
-		// vPanel.add(kontaktNameLabel);
-		// vPanel.add(kontaktNameBox);
-		// vPanel.add(celltable);
+		flextable.setWidget(15, 0, tableButtonPanel);
 
 		vPanel.add(flextable);
-
+		vPanel.setStylePrimaryName("kontaktCellTableView");
+		vPanel2.setStylePrimaryName("kontaktCellTableView");
+		
 		this.add(vPanel);
 		this.add(vPanel3);
 		this.add(vPanel2);

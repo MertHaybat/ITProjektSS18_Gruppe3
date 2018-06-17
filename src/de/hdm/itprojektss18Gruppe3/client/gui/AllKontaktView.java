@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -55,6 +56,7 @@ public class AllKontaktView extends MainFrame {
 	private Button addKontaktToKontaktlistButton = new Button("Kontakt in Kontaktliste");
 	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
 	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
+	private HTML headline = new HTML();
 
 	private Teilhaberschaft teilhaberschaft = null;
 	private SingleSelectionModel<Kontaktliste> ssmKontaktliste = new SingleSelectionModel<Kontaktliste>();
@@ -92,6 +94,7 @@ public class AllKontaktView extends MainFrame {
 	
 	
 	public AllKontaktView() {
+		headline = new HTML("Alle Kontakte in Ihrem Kontaktmanager");
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		RootPanel.get("content").clear();
@@ -102,11 +105,14 @@ public class AllKontaktView extends MainFrame {
 
 	public AllKontaktView(Kontaktliste k) {
 		this.kontaktliste = k;
+
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		if(k.getBezeichnung().equals("Empfangene Kontakte")){
+			headline = new HTML("Alle Kontakte, die Sie als Empfänger geteilt bekommen haben");
 			kontaktmanagerVerwaltung.findAllKontakteByTeilhabenderID(nutzer.getId(), new TeilhaberschaftKontakteCallback());
 		} else {
+			headline = new HTML("Alle Kontakte in der Kontaktliste " + k.getBezeichnung());
 			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
 		}
 		super.onLoad();
@@ -146,7 +152,7 @@ public class AllKontaktView extends MainFrame {
 
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
-		allKontakteCellTable.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));
+		allKontakteCellTable.setEmptyTableWidget(new Label("Diese Kontaktliste ist leer"));
 
 		// Nutzer nutzer = new Nutzer();
 		// nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
@@ -183,6 +189,8 @@ public class AllKontaktView extends MainFrame {
 		menuBarContainerFlowPanel.add(addKontaktToKontaktlistButton);
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 
+		headline.setStylePrimaryName("h2");
+		vPanel.add(headline);
 		vPanel.add(allKontakteCellTableContainer);
 		RootPanel.get("content").add(vPanel);
 	}
