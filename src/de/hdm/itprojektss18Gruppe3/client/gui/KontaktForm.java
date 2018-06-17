@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
@@ -93,10 +94,11 @@ public class KontaktForm extends MainFrame {
 	private Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
 	private DateTimeFormat dtf = DateTimeFormat.getFormat("dd.MMMM.yyyy");
 
-	private CellTableAuspraegungWrapper celltable = new CellTableAuspraegungWrapper();
+	private NoSelectionModel<EigenschaftsAuspraegungWrapper> selection = new NoSelectionModel<EigenschaftsAuspraegungWrapper>();
+	private CellTableAuspraegungWrapper celltable = new CellTableAuspraegungWrapper(selection);
 	private EditTextCell editEigenschaft = new EditTextCell();
-	private final NoSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = new NoSelectionModel<EigenschaftsAuspraegungWrapper>();
-
+	private SingleSelectionModel<EigenschaftsAuspraegungWrapper> ssm = new SingleSelectionModel<EigenschaftsAuspraegungWrapper>();
+	
 	private CellTableAuspraegungWrapper.IconColumn iconColumn = celltable.new IconColumn();
 
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(
@@ -202,7 +204,8 @@ public class KontaktForm extends MainFrame {
 	}
 
 	public void run() {
-
+	
+		
 		addAuspraegung.setStylePrimaryName("addButton");
 		zurueckZuAllKontaktView.setStylePrimaryName("mainButton");
 		wertEigenschaftColumn.setFieldUpdater(new WertEigenschaftFieldUpdater());
@@ -215,7 +218,7 @@ public class KontaktForm extends MainFrame {
 		celltable.addColumn(wertAuspraegungColumn, "");
 		celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 		celltable.addColumn(iconColumn, "");
-		celltable.setSelectionModel(ssmAuspraegung);
+		celltable.setSelectionModel(celltable.getSelectionModel());
 
 		kontaktNameLabel.setStylePrimaryName("kontaktFormText");
 		kontaktLabelkontaktName.add(kontaktNameLabel);
@@ -224,7 +227,12 @@ public class KontaktForm extends MainFrame {
 		tableButtonPanel.add(addAuspraegung);
 		flextable.setWidget(0, 0, kontaktLabelkontaktName);
 		flextable.setWidget(2, 0, celltable);
+//<<<<<<< HEAD
 		flextable.setWidget(15, 0, tableButtonPanel);
+//=======
+//		flextable.setWidget(3, 0, deleteContact);
+//		flextable.setWidget(3, 1, addAuspraegung);
+//>>>>>>> refs/heads/Mert
 
 		vPanel.add(flextable);
 		vPanel.setStylePrimaryName("kontaktCellTableView");
@@ -244,10 +252,9 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
-
 			object.setBezeichnungEigenschaftValue(value);
-			ssmAuspraegung.getLastSelectedObject().setWertEigenschaftsauspraegungValue(value);
-			ssmAuspraegung.getLastSelectedObject()
+			selection.getLastSelectedObject().setWertEigenschaftsauspraegungValue(value);
+			selection.getLastSelectedObject()
 					.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
 			auspraegung.setWert(object.getWertEigenschaftsauspraegungValue());
 			auspraegung.setId(object.getIDEigenschaftsauspraegungValue());
@@ -261,7 +268,7 @@ public class KontaktForm extends MainFrame {
 		@Override
 		public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
 			object.setBezeichnungEigenschaftValue(value);
-			ssmAuspraegung.getLastSelectedObject().setBezeichnungEigenschaftValue(value);// getSelectedObject().setEigenschaft(value);
+			selection.getLastSelectedObject().setBezeichnungEigenschaftValue(value);// getSelectedObject().setEigenschaft(value);
 
 		}
 	}
@@ -282,8 +289,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden: " + caught.getMessage());
 		}
 
 		@Override
@@ -297,8 +303,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden: " + caught.getMessage());
 		}
 
 		@Override
@@ -366,7 +371,6 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-
 			DeleteKontaktDialogBox db = new DeleteKontaktDialogBox();
 			db.center();
 
@@ -378,7 +382,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			NewEigenschaftsauspraegungDialogBox dialogbox = new NewEigenschaftsauspraegungDialogBox(k);
+			CreateEigenschaftsauspraegungDialogBox dialogbox = new CreateEigenschaftsauspraegungDialogBox(k, kontaktliste);
 			dialogbox.center();
 		}
 
@@ -402,11 +406,6 @@ public class KontaktForm extends MainFrame {
 				}
 			};
 			timer.schedule(10000);
-			// TODO Auto-generated method stub
-			// Window.alert("Kontakt wurde erfolgreich abgespeichert");
-			// RootPanel.get("content").clear();
-			// KontaktForm kontaktForm = new KontaktForm(k);
-			// RootPanel.get("content").add(kontaktForm);
 		}
 
 	}
@@ -422,8 +421,6 @@ public class KontaktForm extends MainFrame {
 		public void onSuccess(Void result) {
 			kontaktmanagerVerwaltung.findKontaktByID(auspraegung.getPersonID(), new FindKontaktCallback());
 
-			// TODO
-			// Window.alert("hallo");
 			vPanel3.add(new Label("Änderungen gespeichert"));
 			Timer timer = new Timer() {
 				@Override
@@ -439,13 +436,11 @@ public class KontaktForm extends MainFrame {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-
+				Window.alert("Fehler beim Laden: " + caught.getMessage());
 			}
 
 			@Override
 			public void onSuccess(Kontakt result) {
-
 				modifikationsdatum.setText("Zuletzt geändert am: " + dtf.format(result.getModifikationsdatum()));
 			}
 
@@ -457,14 +452,11 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
 			Window.alert("Fehler beim Speichern der Eigenschaftsauspraegung" + caught.getMessage());
 		}
 
 		@Override
 		public void onSuccess(Eigenschaftsauspraegung result) {
-			// TODO
-
 		}
 
 	}
@@ -478,7 +470,6 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onSuccess(Vector<EigenschaftsAuspraegungWrapper> result) {
-			// TODO
 			celltable.setRowData(0, result);
 			celltable.setRowCount(result.size(), true);
 			for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : result) {
@@ -540,7 +531,6 @@ public class KontaktForm extends MainFrame {
 
 			@Override
 			public void onClick(ClickEvent event) {
-
 				kontaktmanagerVerwaltung.deleteKontaktByOwner(k, new DeleteKontaktCallback());
 			}
 		}

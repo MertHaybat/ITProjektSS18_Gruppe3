@@ -121,8 +121,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden: " + caught.getMessage());
 		}
 
 		@Override
@@ -165,13 +164,12 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden: " + caught.getMessage());
 		}
 
 		@Override
 		public void onSuccess(Nutzer result) {
-
+			
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("mail"));
@@ -200,8 +198,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-
+				Window.alert("Fehler beim Laden: " + caught.getMessage());
 			}
 
 			@Override
@@ -242,8 +239,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden: " + caught.getMessage());
 		}
 
 		@Override

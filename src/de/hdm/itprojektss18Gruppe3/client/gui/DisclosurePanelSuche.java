@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -65,16 +66,17 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	private Button zurueck = new Button("Alle Kontakte");
 	
 	private Kontakt kontakt = new Kontakt();
-	private Eigenschaft eigenschaft = new Eigenschaft();
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
-
-	private CellTable<Kontakt> suchErgebnisCellTable = new CellTable<Kontakt>();
+	
+	private CellTableKontakt kontaktCellTable = new CellTableKontakt();
+	private ClickableTextCell clickCell = new ClickableTextCell();
+	private TextCell textCell = new TextCell();
+	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = kontaktCellTable.new KontaktnameColumn(clickCell);
+	private CellTableKontakt.IconColumn iconColumn = kontaktCellTable.new IconColumn(textCell);
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 
-	private String checkedCheckbox = "";
-	private Kontaktliste kontaktliste = new Kontaktliste();
 	private Kontakt kontaktNeu = new Kontakt();
 	
 	private Button zurStartseiteButton = new Button("Startseite");
@@ -127,8 +129,6 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		eigenschaftTextbox.setVisibleItemCount(1);
 		advancedOptions.setCellSpacing(6);
-		// advancedOptions.setHTML(0, 0, kontaktlisteLabel);
-		// advancedOptions.setWidget(0, 1, kontaktlisteTextbox);
 		advancedOptions.setHTML(0, 0, eigenschaftLabel);
 		advancedOptions.setWidget(0, 1, eigenschaftTextbox);
 		advancedOptions.setHTML(1, 0, auspraegungLabel);
@@ -143,27 +143,6 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		cellFormatter.setColSpan(0, 0, 2);
 		cellFormatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
-		Column<Kontakt, String> kontaktnameColumn = new Column<Kontakt, String>(new TextCell()) {
-			@Override
-			public String getValue(Kontakt object) {
-				return object.getName();
-			}
-		};
-		Column<Kontakt, String> iconColumn = new Column<Kontakt, String>(new TextCell() {
-			public void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
-				sb.appendHtmlConstant("<img width=\"20\" src=\"images/" + value.asString() + "\">");
-			}
-		}) {
-			@Override
-			public String getValue(Kontakt object) {
-				if (object.getStatus() == 1) {
-					return "group.svg";
-				} else {
-					return "singleperson.svg";
-				}
-			}
-		};
-
 		filterLoeschenButton.addClickHandler(new FilterLoeschenClickHandler());
 		startButton.addClickHandler(new StartClickHandler());
 		zurueck.addClickHandler(new ZuruckClickHandler());
@@ -177,8 +156,9 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		kontaktmanagerVerwaltung.findAllEigenschaften(new AllEigenschaftenCallback());
 
 
-		suchErgebnisCellTable.addColumn(kontaktnameColumn, "Kontaktname");
-		suchErgebnisCellTable.addColumn(iconColumn, "");
+		kontaktCellTable.addColumn(kontaktnameColumn, "Kontaktname");
+		kontaktCellTable.addColumn(iconColumn, "");
+		
 		hPanel.add(zurueck);
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(hPanel);
@@ -263,11 +243,11 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
-			suchErgebnisCellTable.setRowData(0, result);
-			suchErgebnisCellTable.setRowCount(result.size(), true);
-			suchErgebnisCellTable.redraw();
+			kontaktCellTable.setRowData(0, result);
+			kontaktCellTable.setRowCount(result.size(), true);
+			kontaktCellTable.redraw();
 
-			suchErgebnisPanel.add(suchErgebnisCellTable);
+			suchErgebnisPanel.add(kontaktCellTable);
 
 		}
 
@@ -290,11 +270,11 @@ public class DisclosurePanelSuche extends VerticalPanel {
 			eigenschaftsauspraegung.setWert(textboxValue);
 			if (result.size()>=1){
 				
-				suchErgebnisCellTable.setRowData(0, result);
-				suchErgebnisCellTable.setRowCount(result.size(), true);
-				suchErgebnisCellTable.redraw();
+				kontaktCellTable.setRowData(0, result);
+				kontaktCellTable.setRowCount(result.size(), true);
+				kontaktCellTable.redraw();
 				
-				suchErgebnisPanel.add(suchErgebnisCellTable);
+				suchErgebnisPanel.add(kontaktCellTable);
 			} else if (result.size() == 0){
 				kontaktmanagerVerwaltung.findTeilhaberUndEigeneKontakteBySuche(nutzer, eigenschaftsauspraegung, "", new VollSucheCallback());	}
 			
@@ -312,11 +292,11 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
-			suchErgebnisCellTable.setRowData(0, result);
-			suchErgebnisCellTable.setRowCount(result.size(), true);
-			suchErgebnisCellTable.redraw();
+			kontaktCellTable.setRowData(0, result);
+			kontaktCellTable.setRowCount(result.size(), true);
+			kontaktCellTable.redraw();
 			
-			suchErgebnisPanel.add(suchErgebnisCellTable);
+			suchErgebnisPanel.add(kontaktCellTable);
 		}
 		
 	}
