@@ -21,6 +21,10 @@ public class NutzerTeilhaberschaftKontaktWrapper implements Serializable{
 		
 	}
 	
+	public NutzerTeilhaberschaftKontaktWrapper(Teilhaberschaft teilhaberschaft, Kontakt kontakt){
+		this.teilhaberschaft = teilhaberschaft;
+		this.kontakt = kontakt;
+	}
 	public NutzerTeilhaberschaftKontaktWrapper(Nutzer nutzer, Teilhaberschaft teilhaberschaft, Kontakt kontakt){
 		this.nutzer = nutzer;
 		this.teilhaberschaft = teilhaberschaft;

@@ -108,7 +108,6 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 
 		@Override	
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 				for (Kontakt kontakt : kontakteToRemoveFromKontaktliste) {
 					k.setKontaktID(kontakt.getId());
 					k.setKontaktlisteID(kontaktliste.getId());
@@ -136,7 +135,6 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
 			hide();
 		}
 		
@@ -147,7 +145,7 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("ERROR");
+			Window.alert("Fehler beim Laden: " + caught.getMessage());
 		}
 
 		@Override
@@ -156,6 +154,7 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 			CustomTreeModel ctm = new CustomTreeModel();
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
+			AllKontaktView allkontaktView = new AllKontaktView(kontaktliste);
 		}
 
 	}

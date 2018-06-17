@@ -28,6 +28,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.BusinessObject;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 /*
  * Die Implementierung des TreeViewModel ermöglicht die Anzeige von Kontaktlisten und
@@ -48,6 +49,8 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	private Kontakt selectedKontakt = null;
 	private ListDataProvider<Kontaktliste> kontaktlistenDataProvider = null;
 	private CustomTreeModel customTreeModel;
+	private Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+	private Vector<Teilhaberschaft> teilhaberschaftVector = new Vector<Teilhaberschaft>();
 	/*
 	 * Durch die Map werden die ListDataProvider mit den Kontakten, die sich in
 	 * einer einer Kontaktliste befinden, gespeichert, wodurch die Anzeige als
@@ -100,12 +103,14 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	 * einer Baumknotenauswahl wird je nach Typ des Business-Objekts der
 	 * "selectedKontaktliste" bzw. das "selectedKontakt" gesetzt.
 	 */
+	
+	//-----Die KontaktListviews auskommentiert!!
 	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			BusinessObject selection = selectionModel.getSelectedObject();
-			KontaktlistView kontaktlistView = new KontaktlistView();
-			kontaktlistView.getMenuBarContainerFlowPanel();
+//			KontaktlistView kontaktlistView = new KontaktlistView();
+//			kontaktlistView.getMenuBarContainerFlowPanel();
 			if (selection instanceof Kontaktliste) {
 				setSelectedKontaktliste((Kontaktliste) selection);
 				AllKontaktView allkontaktView = new AllKontaktView(getSelectedKontaktliste());
@@ -114,7 +119,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				setSelectedKontakt((Kontakt) selection);
 				KontaktForm kontaktForm = new KontaktForm(getSelectedKontakt(), getSelectedKontaktliste());
 			}
-			KontaktlistView klisteView = new KontaktlistView(getSelectedKontakt(), getSelectedKontaktliste());
+//			KontaktlistView klisteView = new KontaktlistView(getSelectedKontakt(), getSelectedKontaktliste());
 		}
 	}
 
@@ -127,7 +132,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("ERROR");
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 
 		}
 
@@ -151,8 +156,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-
+				Window.alert("Fehler beim Laden: " + caught.getMessage());
 			}
 
 			@Override
@@ -210,6 +214,28 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 							}
 
 						});
+				
+				kontaktmanagerVerwaltung.findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(nutzer.getId(), new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Fehler beim Laden" + caught.getMessage());
+					}
+
+					@Override
+					public void onSuccess(Vector<NutzerTeilhaberschaftKontaktWrapper> result) {
+						Vector<Kontakt> kontakt = new Vector<Kontakt>();
+						for (NutzerTeilhaberschaftKontaktWrapper wrapper : result) {
+						
+							kontakt.add(wrapper.getKontakt());
+							teilhaberschaftVector.add(wrapper.getTeilhaberschaft());
+
+						}
+						for (Kontakt k : kontakt) {
+							kontaktProvider.getList().add(k);
+						}
+					}
+				});
 			}
 
 			kontaktDataProvider.put((Kontaktliste) value, kontaktProvider);

@@ -526,5 +526,40 @@ public class TeilhaberschaftMapper {
 		 */
 		return result;
 	}
+	public void deleteTeilhaberschaftByTeilhabender(Teilhaberschaft t) {
+
+		/**
+		 * Verbindung zur DB Connection
+		 */
+		Connection con = DBConnection.connection();
+		try {
+
+			/**
+			 * Durchführen der Löschoperation DELETE FROM `teilhaberschaft`
+			 * WHERE `nutzerid`=2
+			 */
+			
+			Statement stmt1 = con.createStatement();
+			// stmt1.setInt(1, teilhaberschaft.getId());
+						
+			if(t.getKontaktID() != 0 && t.getEigenschaftsauspraegungID() == 0){
+				stmt1.executeUpdate("DELETE FROM `teilhaberschaft` WHERE `kontaktid` = "+t.getKontaktID()+" AND `teilhabenderid` ="+t.getTeilhabenderID());
+			} else if (t.getKontaktID() != 0 && t.getEigenschaftsauspraegungID() != 0){
+				stmt1.executeUpdate("DELETE FROM `teilhaberschaft` WHERE `kontaktid` = "+t.getKontaktID()+" AND `eigenschaftsauspraegungid` = "+t.getEigenschaftsauspraegungID()+" AND `teilhabenderid` ="+t.getTeilhabenderID());
+			} else if (t.getKontaktlisteID() != 0 && t.getEigenschaftsauspraegungID() == 0  && t.getKontaktID() == 0){
+				stmt1.executeUpdate("DELETE FROM `teilhaberschaft` WHERE `kontaktlisteid` = "+t.getKontaktlisteID()+" AND `teilhabenderid` ="+t.getTeilhabenderID());
+			}
+			
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		} finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
 
 }

@@ -196,5 +196,12 @@ public interface KontaktmanagerAdministrationAsync {
 	void findNutzerTeilhaberschaftKontaktlisteWrapper(int teilhabenderID,
 			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktlisteWrapper>> callback);
 
+	void findTeilhabendeKontakteAuspraegungen(int teilhabenderID, AsyncCallback<Vector<Kontakt>> callback);
+
+	void deleteTeilhaberschaftByTeilhaberschaft(Teilhaberschaft t, AsyncCallback<Void> callback);
+
+	void findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(int teilhabenderID,
+			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>> callback);
+
 	
 }

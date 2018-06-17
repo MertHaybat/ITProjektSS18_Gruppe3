@@ -2,29 +2,38 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.view.client.CellPreviewEvent;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegungWrapper> {
 	
-	private final MultiSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = new MultiSelectionModel<EigenschaftsAuspraegungWrapper>();
-
-	public CellTableAuspraegungWrapper() {
-		
+	private final Handler<EigenschaftsAuspraegungWrapper> selectionEventManager = DefaultSelectionEventManager
+			.createCheckboxManager();
+	private MultiSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = null;
+	
+	public CellTableAuspraegungWrapper(NoSelectionModel<EigenschaftsAuspraegungWrapper> ssm) {
+		this.setSelectionModel(ssm);
 		run();
-	
 		}
-	
-	
-	public MultiSelectionModel<EigenschaftsAuspraegungWrapper> getSsmAuspraegung() {
-		return ssmAuspraegung;
-	}
+	public CellTableAuspraegungWrapper(MultiSelectionModel<EigenschaftsAuspraegungWrapper> ssm) {
+		this.setSelectionModel(ssm, selectionEventManager);
+		this.addCellPreviewHandler(new PreviewClickHander());
+
+		this.ssmAuspraegung = ssm;
+		run();
+		}
+
 
 
 	public void run(){
@@ -51,6 +60,7 @@ public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegu
 
 		@Override
 		public String getValue(EigenschaftsAuspraegungWrapper object) {
+			object.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
 			return object.getAuspraegung().getWert();
 		}
 	}
@@ -58,7 +68,6 @@ public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegu
 
 		public CheckBoxBolumn(Cell<Boolean> cell) {
 			super(cell);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -71,7 +80,6 @@ public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegu
 
 		@Override
 		public String getValue(EigenschaftsAuspraegungWrapper object) {
-			// TODO Auto-generated method stub
 			return "";
 		}
 		  @Override
@@ -87,6 +95,18 @@ public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegu
 	        	super.render(context, object, sb);
 	        }
 		
+	}
+	public class PreviewClickHander implements Handler<EigenschaftsAuspraegungWrapper> {
+		@Override
+		public void onCellPreview(CellPreviewEvent<EigenschaftsAuspraegungWrapper> event) {
+			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
+
+				final EigenschaftsAuspraegungWrapper value = event.getValue();
+				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
+				event.getDisplay().getSelectionModel().setSelected(value, state);
+				event.setCanceled(true);
+			}
+		}
 	}
 }
 	

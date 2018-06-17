@@ -26,7 +26,7 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
  * @author wahidvanaki
  *
  */
-public class NewKontaktlisteDialogBox extends DialogBox {
+public class CreateKontaktlisteDialogBox extends DialogBox {
 	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	private CustomTreeModel ctm = null;
@@ -62,37 +62,33 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 	/**
 	 * Non-Argument-Konstruktor
 	 */
-	public NewKontaktlisteDialogBox() {
+	public CreateKontaktlisteDialogBox() {
 		run();
 	}
 	
-//	public NewKontaktlisteDialogBox(Kontaktliste kontaktliste) {
-//		this.kontaktliste = kontaktliste;
-//		run();
-//	}
 	public void run(){
 		
-		setText("Gib eine Bezeichnung für die neue Kontaktliste an");
+		this.setText("Gib eine Bezeichnung für die neue Kontaktliste an");
 		hPanel.add(kontaktlisteLabel);
 		hPanel.add(tkontaktliste);
 		hPanel2.add(bspeichern);
 		hPanel2.add(babbrechen);
+
+		bspeichern.addClickHandler(new insertKontaktlisteClickHandler());
+		babbrechen.addClickHandler(new closeKontaktlisteClickHandler());
 		
 		vPanel.add(hPanel);
 		vPanel.add(hPanel2);
 		vPanel.setWidth("300px");
 		this.add(vPanel);
 		
-		bspeichern.addClickHandler(new insertKontaktlisteClickHandler());
-		babbrechen.addClickHandler(new closeKontaktlisteClickHandler());
 	}
 	
 	public class createKontaktlisteCallback implements AsyncCallback<Kontaktliste> {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			
+			Window.alert("Fehler beim Laden: " + caught.getMessage());
 		}
 
 		@Override
@@ -103,11 +99,7 @@ public class NewKontaktlisteDialogBox extends DialogBox {
 			ctm = new CustomTreeModel();
 			hide();
 			RootPanel.get("leftmenutree").clear();
-			RootPanel.get("leftmenutree").add(ctm);
-			
-//			KontaktlistView klV = new KontaktlistView(kontaktliste);
-//			RootPanel.get("content").clear();
-//			RootPanel.get("content").add(klV);			
+			RootPanel.get("leftmenutree").add(ctm);		
 		}
 	}
 	
