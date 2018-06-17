@@ -227,12 +227,8 @@ public class KontaktForm extends MainFrame {
 		tableButtonPanel.add(addAuspraegung);
 		flextable.setWidget(0, 0, kontaktLabelkontaktName);
 		flextable.setWidget(2, 0, celltable);
-//<<<<<<< HEAD
 		flextable.setWidget(15, 0, tableButtonPanel);
-//=======
-//		flextable.setWidget(3, 0, deleteContact);
-//		flextable.setWidget(3, 1, addAuspraegung);
-//>>>>>>> refs/heads/Mert
+
 
 		vPanel.add(flextable);
 		vPanel.setStylePrimaryName("kontaktCellTableView");
