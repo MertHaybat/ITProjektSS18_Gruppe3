@@ -16,6 +16,7 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 
 /**
  * DialogBox zum Hinzufügen von Eigenschaften und Eigenschaftsausprägungen
@@ -24,7 +25,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
  * @version 1.0 23 May 2018
  *
  */
-public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
+public class CreateEigenschaftsauspraegungDialogBox extends DialogBox{
 
 	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel vPanel2 = new VerticalPanel();
@@ -39,10 +40,11 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	
 	private Kontakt kontakt = new Kontakt();
-
+	private Kontaktliste kontaktliste = new Kontaktliste();
 	
-	public NewEigenschaftsauspraegungDialogBox (Kontakt k) {
-	kontakt=k;
+	public CreateEigenschaftsauspraegungDialogBox (Kontakt k, Kontaktliste kontaktliste) {
+	this.kontakt=k;
+	this.kontaktliste=kontaktliste;
 	/**
 	 * Struktur des linken VerticalPanels
 	 */
@@ -94,15 +96,14 @@ public class NewEigenschaftsauspraegungDialogBox extends DialogBox{
 
 	@Override
 	public void onFailure(Throwable caught) {
-		// TODO Auto-generated method stub
-		
+		Window.alert("Fehler beim Laden: " + caught.getMessage());
 	}
 
 	@Override
 	public void onSuccess(Eigenschaftsauspraegung result) {
-		// TODO Auto-generated method stub
 		hide();
 		KontaktForm kForm = new KontaktForm(kontakt);
+		KontaktlistView klisteView = new KontaktlistView(kontaktliste);
 		
 		
 	}

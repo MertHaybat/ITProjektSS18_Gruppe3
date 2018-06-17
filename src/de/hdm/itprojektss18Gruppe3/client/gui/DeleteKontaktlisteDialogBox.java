@@ -3,6 +3,7 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -13,9 +14,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
-import de.hdm.itprojektss18Gruppe3.client.gui.NewKontaktlisteDialogBox.closeKontaktlisteClickHandler;
-import de.hdm.itprojektss18Gruppe3.client.gui.NewKontaktlisteDialogBox.createKontaktlisteCallback;
-import de.hdm.itprojektss18Gruppe3.client.gui.NewKontaktlisteDialogBox.insertKontaktlisteClickHandler;
+import de.hdm.itprojektss18Gruppe3.client.gui.CreateKontaktlisteDialogBox.closeKontaktlisteClickHandler;
+import de.hdm.itprojektss18Gruppe3.client.gui.CreateKontaktlisteDialogBox.createKontaktlisteCallback;
+import de.hdm.itprojektss18Gruppe3.client.gui.CreateKontaktlisteDialogBox.insertKontaktlisteClickHandler;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
@@ -64,7 +65,7 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			setText("Fehler beim Löschen");
+			Window.alert("Fehler beim Löschen: "+caught.getMessage());
 			vPanel.remove(deleteButton);
 			vPanel.clear();
 		}
@@ -76,19 +77,14 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 			vPanel.remove(abortButton);
 			vPanel.clear();
 			vPanel.add(okButton);
-//			okButton.addClickHandler(new ClickHandler() {
-//				@Override
-//				public void onClick(ClickEvent event) {
-//					
-//				}
-//			});
 			hide();
 			CustomTreeModel ctm = new CustomTreeModel();
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
-			KontaktlistView kontaktlisteBox = new KontaktlistView();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(kontaktlisteBox);	
+			AllKontaktView allkontaktView = new AllKontaktView();
+
+//			RootPanel.get("content").clear();
+//			RootPanel.get("content").add(kontaktlisteBox);	
 		}
 	}
 	
@@ -96,8 +92,6 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			Nutzer nutzer = new Nutzer();
-			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			kontaktmanagerVerwaltung.deleteKontaktlisteByID(kontaktlisteToDelete, new deleteKontaktlisteCallback());
 		}
 	}

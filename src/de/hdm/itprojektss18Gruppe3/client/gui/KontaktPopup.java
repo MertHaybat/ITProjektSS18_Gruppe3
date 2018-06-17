@@ -129,8 +129,7 @@ public class KontaktPopup extends PopupPanel{
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 			}
 
 			@Override

@@ -107,7 +107,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	
 	private CellTableNutzer.NutzerColumn nutzerBox = selectedNutzerCT.new NutzerColumn(textCell);
 	
-	private CellTableAuspraegungWrapper kt = new CellTableAuspraegungWrapper();
+	private CellTableAuspraegungWrapper kt = new CellTableAuspraegungWrapper(ssmAuspraegung);
 	private CellTableAuspraegungWrapper.CheckBoxBolumn checkBoxAuspraegung = kt.new CheckBoxBolumn(cbCell);
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn eigenschaftColumn = kt.new WertEigenschaftColumn(clickableCell);
 	private CellTableAuspraegungWrapper.WertAuspraegungColumn auspraegungColumn = kt.new WertAuspraegungColumn(clickableCell);
@@ -139,25 +139,17 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		ftTeilhaberschaft.setWidget(6, 1, b1);
 		ftTeilhaberschaft.setWidget(6, 2, b2);
 
-
-
-		box.setStylePrimaryName("gwt-SuggestBox");
-
 		kontaktmanagerVerwaltung.findAllNutzer(new getAllNutzerCallback());
 
 		eigenschaftCT.setSelectionModel(eigenschaftModel, eigenschaftSelectionEventManager);
-		kt.setSelectionModel(ssmAuspraegung, selectionEventManager);
 
 		eigenschaftCT.addCellPreviewHandler(new EigenschaftPreviewClickHander());
-		kt.addCellPreviewHandler(new PreviewClickHander());
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		b1.addClickHandler(new insertTeilhaberschaftClickHandler());
 		b2.addClickHandler(new closeDialogBoxClickHandler());
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
-		// eigenschaftCT.addColumn(EigenschaftcbColumn, "");
-		// eigenschaftCT.addColumn(eigenschaftColumn, "Eigenschaft");
 		selectedNutzerCT.addColumn(nutzerBox, "");
 		selectedNutzerCT.addColumn(buttonBox, "");
 
@@ -166,17 +158,14 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		kt.addColumn(auspraegungColumn, "");
 		
 		this.add(ftTeilhaberschaft);
-
 	}
 
 	public class FindNutzerByEmail implements AsyncCallback<Nutzer> {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten" + caught.getMessage());
 		}
-
 		
 		@Override
 		public void onSuccess(Nutzer result) {
@@ -190,10 +179,9 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onKeyPress(KeyPressEvent event) {
-			// TODO Auto-generated method stub
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
 				if (box.getValue() == "") {
-					// Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
+					 Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
 				} else {
 
 					Nutzer nutzer = new Nutzer();
@@ -240,22 +228,14 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten" + caught.getMessage());
 		}
 
 		@Override
 		public void onSuccess(Vector<EigenschaftsAuspraegungWrapper> result) {
 
-			// TODO
-			// for (EigenschaftsAuspraegungHybrid eigenschaftsAuspraegungHybrid
-			// : result) {
-			//
-			// hybridListe.add(eigenschaftsAuspraegungHybrid);
-			// }
 			kt.setRowData(0, result);
 			kt.setRowCount(result.size(), true);
-			// kt.redraw();
 
 		}
 
@@ -285,8 +265,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-
+				Window.alert("Fehler beim Laden der Daten" + caught.getMessage());
 			}
 
 			@Override
@@ -298,20 +277,22 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 				if (kontaktTeilenCB.getValue() == true){
 					kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(), 0, result.getId(),
 							nutzer.getId(), new createTeilhaberschaftCallback());
+				} else {
+					List<EigenschaftsAuspraegungWrapper> eListe = new ArrayList<>();
+					
+					for (EigenschaftsAuspraegungWrapper auspraegung : ssmAuspraegung.getSelectedSet()) {
+						eListe.add(auspraegung);
+					}
+					for (int i = 0; i < eListe.size(); i++) {
+						
+						kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(),
+								eListe.get(i).getIDEigenschaftsauspraegungValue(), result.getId(), nutzer.getId(),
+								new createTeilhaberschaftCallback());
+						
+					}
+					
 				}
 				
-				List<EigenschaftsAuspraegungWrapper> eListe = new ArrayList<>();
-
-				for (EigenschaftsAuspraegungWrapper auspraegung : ssmAuspraegung.getSelectedSet()) {
-					eListe.add(auspraegung);
-				}
-				for (int i = 0; i < eListe.size(); i++) {
-
-					kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(),
-							eListe.get(i).getIDEigenschaftsauspraegungValue(), result.getId(), nutzer.getId(),
-							new createTeilhaberschaftCallback());
-
-				}
 				
 			}
 		}
@@ -321,8 +302,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten" + caught.getMessage());
 		}
 
 		@Override
@@ -337,8 +317,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten" + caught.getMessage());
 		}
 
 		@Override

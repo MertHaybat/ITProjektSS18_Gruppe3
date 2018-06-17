@@ -503,6 +503,13 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	
 	public Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftKontaktWrapperByTeilhaberschaft(int teilhabenderID) throws IllegalArgumentException;
 
-	public Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findNutzerTeilhaberschaftKontaktlisteWrapper(int teilhabenderID) throws IllegalArgumentException; 
+	public Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findNutzerTeilhaberschaftKontaktlisteWrapper(int teilhabenderID) throws IllegalArgumentException;
+
+	Vector<Kontakt> findTeilhabendeKontakteAuspraegungen(int teilhabenderID) throws IllegalArgumentException;
+
+	void deleteTeilhaberschaftByTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException;
+
+	Vector<NutzerTeilhaberschaftKontaktWrapper> findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(
+			int teilhabenderID) throws IllegalArgumentException; 
 
 }

@@ -3,6 +3,7 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -62,32 +63,23 @@ public class KontaktlistView extends MainFrame {
 	private ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
 	private static Kontaktliste kontaktlisteSelectedInTree = null;
 	private Kontakt selectedKontakt;
-	private TextBox vornameBox = new TextBox();
-	private TextBox nachnameBox = new TextBox();
-	private TextBox geburtsdatum = new TextBox();
-	private TextBox telefonnummer = new TextBox();
-	private TextBox mail = new TextBox();
 	private Kontaktliste kontaktliste = new Kontaktliste();
 	private Kontakt kontakt = new Kontakt();
-	
+
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 
 	public KontaktlistView() {
-		 RootPanel.get("menubar").clear();
-		 run();
+		RootPanel.get("menubar").clear();
+		menuBarContainerFlowPanel.clear();
+		menuBarContainerFlowPanel.add(zurueckButton);
+		run();
 	}
 
-	public KontaktlistView(Kontakt kontakt, Kontaktliste kontaktliste) {
-		this.kontakt = kontakt;
+	public KontaktlistView(Kontaktliste kontaktliste) {
+		RootPanel.get("menubar").clear();
 		this.kontaktliste = kontaktliste;
 		this.setKontaktlisteSelectedInTree(kontaktliste);
-		zurueckButton.setStylePrimaryName("mainButton");
-		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
-		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
-		deleteKontaktFromKontaktlisteButton.setStylePrimaryName("mainButton");
-		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
-		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
 		menuBarContainerFlowPanel.clear();
 		menuBarContainerFlowPanel.add(zurueckButton);
 		menuBarContainerFlowPanel.add(deleteKontaktlisteButton);
@@ -97,24 +89,24 @@ public class KontaktlistView extends MainFrame {
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
 		menuBarContainerFlowPanel.setStylePrimaryName("menuBarContainerFlowPanel");
 		menuBarContainerPanel.add(menuBarContainerFlowPanel);
-		 RootPanel.get("menubar").clear();
-		 run();
+		run();
 	}
-	
-	public KontaktlistView(Kontaktliste selection, Teilhaberschaft teilhaberschaft){
+
+	public KontaktlistView(Kontaktliste selection, Teilhaberschaft teilhaberschaft) {
 		this.kontaktliste = selection;
 		this.setKontaktlisteSelectedInTree(selection);
-		 RootPanel.get("menubar").clear();
-		 run();
+		RootPanel.get("menubar").clear();
+		run();
 	}
+
 	public static Kontaktliste getKontaktlisteSelectedInTree() {
 		return kontaktlisteSelectedInTree;
 	}
-	
+
 	public void setKontaktlisteSelectedInTree(Kontaktliste kontaktlisteSelectedInTree) {
 		this.kontaktlisteSelectedInTree = kontaktlisteSelectedInTree;
 	}
-	
+
 	public FlowPanel getMenuBarContainerFlowPanel() {
 		return menuBarContainerFlowPanel;
 	}
@@ -123,13 +115,18 @@ public class KontaktlistView extends MainFrame {
 		this.menuBarContainerFlowPanel = menuBarContainerFlowPanel;
 	}
 
+
 	public void run() {
 
 		/*
 		 * CellList für die Anzeige der Kontaktlisten eines Users wird umgesetzt
 		 */
-		
-		
+		zurueckButton.setStylePrimaryName("mainButton");
+		deleteKontaktlisteButton.setStylePrimaryName("mainButton");
+		addKontaktToKontaktlisteButton.setStylePrimaryName("mainButton");
+		deleteKontaktFromKontaktlisteButton.setStylePrimaryName("mainButton");
+		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
+		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
 		deleteKontaktlisteButton.addClickHandler(new deleteKontaktlisteClickHandler(kontaktlisteSelectedInTree));
 		addKontaktToKontaktlisteButton.addClickHandler(new addKontaktToKontaktlisteClickHandler());
 		deleteKontaktFromKontaktlisteButton.addClickHandler(new KontaktAusKontaktlisteDeleteClickHandler());
@@ -139,27 +136,28 @@ public class KontaktlistView extends MainFrame {
 		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
 
 		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
-		
+
 	}
+	
+
 	class ZurueckButtonClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			
+
 			AllKontaktView akw = new AllKontaktView();
 		}
-		
+
 	}
 
 	class TeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
-		
+
 		@Override
 		public void onClick(ClickEvent event) {
-		DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontaktlisteSelectedInTree);
-		dialogbox.center();
+			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontaktlisteSelectedInTree);
+			dialogbox.center();
 		}
 	}
-	
 
 	class deleteKontaktlisteClickHandler implements ClickHandler {
 
@@ -194,7 +192,8 @@ public class KontaktlistView extends MainFrame {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			KontaktFromKontaktlisteLoeschenDialogBox deleteKontakt = new KontaktFromKontaktlisteLoeschenDialogBox(kontakt, kontaktliste);
+			KontaktFromKontaktlisteLoeschenDialogBox deleteKontakt = new KontaktFromKontaktlisteLoeschenDialogBox(
+					kontakt, kontaktliste);
 			deleteKontakt.center();
 		}
 
@@ -209,7 +208,7 @@ public class KontaktlistView extends MainFrame {
 			@Override
 			public void onSuccess(Void result) {
 				Window.alert("Kontakt wurde aus der Kontaktliste entfernt");
-				KontaktlistView klV = new KontaktlistView(null, kontaktliste);
+				KontaktlistView klV = new KontaktlistView(kontaktliste);
 				RootPanel.get("content").clear();
 				RootPanel.get("content").add(klV);
 			}
@@ -226,45 +225,47 @@ public class KontaktlistView extends MainFrame {
 		}
 
 	}
-
-	class EigenschaftAuspraegungCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onSuccess(Vector<EigenschaftsAuspraegungWrapper> result) {
-			for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : result) {
-				switch (eigenschaftsAuspraegungWrapper.getEigenschaftIdValue()){
-
-				case 1:
-					vornameBox.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
-
-					break;
-				case 2:
-					nachnameBox.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
-					break;
-				case 3:
-					geburtsdatum.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
-					break;
-				case 4:
-					telefonnummer.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
-					break;
-				case 5:
-					mail.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
-					break;
-
-				default:
-					break;
-				}
-
-			}
-		}
-
-	}
+	//
+	// class EigenschaftAuspraegungCallback implements
+	// AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> {
+	//
+	// @Override
+	// public void onFailure(Throwable caught) {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	//
+	// @Override
+	// public void onSuccess(Vector<EigenschaftsAuspraegungWrapper> result) {
+	// for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper :
+	// result) {
+	// switch (eigenschaftsAuspraegungWrapper.getEigenschaftIdValue()){
+	//
+	// case 1:
+	// vornameBox.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
+	//
+	// break;
+	// case 2:
+	// nachnameBox.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
+	// break;
+	// case 3:
+	// geburtsdatum.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
+	// break;
+	// case 4:
+	// telefonnummer.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
+	// break;
+	// case 5:
+	// mail.setValue(eigenschaftsAuspraegungWrapper.getWertEigenschaftsauspraegungValue());
+	// break;
+	//
+	// default:
+	// break;
+	// }
+	//
+	// }
+	// }
+	//
+	// }
 
 	class AddTeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
 
@@ -273,11 +274,12 @@ public class KontaktlistView extends MainFrame {
 			if (kontaktliste == null) {
 				Window.alert("Bitte wähle zuerst eine Kontaktliste");
 			} else {
-				
+
 			}
 		}
-		
+
 	}
+
 	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {
 
 		ArrayList<Kontakt> selectedKontakteInCellTable;
@@ -291,38 +293,40 @@ public class KontaktlistView extends MainFrame {
 			if (selectedKontakt == null) {
 				Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du teilen möchtest");
 			} else {
-//				TeilhaberschaftDialogBox dialogBox = new TeilhaberschaftDialogBox(selectedKontakteInCellTable);
-//				dialogBox.center();
-			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(selectedKontakt);
-			dialogbox.center();
+				// TeilhaberschaftDialogBox dialogBox = new
+				// TeilhaberschaftDialogBox(selectedKontakteInCellTable);
+				// dialogBox.center();
+				DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(selectedKontakt);
+				dialogbox.center();
 			}
 		}
-		
+
 	}
 
-//	static class KontaktCell extends AbstractCell<Kontakt> {
-//
-//		@Override
-//		public void render(Context context, Kontakt value, SafeHtmlBuilder sb) {
-//
-//			if (value == null) {
-//				return;
-//			}
-//			sb.appendHtmlConstant("<table>");
-//			sb.appendHtmlConstant("<td style='font-size:95%;'>");
-//			sb.appendEscaped(value.getName());
-//			sb.appendHtmlConstant("</td><td>");
-//			if (value.getStatus() == 0) {
-//				sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
-//
-//			} else if (value.getStatus() == 1) {
-//
-//				sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
-//			}
-//			sb.appendHtmlConstant("</td></table>");
-//
-//		}
-//	}
+	// static class KontaktCell extends AbstractCell<Kontakt> {
+	//
+	// @Override
+	// public void render(Context context, Kontakt value, SafeHtmlBuilder sb) {
+	//
+	// if (value == null) {
+	// return;
+	// }
+	// sb.appendHtmlConstant("<table>");
+	// sb.appendHtmlConstant("<td style='font-size:95%;'>");
+	// sb.appendEscaped(value.getName());
+	// sb.appendHtmlConstant("</td><td>");
+	// if (value.getStatus() == 0) {
+	// sb.appendHtmlConstant("<img width=\"20\"
+	// src=\"images/singleperson.svg\">");
+	//
+	// } else if (value.getStatus() == 1) {
+	//
+	// sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
+	// }
+	// sb.appendHtmlConstant("</td></table>");
+	//
+	// }
+	// }
 
 	private static class KontaktDataProvider extends AsyncDataProvider<Kontakt> {
 
