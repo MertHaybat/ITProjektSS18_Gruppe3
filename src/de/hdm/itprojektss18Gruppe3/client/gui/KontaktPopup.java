@@ -15,10 +15,13 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
@@ -37,8 +40,10 @@ public class KontaktPopup extends PopupPanel{
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 	private VerticalPanel vPanel = new VerticalPanel();
-	private TextArea ktNameTa = new TextArea();
+	private TextBox ktNameTa = new TextBox();
 	private Button speichern = new Button("Hinzufügen");
+	private Button abbrechen = new Button("Abbrechen");
+	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private Kontaktliste kontaktliste = new Kontaktliste();
 	private CustomTreeModel ctm = new CustomTreeModel();
 	
@@ -46,6 +51,7 @@ public class KontaktPopup extends PopupPanel{
 	public KontaktPopup(){
 		super(true);
 		speichern.addClickHandler(new SpeichernOhneKontaktlisteClickHandler());
+		abbrechen.addClickHandler(new AbbrechenClickHandler());
 		run();
 	}
 	
@@ -54,6 +60,7 @@ public class KontaktPopup extends PopupPanel{
 		super(true);
 		this.kontaktliste = kontaktliste;
 		speichern.addClickHandler(new SpeichernMitKontaktlisteClickHandler());
+		abbrechen.addClickHandler(new AbbrechenClickHandler());
 		run();
 	}
 	
@@ -61,10 +68,15 @@ public class KontaktPopup extends PopupPanel{
 	public void run(){
 		setAnimationEnabled(true);
 		ktNameTa.setReadOnly(true);
-		ktNameTa.setValue("Geben Sie einen Kontaktnamen an.");
+		ktNameTa.setValue("Name des neuen Kontaktes");
 		ktNameTa.addClickHandler(new KontaktClickHandler());
-		vPanel.add(ktNameTa);
-		vPanel.add(speichern);
+		ktNameTa.setWidth("15em");
+
+		vPanel.add(ktNameTa);	
+		vPanel.add(new HTML("<br>"));
+		buttonPanel.add(speichern);
+		buttonPanel.add(abbrechen);
+		vPanel.add(buttonPanel);
 		this.add(vPanel);
 	}
 	
@@ -107,12 +119,22 @@ public class KontaktPopup extends PopupPanel{
 		
 	}
 	
+	class AbbrechenClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			hide();
+			
+		}
+		
+	}
+	
 	
 	class CreateKontaktMitKontaktlisteCallback implements AsyncCallback<Kontakt> {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("Fehler beim Erstellen des Kontakts: " + caught.getMessage());
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override
@@ -158,4 +180,6 @@ public class KontaktPopup extends PopupPanel{
 		}
 
 	}
+	
+
 }
