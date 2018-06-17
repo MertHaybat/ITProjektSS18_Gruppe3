@@ -12,6 +12,8 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -87,9 +89,8 @@ public class AllKontaktView extends MainFrame {
 	private ButtonCell buttonCell = new ButtonCell();
 	private TextCell textCell = new TextCell();
 	private ClickableTextCell clickCell = new ClickableTextCell();
-	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(textCell);
-	private CellTableKontakt.CheckColumn checkColumn = allKontakteCellTable.new CheckColumn(checkBoxCell);
-	private CellTableKontakt.VisitProfileButtonColumn visitProfileButtonColumn  = allKontakteCellTable.new VisitProfileButtonColumn(clickCell);
+	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(clickCell);
+	
 	private CellTableKontakt.IconColumn iconColumn = allKontakteCellTable.new IconColumn(textCell);
 	
 	
@@ -136,14 +137,20 @@ public class AllKontaktView extends MainFrame {
 	}
 
 	public void run() {
-
-		kontaktlisteCelltable.setSelectionModel(ssmKontaktliste);
+		
 		allKontakteCellTable.setSelectionModel(selectionModelCellTable,
 				DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
 		selectionModelCellTable.addSelectionChangeHandler(new SelectionChangeHandlerCellTable());
-
+		
+		CellTableKontakt.CheckColumn checkColumn = allKontakteCellTable.new CheckColumn(checkBoxCell) {
+		      @Override
+		      public Boolean getValue(Kontakt object) {
+		        // Get the value from the selection model.
+		        return selectionModelCellTable.isSelected(object);
+		      }
+		    };
+			
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
-
 		addKontaktButton.setStylePrimaryName("mainButton");
 		deleteKontaktButton.setStylePrimaryName("mainButton");
 		addKontaktToKontaktlistButton.setStylePrimaryName("mainButton");
@@ -170,7 +177,7 @@ public class AllKontaktView extends MainFrame {
 		addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
 
-		visitProfileButtonColumn.setFieldUpdater(new VisitProfileUpdate());
+		kontaktnameColumn.setFieldUpdater(new VisitProfileUpdate());
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
 		allKontakteCellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		allKontakteCellTable.setColumnWidth(checkColumn, 20, Unit.PX);
@@ -178,7 +185,6 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
 		allKontakteCellTable.addColumn(iconColumn, "");
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
-		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
 
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
@@ -302,8 +308,8 @@ public class AllKontaktView extends MainFrame {
 				public void onSuccess(Void result) {
 					Window.alert("Der Kontakt wurde erfolgreich gelöscht.");
 					hide();
+					AllKontaktView akw = new AllKontaktView();
 				}
-
 			}
 		}
 
@@ -336,11 +342,20 @@ public class AllKontaktView extends MainFrame {
 
 	public class VisitProfileUpdate implements FieldUpdater<Kontakt, String> {
 
+		Kontakt kontaktToDisplay;
+		
 		@Override
 		public void update(int index, Kontakt object, String value) {
-			KontaktForm kontaktForm = new KontaktForm(object);
-		}
+			
+			this.kontaktToDisplay = object;
+				allKontakteCellTable.addDomHandler(new DoubleClickHandler() {
 
+					@Override
+					public void onDoubleClick(DoubleClickEvent event) {
+						KontaktForm kontaktForm = new KontaktForm(kontaktToDisplay);
+					}
+			    }, DoubleClickEvent.getType());
+	}
 	}
 
 	public class CreateKontaktClickHandler implements ClickHandler {

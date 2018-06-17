@@ -12,6 +12,7 @@
 
 .cellTreeItem tr td {
 	font-family: 'Kalam', cursive;
+	font-weight: 300;
 	font-size: 16px;
 	letter-spacing: 0.3px;
 }
@@ -41,6 +42,7 @@
 	font-family: 'Kalam', bold;
 	font-size: 16px;
 	letter-spacing: 0.3px;
+	font-weight: 500;
 }
 
 .cellTreeTopItemImageValue {

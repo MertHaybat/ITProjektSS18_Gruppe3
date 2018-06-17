@@ -256,15 +256,15 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		@Override
 		public void render(Context context, Kontaktliste value, SafeHtmlBuilder sb) {
 			if (value != null) {
-				sb.appendHtmlConstant("<table><td>");
+				sb.appendHtmlConstant("<table width='100%'><td>");
 				sb.appendEscaped(value.getBezeichnung());
-				sb.appendHtmlConstant("</td><td>");
+				sb.appendHtmlConstant("</td><td style='float: right'>");
 				if (value.getStatus() == 0) {
-					sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+					sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\" style=\"vertical-align: middle;\">");
 
 				} else if (value.getStatus() == 1) {
 
-					sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
+					sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\" style=\"vertical-align: middle;\">");
 				}
 				sb.appendHtmlConstant("</td></table>");
 			}
@@ -280,15 +280,15 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		@Override
 		public void render(Context context, Kontakt value, SafeHtmlBuilder sb) {
 			if (value != null) {
-				sb.appendHtmlConstant("<table><td>");
+				sb.appendHtmlConstant("<table width='85%'><td><td>");
 				sb.appendEscaped(value.getName());
-				sb.appendHtmlConstant("</td><td>");
+				sb.appendHtmlConstant("</td><td style='float: right'>");
 				if (value.getStatus() == 0) {
-					sb.appendHtmlConstant("<img width=\"16\" src=\"images/singleperson.svg\">");
+					sb.appendHtmlConstant("<img width=\"16\" src=\"images/singleperson.svg\" style=\"vertical-align: middle;\">");
 
 				} else if (value.getStatus() == 1) {
 
-					sb.appendHtmlConstant("<img width=\"16\" src=\"images/group.svg\">");
+					sb.appendHtmlConstant("<img width=\"16\" src=\"images/group.svg\" style=\"vertical-align: middle;\">");
 				}
 				sb.appendHtmlConstant("</td></table>");
 			} else if (value == null) {
