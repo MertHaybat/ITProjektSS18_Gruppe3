@@ -40,20 +40,23 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 	private Button abortButton = new Button("Abbrechen");
 	private Button okButton = new Button("OK");
 	private Kontaktliste kontaktlisteToDelete;
+	
+	private Label infoLabel = new Label("Möchten Sie die Kontaktliste löschen?");
+	
 	/**
 	 * Non-Argument-Konstruktor
 	 * @param kontaktlisteToDelete 
 	 */
 	public DeleteKontaktlisteDialogBox(Kontaktliste kontaktlisteToDelete) {
 		this.kontaktlisteToDelete = kontaktlisteToDelete;
+		this.setText("Kontaktliste löschen");
 		
-		setText("Soll die Kontaktliste " + kontaktlisteToDelete.getBezeichnung() + " wirklich gelöscht werden?");
 		hPanel2.add(deleteButton);
 		hPanel2.add(abortButton);
-		
+
+		vPanel.add(infoLabel);
 		vPanel.add(hPanel);
 		vPanel.add(hPanel2);
-		vPanel.setWidth("300px");
 		this.add(vPanel);
 		
 		deleteButton.addClickHandler(new deleteKontaktlisteClickHandler());
@@ -72,11 +75,7 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 
 		@Override
 		public void onSuccess(Void result) {
-			setText("Kontaktliste gelöscht");
-			vPanel.remove(deleteButton);
-			vPanel.remove(abortButton);
-			vPanel.clear();
-			vPanel.add(okButton);
+			Window.alert("Kontaktliste wurde gelöscht");
 			hide();
 			CustomTreeModel ctm = new CustomTreeModel();
 			RootPanel.get("leftmenutree").clear();

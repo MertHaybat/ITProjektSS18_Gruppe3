@@ -57,7 +57,7 @@ public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegu
 		public WertAuspraegungColumn(Cell<String> cell) {
 			super(cell);
 		}
-
+	
 		@Override
 		public String getValue(EigenschaftsAuspraegungWrapper object) {
 			object.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());

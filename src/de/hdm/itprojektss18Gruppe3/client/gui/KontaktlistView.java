@@ -50,7 +50,7 @@ public class KontaktlistView extends MainFrame {
 
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private static FlowPanel menuBarContainerFlowPanel = new FlowPanel();
-	private Button zurueckButton = new Button("Zurück");
+	private Button zurueckButton = new Button("Startseite");
 	private Button deleteKontaktlisteButton = new Button("Kontaktliste löschen");
 	private Button addKontaktToKontaktlisteButton = new Button("Kontakt hinzufügen");
 	private Button deleteKontaktFromKontaktlisteButton = new Button("Kontakt entfernen");
@@ -201,8 +201,7 @@ public class KontaktlistView extends MainFrame {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-
+				Window.alert("Fehler beim Löschen: " + caught.getMessage());
 			}
 
 			@Override
