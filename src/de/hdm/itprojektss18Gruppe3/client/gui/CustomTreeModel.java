@@ -117,7 +117,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 //				allkontaktView.getAllKontakteCellTableContainer().clear();
 			} else if (selection instanceof Kontakt) {
 				setSelectedKontakt((Kontakt) selection);
-				KontaktForm kontaktForm = new KontaktForm(getSelectedKontakt(), getSelectedKontaktliste());
+				KontaktForm kontaktForm = new KontaktForm(getSelectedKontakt());
 			}
 //			KontaktlistView klisteView = new KontaktlistView(getSelectedKontakt(), getSelectedKontaktliste());
 		}
@@ -192,28 +192,28 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			if (((Kontaktliste) value).getBezeichnung().equals("Empfangene Kontakte")) {
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-				kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(nutzer.getId(),
-						new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-								Window.alert("Fehler beim Laden" + caught.getMessage());
-							}
-
-							@Override
-							public void onSuccess(Vector<NutzerTeilhaberschaftKontaktWrapper> result) {
-								Vector<Kontakt> kontakt = new Vector<Kontakt>();
-								for (NutzerTeilhaberschaftKontaktWrapper wrapper : result) {
-								
-									kontakt.add(wrapper.getKontakt());
-
-								}
-								for (Kontakt k : kontakt) {
-									kontaktProvider.getList().add(k);
-								}
-							}
-
-						});
+//				kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(nutzer.getId(),
+//						new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>() {
+//
+//							@Override
+//							public void onFailure(Throwable caught) {
+//								Window.alert("Fehler beim Laden" + caught.getMessage());
+//							}
+//
+//							@Override
+//							public void onSuccess(Vector<NutzerTeilhaberschaftKontaktWrapper> result) {
+//								Vector<Kontakt> kontakt = new Vector<Kontakt>();
+//								for (NutzerTeilhaberschaftKontaktWrapper wrapper : result) {
+//								
+//									kontakt.add(wrapper.getKontakt());
+//
+//								}
+//								for (Kontakt k : kontakt) {
+//									kontaktProvider.getList().add(k);
+//								}
+//							}
+//
+//						});
 				
 				kontaktmanagerVerwaltung.findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(nutzer.getId(), new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>() {
 

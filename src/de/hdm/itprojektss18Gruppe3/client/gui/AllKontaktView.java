@@ -4,21 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.http.client.params.AllClientPNames;
+
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.cell.client.Cell.Context;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Cookies;
@@ -34,19 +31,18 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.DefaultSelectionEventManager;
-import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
-import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
-import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm.DeleteEigenschaftsauspraegung;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
+import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktlisteHinzufuegen.AddClickHandler;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
@@ -59,12 +55,18 @@ public class AllKontaktView extends MainFrame {
 	private HorizontalPanel allKontakteCellTableContainer = new HorizontalPanel();
 	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
 	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
+	private Button kontaktlisteLoeschen = new Button("Kontaktliste löschen");
 	private Button teilhaberschaftButton = new Button("Teilhaberschaft löschen");
+	private Button kontaktHinzufuegenButton = new Button("Kontakt hinzufügen");
 	private Button addKontaktButton = new Button("Neuer Kontakt");
 	private Button deleteKontaktButton = new Button("Kontakt löschen");
 	private Button addKontaktToKontaktlistButton = new Button("Kontakt in Kontaktliste");
 	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
 	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
+	private Button deleteKontaktfromListeButton = new Button("Kontakt entfernen");
+	private Button addTeilhaberschaftKontaktlisteButton = new Button("Kontaktliste teilen");
+	private Button zurueckButton = new Button("Alle Kontakte");
+
 	private HTML headline = new HTML();
 
 	private Teilhaberschaft teilhaberschaft = null;
@@ -85,17 +87,19 @@ public class AllKontaktView extends MainFrame {
 	
 	private CellTableKontakt allKontakteCellTable = new CellTableKontakt();
 
-	
 	private CheckboxCell checkBoxCell = new CheckboxCell(true, false);
 	private ButtonCell buttonCell = new ButtonCell();
 	private TextCell textCell = new TextCell();
 	private ClickableTextCell clickCell = new ClickableTextCell();
-	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(clickCell);
+	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(clickCell){
+		
+		
+	};
+	
 	private CellTableKontakt.CheckColumn checkColumn = allKontakteCellTable.new CheckColumn(checkBoxCell);
 	private CellTableKontakt.IconColumn iconColumn = allKontakteCellTable.new IconColumn(textCell);
-	private CellTableKontakt.VisitProfileButtonColumn visitProfileButtonColumn  = allKontakteCellTable.new VisitProfileButtonColumn(clickCell);
 
-	KontaktlistView klisteView = new KontaktlistView();
+	private KontaktlistView klisteView = new KontaktlistView();
 
 	public AllKontaktView() {
 		headline = new HTML("Alle Kontakte in Ihrem Kontaktmanager");
@@ -104,6 +108,12 @@ public class AllKontaktView extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
 		
+		deleteKontaktButton.addClickHandler(new KontaktDeleteClickHandler());
+		addKontaktToKontaktlistButton.addClickHandler(new AddKontaktToKontaktlisteClickHandler());
+		
+		addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
+		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
+		addTeilhaberschaftKontaktlisteButton.addClickHandler(new AddTeilhaberschaftKontaktlisteClickHandler());
 
 		menuBarContainerFlowPanel.add(addKontaktButton);
 		menuBarContainerFlowPanel.add(deleteKontaktButton);
@@ -111,27 +121,12 @@ public class AllKontaktView extends MainFrame {
 		menuBarContainerFlowPanel.add(addKontaktToKontaktlistButton);
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 
+		
 		RootPanel.get("menubar").add(menuBarContainerPanel);
 	
 	}
 	
-//	public AllKontaktView(Kontaktliste k) {
-//		this.kontaktliste = k;
-//		Nutzer nutzer = new Nutzer();
-//		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-//		if(k.getBezeichnung().equals("Empfangene Kontakte")){
-//			KontaktlistView klisteView = new KontaktlistView();
-//			kontaktmanagerVerwaltung.findAllKontakteByTeilhabenderID(nutzer.getId(), new TeilhaberschaftKontakteCallback());
-//		} else {
-////			KontaktlistView klisteView = new KontaktlistView(k);
-//
-//			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
-//		}
-//		super.onLoad();
-//	}
-	
-	
-	public AllKontaktView(Kontaktliste k) {
+	public AllKontaktView(final Kontaktliste k) {
 		super.onLoad();
 		this.kontaktliste = k;
 
@@ -139,12 +134,14 @@ public class AllKontaktView extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		if(k.getBezeichnung().equals("Empfangene Kontakte")){
 			headline = new HTML("Alle Kontakte, die Sie als Empfänger geteilt bekommen haben");
-			klisteView = new KontaktlistView();
-			klisteView.getMenuBarContainerFlowPanel().add(teilhaberschaftButton);
-			kontaktmanagerVerwaltung.findAllKontakteByTeilhabenderID(nutzer.getId(), new TeilhaberschaftKontakteCallback());
+//			klisteView = new KontaktlistView();
+//			klisteView.getMenuBarContainerFlowPanel().add(teilhaberschaftButton);
+			menuBarContainerFlowPanel.add(teilhaberschaftButton);
+			teilhaberschaftButton.addClickHandler(new TeilhaberschaftButtonClickHandler());
+			kontaktmanagerVerwaltung.findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(nutzer.getId(), new TeilhaberschaftKontakteCallback());
 		} else {
 			headline = new HTML("Alle Kontakte in der Kontaktliste " + k.getBezeichnung());
-			klisteView = new KontaktlistView(k);
+			kontaktmanagerVerwaltung.findKontaktlisteByTeilhabenderID(nutzer.getId(), new TeilhaberschaftKontaktlisteCallback());
 			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
 			
 		}
@@ -160,16 +157,20 @@ public class AllKontaktView extends MainFrame {
 	}
 
 	public void run() {
-
-
-		
-		
+		menuBarContainerFlowPanel.add(zurueckButton);
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
+		zurueckButton.setStylePrimaryName("mainButton");
+		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
+		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
+		deleteKontaktfromListeButton.setStylePrimaryName("mainButton");
+		kontaktlisteLoeschen.setStylePrimaryName("mainButton");
+		kontaktHinzufuegenButton.setStylePrimaryName("mainButton");
 		addKontaktButton.setStylePrimaryName("mainButton");
 		deleteKontaktButton.setStylePrimaryName("mainButton");
 		addKontaktToKontaktlistButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
 		addKontaktlisteButton.setStylePrimaryName("mainButton");
+		teilhaberschaftButton.setStylePrimaryName("mainButton");
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
@@ -177,31 +178,16 @@ public class AllKontaktView extends MainFrame {
 
 		allKontakteCellTable.setEmptyTableWidget(new Label("Diese Kontaktliste ist leer"));
 
-		// Nutzer nutzer = new Nutzer();
-		// nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-		// kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new
-		// AllKontaktByNutzerCallback());
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menuBarContainerPanel);
 		allKontakteCellTableContainer.clear();
 		allKontakteCellTableContainer.add(allKontakteCellTable);
-
-		teilhaberschaftButton.setStylePrimaryName("mainButton");
 		
-		
-		teilhaberschaftButton.addClickHandler(new TeilhaberschaftButtonClickHandler());
-
-		deleteKontaktButton.addClickHandler(new KontaktDeleteClickHandler());
-		addKontaktToKontaktlistButton.addClickHandler(new AddKontaktToKontaktlisteClickHandler());
+		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
 		addTeilhaberschaftKontaktButton
-				.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
-		addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
-
-
-		kontaktnameColumn.setFieldUpdater(new VisitProfileUpdate());
-
+		.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
 		
-		visitProfileButtonColumn.setFieldUpdater(new VisitProfileUpdate());
+		kontaktnameColumn.setFieldUpdater(new VisitProfileUpdate());
 
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
 		allKontakteCellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
@@ -210,31 +196,38 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
 		allKontakteCellTable.addColumn(iconColumn, "");
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
-		allKontakteCellTable.addColumn(visitProfileButtonColumn, "");
 
-//HEAD
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
-//
-//		menuBarContainerFlowPanel.add(addKontaktButton);
-//		menuBarContainerFlowPanel.add(deleteKontaktButton);
-//		menuBarContainerFlowPanel.add(addKontaktlisteButton);
-//		menuBarContainerFlowPanel.add(addKontaktToKontaktlistButton);
-//		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
-//
+
 		headline.setStylePrimaryName("h2");
 		vPanel.add(headline);
 
 		allKontakteCellTable.getSsmAuspraegung().addSelectionChangeHandler(new SelectionChangeHandlerCellTable());
-		
 		
 		allKontakteCellTableContainer.clear();
 		allKontakteCellTableContainer.add(allKontakteCellTable);
 
 		vPanel.add(allKontakteCellTableContainer);
 		
-		
 		RootPanel.get("content").add(vPanel);
+	}
+	class ZurueckButtonClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+
+			AllKontaktView akw = new AllKontaktView();
+		}
+
+	}
+	class AddTeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontaktliste);
+			dialogbox.center();
+		}
 	}
 	class TeilhaberschaftButtonClickHandler implements ClickHandler {
 
@@ -257,6 +250,113 @@ public class AllKontaktView extends MainFrame {
 		}
 		
 	}
+	class TeilhaberschaftKontaktlisteCallback implements AsyncCallback<Vector<Kontaktliste>>{
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Vector<Kontaktliste> result) {
+			int o = result.size();
+			
+			if (result.size() == 0){
+				menuBarContainerFlowPanel.add(deleteKontaktButton);
+				menuBarContainerFlowPanel.add(kontaktlisteLoeschen);
+				menuBarContainerFlowPanel.add(kontaktHinzufuegenButton);
+				menuBarContainerFlowPanel.add(deleteKontaktfromListeButton);
+				menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
+				menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
+				deleteKontaktfromListeButton.addClickHandler(new KontaktAusKontaktlisteDeleteClickHandler());
+				kontaktHinzufuegenButton.addClickHandler(new AddNewKontaktToKontaktlisteClickHandler());
+				kontaktlisteLoeschen.addClickHandler(new deleteKontaktlisteClickHandler());
+			}
+			
+			for (int i = 0; i < result.size(); i++) {
+				if (result.elementAt(i).getId() == kontaktliste.getId()) {
+					menuBarContainerFlowPanel.add(teilhaberschaftButton);
+					menuBarContainerFlowPanel.add(kontaktHinzufuegenButton);
+					teilhaberschaftButton.addClickHandler(new DeleteTeilhaberschaftKontaktlisteClickHandler());
+					kontaktHinzufuegenButton.addClickHandler(new AddNewKontaktToKontaktlisteClickHandler());
+
+				}
+					
+				if (i + 1 == result.size() && result.elementAt(i).getId() != kontaktliste.getId()) {
+					menuBarContainerFlowPanel.add(deleteKontaktButton);
+					menuBarContainerFlowPanel.add(kontaktlisteLoeschen);
+					menuBarContainerFlowPanel.add(kontaktHinzufuegenButton);
+					menuBarContainerFlowPanel.add(deleteKontaktfromListeButton);
+					menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
+					menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
+					deleteKontaktfromListeButton.addClickHandler(new KontaktAusKontaktlisteDeleteClickHandler());
+					kontaktHinzufuegenButton.addClickHandler(new AddNewKontaktToKontaktlisteClickHandler());
+					kontaktlisteLoeschen.addClickHandler(new deleteKontaktlisteClickHandler());
+
+				}
+					
+				}
+
+		}
+	}
+	class KontaktAusKontaktlisteDeleteClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+
+			KontaktFromKontaktlisteLoeschenDialogBox deleteKontakt = new KontaktFromKontaktlisteLoeschenDialogBox(
+					allKontakteSelectedArrayList, kontaktliste);
+			deleteKontakt.center();
+		}
+
+	}
+	class deleteKontaktlisteClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			DeleteKontaktlisteDialogBox deleteKontakt = new DeleteKontaktlisteDialogBox(kontaktliste);
+			deleteKontakt.center();
+		}
+	}
+	class AddNewKontaktToKontaktlisteClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			if (kontaktliste == null) {
+				KontaktPopup k = new KontaktPopup();
+				k.center();
+			} else if (kontaktliste != null) {
+				KontaktPopup k = new KontaktPopup(kontaktliste);
+				k.center();
+			}
+		}
+	}
+	class DeleteTeilhaberschaftKontaktlisteClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+			teilhaberschaft.setKontaktlisteID(kontaktliste.getId());
+			teilhaberschaft.setTeilhabenderID(nutzer.getId());
+			kontaktmanagerVerwaltung.deleteTeilhaberschaftByTeilhaberschaft(teilhaberschaft, new DeleteTeilhaberschaftKontaktlisteCallback());
+		}
+		class DeleteTeilhaberschaftKontaktlisteCallback implements AsyncCallback<Void>{
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Fehler beim Löschen" + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				AllKontaktView allkontaktview = new AllKontaktView();
+			}
+			
+		}
+	}
+	
 	class DeleteTeilhaberschaftCallback implements AsyncCallback<Void>{
 
 		@Override
@@ -269,6 +369,9 @@ public class AllKontaktView extends MainFrame {
 			Kontaktliste kontaktliste = new Kontaktliste();
 			kontaktliste.setBezeichnung("Empfangene Kontakte");
 			AllKontaktView allkontaktView = new AllKontaktView(kontaktliste);
+			CustomTreeModel ctm = new CustomTreeModel();
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
 		}
 		
 	}
@@ -386,7 +489,7 @@ public class AllKontaktView extends MainFrame {
 		}
 
 	}
-	public class TeilhaberschaftKontakteCallback implements AsyncCallback<Vector<Kontakt>>{
+	public class TeilhaberschaftKontakteCallback implements AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>{
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -394,9 +497,13 @@ public class AllKontaktView extends MainFrame {
 		}
 
 		@Override
-		public void onSuccess(Vector<Kontakt> result) {
-			allKontakteCellTable.setRowData(0, result);
-			allKontakteCellTable.setRowCount(result.size(), true);
+		public void onSuccess(Vector<NutzerTeilhaberschaftKontaktWrapper> result) {
+			Vector<Kontakt> kontakt = new Vector<Kontakt>();
+			for (NutzerTeilhaberschaftKontaktWrapper nutzerTeilhaberschaftKontaktWrapper : result) {
+				kontakt.add(nutzerTeilhaberschaftKontaktWrapper.getKontakt());
+			}
+			allKontakteCellTable.setRowData(0, kontakt);
+			allKontakteCellTable.setRowCount(kontakt.size(), true);
 			
 		}
 		

@@ -203,5 +203,16 @@ public interface KontaktmanagerAdministrationAsync {
 	void findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(int teilhabenderID,
 			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>> callback);
 
+	void findEigenschaftAndAuspraegungByKontakt(int nutzerID, int kontaktID,
+			AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> callback);
+
+	void findTeilhaberschaftByAuspraegungIDAndNutzerID(int nutzerid, int auspraegungid,
+			AsyncCallback<Vector<Teilhaberschaft>> callback);
+
+	void findTeilhaberschaftByKontaktAndTeilhaber(int nutzerid, int kontaktid,
+			AsyncCallback<Vector<Teilhaberschaft>> callback);
+
+	void findTeilhaberschaftString(int nutzerid, Vector<Eigenschaftsauspraegung> auspraegung, AsyncCallback<String> callback);
+
 	
 }

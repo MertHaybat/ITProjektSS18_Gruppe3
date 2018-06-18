@@ -307,8 +307,13 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onSuccess(Teilhaberschaft result) {
-			Window.alert("Teilhaberschaft erfolgreich erstellt");
-			hide();
+			if(result == null){
+				Window.alert("Teilhaberschaft existiert bereits!");
+			} else {
+				Window.alert("Teilhaberschaft erfolgreich erstellt");
+				hide();
+				
+			}
 		}
 
 	}

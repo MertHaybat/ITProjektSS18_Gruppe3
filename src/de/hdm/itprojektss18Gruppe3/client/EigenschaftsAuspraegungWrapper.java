@@ -20,7 +20,12 @@ public class EigenschaftsAuspraegungWrapper implements Serializable {
 		
 	}
 	
-
+	public EigenschaftsAuspraegungWrapper(Eigenschaft eigenschaft){
+		this.eigenschaft = eigenschaft;
+	}
+	public EigenschaftsAuspraegungWrapper(Eigenschaftsauspraegung auspraegung){
+		this.auspraegung = auspraegung;
+	}
 	
 	public EigenschaftsAuspraegungWrapper(Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung){
 		this.eigenschaft = eigenschaft;
