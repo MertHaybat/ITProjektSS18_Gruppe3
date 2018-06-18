@@ -19,6 +19,9 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -86,15 +89,14 @@ public class AllKontaktView extends MainFrame {
 	private Kontakt kontakt = null;
 	
 	private CellTableKontakt allKontakteCellTable = new CellTableKontakt();
-
+	
 	private CheckboxCell checkBoxCell = new CheckboxCell(true, false);
 	private ButtonCell buttonCell = new ButtonCell();
 	private TextCell textCell = new TextCell();
 	private ClickableTextCell clickCell = new ClickableTextCell();
-	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(clickCell){
-		
-		
-	};
+	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(clickCell);
+	
+	private CellTableKontakt.VisitProfileButtonColumn visitColumn = allKontakteCellTable.new VisitProfileButtonColumn(textCell);
 	
 	private CellTableKontakt.CheckColumn checkColumn = allKontakteCellTable.new CheckColumn(checkBoxCell);
 	private CellTableKontakt.IconColumn iconColumn = allKontakteCellTable.new IconColumn(textCell);
@@ -157,6 +159,7 @@ public class AllKontaktView extends MainFrame {
 	}
 
 	public void run() {
+		visitColumn.setFieldUpdater(new VisitProfileUpdate());
 		menuBarContainerFlowPanel.add(zurueckButton);
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 		zurueckButton.setStylePrimaryName("mainButton");
@@ -196,6 +199,8 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
 		allKontakteCellTable.addColumn(iconColumn, "");
 		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
+		allKontakteCellTable.addColumn(visitColumn, "");
+		allKontakteCellTable.setColumnWidth(visitColumn, 5, Unit.EM);
 
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
@@ -522,19 +527,11 @@ public class AllKontaktView extends MainFrame {
 
 	public class VisitProfileUpdate implements FieldUpdater<Kontakt, String> {
 
-		Kontakt kontaktToDisplay;
 		
 		@Override
 		public void update(int index, Kontakt object, String value) {
 			
-			this.kontaktToDisplay = object;
-				allKontakteCellTable.addDomHandler(new DoubleClickHandler() {
-
-					@Override
-					public void onDoubleClick(DoubleClickEvent event) {
-						KontaktForm kontaktForm = new KontaktForm(kontaktToDisplay);
-					}
-			    }, DoubleClickEvent.getType());
+			KontaktForm kontaktForm = new KontaktForm(object);
 	}
 	}
 

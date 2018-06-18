@@ -64,7 +64,7 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 		public KontaktnameColumn(Cell<String> cell) {
 			super(cell);
 		}
-
+		
 		@Override
 		public String getValue(Kontakt object) {
 			return object.getName();
