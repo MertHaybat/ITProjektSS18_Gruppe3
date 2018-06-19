@@ -264,14 +264,32 @@ public class KontaktForm extends MainFrame {
 		@Override
 		public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
 			
-			object.setBezeichnungEigenschaftValue(value);
 			selection.getLastSelectedObject().setWertEigenschaftsauspraegungValue(value);
 			selection.getLastSelectedObject()
 					.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
 			auspraegung.setWert(object.getWertEigenschaftsauspraegungValue());
 			auspraegung.setId(object.getIDEigenschaftsauspraegungValue());
 			auspraegung.setPersonID(object.getPersonIdEigenschaftsauspraegungValue());
-			kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+			String input = object.getEigenschaft().getBezeichnung();
+			String inputAuspraegung = value;
+			if (input.equals("PLZ") || input.equals("Telefonnummer")) {
+				if (!inputAuspraegung.matches("[0-9]*")) {
+					Window.alert("Für diese Eigenschaft müssen Sie Zahlen als Ausprägung eingeben!");
+					KontaktForm kontaktform = new KontaktForm(k);
+				} else {
+					kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+
+				}
+			} else if (input.equals("Geburtsdatum")) {
+				if (!inputAuspraegung.matches("[0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9]")) {
+					Window.alert("Bitte beachten Sie das Format: TT.MM.YYYY");
+					KontaktForm kontaktform = new KontaktForm(k);
+				} else {
+					kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+	}
+			} else {
+				kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+	}
 		
 		}
 
@@ -321,7 +339,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onSuccess(Void result) {
-			celltable.redraw();
+			KontaktForm kontaktform = new KontaktForm(k);
 		}
 
 	}
@@ -499,9 +517,7 @@ public class KontaktForm extends MainFrame {
 				Eigenschaftsauspraegung e = new Eigenschaftsauspraegung();
 				e.setId(eigenschaftsAuspraegungWrapper.getEigenschaftIdValue());
 				auspraegungVector.add(e);
-
 			}
-
 		}
 
 	}
