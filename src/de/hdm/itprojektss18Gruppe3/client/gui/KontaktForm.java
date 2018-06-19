@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
@@ -45,6 +46,7 @@ import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.KontaktDeleteClickH
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.KontaktDeleteClickHandler.DeleteKontaktDialogBox.AbortDeleteClickHandler;
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.KontaktDeleteClickHandler.DeleteKontaktDialogBox.DeleteKontaktCallback;
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.KontaktDeleteClickHandler.DeleteKontaktDialogBox.DeleteKontaktClickHandler;
+import de.hdm.itprojektss18Gruppe3.client.gui.CreateEigenschaftsauspraegungDialogBox.createEigenschaftsauspraegungCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
@@ -232,7 +234,7 @@ public class KontaktForm extends MainFrame {
 		hPanel.add(zurueckZuAllKontaktView);
 		
 		
-		celltable.setSelectionModel(celltable.getSelectionModel());
+//		celltable.setSelectionModel(celltable.getSelectionModel());
 
 		kontaktNameLabel.setStylePrimaryName("kontaktFormText");
 		kontaktLabelkontaktName.add(kontaktNameLabel);
@@ -261,6 +263,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
+			
 			object.setBezeichnungEigenschaftValue(value);
 			selection.getLastSelectedObject().setWertEigenschaftsauspraegungValue(value);
 			selection.getLastSelectedObject()
@@ -269,6 +272,7 @@ public class KontaktForm extends MainFrame {
 			auspraegung.setId(object.getIDEigenschaftsauspraegungValue());
 			auspraegung.setPersonID(object.getPersonIdEigenschaftsauspraegungValue());
 			kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
+		
 		}
 
 	}
@@ -317,10 +321,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onSuccess(Void result) {
-			Nutzer nutzer = new Nutzer();
-			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-			nutzer.setMail(Cookies.getCookie("mail"));
-			kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), k.getId(), new AllAuspraegungenCallback());
+			celltable.redraw();
 		}
 
 	}

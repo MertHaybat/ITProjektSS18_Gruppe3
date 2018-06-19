@@ -58,7 +58,6 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 	private final MultiSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = new MultiSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private final MultiSelectionModel<Eigenschaft> eigenschaftModel = new MultiSelectionModel<Eigenschaft>();
-
 	
 	private FlexTable ftTeilhaberschaft = new FlexTable();
 
@@ -307,16 +306,18 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onSuccess(Teilhaberschaft result) {
-			if(result == null){
+			if (result == null) {
 				Window.alert("Teilhaberschaft existiert bereits!");
+			} else if (result.getTeilhabenderID() == result.getEigentuemerID()) {
+				Window.alert("Sie können nichts mit sich selbst teilen!");
 			} else {
 				Window.alert("Teilhaberschaft erfolgreich erstellt");
-				hide();
-				
 			}
+			hide();
+
+		}
 		}
 
-	}
 
 	class getAllNutzerCallback implements AsyncCallback<Vector<Nutzer>> {
 

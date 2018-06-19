@@ -1,5 +1,7 @@
 package de.hdm.itprojektss18Gruppe3.shared.bo;
 
+import javax.validation.constraints.Size;
+
 /**
  * Die Klasse Eigenschaft steht in einer 1:n Beziehung zu Kontakt und Nutzer.
  * Die Klasse Eigenschaft steht in einer 1:n Beziehung zu Eigenschaftsausprägung.

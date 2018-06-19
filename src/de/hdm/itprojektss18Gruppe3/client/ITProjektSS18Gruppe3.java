@@ -77,6 +77,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 					DisclosurePanelSuche panelSuche = new DisclosurePanelSuche(textBox.getValue());
 					RootPanel.get("content").clear();
 					RootPanel.get("content").add(panelSuche);
+					textBox.setText("");
 				}			
 			}
 		});
