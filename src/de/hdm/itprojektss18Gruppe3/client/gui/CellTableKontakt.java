@@ -42,8 +42,6 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 	public void run(){
 		this.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
-
-		this.addCellPreviewHandler(new PreviewClickHander());
 	}
 	
 	public class CheckColumn extends Column<Kontakt, Boolean>{
@@ -94,40 +92,8 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 			}
 			super.render(context, object, sb);
 		}		
-	}	
-	
-	public class VisitProfileButtonColumn extends Column<Kontakt, String>{
 
-		public VisitProfileButtonColumn(Cell<String> cell) {
-			super(cell);
-		}
-
-		@Override
-		public String getValue(Kontakt object) {
-			return "";
-		}
-	
-		@Override
-		public void render(Context context, Kontakt object, SafeHtmlBuilder sb) {
-			sb.appendHtmlConstant("<button type=\"button\" class=\"viewProfileIcon\" tabindex=\"-1\">");
-
-			super.render(context, object, sb);
-		}
-		
 	}
-		
-	public class PreviewClickHander implements Handler<Kontakt> {
-		@Override
-		public void onCellPreview(CellPreviewEvent<Kontakt> event) {
-			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
+}
 
-				final Kontakt value = event.getValue();
-				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
-				event.getDisplay().getSelectionModel().setSelected(value, state);
-				event.setCanceled(true);
-			}
-		}
-	}
-			
-	}
 
