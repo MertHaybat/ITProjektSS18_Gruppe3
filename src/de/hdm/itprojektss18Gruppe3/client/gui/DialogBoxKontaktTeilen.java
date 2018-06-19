@@ -183,7 +183,6 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			Window.alert("hallo");
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("mail"));
@@ -244,8 +243,15 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 		@Override
 		public void onSuccess(Teilhaberschaft result) {
-			Window.alert("Teilhaberschaft erfolgreich erstellt");
+			if (result == null) {
+				Window.alert("Teilhaberschaft existiert bereits!");
+			} else if (result.getTeilhabenderID() == result.getEigentuemerID()) {
+				Window.alert("Sie können nichts mit sich selbst teilen!");
+			} else {
+				Window.alert("Teilhaberschaft erfolgreich erstellt");
+			}
 			hide();
+
 		}
 
 	}

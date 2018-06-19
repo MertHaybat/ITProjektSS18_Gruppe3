@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.server.KontaktmanagerAdministrationImpl;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministration;
 import de.hdm.itprojektss18Gruppe3.shared.ReportGenerator;
@@ -13,6 +14,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteByTeilhaberschaftReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.Column;
@@ -215,6 +217,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 		KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport result = new KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport();
 
+
 		result.setTitle("Kontakte mit angegebenen Eigenschaften und Ausprägungen");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
 		result.setCreated(simpleDateFormat.format(new Date()));
@@ -226,7 +229,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		headline.addColumn(new Column("Status"));
 		headline.addColumn(new Column("Ersteller"));
 
-		result.addRow(headline);
+		
 		Vector<Kontakt> kontakteMitBestimmtenEigenschaftenUndAuspraegungen = this.getKontaktVerwaltung()
 				.findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(eigenschaft, ea);
 
@@ -241,6 +244,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				kontakte.addColumn(new Column("Nicht Geteilt"));
 			}
 			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
+			Vector<EigenschaftsAuspraegungWrapper> wrapperVector = findEigenschaftWrapper(kontakt);
+			for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : wrapperVector) {
+				headline.addColumn(new Column(eigenschaftsAuspraegungWrapper.getEigenschaft().getBezeichnung()));
+				kontakte.addColumn(new Column(eigenschaftsAuspraegungWrapper.getAuspraegung().getWert()));
+			}
+			
+			
+			result.addRow(headline);
 			result.addRow(kontakte);
 		}
 		return result;
@@ -285,6 +296,15 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		e.setBezeichnung(bezeichnung);
 
 		return this.getKontaktVerwaltung().findEigenschaftByBezeichnung(bezeichnung);
+	}
+	
+	@Override
+	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftWrapper(Person p)throws IllegalArgumentException {
+		if (this.getKontaktVerwaltung() == null) {
+			return null;
+		}
+
+		return this.getKontaktVerwaltung().findEigenschaftHybrid(p);
 	}
 
 }

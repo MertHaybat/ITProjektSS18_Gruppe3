@@ -2,6 +2,8 @@ package de.hdm.itprojektss18Gruppe3.client;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.Window;
+
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 
@@ -100,6 +102,8 @@ public class EigenschaftsAuspraegungWrapper implements Serializable {
 	public void setStatusValue(int status){
 		this.auspraegung.setStatus(status);
 	}
-	
+	public String toString(){
+		return "Eigenschaft: " + this.eigenschaft.getBezeichnung() + "Eigenschaftsausprägung: " + this.auspraegung.getWert();
+	}
 }
 

@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -23,6 +24,10 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
+import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -32,6 +37,10 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
+import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.gui.CellTableAuspraegungWrapper.WertAuspraegungColumn;
+import de.hdm.itprojektss18Gruppe3.client.gui.CellTableAuspraegungWrapper.WertEigenschaftColumn;
+import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm.AllAuspraegungenCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
@@ -42,6 +51,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class DisclosurePanelSuche extends VerticalPanel {
 
 	private DisclosurePanel disc = new DisclosurePanel("Eigenschaftsausprägung Suche: ");
+	private VerticalPanel suchErgebnisZweiPanel = new VerticalPanel();
 	private VerticalPanel suchErgebnisPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 
@@ -67,13 +77,19 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	
 	private Kontakt kontakt = new Kontakt();
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
-	
+	private NoSelectionModel<EigenschaftsAuspraegungWrapper> selection = new NoSelectionModel<EigenschaftsAuspraegungWrapper>();
+	private SingleSelectionModel<Kontakt> ssmKontakt = new SingleSelectionModel<Kontakt>();
 	private CellTableKontakt kontaktCellTable = new CellTableKontakt();
 	private ClickableTextCell clickCell = new ClickableTextCell();
 	private TextCell textCell = new TextCell();
 	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = kontaktCellTable.new KontaktnameColumn(clickCell);
 	private CellTableKontakt.IconColumn iconColumn = kontaktCellTable.new IconColumn(textCell);
+	private ClickableTextCell clickEigenschaft = new ClickableTextCell();
+	private CellTableAuspraegungWrapper celltable = new CellTableAuspraegungWrapper(selection);
 
+	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(clickEigenschaft);
+	private CellTableAuspraegungWrapper.WertAuspraegungColumn wertAuspraegungColumn = celltable.new WertAuspraegungColumn(clickEigenschaft);
+	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 
@@ -150,20 +166,54 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		disc.addOpenHandler(new DiscOpenHandler());
 		disc.addCloseHandler(new DiscCloseHandler());
 
-		
-	
+
 		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzer.getId(), new AllKontaktlisteCallback());
 		kontaktmanagerVerwaltung.findAllEigenschaften(new AllEigenschaftenCallback());
 
-
+		kontaktCellTable.setSelectionModel(ssmKontakt);
 		kontaktCellTable.addColumn(kontaktnameColumn, "Kontaktname");
 		kontaktCellTable.addColumn(iconColumn, "");
+		
+		celltable.setSelectionModel(selection);
+		ssmKontakt.addSelectionChangeHandler(new Handler() {
+			
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			suchErgebnisZweiPanel.clear();
+			suchErgebnisZweiPanel.add(celltable);
+			kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), ssmKontakt.getSelectedObject().getId(), new WrapperCallback());
+
+			
+			}
+		});
+		
+		celltable.addColumn(wertEigenschaftColumn, "");
+		celltable.setColumnWidth(wertEigenschaftColumn, 7, Unit.EM);
+		celltable.addColumn(wertAuspraegungColumn, "");
+		celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 		
 		hPanel.add(zurueck);
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(hPanel);
 		this.add(layout);
 		this.add(suchErgebnisPanel);
+		this.add(suchErgebnisZweiPanel);
+	}
+	public class WrapperCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>>{
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Vector<EigenschaftsAuspraegungWrapper> result) {
+			celltable.setRowData(0, result);
+			celltable.setRowCount(result.size(), true);
+		}
+		
 	}
 	public class ZuruckClickHandler implements ClickHandler{
 

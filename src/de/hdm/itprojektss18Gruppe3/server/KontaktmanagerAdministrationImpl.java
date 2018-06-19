@@ -231,6 +231,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	public Teilhaberschaft createTeilhaberschaft(int kontaktlisteID, int kontaktID, int eigenschaftsauspraegungID,
 			int teilhabenderID, int eigentuemerID) throws IllegalArgumentException {
 
+		
 		Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 
 		teilhaberschaft.setEigenschaftsauspraegungID(eigenschaftsauspraegungID);
@@ -238,6 +239,9 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		teilhaberschaft.setKontaktID(kontaktID);
 		teilhaberschaft.setKontaktlisteID(kontaktlisteID);
 		teilhaberschaft.setTeilhabenderID(teilhabenderID);
+		if(teilhabenderID == eigentuemerID){
+			return teilhaberschaft;
+		}
 
 		if (kontaktID != 0) {
 			Kontakt k = findKontaktByID(kontaktID);
