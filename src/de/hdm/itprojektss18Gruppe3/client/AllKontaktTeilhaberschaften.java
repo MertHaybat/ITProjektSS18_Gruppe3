@@ -25,7 +25,7 @@ public class AllKontaktTeilhaberschaften extends HTMLResultPanel{
 
 		@Override
 		public void onFailure(Throwable caught) {
-			Window.alert("Es liegen keine Teilhaberschaften für den angegeben Nutzer vor.");
+			Window.alert("Fehler beim Laden: " + caught.getMessage());
 		}
 
 		@Override

@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
@@ -28,6 +29,11 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 			.createCheckboxManager();
 	
 	public CellTableKontakt(){
+		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
+		run();
+	}
+	public CellTableKontakt(SingleSelectionModel<Kontakt> ssm){
+		this.setSelectionModel(ssm);
 		run();
 	}
 	
@@ -35,13 +41,12 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 		return ssmAuspraegung;
 	}
 
-	public void setSsmAuspraegung(MultiSelectionModel<Kontakt> ssmAuspraegung) {
-		this.ssmAuspraegung = ssmAuspraegung;
-	}
+//	public void setSsmAuspraegung(MultiSelectionModel<Kontakt> ssmAuspraegung) {
+//		this.ssmAuspraegung = ssmAuspraegung;
+//	}
 
 	public void run(){
 		this.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));
-		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
 	}
 	
 	public class CheckColumn extends Column<Kontakt, Boolean>{

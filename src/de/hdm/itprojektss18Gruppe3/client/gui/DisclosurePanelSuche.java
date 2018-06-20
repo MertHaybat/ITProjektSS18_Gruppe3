@@ -79,7 +79,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
 	private NoSelectionModel<EigenschaftsAuspraegungWrapper> selection = new NoSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private SingleSelectionModel<Kontakt> ssmKontakt = new SingleSelectionModel<Kontakt>();
-	private CellTableKontakt kontaktCellTable = new CellTableKontakt();
+	private CellTableKontakt kontaktCellTable = new CellTableKontakt(ssmKontakt);
 	private ClickableTextCell clickCell = new ClickableTextCell();
 	private TextCell textCell = new TextCell();
 	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = kontaktCellTable.new KontaktnameColumn(clickCell);
@@ -175,19 +175,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		kontaktCellTable.addColumn(iconColumn, "");
 		
 		celltable.setSelectionModel(selection);
-		ssmKontakt.addSelectionChangeHandler(new Handler() {
-			
-			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-			Nutzer nutzer = new Nutzer();
-			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-			suchErgebnisZweiPanel.clear();
-			suchErgebnisZweiPanel.add(celltable);
-			kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), ssmKontakt.getSelectedObject().getId(), new WrapperCallback());
-
-			
-			}
-		});
+		ssmKontakt.addSelectionChangeHandler(new SelectionHandlerAuspraegung());
 		
 		celltable.addColumn(wertEigenschaftColumn, "");
 		celltable.setColumnWidth(wertEigenschaftColumn, 7, Unit.EM);
@@ -200,6 +188,19 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		this.add(layout);
 		this.add(suchErgebnisPanel);
 		this.add(suchErgebnisZweiPanel);
+	}
+	public class SelectionHandlerAuspraegung implements SelectionChangeEvent.Handler{
+
+		@Override
+		public void onSelectionChange(SelectionChangeEvent event) {
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			suchErgebnisZweiPanel.clear();
+			suchErgebnisZweiPanel.add(celltable);
+			kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), ssmKontakt.getSelectedObject().getId(), new WrapperCallback());
+
+		}
+		
 	}
 	public class WrapperCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>>{
 
@@ -249,6 +250,8 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			suchErgebnisPanel.clear();
+			suchErgebnisZweiPanel.clear();
 			int checked = 0;
 			
 			Nutzer nutzer = new Nutzer();
@@ -307,8 +310,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Suchen aufgetreten: " + caught.getMessage());
 		}
 
 		@Override

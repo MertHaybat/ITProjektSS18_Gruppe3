@@ -114,7 +114,6 @@ public class AllKontaktView extends MainFrame {
 
 		addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
-		addTeilhaberschaftKontaktlisteButton.addClickHandler(new AddTeilhaberschaftKontaktlisteClickHandler());
 
 		menuBarContainerFlowPanel.add(addKontaktButton);
 		menuBarContainerFlowPanel.add(deleteKontaktButton);
@@ -164,7 +163,6 @@ public class AllKontaktView extends MainFrame {
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 		zurueckButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
-		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
 		deleteKontaktfromListeButton.setStylePrimaryName("mainButton");
 		kontaktlisteLoeschen.setStylePrimaryName("mainButton");
 		kontaktHinzufuegenButton.setStylePrimaryName("mainButton");
@@ -189,6 +187,7 @@ public class AllKontaktView extends MainFrame {
 		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
 		addTeilhaberschaftKontaktButton
 		.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
+		addTeilhaberschaftKontaktlisteButton.addClickHandler(new AddTeilhaberschaftKontaktlisteClickHandler());
 
 		allKontakteCellTable.addCellPreviewHandler(new PreviewClickHander());
 

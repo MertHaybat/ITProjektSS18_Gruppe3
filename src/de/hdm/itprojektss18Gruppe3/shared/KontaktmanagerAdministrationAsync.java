@@ -214,5 +214,10 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findTeilhaberschaftString(int nutzerid, Vector<Eigenschaftsauspraegung> auspraegung, AsyncCallback<String> callback);
 
+	void findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer,
+			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>> callback);
+
+
+
 	
 }

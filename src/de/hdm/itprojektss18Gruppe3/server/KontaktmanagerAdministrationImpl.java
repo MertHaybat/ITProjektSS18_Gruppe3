@@ -562,13 +562,18 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	@Override
 	public Vector<Eigenschaftsauspraegung> findAllEigenschaftsauspraegungByWertAndEigenschaft(Eigenschaftsauspraegung e,
 			Eigenschaft eigenschaft) throws IllegalArgumentException {
+		Vector<Eigenschaftsauspraegung> auspraegungen = new Vector<Eigenschaftsauspraegung>();
 
+		if(e.getWert().equals("")){
+			auspraegungen = findAllEigenschaftsauspraegungByEigenschaftID(eigenschaft);
+			
+		} else {
+		
 		char a = e.getWert().charAt(0);
 		String b = "*";
 		char c = b.charAt(0);
 		char d = e.getWert().charAt(e.getWert().length() - 1);
 
-		Vector<Eigenschaftsauspraegung> auspraegungen = new Vector<Eigenschaftsauspraegung>();
 		if (eigenschaft != null){
 			
 			e.setEigenschaftID(eigenschaft.getId());
@@ -583,7 +588,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		} else {
 			auspraegungen = this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByWert(e);
 		}
-
+		}
 		return auspraegungen;
 	}
 
@@ -858,10 +863,18 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	@Override
 	public Vector<Kontakt> findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(Eigenschaft e,
 			Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException {
-
-		Vector<Eigenschaftsauspraegung> auspraegungen = findAllEigenschaftsauspraegungByWertAndEigenschaft(auspraegung,
-				e);
 		Vector<Kontakt> allContact = new Vector<Kontakt>();
+		Vector<Eigenschaftsauspraegung> auspraegungen = new Vector<Eigenschaftsauspraegung>();
+
+		if (auspraegung.getWert().equals("")) {
+
+			auspraegungen = findAllEigenschaftsauspraegungByEigenschaftID(e);
+			
+		} else {
+
+			auspraegungen = findAllEigenschaftsauspraegungByWertAndEigenschaft(auspraegung, e);
+
+		}
 
 		for (Eigenschaftsauspraegung eigenschaftsauspraegung : auspraegungen) {
 			allContact.add(findKontaktByID(eigenschaftsauspraegung.getPersonID()));
@@ -1687,14 +1700,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 					}
 				}
 			}
-//			for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : wrapperVector) {
-//				for (Eigenschaft eigenschaft : eigenschaftVector) {
-//					if(eigenschaftsAuspraegungWrapper.getEigenschaft().getId() == eigenschaft.getId()){
-//						wrapperVectorFiltered.add(new EigenschaftsAuspraegungWrapper(eigenschaft, eigenschaftsAuspraegungWrapper.getAuspraegung()));
-//					}
-//				}	
-////				break;
-//			}	
 			
 			return wrapperVectorFiltered;
 		} else {
@@ -1734,6 +1739,45 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		}
 		
 	}
+
+	@Override
+	public Vector<NutzerTeilhaberschaftKontaktWrapper> findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer)
+			throws IllegalArgumentException {
+		Vector<Kontakt> teilhaberschaftKontakte = findAllKontakteByTeilhabenderID(nutzer.getId());
+		Vector<Kontakt> eigeneKontakte = findAllKontaktByNutzerID(nutzer.getId());
+
+		Vector<Teilhaberschaft> eigentuemerteilhaberschaft = findTeilhaberschaftByEigentuemerID(nutzer.getId());
+		Vector<Teilhaberschaft> teilhaberschaft = findAllTeilhaberschaftenByTeilhabenderID(nutzer.getId());
+		Vector<NutzerTeilhaberschaftKontaktWrapper> wrapperVector = new Vector<NutzerTeilhaberschaftKontaktWrapper>();
+
+		for (Kontakt kontakt : teilhaberschaftKontakte) {
+			for (Teilhaberschaft teilhaberschaftForeach : teilhaberschaft) {
+				if (teilhaberschaftForeach.getKontaktID() == kontakt.getId()) {
+					wrapperVector.add(new NutzerTeilhaberschaftKontaktWrapper(findNutzerByID(teilhaberschaftForeach.getEigentuemerID()), teilhaberschaftForeach, kontakt));
+
+				}
+			}
+		}
+		for (Kontakt kontakte : eigeneKontakte) {
+			for (Teilhaberschaft teilhaberschafteigen : eigentuemerteilhaberschaft) {
+
+				if (kontakte.getId() == teilhaberschafteigen.getKontaktID()) {
+					wrapperVector.add(new NutzerTeilhaberschaftKontaktWrapper(findNutzerByID(teilhaberschafteigen.getTeilhabenderID()), teilhaberschafteigen, kontakte));
+				}
+
+			}
+
+		}
+		for (Kontakt kontakteigen : eigeneKontakte) {
+			if(kontakteigen.getStatus() == 0){
+				wrapperVector.add(new NutzerTeilhaberschaftKontaktWrapper(null, null, kontakteigen));
+			}
+		}
+
+		return wrapperVector;
+
+	}
+	
 }
 
 	// @Override

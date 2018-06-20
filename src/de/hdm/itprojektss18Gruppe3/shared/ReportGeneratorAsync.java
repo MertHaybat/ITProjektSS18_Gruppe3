@@ -5,8 +5,10 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteByTeilhaberschaftReport;
@@ -17,7 +19,7 @@ public interface ReportGeneratorAsync {
 
 	void init(AsyncCallback<Void> callback);
 
-	void createAlleKontakteReport(String lbEmail, AsyncCallback<AlleKontakteReport> callback);
+	void createAlleKontakteReport(Nutzer nutzer, AsyncCallback<AlleKontakteReport> callback);
 
 	void createAlleKontakteByTeilhaberschaftReport(String a, String b,
 			AsyncCallback<AlleKontakteByTeilhaberschaftReport> callback);
@@ -34,6 +36,10 @@ public interface ReportGeneratorAsync {
 	void findEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Eigenschaft> callback);
 
 	void findEigenschaftWrapper(Person p, AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> callback);
+
+	void findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer, AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>> callback);
+
+	void nutzerTeilhaberschaft(int teilhaberid, AsyncCallback<Nutzer> callback);
 
 
 }

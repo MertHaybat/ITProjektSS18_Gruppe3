@@ -36,7 +36,7 @@ public class ReportSelectMenu extends HorizontalPanel{
 
 		@Override
 		public void onClick(ClickEvent event) {
-			KontakteReportForm allKontakteReport = new KontakteReportForm();
+			AllKontakte allKontakteReport = new AllKontakte();
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(allKontakteReport);
 		}

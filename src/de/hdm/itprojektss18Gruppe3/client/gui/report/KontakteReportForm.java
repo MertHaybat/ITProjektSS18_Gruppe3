@@ -16,6 +16,7 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -52,51 +53,56 @@ public class KontakteReportForm extends HorizontalPanel {
 	private VerticalPanel vpanel = new VerticalPanel();
 
 	public KontakteReportForm() {
+		vpanel.clear();
+		Nutzer nutzer = new Nutzer();
+		nutzer.setMail(Cookies.getCookie("email"));
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+//		vpanel.add(new AllKontakte(nutzer));
 
 		// listboxNutzer.setVisibleItemCount(1);
 		// listboxNutzer.setStylePrimaryName("listbox-report");
-		btAllNutzer.setStylePrimaryName("reportButton");
+//		btAllNutzer.setStylePrimaryName("reportButton");
+//
+//		this.add(labelbNutzer);
+//		// this.add(listboxNutzer);
+//		this.add(box);
+//		this.add(btAllNutzer);
+//
+//		RootPanel.get("content").add(this);
 
-		this.add(labelbNutzer);
-		// this.add(listboxNutzer);
-		this.add(box);
-		this.add(btAllNutzer);
-
-		RootPanel.get("content").add(this);
-
-		btAllNutzer.addClickHandler(new AllKontakteClickHandler());
-
-		Column<Nutzer, String> nutzertxtColumn = new Column<Nutzer, String>(new TextCell()) {
-
-			@Override
-			public String getValue(Nutzer object) {
-				return object.getMail();
-			}
-		};
-		Column<Nutzer, String> buttonColumn1 = new Column<Nutzer, String>(new ButtonCell()) {
-			@Override
-			public String getValue(Nutzer x) {
-				return "x";
-
-			}
-
-			@Override
-			public void onBrowserEvent(Context context, Element elem, Nutzer object, NativeEvent event) {
-				super.onBrowserEvent(context, elem, object, event);
-				if (event.getButton() == NativeEvent.BUTTON_LEFT) {
-					nutzerDataProvider.getList().remove(object);
-					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
-					selectedNutzerCT.redraw();
-				}
-			}
-		};
-		oracle.add("Allen");
-		box.setStylePrimaryName("gwt-SuggestBox");
-		reportverwaltung.findNutzer(new getNutzerCallback());
-		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
-		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
-
+//		btAllNutzer.addClickHandler(new AllKontakteClickHandler());
+//
+//		Column<Nutzer, String> nutzertxtColumn = new Column<Nutzer, String>(new TextCell()) {
+//
+//			@Override
+//			public String getValue(Nutzer object) {
+//				return object.getMail();
+//			}
+//		};
+//		Column<Nutzer, String> buttonColumn1 = new Column<Nutzer, String>(new ButtonCell()) {
+//			@Override
+//			public String getValue(Nutzer x) {
+//				return "x";
+//
+//			}
+//
+//			@Override
+//			public void onBrowserEvent(Context context, Element elem, Nutzer object, NativeEvent event) {
+//				super.onBrowserEvent(context, elem, object, event);
+//				if (event.getButton() == NativeEvent.BUTTON_LEFT) {
+//					nutzerDataProvider.getList().remove(object);
+//					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
+//					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+//					selectedNutzerCT.redraw();
+//				}
+//			}
+//		};
+//		oracle.add("Allen");
+//		box.setStylePrimaryName("gwt-SuggestBox");
+////		reportverwaltung.findNutzer(new getNutzerCallback());
+////		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
+//		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
+//
 		this.add(vpanel);
 
 	}
@@ -117,51 +123,51 @@ public class KontakteReportForm extends HorizontalPanel {
 
 	}
 
-	public class NutzerHinzufuegenKeyPressHandler implements KeyPressHandler {
+//	public class NutzerHinzufuegenKeyPressHandler implements KeyPressHandler {
+//
+//		@Override
+//		public void onKeyPress(KeyPressEvent event) {
+//			// TODO Auto-generated method stub
+//			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+//				if (box.getValue() == "") {
+//					// Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
+//				} else {
+//
+//					Nutzer nutzer = new Nutzer();
+//					nutzer.setMail(box.getValue());
+//
+//					nutzerSuggestbox.add(nutzer);
+//					box.setValue("");
+//					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
+//					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+//				}
+//			}
+//
+//		}
+//
+//	}
 
-		@Override
-		public void onKeyPress(KeyPressEvent event) {
-			// TODO Auto-generated method stub
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-				if (box.getValue() == "") {
-					// Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
-				} else {
-
-					Nutzer nutzer = new Nutzer();
-					nutzer.setMail(box.getValue());
-
-					nutzerSuggestbox.add(nutzer);
-					box.setValue("");
-					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
-				}
-			}
-
-		}
-
-	}
-
-	class getNutzerCallback implements AsyncCallback<Vector<Nutzer>> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onSuccess(Vector<Nutzer> result) {
-			for (Nutzer nutzer : result) {
-				nutzerListe.add(nutzer);
-
-			}
-			for (Nutzer nutzer : nutzerListe) {
-				oracle.add(nutzer.getMail());
-
-			}
-		}
-
-	}
+//	class getNutzerCallback implements AsyncCallback<Vector<Nutzer>> {
+//
+//		@Override
+//		public void onFailure(Throwable caught) {
+//			// TODO Auto-generated method stub
+//
+//		}
+//
+//		@Override
+//		public void onSuccess(Vector<Nutzer> result) {
+//			for (Nutzer nutzer : result) {
+//				nutzerListe.add(nutzer);
+//
+//			}
+//			for (Nutzer nutzer : nutzerListe) {
+//				oracle.add(nutzer.getMail());
+//
+//			}
+//		}
+//
+//	}
 
 	class AllKontakteReport implements AsyncCallback<Vector<Nutzer>> {
 
@@ -187,28 +193,29 @@ public class KontakteReportForm extends HorizontalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			if (box.getValue() == "Allen") {
-				vpanel.clear();
-				for (Nutzer nutzer : nutzerListe) {
-
-					vpanel.add(new AllKontakte(nutzer.getMail()));
-
-					// vpanel.add(new AllKontakte(box.getValue()));
-					RootPanel.get("content").add(vpanel);
-				}
-
-			} else {
-				if (box.getValue() == null) {
-					Window.alert("Für diesen Nutzer liegen keine gespeicherten Kontakte vor.");
-				} else {
-
-					vpanel.clear();
-					vpanel.add(new AllKontakte(box.getValue()));
-					RootPanel.get("content").add(vpanel);
-
-				}
-			}
+			
+//			// TODO Auto-generated method stub
+//			if (box.getValue() == "Allen") {
+//				vpanel.clear();
+//				for (Nutzer nutzer : nutzerListe) {
+//
+//					vpanel.add(new AllKontakte(nutzer.getMail()));
+//
+//					// vpanel.add(new AllKontakte(box.getValue()));
+//					RootPanel.get("content").add(vpanel);
+//				}
+//
+//			} else {
+//				if (box.getValue() == null) {
+//					Window.alert("Für diesen Nutzer liegen keine gespeicherten Kontakte vor.");
+//				} else {
+//
+//					vpanel.clear();
+//					vpanel.add(new AllKontakte(box.getValue()));
+//					RootPanel.get("content").add(vpanel);
+//
+//				}
+//			}
 		}
 
 	}

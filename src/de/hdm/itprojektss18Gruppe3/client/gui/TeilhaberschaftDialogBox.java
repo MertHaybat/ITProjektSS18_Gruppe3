@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Event;
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
@@ -30,11 +31,13 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
@@ -142,23 +145,44 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		eigenschaftCT.setSelectionModel(eigenschaftModel, eigenschaftSelectionEventManager);
 
-		eigenschaftCT.addCellPreviewHandler(new EigenschaftPreviewClickHander());
+//		eigenschaftCT.addCellPreviewHandler(new EigenschaftPreviewClickHander());
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		b1.addClickHandler(new insertTeilhaberschaftClickHandler());
 		b2.addClickHandler(new closeDialogBoxClickHandler());
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 
+		ssmAuspraegung.addSelectionChangeHandler(new SelectionHandlerAuspraegung());
+		
+		kontaktTeilenCB.addClickHandler(new CheckBoxClickHandler());
+		
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
 		selectedNutzerCT.addColumn(nutzerBox, "");
 		selectedNutzerCT.addColumn(buttonBox, "");
 
+		
+		
 		kt.addColumn(checkBoxAuspraegung, ""); 
 		kt.addColumn(eigenschaftColumn, "");
 		kt.addColumn(auspraegungColumn, "");
 		
 		this.add(ftTeilhaberschaft);
 	}
+	public class CheckBoxClickHandler implements ClickHandler{
 
+		@Override
+		public void onClick(ClickEvent event) {
+			ssmAuspraegung.clear();
+		}
+		
+	}
+	public class SelectionHandlerAuspraegung implements SelectionChangeEvent.Handler{
+
+		@Override
+		public void onSelectionChange(SelectionChangeEvent event) {
+			kontaktTeilenCB.setValue(false);
+		}
+		
+	}
 	public class FindNutzerByEmail implements AsyncCallback<Nutzer> {
 
 		@Override

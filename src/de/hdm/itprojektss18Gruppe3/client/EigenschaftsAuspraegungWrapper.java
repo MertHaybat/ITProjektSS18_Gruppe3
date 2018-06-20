@@ -103,7 +103,7 @@ public class EigenschaftsAuspraegungWrapper implements Serializable {
 		this.auspraegung.setStatus(status);
 	}
 	public String toString(){
-		return "Eigenschaft: " + this.eigenschaft.getBezeichnung() + "Eigenschaftsausprägung: " + this.auspraegung.getWert();
+		return this.eigenschaft.getBezeichnung() + ": "+ this.auspraegung.getWert() + "<br>";
 	}
 }
 
