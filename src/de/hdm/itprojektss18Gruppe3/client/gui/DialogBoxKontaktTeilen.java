@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -39,13 +40,19 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
+	
 	private VerticalPanel vPanel = new VerticalPanel();
-	private HorizontalPanel hPanel = new HorizontalPanel();
+//	private HorizontalPanel hPanel = new HorizontalPanel();
+	private FlexTable flextable1 = new FlexTable();
+	private FlexTable flextable2 = new FlexTable();
+
 	private Label abfrage = new Label("Wählen Sie die Teilnehmer aus: ");
 	private Button sichern = new Button("Sichern");
 	private Button abbrechen = new Button("Abbrechen");
+	
 	private ArrayList<Kontakt> kontakt = new ArrayList<>();
 	private List<Nutzer> nutzerListe = new ArrayList<>();
+	
 	private Nutzer nutzerausdb = null;
 
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
@@ -105,14 +112,18 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 		selectedNutzerCT.addColumn(buttonColumn1, "");
 		abbrechen.addClickHandler(new AbortTeilhaberschaftClickHandler());
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
-		vPanel.add(abfrage);
-		vPanel.add(box);
-		vPanel.add(selectedNutzerCT);
-		hPanel.add(sichern);
-		hPanel.add(abbrechen);
-		vPanel.add(hPanel);
+		flextable1.setWidget(0, 0, abfrage);
+		flextable1.setWidget(1, 0, box);
+		flextable1.setWidget(2, 0, selectedNutzerCT);
+		flextable2.setWidget(0, 0, sichern);
+		flextable2.setWidget(0, 1, abbrechen);
+		vPanel.add(flextable1);
+		vPanel.add(flextable2);
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		box.setStylePrimaryName("gwt-SuggestBox");
+		sichern.setStylePrimaryName("mainButton");
+		abbrechen.setStylePrimaryName("mainButton");
+
 		this.setTitle("Kontakte teilen");
 		this.add(vPanel);
 	}

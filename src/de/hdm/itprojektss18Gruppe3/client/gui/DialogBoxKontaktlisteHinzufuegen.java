@@ -14,6 +14,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -37,6 +38,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
+	private FlexTable flextable1 = new FlexTable();
 	private Label abfrage= new HTML("In welche Kontaktlisten möchten Sie die Auswahl hinzufügen?<br><br>");
 	private Label keineKontaktlisteLabel = new HTML("Sie müssen zuerst eine Kontaktliste angelegt haben, um einen Kontakt zu einer Kontaktliste"
 					+ " hinzufügen zu können!<br><br>");
@@ -81,10 +83,12 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			vPanel.add(abfrage);
 			vPanel.add(kontaktliste);
 			vPanel.add(new HTML("<br><br"));
-			hPanel.add(speichern);
-			hPanel.add(abbrechen);
+			flextable1.setWidget(1, 0, speichern);
+			flextable1.setWidget(1, 1, abbrechen);
+			vPanel.add(flextable1);
 			vPanel.add(hPanel);
 			this.add(vPanel);
+			
 		} else {
 			vPanel.add(keineKontaktlisteLabel);
 			vPanel.add(abbrechen);

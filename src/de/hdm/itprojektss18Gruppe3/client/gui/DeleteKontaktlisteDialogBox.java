@@ -7,6 +7,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -31,6 +32,7 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private HorizontalPanel hPanel2 = new HorizontalPanel();
+	private FlexTable flextable1 = new FlexTable();
 
 	/**
 	 * Instanziierung der Buttons "Löschen" und "Abbrechen"
@@ -51,10 +53,11 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 		this.kontaktlisteToDelete = kontaktlisteToDelete;
 		this.setText("Kontaktliste löschen");
 		
-		hPanel2.add(deleteButton);
-		hPanel2.add(abortButton);
-
+		flextable1.setWidget(0, 0, deleteButton);
+		flextable1.setWidget(0, 1, abortButton);
+		
 		vPanel.add(infoLabel);
+		vPanel.add(flextable1);
 		vPanel.add(hPanel);
 		vPanel.add(hPanel2);
 		this.add(vPanel);
