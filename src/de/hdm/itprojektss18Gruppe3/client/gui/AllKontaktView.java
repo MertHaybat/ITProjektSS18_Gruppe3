@@ -71,6 +71,7 @@ public class AllKontaktView extends MainFrame {
 	private Button deleteKontaktfromListeButton = new Button("Kontakt entfernen");
 	private Button addTeilhaberschaftKontaktlisteButton = new Button("Kontaktliste teilen");
 	private Button zurueckButton = new Button("Alle Kontakte");
+	private Button teilhaberschaftVerwaltenButton = new Button("Teilhaberschaft verwalten");
 
 	private HTML headline = new HTML();
 
@@ -160,6 +161,7 @@ public class AllKontaktView extends MainFrame {
 	public void run() {
 		//visitColumn.setFieldUpdater(new VisitProfileUpdate());
 		menuBarContainerFlowPanel.add(zurueckButton);
+		menuBarContainerFlowPanel.add(teilhaberschaftVerwaltenButton);
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
 		zurueckButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
@@ -167,6 +169,7 @@ public class AllKontaktView extends MainFrame {
 		kontaktlisteLoeschen.setStylePrimaryName("mainButton");
 		kontaktHinzufuegenButton.setStylePrimaryName("mainButton");
 		addKontaktButton.setStylePrimaryName("mainButton");
+		teilhaberschaftVerwaltenButton.setStylePrimaryName("mainButton");
 		deleteKontaktButton.setStylePrimaryName("mainButton");
 		addKontaktToKontaktlistButton.setStylePrimaryName("mainButton");
 		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
@@ -188,7 +191,7 @@ public class AllKontaktView extends MainFrame {
 		addTeilhaberschaftKontaktButton
 		.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
 		addTeilhaberschaftKontaktlisteButton.addClickHandler(new AddTeilhaberschaftKontaktlisteClickHandler());
-
+		teilhaberschaftVerwaltenButton.addClickHandler(new TeilhaberschaftVerwaltenClickHandler());
 		allKontakteCellTable.addCellPreviewHandler(new PreviewClickHander());
 
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
@@ -595,6 +598,15 @@ public class AllKontaktView extends MainFrame {
 			db.center();
 		}
 
+	}
+	
+	class TeilhaberschaftVerwaltenClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+			TeilhaberschaftVerwaltungView teilhaberschaftVerwaltung = new TeilhaberschaftVerwaltungView();
+		}
+		
 	}
 
 }
