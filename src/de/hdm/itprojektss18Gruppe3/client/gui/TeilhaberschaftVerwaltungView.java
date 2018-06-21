@@ -17,7 +17,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel allKontakteCellTableContainer = new HorizontalPanel();
-	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
+	private HorizontalPanel menuBarContainer = new HorizontalPanel();
 	
 	private Button zurueckButton = new Button("Alle Kontakte");
 	private Button teilhaberschaftButton = new Button("Teilhaberschaft löschen");
@@ -64,9 +64,10 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 	@Override
 	protected void run() {
 		
-		
-		menuBarContainerFlowPanel.add(zurueckButton);
-		menuBarContainerFlowPanel.add(teilhaberschaftButton);
+		zurueckButton.setStylePrimaryName("mainButton");
+		teilhaberschaftButton.setStylePrimaryName("mainButton");
+		menuBarContainer.add(zurueckButton);
+		menuBarContainer.add(teilhaberschaftButton);
 		
 		
 		teilhaberschaftAuspraegung.addColumn(teilhaberschaftAuspraegungCheckColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
@@ -83,8 +84,8 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		vPanel.add(teilhaberschaftAuspraegung);
 		vPanel.add(teilhaberschaftKontakt);
 		vPanel.add(teilhaberschaftKontaktliste);
-		
-		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
+		menuBarContainer.setStylePrimaryName("menuBarLabelContainer");
+		RootPanel.get("menubar").add(menuBarContainer);
 		RootPanel.get("content").add(vPanel);
 	}
 

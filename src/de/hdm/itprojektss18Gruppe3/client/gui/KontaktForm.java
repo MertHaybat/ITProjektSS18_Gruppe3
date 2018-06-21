@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -252,6 +253,7 @@ public class KontaktForm extends MainFrame {
 		this.add(vPanel);
 		this.add(vPanel3);
 		this.add(vPanel2);
+		hPanel.setStylePrimaryName("menuBarLabelContainer");
 		RootPanel.get("menubar").add(hPanel);
 		RootPanel.get("content").add(vPanel);
 		RootPanel.get("content").add(vPanel3);
@@ -601,8 +603,7 @@ public class KontaktForm extends MainFrame {
 	public class DeleteKontaktDialogBox extends DialogBox {
 		private VerticalPanel vPanel = new VerticalPanel();
 		private HorizontalPanel hPanel = new HorizontalPanel();
-		private Label abfrage = new Label("Sind Sie sicher, dass Sie diesen Vorgang abbrechen "
-				+ "und Ihre Änderungen verwerfen/den Kontakt löschen möchten?");
+		private Label abfrage = new HTML("Soll der Kontakt " + k.getName() + " wirklich gelöscht werden?<br><br>");
 		private Button ja = new Button("Ja");
 		private Button nein = new Button("Nein");
 

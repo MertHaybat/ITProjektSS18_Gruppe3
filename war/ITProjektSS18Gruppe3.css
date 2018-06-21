@@ -11,6 +11,10 @@ body {
 	background: transparent !important;
 }
 
+.tbody, tfoot, thead, tr, th, td {
+    vertical-align: middle !important;
+}
+
 #header {
 	height: 80px;
 	width: 89.5%;
@@ -47,12 +51,6 @@ body {
 	margin-right: 15px;
 }
 
-#logout {
-	width: auto;
-	float: right;
-	margin-right: 15px;
-}
-
 #menubar {
 	height: 40px;
 	width: 89.5%;
@@ -65,8 +63,9 @@ body {
 }
 
 #menubar .menuBarLabelContainer {
-	height: 40px;
+	height: inherit;
 	display: inline-block;
+	margin-left: 5px;
 }
 
 #menubar .menuBarLabel {
@@ -76,6 +75,28 @@ body {
 	font-size: 1.7em;
 	color: #606060;
 	display: inline-block;
+}
+
+#logout {
+	width: auto;
+	float: right;
+	margin-right: 10px;
+	height: inherit;
+}
+
+#logout .logoutBarContainer {
+	height: inherit;
+	display: inline-block;
+}
+
+.logoutBarContainer tr {
+	height: 40px;
+}
+
+
+
+.menuBarLabelContainer tr {
+	height: 40px;
 }
 
 #leftmenutree {
@@ -111,11 +132,6 @@ body {
 	line-height: 1px;
 	border: 2px solid #bbb;
 	font-size: 1px;
-}
-
-#content .suchTextbox {
-	position: absolute;
-	left: 684px;
 }
 
 #content .headline {
@@ -154,6 +170,9 @@ body {
 	font-size: 1.5em;
 }
 
+.labelSize1 {
+	font-size: 1.1em;
+}
 
 .kontaktFormText {
 	margin-right: 10px;
@@ -190,8 +209,7 @@ body {
 
 .cellListWidgetContainerPanel {
 	width: auto;
-	height: 600px;
-	border: 1px grey;
+	height: auto;
 	margin-left: 1em;
 	margin-top: 2em;
 }
@@ -254,12 +272,22 @@ body {
 	background-repeat: no-repeat;
 	background-position: right;
 	height: 25px;
-	margin-top: 2.5px;
+	width: 120px;
 	font-size: 1.1em;
+	margin-right: 5px;
 }
 
 .searchTextBox:hover {
 	background-size: 18%;
+}
+
+.detailSearchTextbox {
+	margin-left: 15px;
+	height: 20px;
+}
+
+.detailSearchTextbox:hover {
+	transform: scale(1.01);
 }
 
 .mainButton {
@@ -275,9 +303,7 @@ body {
 	padding: 8px 8px 8px 8px;
 	text-shadow: 0px 1px 0px #ffffff;
 	text-align: center;
-	margin-left: 5px;
-	margin-top: 4.5px;
-	vertical-align: super;
+	margin: auto 2px;
 }
 
 .mainButton:hover {
@@ -289,7 +315,7 @@ body {
 
 .logoutButton {
 	background-color: #d9d9d9;
-	width: 80px;
+	width: 70px;
 	border-radius: 6px;
 	border: 1px solid #f2f2f2;
 	display: inline-block;
@@ -300,7 +326,7 @@ body {
 	padding: 8px 0px 8px 0px;
 	text-shadow: 0px 1px 0px #ffffff;
 	text-align: center;
-	margin-left: 5px;
+	margin: auto 2px;
 }
 
 .logoutButton:hover {

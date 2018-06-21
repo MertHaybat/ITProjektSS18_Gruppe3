@@ -17,13 +17,16 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
@@ -31,6 +34,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -38,6 +42,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.PreviewClickHander;
 import de.hdm.itprojektss18Gruppe3.client.gui.CellTableAuspraegungWrapper.WertAuspraegungColumn;
 import de.hdm.itprojektss18Gruppe3.client.gui.CellTableAuspraegungWrapper.WertEigenschaftColumn;
 import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm.AllAuspraegungenCallback;
@@ -55,11 +60,12 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	private VerticalPanel suchErgebnisPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 
-	private String eingabeText = "Geben Sie die Suchkriterien ein";
-	private String kontaktLabel = "Kontaktname: ";
+	private Label eingabeText = new Label("Geben Sie die Suchkriterien ein");
+	private Label kontaktLabel = new Label("Kontaktname:");
 	private String eigenschaftLabel = "Eigenschaft: ";
 	private String auspraegungLabel = "Eigenschaftsausprägung: ";
 	private String textboxValue = "";
+	private Label emptyListMessage = new Label("Diese Suche ergab keinen Treffer");
 	
 	private ListBox eigenschaftTextbox = new ListBox();
 	private TextBox auspraegungTextbox = new TextBox();
@@ -67,6 +73,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 	private FlexTable layout = new FlexTable();
 	private Grid advancedOptions = new Grid(4, 2);
+	private HorizontalPanel kontaktLabelTextBox = new HorizontalPanel();
 
 	private CheckBox checkBoxKontakt = new CheckBox("In eigenen Kontakten/Kontaktlisten suchen");
 	private CheckBox checkBoxTeilhaber = new CheckBox("In den teilhabenden Kontakten/Kontaktlisten suchen");
@@ -83,7 +90,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	private ClickableTextCell clickCell = new ClickableTextCell();
 	private TextCell textCell = new TextCell();
 	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = kontaktCellTable.new KontaktnameColumn(clickCell);
-	private CellTableKontakt.IconColumn iconColumn = kontaktCellTable.new IconColumn(textCell);
+	private CellTableKontakt.IconColumn iconColumn = kontaktCellTable.new IconColumn(clickCell);
 	private ClickableTextCell clickEigenschaft = new ClickableTextCell();
 	private CellTableAuspraegungWrapper celltable = new CellTableAuspraegungWrapper(selection);
 
@@ -124,6 +131,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	}
 
 	void run() {
+		eingabeText.setStylePrimaryName("h2");
 		zurueck.setStylePrimaryName("mainButton");
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
@@ -134,15 +142,17 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		checkBoxKontakt.getValue();
 		checkBoxTeilhaber.getValue();
 
-		kontaktTextbox.setStylePrimaryName("suchTextbox");
+		//kontaktTextbox.setStylePrimaryName("suchTextbox");
 		FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
 		this.setSpacing(6);
 		layout.setCellSpacing(6);
 
-		layout.setHTML(0, 0, eingabeText);
-		layout.setHTML(1, 0, kontaktLabel);
-		layout.setWidget(1, 1, kontaktTextbox);
-
+		kontaktTextbox.setStylePrimaryName("detailSearchTextbox");
+		kontaktLabel.setStylePrimaryName("labelSize1");
+		kontaktLabelTextBox.add(kontaktLabel);
+		kontaktLabelTextBox.add(kontaktTextbox);
+		layout.setWidget(1, 0, kontaktLabelTextBox);
+		
 		eigenschaftTextbox.setVisibleItemCount(1);
 		advancedOptions.setCellSpacing(6);
 		advancedOptions.setHTML(0, 0, eigenschaftLabel);
@@ -169,26 +179,35 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzer.getId(), new AllKontaktlisteCallback());
 		kontaktmanagerVerwaltung.findAllEigenschaften(new AllEigenschaftenCallback());
-
+		
+		ssmKontakt.addSelectionChangeHandler(new SelectionHandlerAuspraegung());
+		kontaktCellTable.getSsmAuspraegung().addSelectionChangeHandler(new SelectionHandlerAuspraegung());
 		kontaktCellTable.setSelectionModel(ssmKontakt);
 		kontaktCellTable.addColumn(kontaktnameColumn, "Kontaktname");
 		kontaktCellTable.addColumn(iconColumn, "");
-		
+		kontaktCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
+		kontaktCellTable.setEmptyTableWidget(emptyListMessage);
+		kontaktCellTable.setWidth("250%");
+		kontaktCellTable.addCellPreviewHandler(new PreviewClickHander());
 		celltable.setSelectionModel(selection);
-		ssmKontakt.addSelectionChangeHandler(new SelectionHandlerAuspraegung());
+
 		
 		celltable.addColumn(wertEigenschaftColumn, "");
 		celltable.setColumnWidth(wertEigenschaftColumn, 7, Unit.EM);
 		celltable.addColumn(wertAuspraegungColumn, "");
 		celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 		
+		suchErgebnisPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		hPanel.add(zurueck);
+		hPanel.setStylePrimaryName("menuBarLabelContainer");
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(hPanel);
+		this.add(eingabeText);
 		this.add(layout);
 		this.add(suchErgebnisPanel);
 		this.add(suchErgebnisZweiPanel);
 	}
+	
 	public class SelectionHandlerAuspraegung implements SelectionChangeEvent.Handler{
 
 		@Override
@@ -202,6 +221,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		}
 		
 	}
+	
 	public class WrapperCallback implements AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>>{
 
 		@Override
@@ -216,6 +236,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		}
 		
 	}
+	
 	public class ZuruckClickHandler implements ClickHandler{
 
 		@Override
@@ -417,6 +438,18 @@ public class DisclosurePanelSuche extends VerticalPanel {
 				eigenschaftTextbox.addItem(eigenschaft.getBezeichnung());
 
 			}
+		}
+	}
+	
+	public class PreviewClickHander implements CellPreviewEvent.Handler<Kontakt> {
+
+		@Override
+		public void onCellPreview(CellPreviewEvent<Kontakt> event) {
+			
+			if(Event.getTypeInt(event.getNativeEvent().getType()) == Event.ONCLICK){
+				
+					KontaktForm kf = new KontaktForm(event.getValue());
+				}
 		}
 	}
 }

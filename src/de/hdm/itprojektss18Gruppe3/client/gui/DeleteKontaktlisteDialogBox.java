@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -43,7 +44,7 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 	private Button okButton = new Button("OK");
 	private Kontaktliste kontaktlisteToDelete;
 	
-	private Label infoLabel = new Label("Möchten Sie die Kontaktliste löschen?");
+	private HTML infoLabel;
 	
 	/**
 	 * Non-Argument-Konstruktor
@@ -52,7 +53,7 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 	public DeleteKontaktlisteDialogBox(Kontaktliste kontaktlisteToDelete) {
 		this.kontaktlisteToDelete = kontaktlisteToDelete;
 		this.setText("Kontaktliste löschen");
-		
+		infoLabel = new HTML("Möchten Sie die Kontaktliste " + kontaktlisteToDelete.getBezeichnung() + " wirklich löschen?<br><br>");
 		flextable1.setWidget(0, 0, deleteButton);
 		flextable1.setWidget(0, 1, abortButton);
 		

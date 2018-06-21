@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -81,7 +82,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 				}			
 			}
 		});
-		FlowPanel flowpanel = new FlowPanel();
+		HorizontalPanel flowpanel = new HorizontalPanel();
 //		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
 		logoutButton.addClickHandler(new logoutClickHandler());
 		logoutButton.setStylePrimaryName("logoutButton");
@@ -92,6 +93,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		flowpanel.add(textBox);
 		flowpanel.add(suchenButton);
 		flowpanel.add(logoutButton);
+		flowpanel.setStylePrimaryName("logoutBarContainer");
 		RootPanel.get("logout").add(flowpanel);//hPanelBar.add(logoutButton);
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("menubar").clear();
