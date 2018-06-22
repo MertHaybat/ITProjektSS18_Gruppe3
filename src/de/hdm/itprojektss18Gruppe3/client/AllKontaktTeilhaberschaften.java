@@ -31,7 +31,7 @@ public class AllKontaktTeilhaberschaften extends HTMLResultPanel{
 		@Override
 		public void onSuccess(AlleKontakteByTeilhaberschaftReport result) {
 			int resultSize = result.getRows().size();
-			if(resultSize == 1){
+			if(resultSize == 0){
 				Window.alert("Es gibt keine Teilhaberschaften");
 			}
 			HTMLReportWriter hrw = new HTMLReportWriter();
