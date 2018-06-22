@@ -209,7 +209,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			alleKontakteByTeilhaberschaft= this.getKontaktVerwaltung().findAllKontakteByEigentuemerID(nutzerA.getId());
 		} else {
 			alleKontakteByTeilhaberschaft = this.getKontaktVerwaltung()
-					.findAllKontaktByTeilhaberschaften(nutzerA.getId(), nutzerB.getId());
+					.findAllKontaktByTeilhaberschaften(nutzerB.getId(), nutzerA.getId());
 		}
 
 		for (Kontakt kontakt : alleKontakteByTeilhaberschaft) {

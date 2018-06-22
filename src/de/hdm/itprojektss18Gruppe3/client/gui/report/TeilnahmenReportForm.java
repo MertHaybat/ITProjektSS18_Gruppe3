@@ -239,7 +239,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("email"));
-			vpanel.add(new AllKontaktTeilhaberschaften(nutzer.getMail(),boxTeilhabender.getValue()));
+			vpanel.add(new AllKontaktTeilhaberschaften(nutzer.getMail(), boxTeilhabender.getValue()));
 			RootPanel.get("content").add(vpanel);
 //			if (boxTeilhabender.getValue() == "Allen") {
 //
