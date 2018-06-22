@@ -8,6 +8,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -37,6 +38,9 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private HorizontalPanel hPanel2 = new HorizontalPanel();
+	
+	private FlexTable flextable1 = new FlexTable();
+
 	
 	private HorizontalPanel treeContainer = new HorizontalPanel();
 
@@ -69,16 +73,19 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 	public void run(){
 		
 		this.setText("Gib eine Bezeichnung für die neue Kontaktliste an");
-		hPanel.add(kontaktlisteLabel);
-		hPanel.add(tkontaktliste);
-		hPanel2.add(bspeichern);
-		hPanel2.add(babbrechen);
+		hPanel.add(bspeichern);
+		hPanel.add(babbrechen);
+		flextable1.setWidget(0, 0, kontaktlisteLabel);
+		flextable1.setWidget(1, 0, tkontaktliste);
+		flextable1.setWidget(2, 0, hPanel);
 
 		bspeichern.addClickHandler(new insertKontaktlisteClickHandler());
 		babbrechen.addClickHandler(new closeKontaktlisteClickHandler());
 		
-		vPanel.add(hPanel);
-		vPanel.add(hPanel2);
+		bspeichern.setStylePrimaryName("mainButton");
+		babbrechen.setStylePrimaryName("mainButton");
+
+		vPanel.add(flextable1);
 		vPanel.setWidth("300px");
 		this.add(vPanel);
 		

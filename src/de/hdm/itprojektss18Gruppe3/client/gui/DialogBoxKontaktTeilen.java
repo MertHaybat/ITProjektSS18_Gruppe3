@@ -42,12 +42,11 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 			.getKontaktVerwaltung();
 	
 	private VerticalPanel vPanel = new VerticalPanel();
-//	private HorizontalPanel hPanel = new HorizontalPanel();
+	private HorizontalPanel hPanel = new HorizontalPanel();
 	private FlexTable flextable1 = new FlexTable();
-	private FlexTable flextable2 = new FlexTable();
 
 	private Label abfrage = new Label("Wählen Sie die Teilnehmer aus: ");
-	private Button sichern = new Button("Sichern");
+	private Button sichern = new Button("Speichern");
 	private Button abbrechen = new Button("Abbrechen");
 	
 	private ArrayList<Kontakt> kontakt = new ArrayList<>();
@@ -112,13 +111,14 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 		selectedNutzerCT.addColumn(buttonColumn1, "");
 		abbrechen.addClickHandler(new AbortTeilhaberschaftClickHandler());
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
+		hPanel.add(sichern);
+		hPanel.add(abbrechen);
 		flextable1.setWidget(0, 0, abfrage);
 		flextable1.setWidget(1, 0, box);
 		flextable1.setWidget(2, 0, selectedNutzerCT);
-		flextable2.setWidget(0, 0, sichern);
-		flextable2.setWidget(0, 1, abbrechen);
+		flextable1.setWidget(3, 0, hPanel);
+		
 		vPanel.add(flextable1);
-		vPanel.add(flextable2);
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		box.setStylePrimaryName("gwt-SuggestBox");
 		sichern.setStylePrimaryName("mainButton");

@@ -15,6 +15,7 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupListener;
@@ -40,6 +41,8 @@ public class KontaktPopup extends PopupPanel{
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 	private VerticalPanel vPanel = new VerticalPanel();
+	private FlexTable flextable1 = new FlexTable();
+
 	private TextBox ktNameTa = new TextBox();
 	private Button speichern = new Button("Hinzufügen");
 	private Button abbrechen = new Button("Abbrechen");
@@ -72,12 +75,17 @@ public class KontaktPopup extends PopupPanel{
 		ktNameTa.addClickHandler(new KontaktClickHandler());
 		ktNameTa.setWidth("15em");
 
-		vPanel.add(ktNameTa);	
-		vPanel.add(new HTML("<br>"));
 		buttonPanel.add(speichern);
 		buttonPanel.add(abbrechen);
-		vPanel.add(buttonPanel);
+		flextable1.setWidget(0, 0, ktNameTa);	
+		flextable1.setWidget(1, 0, new HTML("<br>"));
+		flextable1.setWidget(2, 0, buttonPanel);
+		
+		vPanel.add(flextable1);
 		this.add(vPanel);
+		
+		speichern.setStylePrimaryName("mainButton");
+		abbrechen.setStylePrimaryName("mainButton");
 	}
 	
 	

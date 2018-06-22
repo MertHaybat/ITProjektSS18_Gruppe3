@@ -6,6 +6,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -31,6 +32,8 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel vPanel2 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
+	private FlexTable flextable1 = new FlexTable();
+	private FlexTable flextable2 = new FlexTable();
 	private Label eigenschaftLabel = new Label("Eigenschaft: ");
 	private Label auspraegungLabel = new Label("Eigenschaftsausprägung: ");
 	private Button erstellen = new Button("Erstellen");
@@ -47,27 +50,22 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 	public CreateEigenschaftsauspraegungDialogBox(Kontakt k, Kontaktliste kontaktliste) {
 		this.kontakt = k;
 		this.kontaktliste = kontaktliste;
+		
+		//Horizontal Panel besetzen mit den Buttons
+		hPanel.add(erstellen);
+		hPanel.add(abbrechen);
 		/**
-		 * Struktur des linken VerticalPanels
+		 * Struktur des linken VerticalPanels über FlexTables 
 		 */
-		vPanel.add(eigenschaftLabel);
-		vPanel.add(tbEigenschaft);
-		vPanel.add(erstellen);
+		flextable1.setWidget(0, 0, eigenschaftLabel);
+		flextable1.setWidget(1, 0, tbEigenschaft);
+		flextable1.setWidget(0, 3, auspraegungLabel);
+		flextable1.setWidget(1, 3, tbEigenschaftsauspraegung);
+		flextable1.setWidget(3, 0, hPanel);
 
-		/**
-		 * Struktur des rechten VerticalPanels
-		 */
-		vPanel2.add(auspraegungLabel);
-		vPanel2.add(tbEigenschaftsauspraegung);
-		vPanel2.add(abbrechen);
 
-		/**
-		 * Struktur der gesamten Seite. Die beiden VerticalPanels werden dem
-		 * HorizontalPanel hinzugefügt.
-		 */
-		hPanel.add(vPanel);
-		hPanel.add(vPanel2);
-		this.add(hPanel);
+		vPanel.add(flextable1);
+		this.add(vPanel);
 
 		/**
 		 * Funktionalität des Buttons anlegen.
@@ -75,6 +73,10 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 		erstellen.addClickHandler(new insertEigenschaftClickHandler());
 		abbrechen.addClickHandler(new AbbruchClickHandler());
 
+		//CSS Style für die Buttons übernehmen
+		erstellen.setStylePrimaryName("mainButton");
+		abbrechen.setStylePrimaryName("mainButton");
+		
 	}
 
 	/**

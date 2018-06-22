@@ -8,6 +8,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -38,6 +39,7 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel hPanel1 = new HorizontalPanel();
 	private HorizontalPanel hPanel2 = new HorizontalPanel();
+	private FlexTable flextable1 = new FlexTable();
 
 	/**
 	 * Buttons für die DialogBox
@@ -49,22 +51,28 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	private Kontakt kontaktToRemoveFromKontaktliste;
 	private KontaktKontaktliste kontaktKontaktlisteObject = new KontaktKontaktliste();
 	private ArrayList<Kontakt> kontakteToRemoveFromKontaktliste;
+		
 	
 	public KontaktFromKontaktlisteLoeschenDialogBox(ArrayList<Kontakt> kontakteToRemoveFromKontaktliste, Kontaktliste kontaktliste) {
 		
+		bBestaetigen.setStylePrimaryName("mainButton");
+		bAbbrechen.setStylePrimaryName("mainButton");
+
 		this.kontakteToRemoveFromKontaktliste = kontakteToRemoveFromKontaktliste;
 		this.kontaktliste = kontaktliste;
 		StringBuilder listOfNames = new StringBuilder();
 		for(Kontakt k:kontakteToRemoveFromKontaktliste) {
 			listOfNames.append(k.getName() + ", ");
+			
 		}
 		
 		/**
 		 * Anordnung der Buttons in der DialogBox durch die Panels
 		 */
 		setText("Möchtest du " + listOfNames.toString().substring(0, listOfNames.length() - 2) + " aus der Kontaktliste entfernen?");
-		hPanel2.add(bBestaetigen);
-		hPanel2.add(bAbbrechen);
+		flextable1.setWidget(0, 0, bBestaetigen);
+		flextable1.setWidget(0, 1, bAbbrechen);
+		vPanel.add(flextable1);
 		setGlassEnabled(true);
 		
 		vPanel.add(hPanel1);
@@ -87,8 +95,9 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		 * Anordnung der Buttons in der DialogBox durch die Panels
 		 */
 		setText("Möchtest du " + kontaktToRemoveFromKontaktliste.getName() + " aus der Kontaktliste entfernen?");
-		hPanel2.add(bBestaetigen);
-		hPanel2.add(bAbbrechen);
+		flextable1.setWidget(0, 0, bBestaetigen);
+		flextable1.setWidget(0, 1, bAbbrechen);
+		vPanel.add(flextable1);
 		setGlassEnabled(true);
 		
 		vPanel.add(hPanel1);
