@@ -27,6 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -438,6 +439,7 @@ public class AllKontaktView extends MainFrame {
 		public class DeleteKontaktDialogBox extends DialogBox {
 			private VerticalPanel vPanel = new VerticalPanel();
 			private HorizontalPanel hPanel = new HorizontalPanel();
+			private FlexTable flextable1 = new FlexTable();
 			private Label abfrage = new Label("Möchten Sie den Kontakt löschen? Dies führt dazu,"
 					+ " dass der Kontakt in allen Kontaktlisten gelöscht wird.");
 			private Button ja = new Button("Ja");
@@ -448,12 +450,16 @@ public class AllKontaktView extends MainFrame {
 				kontakt = k;
 				ja.addClickHandler(new DeleteKontaktClickHandler());
 				nein.addClickHandler(new AbortDeleteClickHandler());
-				vPanel.add(abfrage);
 				hPanel.add(ja);
 				hPanel.add(nein);
-				vPanel.add(hPanel);
+				flextable1.setWidget(0, 0, abfrage);
+				flextable1.setWidget(1, 0, hPanel);
+				vPanel.add(flextable1);
 				this.setTitle("Kontakt löschen");
 				this.add(vPanel);
+				
+				ja.setStylePrimaryName("mainButton");
+				nein.setStylePrimaryName("mainButton");
 			}
 
 			public class AbortDeleteClickHandler implements ClickHandler {
