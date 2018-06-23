@@ -35,8 +35,10 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label(
-			"Please sign in to your Google Account to access the Kontaktmanager application.");
+	private Label welcomeMessage = new Label(
+			"Willkommen beim Kontaktmanager");
+	private Label loginMessage= new Label("Bitte loggen Sie sich mit Ihrem"
+			+ " Google Account ein");
 //	private Label instructionMessage = new Label("Clientauswahl");
 	private Anchor signInLink = new Anchor("Sign In");
 	private Anchor signOutLink = new Anchor("Sign Out");
@@ -49,7 +51,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private Button logoutButton = new Button("Ausloggen");
 //	private Button zumReportGenerator = new Button("Report-Generator");
 //	private Button zumKontaktmanager = new Button("Kontaktmanager");
-	private Button loginButton = new Button("Login");
+	private Button loginButton = new Button("LOGIN");
 //	private Button zurClientAuswahl = new Button("Zurück zur Client-Auswahl");
 
 	@Override
@@ -62,8 +64,12 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private void loadLogin() {
 
 		loginButton.addClickHandler(new loginButtonClickHandler());
-
-		loginPanel.add(loginLabel);
+		loginButton.setStylePrimaryName("loginButton");
+		welcomeMessage.setStylePrimaryName("landingPageWelcomeMessage");
+		loginPanel.setStylePrimaryName("loginPanel");
+		loginMessage.setStylePrimaryName("landingPageLoginMessage");
+		loginPanel.add(welcomeMessage);
+		loginPanel.add(loginMessage);
 		loginPanel.add(loginButton);
 		RootPanel.get("content").add(loginPanel);
 
