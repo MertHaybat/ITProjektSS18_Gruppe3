@@ -13,6 +13,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 
+/**
+ * Klasse, um Teilhaberschaften (Eigenschaften, Ausprägungen, Kontakte und Kontaktlisten) zu verwalten 
+ * @author ersinbarut
+ *
+ */
 public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 	private VerticalPanel vPanel = new VerticalPanel();

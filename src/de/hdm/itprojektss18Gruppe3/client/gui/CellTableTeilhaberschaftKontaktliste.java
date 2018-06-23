@@ -10,6 +10,11 @@ import com.google.gwt.view.client.MultiSelectionModel;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
 
+/**
+ * Klasse, um eine Teilhaberschaft und ihre Kontaktliste(-n) zu verwalten - innerhalb einer Tabelle
+ * @author ersinbarut
+ *
+ */
 public class CellTableTeilhaberschaftKontaktliste extends CellTable <NutzerTeilhaberschaftKontaktlisteWrapper>{
 	
 	private final MultiSelectionModel<NutzerTeilhaberschaftKontaktlisteWrapper> ssmAuspraegung =

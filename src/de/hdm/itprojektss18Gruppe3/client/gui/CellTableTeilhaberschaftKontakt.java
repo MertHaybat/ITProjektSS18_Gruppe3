@@ -10,6 +10,11 @@ import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 
+/**
+ * Klasse, um eine Teilhaberschaft und ihre Kontakte zu verwalten innerhalb einer Tabelle
+ * @author ersinbarut
+ *
+ */
 public class CellTableTeilhaberschaftKontakt extends CellTable<NutzerTeilhaberschaftKontaktWrapper>{
 	
 	private final MultiSelectionModel<NutzerTeilhaberschaftKontaktWrapper> ssmAuspraegung = 

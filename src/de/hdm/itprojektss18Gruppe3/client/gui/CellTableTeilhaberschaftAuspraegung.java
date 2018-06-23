@@ -10,6 +10,11 @@ import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 
+/**
+ * Klasse, um eine Teilhaberschaft und ihre Eigenschaften und Ausprägungen zu verwalten innerhalb einer Tabelle
+ * @author ersinbarut
+ *
+ */
 public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> {
 
 	
