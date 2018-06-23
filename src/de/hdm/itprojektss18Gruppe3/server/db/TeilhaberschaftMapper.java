@@ -772,4 +772,57 @@ public class TeilhaberschaftMapper {
 		 */
 		return result;
 	}
+	
+	public Vector<Teilhaberschaft> findTeilhaberschaftByEigentuemerAndTeilhaber(int eigentuemer, int teilhabenderID) {
+
+		/**
+		 * Verbindung zur Datenbank
+		 */
+		Connection con = DBConnection.connection();
+
+		Vector<Teilhaberschaft> result = new Vector<Teilhaberschaft>();
+
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE eigentuemerid= ? AND teilhabenderid= ? ORDER BY `kontaktid` ASC");
+			
+			stmt.setInt(1, eigentuemer);
+			stmt.setInt(2, teilhabenderID);
+			ResultSet rs = stmt.executeQuery();
+
+			/**
+			 * Für jeden Eintrag Teilhabender wird ein Teilhaberschaft-Objekt
+			 * erstellt.
+			 */
+			while (rs.next()) {
+				Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
+
+				teilhaberschaft.setId(rs.getInt("id"));
+				teilhaberschaft.setEigenschaftsauspraegungID(rs.getInt("eigenschaftsauspraegungid"));
+				teilhaberschaft.setKontaktID(rs.getInt("kontaktid"));
+				teilhaberschaft.setKontaktlisteID(rs.getInt("kontaktlisteid"));
+				teilhaberschaft.setTeilhabenderID(rs.getInt("teilhabenderid"));
+				teilhaberschaft.setEigentuemerID(rs.getInt("eigentuemerid"));
+
+				/**
+				 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 */
+				result.addElement(teilhaberschaft);
+			}
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		} finally {
+			if (con != null)
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+
+		/**
+		 * Ergebnisvektor zurückgeben
+		 */
+		return result;
+	}
 }

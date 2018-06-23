@@ -114,7 +114,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 			}
 		};
 
-		oracleNutzerTeilhabender.add("Alle");
+//		oracleNutzerTeilhabender.add("Alle");
 //		boxEigentümer.setStylePrimaryName("gwt-SuggestBox");
 		boxTeilhabender.setStylePrimaryName("gwt-SuggestBox");
 //		reportverwaltung.findNutzer(new getNutzerCallback());

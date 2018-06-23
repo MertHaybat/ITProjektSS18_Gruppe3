@@ -523,6 +523,9 @@ public interface KontaktmanagerAdministration extends RemoteService {
 
 	String findTeilhaberschaftString(int nutzerid, Vector<Eigenschaftsauspraegung> auspraegung);
 
-	Vector<NutzerTeilhaberschaftKontaktWrapper> findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer) throws IllegalArgumentException; 
+	Vector<NutzerTeilhaberschaftKontaktWrapper> findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer) throws IllegalArgumentException;
+
+	Vector<Kontakt> findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(int eigentuemerID, int teilhabenderID)
+			throws IllegalArgumentException; 
 
 }

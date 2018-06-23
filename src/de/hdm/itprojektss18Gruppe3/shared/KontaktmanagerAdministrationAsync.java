@@ -217,6 +217,9 @@ public interface KontaktmanagerAdministrationAsync {
 	void findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer,
 			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>> callback);
 
+	void findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(int eigentuemerID, int teilhabenderID,
+			AsyncCallback<Vector<Kontakt>> callback);
+
 
 
 	

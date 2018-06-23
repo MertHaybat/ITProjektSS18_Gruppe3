@@ -179,16 +179,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * 			zwischen den beiden geteilten, Kontakte ausgibt.
 	 */
 	@Override
-	public AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(String a, String b)
+	public AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(String eigentuemer, String teilnehmer)
 			throws IllegalArgumentException {
 
 		if (this.getKontaktVerwaltung() == null) {
 			return null;
 		}
 
-		Nutzer nutzerA = findNutzerByMail(a);
-		Nutzer nutzerB = findNutzerByMail(b);
-		String alle = "Alle";
+		Nutzer nutzerEigentuemer = findNutzerByMail(eigentuemer);
+		Nutzer nutzerTeilnehmer = findNutzerByMail(teilnehmer);
+		
 		Vector<Kontakt> alleKontakteByTeilhaberschaft = new Vector<Kontakt>();
 		AlleKontakteByTeilhaberschaftReport result = new AlleKontakteByTeilhaberschaftReport();
 
@@ -205,11 +205,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 		result.addRow(headline);
 		
-		if(b.equals("")){
-			alleKontakteByTeilhaberschaft= this.getKontaktVerwaltung().findAllKontakteByEigentuemerID(nutzerA.getId());
+		if(teilnehmer.equals("")){
+			alleKontakteByTeilhaberschaft= this.getKontaktVerwaltung().findAllKontakteByEigentuemerID(nutzerEigentuemer.getId());
 		} else {
 			alleKontakteByTeilhaberschaft = this.getKontaktVerwaltung()
-					.findAllKontaktByTeilhaberschaften(nutzerB.getId(), nutzerA.getId());
+					.findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(nutzerEigentuemer.getId(), nutzerTeilnehmer.getId());
+					
 		}
 
 		for (Kontakt kontakt : alleKontakteByTeilhaberschaft) {
@@ -264,10 +265,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		headline.addColumn(new Column("Kontaktname"));
 		headline.addColumn(new Column("Status"));
 		headline.addColumn(new Column("Ersteller"));
-		for (Eigenschaft eigenschaft2 : eigenschaften) {
-			headline.addColumn(new Column(eigenschaft2.getBezeichnung()));
-		}
-		
+		headline.addColumn(new Column("Eigenschaften"));
+//		for (Eigenschaft eigenschaft2 : eigenschaften) {
+//			headline.addColumn(new Column(eigenschaft2.getBezeichnung()));
+//		}
 		
 		result.addRow(headline);
 		
@@ -288,13 +289,23 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				kontakte.addColumn(new Column("Nicht Geteilt"));
 			}
 			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
-			for (Eigenschaft eigenschaft2 : eigenschaften) {
-				for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : auspraegungen) {
-					if(eigenschaft2.getBezeichnung().equals(eigenschaftsAuspraegungWrapper.getEigenschaft().getBezeichnung())){
-						kontakte.addColumn(new Column(eigenschaftsAuspraegungWrapper.getAuspraegung().getWert()));
-					}
-				}
-			}
+			
+//					for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : auspraegungen) {
+//						if(eigenschaft2.getBezeichnung().equals(eigenschaftsAuspraegungWrapper.getEigenschaft().getBezeichnung())){
+			kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
+//						}
+//					}
+					
+//					);
+			
+			
+//			for (Eigenschaft eigenschaft2 : eigenschaften) {
+//				for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : auspraegungen) {
+//					if(eigenschaft2.getBezeichnung().equals(eigenschaftsAuspraegungWrapper.getEigenschaft().getBezeichnung())){
+//						kontakte.addColumn(new Column(eigenschaftsAuspraegungWrapper.toString()));
+//					}
+//				}
+//			}
 			
 			
 			
