@@ -88,8 +88,7 @@ public class AllKontaktView extends MainFrame {
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 	private Nutzer nutzerausdb = null;
-	private Kontaktliste kontaktliste = new Kontaktliste();
-
+	private static Kontaktliste kontaktliste = null;
 
 	private Kontakt kontakt = null;
 
@@ -99,7 +98,8 @@ public class AllKontaktView extends MainFrame {
 	private ButtonCell buttonCell = new ButtonCell();
 	private TextCell textCell = new TextCell();
 	private ClickableTextCell clickCell = new ClickableTextCell();
-	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(clickCell);
+	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(
+			clickCell);
 	private CellTableKontakt.CheckColumn checkColumn = allKontakteCellTable.new CheckColumn(checkBoxCell);
 	private CellTableKontakt.IconColumn iconColumn = allKontakteCellTable.new IconColumn(textCell);
 
@@ -112,47 +112,33 @@ public class AllKontaktView extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
 
-		Menubar mb = new Menubar();
-		
-		//deleteKontaktButton.addClickHandler(new KontaktDeleteClickHandler());
-		
-		
-		//addKontaktToKontaktlistButton.addClickHandler(new AddKontaktToKontaktlisteClickHandler());
-
-		//addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
-		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
-
-		menuBarContainerFlowPanel.add(addKontaktButton);
-		menuBarContainerFlowPanel.add(deleteKontaktButton);
-		menuBarContainerFlowPanel.add(addKontaktlisteButton);
-		menuBarContainerFlowPanel.add(addKontaktToKontaktlistButton);
-		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
-
-
 	}
 
 	public AllKontaktView(final Kontaktliste k) {
 
 		this.kontaktliste = k;
 
+		allKontakteSelectedArrayList.clear();
+
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-		if(k.getBezeichnung().equals("Empfangene Kontakte")){
+		if (k.getBezeichnung().equals("Empfangene Kontakte")) {
 			headline = new HTML("Alle Kontakte, die Sie als Empfänger geteilt bekommen haben");
-			//			klisteView = new KontaktlistView();
-			//			klisteView.getMenuBarContainerFlowPanel().add(teilhaberschaftButton);
+			// klisteView = new KontaktlistView();
+			// klisteView.getMenuBarContainerFlowPanel().add(teilhaberschaftButton);
 			menuBarContainerFlowPanel.add(teilhaberschaftButton);
 			teilhaberschaftButton.addClickHandler(new TeilhaberschaftButtonClickHandler());
-			kontaktmanagerVerwaltung.findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(nutzer.getId(), new TeilhaberschaftKontakteCallback());
+			kontaktmanagerVerwaltung.findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(nutzer.getId(),
+					new TeilhaberschaftKontakteCallback());
 		} else {
 			headline = new HTML("Alle Kontakte in der Kontaktliste " + k.getBezeichnung());
-			kontaktmanagerVerwaltung.findKontaktlisteByTeilhabenderID(nutzer.getId(), new TeilhaberschaftKontaktlisteCallback());
+			kontaktmanagerVerwaltung.findKontaktlisteByTeilhabenderID(nutzer.getId(),
+					new TeilhaberschaftKontaktlisteCallback());
 			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
 
 		}
 		super.onLoad();
 	}
-
 
 	public HorizontalPanel getAllKontakteCellTableContainer() {
 		return allKontakteCellTableContainer;
@@ -163,8 +149,9 @@ public class AllKontaktView extends MainFrame {
 	}
 
 	public void run() {
-		//visitColumn.setFieldUpdater(new VisitProfileUpdate());		
-		
+		// visitColumn.setFieldUpdater(new VisitProfileUpdate());
+		Menubar mb = new Menubar();
+
 		menuBarContainerFlowPanel.add(zurueckButton);
 		menuBarContainerFlowPanel.add(teilhaberschaftVerwaltenButton);
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
@@ -187,16 +174,9 @@ public class AllKontaktView extends MainFrame {
 
 		allKontakteCellTable.setEmptyTableWidget(new Label("Diese Kontaktliste ist leer"));
 
-		RootPanel.get("menubar").clear();
-		RootPanel.get("menubar").add(menuBarContainerPanel);
 		allKontakteCellTableContainer.clear();
 		allKontakteCellTableContainer.add(allKontakteCellTable);
 
-		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
-	//	addTeilhaberschaftKontaktButton
-	//	.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
-		addTeilhaberschaftKontaktlisteButton.addClickHandler(new AddTeilhaberschaftKontaktlisteClickHandler());
-		teilhaberschaftVerwaltenButton.addClickHandler(new TeilhaberschaftVerwaltenClickHandler());
 		allKontakteCellTable.addCellPreviewHandler(new PreviewClickHander());
 
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
@@ -222,28 +202,25 @@ public class AllKontaktView extends MainFrame {
 
 		RootPanel.get("content").add(vPanel);
 	}
-	class ZurueckButtonClickHandler implements ClickHandler {
+
+	public static class AddTeilhaberschaftKontaktlisteCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
-
-			AllKontaktView akw = new AllKontaktView();
-		}
-
-	}
-	class AddTeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontaktliste);
-			dialogbox.center();
+		public void execute() {
+			if (kontaktliste != null) {
+				DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontaktliste);
+				dialogbox.center();
+			} else {
+				Window.alert("Bitte wählen Sie zunächst die Kontaktliste aus, die geteilt werden soll!");
+			}
 		}
 	}
+
 	class TeilhaberschaftButtonClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			if(allKontakteSelectedArrayList.isEmpty()){
+			if (allKontakteSelectedArrayList.isEmpty()) {
 				Window.alert("Sie müssen mindestens eine Teilhaberschaft auswählen");
 			} else {
 				Nutzer nutzer = new Nutzer();
@@ -254,13 +231,15 @@ public class AllKontaktView extends MainFrame {
 				for (Kontakt kontakt : allKontakteSelectedArrayList) {
 
 					teilhaberschaft.setKontaktID(kontakt.getId());
-					kontaktmanagerVerwaltung.deleteTeilhaberschaftByTeilhaberschaft(teilhaberschaft, new DeleteTeilhaberschaftCallback());
+					kontaktmanagerVerwaltung.deleteTeilhaberschaftByTeilhaberschaft(teilhaberschaft,
+							new DeleteTeilhaberschaftCallback());
 				}
 			}
 		}
 
 	}
-	class TeilhaberschaftKontaktlisteCallback implements AsyncCallback<Vector<Kontaktliste>>{
+
+	class TeilhaberschaftKontaktlisteCallback implements AsyncCallback<Vector<Kontaktliste>> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -271,24 +250,20 @@ public class AllKontaktView extends MainFrame {
 		public void onSuccess(Vector<Kontaktliste> result) {
 			int o = result.size();
 
-			if (result.size() == 0){
+			if (result.size() == 0) {
 				menuBarContainerFlowPanel.add(deleteKontaktButton);
 				menuBarContainerFlowPanel.add(kontaktlisteLoeschen);
 				menuBarContainerFlowPanel.add(kontaktHinzufuegenButton);
 				menuBarContainerFlowPanel.add(deleteKontaktfromListeButton);
 				menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 				menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
-				deleteKontaktfromListeButton.addClickHandler(new KontaktAusKontaktlisteDeleteClickHandler());
-				kontaktHinzufuegenButton.addClickHandler(new AddNewKontaktToKontaktlisteClickHandler());
-				kontaktlisteLoeschen.addClickHandler(new deleteKontaktlisteClickHandler());
+
 			}
 
 			for (int i = 0; i < result.size(); i++) {
 				if (result.elementAt(i).getId() == kontaktliste.getId()) {
 					menuBarContainerFlowPanel.add(teilhaberschaftButton);
 					menuBarContainerFlowPanel.add(kontaktHinzufuegenButton);
-					teilhaberschaftButton.addClickHandler(new DeleteTeilhaberschaftKontaktlisteClickHandler());
-					kontaktHinzufuegenButton.addClickHandler(new AddNewKontaktToKontaktlisteClickHandler());
 
 				}
 
@@ -299,9 +274,6 @@ public class AllKontaktView extends MainFrame {
 					menuBarContainerFlowPanel.add(deleteKontaktfromListeButton);
 					menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 					menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
-					deleteKontaktfromListeButton.addClickHandler(new KontaktAusKontaktlisteDeleteClickHandler());
-					kontaktHinzufuegenButton.addClickHandler(new AddNewKontaktToKontaktlisteClickHandler());
-					kontaktlisteLoeschen.addClickHandler(new deleteKontaktlisteClickHandler());
 
 				}
 
@@ -309,39 +281,51 @@ public class AllKontaktView extends MainFrame {
 
 		}
 	}
-	class KontaktAusKontaktlisteDeleteClickHandler implements ClickHandler {
+
+	public static class DeleteKontaktAusKontaktlisteCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
+			if (allKontakteSelectedArrayList.size() != 0) {
+				KontaktFromKontaktlisteLoeschenDialogBox deleteKontakt = new KontaktFromKontaktlisteLoeschenDialogBox(
+						allKontakteSelectedArrayList, kontaktliste);
+				deleteKontakt.center();
+			} else {
+				Window.alert("Es muss zuerst mindestens ein Kontakt aus einer Kontaktliste ausgewählt werden!");
+			}
 
-			KontaktFromKontaktlisteLoeschenDialogBox deleteKontakt = new KontaktFromKontaktlisteLoeschenDialogBox(
-					allKontakteSelectedArrayList, kontaktliste);
-			deleteKontakt.center();
 		}
 
 	}
-	class deleteKontaktlisteClickHandler implements ClickHandler {
+
+	public static class DeleteKontaktlisteCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
-			DeleteKontaktlisteDialogBox deleteKontakt = new DeleteKontaktlisteDialogBox(kontaktliste);
-			deleteKontakt.center();
+		public void execute() {
+			if (kontaktliste != null) {
+				DeleteKontaktlisteDialogBox deleteKontakt = new DeleteKontaktlisteDialogBox(kontaktliste);
+				deleteKontakt.center();
+			} else {
+				Window.alert("Bitte wählen Sie zunächst die Kontaktliste aus, die gelöscht werden soll!");
+			}
 		}
 	}
-	class AddNewKontaktToKontaktlisteClickHandler implements ClickHandler {
+
+	public static class AddNewKontaktToKontaktlisteCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
 			if (kontaktliste == null) {
-				KontaktPopup k = new KontaktPopup();
-				k.center();
+				Window.alert("Bitte wählen Sie eine Kontaktliste aus, in welche der  "
+						+ "neu zu erstellende Kontakt eingefügt werden soll!");
 			} else if (kontaktliste != null) {
 				KontaktPopup k = new KontaktPopup(kontaktliste);
 				k.center();
 			}
 		}
 	}
-	class DeleteTeilhaberschaftKontaktlisteClickHandler implements ClickHandler{
+
+	class DeleteTeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
@@ -350,9 +334,11 @@ public class AllKontaktView extends MainFrame {
 			Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 			teilhaberschaft.setKontaktlisteID(kontaktliste.getId());
 			teilhaberschaft.setTeilhabenderID(nutzer.getId());
-			kontaktmanagerVerwaltung.deleteTeilhaberschaftByTeilhaberschaft(teilhaberschaft, new DeleteTeilhaberschaftKontaktlisteCallback());
+			kontaktmanagerVerwaltung.deleteTeilhaberschaftByTeilhaberschaft(teilhaberschaft,
+					new DeleteTeilhaberschaftKontaktlisteCallback());
 		}
-		class DeleteTeilhaberschaftKontaktlisteCallback implements AsyncCallback<Void>{
+
+		class DeleteTeilhaberschaftKontaktlisteCallback implements AsyncCallback<Void> {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -367,7 +353,7 @@ public class AllKontaktView extends MainFrame {
 		}
 	}
 
-	class DeleteTeilhaberschaftCallback implements AsyncCallback<Void>{
+	class DeleteTeilhaberschaftCallback implements AsyncCallback<Void> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -385,16 +371,15 @@ public class AllKontaktView extends MainFrame {
 		}
 
 	}
-	
-	public static class AddTeilhaberschaftKontaktCommand implements Command {
 
+	public static class AddTeilhaberschaftKontaktCommand implements Command {
 
 		@Override
 		public void execute() {
 			ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
 			selectedKontakteInCellTable = allKontakteSelectedArrayList;
 			if (selectedKontakteInCellTable.size() == 0) {
-				Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du teilen möchtest");
+				Window.alert("Es muss zuerst ein Kontakt ausgewählt werden!");
 			} else if (selectedKontakteInCellTable.size() == 1) {
 				TeilhaberschaftDialogBox dialogBox = new TeilhaberschaftDialogBox(allKontakteSelectedArrayList);
 				dialogBox.center();
@@ -405,13 +390,12 @@ public class AllKontaktView extends MainFrame {
 		}
 	}
 
-	class addKontaktlisteClickHandler implements ClickHandler {
+	public static class AddKontaktlisteCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
 			CreateKontaktlisteDialogBox dbox = new CreateKontaktlisteDialogBox();
 			dbox.center();
-
 		}
 	}
 
@@ -429,77 +413,80 @@ public class AllKontaktView extends MainFrame {
 
 	public static class KontaktDeleteCommand implements Command {
 
-			@Override
-			public void execute() {
+		@Override
+		public void execute() {
+			if (allKontakteSelectedArrayList.size() != 0) {
 				DeleteKontaktDialogBox db = new DeleteKontaktDialogBox(allKontakteSelectedArrayList);
 				db.center();
+			} else {
+				Window.alert("Es muss zuerst ein Kontakt ausgewählt werden!");
 			}
 		}
+	}
 
-		public static class DeleteKontaktDialogBox extends DialogBox {
-			private VerticalPanel vPanel = new VerticalPanel();
-			private HorizontalPanel hPanel = new HorizontalPanel();
-			private FlexTable flextable1 = new FlexTable();
-			private Label abfrage = new Label("Möchten Sie den Kontakt löschen? Dies führt dazu,"
-					+ " dass der Kontakt in allen Kontaktlisten gelöscht wird.");
-			private Button ja = new Button("Ja");
-			private Button nein = new Button("Nein");
-			private ArrayList<Kontakt> kontakt = new ArrayList<>();
+	public static class DeleteKontaktDialogBox extends DialogBox {
+		private VerticalPanel vPanel = new VerticalPanel();
+		private HorizontalPanel hPanel = new HorizontalPanel();
+		private FlexTable flextable1 = new FlexTable();
+		private Label abfrage = new Label("Möchten Sie den Kontakt löschen? Dies führt dazu,"
+				+ " dass der Kontakt in allen Kontaktlisten gelöscht wird.");
+		private Button ja = new Button("Ja");
+		private Button nein = new Button("Nein");
+		private ArrayList<Kontakt> kontakt = new ArrayList<>();
 
-			public DeleteKontaktDialogBox(ArrayList<Kontakt> k) {
-				kontakt = k;
-				ja.addClickHandler(new DeleteKontaktClickHandler());
-				nein.addClickHandler(new AbortDeleteClickHandler());
-				hPanel.add(ja);
-				hPanel.add(nein);
-				flextable1.setWidget(0, 0, abfrage);
-				flextable1.setWidget(1, 0, hPanel);
-				vPanel.add(flextable1);
-				this.setTitle("Kontakt löschen");
-				this.add(vPanel);
-				
-				ja.setStylePrimaryName("mainButton");
-				nein.setStylePrimaryName("mainButton");
-			}
+		public DeleteKontaktDialogBox(ArrayList<Kontakt> k) {
+			kontakt = k;
+			ja.addClickHandler(new DeleteKontaktClickHandler());
+			nein.addClickHandler(new AbortDeleteClickHandler());
+			hPanel.add(ja);
+			hPanel.add(nein);
+			flextable1.setWidget(0, 0, abfrage);
+			flextable1.setWidget(1, 0, hPanel);
+			vPanel.add(flextable1);
+			this.setTitle("Kontakt löschen");
+			this.add(vPanel);
 
-			public class AbortDeleteClickHandler implements ClickHandler {
-
-				@Override
-				public void onClick(ClickEvent event) {
-					hide();
-				}
-
-			}
-
-			public class DeleteKontaktClickHandler implements ClickHandler {
-
-				@Override
-				public void onClick(ClickEvent event) {
-					for (Kontakt kontakt : kontakt) {
-						kontaktmanagerVerwaltung.deleteKontaktByID(kontakt, new DeleteKontaktCallback());
-					}
-				}
-
-			}
-
-			public class DeleteKontaktCallback implements AsyncCallback<Void> {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Der Kontakt konnte nicht gelöscht werden: " + caught.getMessage());
-				}
-
-				@Override
-				public void onSuccess(Void result) {
-					Window.alert("Der Kontakt wurde erfolgreich gelöscht.");
-					hide();
-					AllKontaktView akw = new AllKontaktView();
-				}
-			}
+			ja.setStylePrimaryName("mainButton");
+			nein.setStylePrimaryName("mainButton");
 		}
 
-	
-	public class TeilhaberschaftKontakteCallback implements AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>{
+		public class AbortDeleteClickHandler implements ClickHandler {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				hide();
+			}
+
+		}
+
+		public class DeleteKontaktClickHandler implements ClickHandler {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				for (Kontakt kontakt : kontakt) {
+					kontaktmanagerVerwaltung.deleteKontaktByID(kontakt, new DeleteKontaktCallback());
+				}
+			}
+
+		}
+
+		public class DeleteKontaktCallback implements AsyncCallback<Void> {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Der Kontakt konnte nicht gelöscht werden: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("Der Kontakt wurde erfolgreich gelöscht.");
+				hide();
+				AllKontaktView akw = new AllKontaktView();
+			}
+		}
+	}
+
+	public class TeilhaberschaftKontakteCallback implements AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -524,7 +511,7 @@ public class AllKontaktView extends MainFrame {
 		public void onSelectionChange(SelectionChangeEvent event) {
 			allKontakteSelectedArrayList.clear();
 			allKontakteSelectedArrayList
-			.addAll(((MultiSelectionModel<Kontakt>) allKontakteCellTable.getSsmAuspraegung()).getSelectedSet());
+					.addAll(((MultiSelectionModel<Kontakt>) allKontakteCellTable.getSsmAuspraegung()).getSelectedSet());
 
 		}
 
@@ -532,23 +519,23 @@ public class AllKontaktView extends MainFrame {
 
 	public class PreviewClickHander implements Handler<Kontakt> {
 
-		long initialClick=-1000;
+		long initialClick = -1000;
 
 		@Override
 		public void onCellPreview(CellPreviewEvent<Kontakt> event) {
 
 			long clickedAt = System.currentTimeMillis();
 
-			if(event.getNativeEvent().getType().contains("click")){
+			if (event.getNativeEvent().getType().contains("click")) {
 
 				/*
-				 * Wenn nicht mehr als 300ms zwischen zwei Klicks liegen,
-				 * so wird ein Doppelklick ausgelöst und die Profilansicht
-				 * des angeklickten Kontaktes geöffnet. Andernfalls wird der 
-				 * Kontakt lediglich selektiert.
+				 * Wenn nicht mehr als 300ms zwischen zwei Klicks liegen, so
+				 * wird ein Doppelklick ausgelöst und die Profilansicht des
+				 * angeklickten Kontaktes geöffnet. Andernfalls wird der Kontakt
+				 * lediglich selektiert.
 				 */
-				
-				if(clickedAt-initialClick < 300) {
+
+				if (clickedAt - initialClick < 300) {
 					KontaktForm kf = new KontaktForm(event.getValue());
 				}
 
@@ -567,7 +554,7 @@ public class AllKontaktView extends MainFrame {
 		@Override
 		public void execute() {
 			KontaktPopup k = new KontaktPopup();
-			k.center();			
+			k.center();
 		}
 	}
 
@@ -596,21 +583,25 @@ public class AllKontaktView extends MainFrame {
 
 	public static class AddKontaktToKontaktlisteCommand implements Command {
 
-			@Override
-			public void execute() {
-				DialogBoxKontaktlisteHinzufuegen db = new DialogBoxKontaktlisteHinzufuegen(allKontakteSelectedArrayList);
+		@Override
+		public void execute() {
+			if (allKontakteSelectedArrayList.size() != 0) {
+				DialogBoxKontaktlisteHinzufuegen db = new DialogBoxKontaktlisteHinzufuegen(
+						allKontakteSelectedArrayList);
 				db.center();
+			} else {
+				Window.alert("Es muss zuerst ein Kontakt ausgewählt werden!");
 			}
 		}
+	}
 
-	
-	class TeilhaberschaftVerwaltenClickHandler implements ClickHandler{
+	public static class TeilhaberschaftVerwaltenCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
 			TeilhaberschaftVerwaltungView teilhaberschaftVerwaltung = new TeilhaberschaftVerwaltungView();
 		}
-		
+
 	}
 
 }

@@ -70,14 +70,12 @@ public class KontaktlistView extends MainFrame {
 			.getKontaktVerwaltung();
 
 	public KontaktlistView() {
-		RootPanel.get("menubar").clear();
 		menuBarContainerFlowPanel.clear();
 		menuBarContainerFlowPanel.add(zurueckButton);
 		run();
 	}
 
 	public KontaktlistView(Kontaktliste kontaktliste) {
-		RootPanel.get("menubar").clear();
 		this.kontaktliste = kontaktliste;
 		this.setKontaktlisteSelectedInTree(kontaktliste);
 		menuBarContainerFlowPanel.clear();
@@ -95,7 +93,6 @@ public class KontaktlistView extends MainFrame {
 	public KontaktlistView(Kontaktliste selection, Teilhaberschaft teilhaberschaft) {
 		this.kontaktliste = selection;
 		this.setKontaktlisteSelectedInTree(selection);
-		RootPanel.get("menubar").clear();
 		run();
 	}
 
@@ -135,7 +132,7 @@ public class KontaktlistView extends MainFrame {
 		addTeilhaberschaftKontaktlisteButton.addClickHandler(new TeilhaberschaftKontaktlisteClickHandler());
 		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
 
-		RootPanel.get("menubar").add(menuBarContainerFlowPanel);
+
 
 	}
 	

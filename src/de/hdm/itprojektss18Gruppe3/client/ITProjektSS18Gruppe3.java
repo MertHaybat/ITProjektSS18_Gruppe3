@@ -72,9 +72,6 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		loginPanel.add(loginMessage);
 		loginPanel.add(loginButton);
 		RootPanel.get("content").add(loginPanel);
-		Menubar mb = new Menubar();
-		RootPanel.get("menubar").add(mb);
-
 	}
 
 	private void loadKontaktmanager() {
@@ -105,7 +102,9 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		RootPanel.get("logout").add(flowpanel);//hPanelBar.add(logoutButton);
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("menubar").clear();
-//		RootPanel.get("menubar").add(hPanelBar);
+		Menubar mb = new Menubar();
+		RootPanel.get("menubar").add(mb);
+
 		
 		AllKontaktView kontaktView = new AllKontaktView();
 		
