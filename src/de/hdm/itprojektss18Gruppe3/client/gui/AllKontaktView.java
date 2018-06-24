@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.http.client.params.AllClientPNames;
-
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
@@ -18,6 +16,7 @@ import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -33,6 +32,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.CellPreviewEvent;
@@ -47,6 +47,7 @@ import com.google.gwt.dom.client.NativeEvent;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
+import de.hdm.itprojektss18Gruppe3.client.Menubar;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktlisteHinzufuegen.AddClickHandler;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
@@ -78,7 +79,7 @@ public class AllKontaktView extends MainFrame {
 
 	private Teilhaberschaft teilhaberschaft = null;
 
-	private ArrayList<Kontakt> allKontakteSelectedArrayList = new ArrayList<>();
+	private static ArrayList<Kontakt> allKontakteSelectedArrayList = new ArrayList<>();
 	private ArrayList<Kontakt> allKontakteByUserArrayList = new ArrayList<>();
 	private List<Kontakt> allSelectedKontakte = new ArrayList<>();
 	private static ProvidesKey<Kontakt> keyProvider;
@@ -111,10 +112,14 @@ public class AllKontaktView extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
 
-		deleteKontaktButton.addClickHandler(new KontaktDeleteClickHandler());
-		addKontaktToKontaktlistButton.addClickHandler(new AddKontaktToKontaktlisteClickHandler());
+		Menubar mb = new Menubar();
+		
+		//deleteKontaktButton.addClickHandler(new KontaktDeleteClickHandler());
+		
+		
+		//addKontaktToKontaktlistButton.addClickHandler(new AddKontaktToKontaktlisteClickHandler());
 
-		addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
+		//addKontaktButton.addClickHandler(new CreateKontaktClickHandler());
 		addKontaktlisteButton.addClickHandler(new addKontaktlisteClickHandler());
 
 		menuBarContainerFlowPanel.add(addKontaktButton);
@@ -123,8 +128,6 @@ public class AllKontaktView extends MainFrame {
 		menuBarContainerFlowPanel.add(addKontaktToKontaktlistButton);
 		menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 
-
-		RootPanel.get("menubar").add(menuBarContainerPanel);
 
 	}
 
@@ -160,7 +163,8 @@ public class AllKontaktView extends MainFrame {
 	}
 
 	public void run() {
-		//visitColumn.setFieldUpdater(new VisitProfileUpdate());
+		//visitColumn.setFieldUpdater(new VisitProfileUpdate());		
+		
 		menuBarContainerFlowPanel.add(zurueckButton);
 		menuBarContainerFlowPanel.add(teilhaberschaftVerwaltenButton);
 		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
@@ -189,8 +193,8 @@ public class AllKontaktView extends MainFrame {
 		allKontakteCellTableContainer.add(allKontakteCellTable);
 
 		zurueckButton.addClickHandler(new ZurueckButtonClickHandler());
-		addTeilhaberschaftKontaktButton
-		.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
+	//	addTeilhaberschaftKontaktButton
+	//	.addClickHandler(new addTeilhaberschaftKontaktClickHandler(allKontakteSelectedArrayList));
 		addTeilhaberschaftKontaktlisteButton.addClickHandler(new AddTeilhaberschaftKontaktlisteClickHandler());
 		teilhaberschaftVerwaltenButton.addClickHandler(new TeilhaberschaftVerwaltenClickHandler());
 		allKontakteCellTable.addCellPreviewHandler(new PreviewClickHander());
@@ -381,16 +385,14 @@ public class AllKontaktView extends MainFrame {
 		}
 
 	}
-	class addTeilhaberschaftKontaktClickHandler implements ClickHandler {
+	
+	public static class AddTeilhaberschaftKontaktCommand implements Command {
 
-		ArrayList<Kontakt> selectedKontakteInCellTable;
-
-		public addTeilhaberschaftKontaktClickHandler(ArrayList<Kontakt> selectedKontakteInCellTable) {
-			this.selectedKontakteInCellTable = selectedKontakteInCellTable;
-		}
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
+			ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
+			selectedKontakteInCellTable = allKontakteSelectedArrayList;
 			if (selectedKontakteInCellTable.size() == 0) {
 				Window.alert("Bitte wähle zuerst mindestens einen Kontakt aus, den du teilen möchtest");
 			} else if (selectedKontakteInCellTable.size() == 1) {
@@ -402,8 +404,6 @@ public class AllKontaktView extends MainFrame {
 			}
 		}
 	}
-
-
 
 	class addKontaktlisteClickHandler implements ClickHandler {
 
@@ -427,16 +427,16 @@ public class AllKontaktView extends MainFrame {
 
 	}
 
-	public class KontaktDeleteClickHandler implements ClickHandler {
+	public static class KontaktDeleteCommand implements Command {
 
-		@Override
-		public void onClick(ClickEvent event) {
-			DeleteKontaktDialogBox db = new DeleteKontaktDialogBox(allKontakteSelectedArrayList);
-			db.center();
-
+			@Override
+			public void execute() {
+				DeleteKontaktDialogBox db = new DeleteKontaktDialogBox(allKontakteSelectedArrayList);
+				db.center();
+			}
 		}
 
-		public class DeleteKontaktDialogBox extends DialogBox {
+		public static class DeleteKontaktDialogBox extends DialogBox {
 			private VerticalPanel vPanel = new VerticalPanel();
 			private HorizontalPanel hPanel = new HorizontalPanel();
 			private FlexTable flextable1 = new FlexTable();
@@ -498,7 +498,7 @@ public class AllKontaktView extends MainFrame {
 			}
 		}
 
-	}
+	
 	public class TeilhaberschaftKontakteCallback implements AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>{
 
 		@Override
@@ -562,15 +562,13 @@ public class AllKontaktView extends MainFrame {
 		}
 	}
 
-	public class CreateKontaktClickHandler implements ClickHandler {
+	public static class CreateKontaktCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
 			KontaktPopup k = new KontaktPopup();
-			k.center();
-
+			k.center();			
 		}
-
 	}
 
 	public class AllKontaktByNutzerCallback implements AsyncCallback<Vector<Kontakt>> {
@@ -596,15 +594,15 @@ public class AllKontaktView extends MainFrame {
 
 	}
 
-	class AddKontaktToKontaktlisteClickHandler implements ClickHandler {
+	public static class AddKontaktToKontaktlisteCommand implements Command {
 
-		@Override
-		public void onClick(ClickEvent event) {
-			DialogBoxKontaktlisteHinzufuegen db = new DialogBoxKontaktlisteHinzufuegen(allKontakteSelectedArrayList);
-			db.center();
+			@Override
+			public void execute() {
+				DialogBoxKontaktlisteHinzufuegen db = new DialogBoxKontaktlisteHinzufuegen(allKontakteSelectedArrayList);
+				db.center();
+			}
 		}
 
-	}
 	
 	class TeilhaberschaftVerwaltenClickHandler implements ClickHandler{
 

@@ -72,6 +72,8 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		loginPanel.add(loginMessage);
 		loginPanel.add(loginButton);
 		RootPanel.get("content").add(loginPanel);
+		Menubar mb = new Menubar();
+		RootPanel.get("menubar").add(mb);
 
 	}
 
