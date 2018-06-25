@@ -86,7 +86,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		// Cookies.setCookie("logout", loginInfo.getLogoutUrl());
 		textBox.setStylePrimaryName("searchTextBox");
 		textBox.setMaxLength(100);
-		textBox.getElement().setPropertyString("placeholder", "Schnellsuche...");
+		textBox.getElement().setPropertyString("placeholder", " Schnellsuche...");
 		flowpanel.add(textBox);
 		flowpanel.setStylePrimaryName("logoutBarContainer");
 		RootPanel.get("logout").add(flowpanel);// hPanelBar.add(logoutButton);

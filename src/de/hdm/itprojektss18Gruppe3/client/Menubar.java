@@ -90,11 +90,11 @@ public class Menubar extends MenuBar {
 			}
 		});
 		menubar.addSeparator();
-		menubar.addItem("Kontakt", kontaktMenu);
+		menubar.addItem("Kontakt", kontaktMenu).addStyleName("menuBarImage");
 		menubar.addSeparator();
-		menubar.addItem("Kontaktliste", kontaktlisteMenu);
+		menubar.addItem("Kontaktliste", kontaktlisteMenu).addStyleName("menuBarImage");
 		menubar.addSeparator();
-		menubar.addItem("Teilhaberschaft", teilhaberschaftMenu);
+		menubar.addItem("Teilhaberschaft", teilhaberschaftMenu).addStyleName("menuBarImage");
 		menubar.addSeparator();
 		menubar.addItem(searchMenu);
 		menubar.addSeparator();
@@ -104,7 +104,8 @@ public class Menubar extends MenuBar {
 				com.google.gwt.user.client.Window.open(signOutLink.getHref(), "_self", "");
 			}
 		});
-
+		menubar.addSeparator();
+		
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menubar);
 	}

@@ -11,7 +11,6 @@ public abstract class MainFrame extends VerticalPanel {
 	     * Superklasse eine Initialisierung vorzunehmen.
 	     */
 	    super.onLoad();
-	    RootPanel.get("menubar").clear();
 	    RootPanel.get("content").clear();	  
 	    this.run();
 	}
