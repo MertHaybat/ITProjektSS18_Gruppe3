@@ -286,13 +286,14 @@ body {
 	background-repeat: no-repeat;
 	background-position: right;
 	height: 25px;
-	width: 120px;
+	width: 200px;
 	font-size: 1.1em;
 	margin-right: 5px;
+	border: none;
 }
 
 .searchTextBox:hover {
-	background-size: 18%;
+	background-size: 10%;
 }
 
 .detailSearchTextbox {

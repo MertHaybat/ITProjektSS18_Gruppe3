@@ -3,7 +3,10 @@ package de.hdm.itprojektss18Gruppe3.client;
 import java.awt.Window;
 import java.util.HashMap;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -16,9 +19,16 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3.FindNutzerCallback;
+import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3.LoginCallback;
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
+import de.hdm.itprojektss18Gruppe3.shared.LoginService;
+import de.hdm.itprojektss18Gruppe3.shared.LoginServiceAsync;
 
 public class Menubar extends MenuBar {
+
+	private LoginInfo loginInfo = null;
+	private Anchor signOutLink = new Anchor("Sign Out");
 
 	private MenuBar menubar = new MenuBar();
 	private MenuBar kontaktMenu = new MenuBar(true);
@@ -43,6 +53,7 @@ public class Menubar extends MenuBar {
 			new AllKontaktView.AddTeilhaberschaftKontaktlisteCommand());
 	private MenuItem manageTeilhaberschaften = new MenuItem("Teilhaberschaften verwalten",
 			new AllKontaktView.TeilhaberschaftVerwaltenCommand());
+	private MenuItem searchMenu = new MenuItem("Detailsuche", new ITProjektSS18Gruppe3.SuchenCommand());
 
 	public Menubar() {
 		RootPanel.get("menubar").clear();
@@ -50,6 +61,8 @@ public class Menubar extends MenuBar {
 	}
 
 	public void run() {
+		LoginServiceAsync loginService = GWT.create(LoginService.class);
+		loginService.login(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html", new LoginCallback());
 
 		kontaktMenu.addItem(addKontakt);
 		kontaktMenu.addItem(deleteKontakt);
@@ -67,26 +80,44 @@ public class Menubar extends MenuBar {
 		menubar.setAutoOpen(true);
 		menubar.setAnimationEnabled(true);
 		menubar.setWidth("auto");
-		menubar.setHeight("35px");
+		menubar.setHeight("inherit");
 
-		menubar.addItem("Home", new Command() {
+		menubar.addItem("Übersicht", new Command() {
 
 			@Override
 			public void execute() {
 				AllKontaktView akw = new AllKontaktView();
 			}
 		});
-
 		menubar.addSeparator();
-		menubar.addItem("Kontakte", kontaktMenu);
+		menubar.addItem("Kontakt", kontaktMenu);
 		menubar.addSeparator();
-		menubar.addItem("Kontaktlisten", kontaktlisteMenu);
+		menubar.addItem("Kontaktliste", kontaktlisteMenu);
 		menubar.addSeparator();
 		menubar.addItem("Teilhaberschaft", teilhaberschaftMenu);
+		menubar.addSeparator();
+		menubar.addItem(searchMenu);
+		menubar.addSeparator();
+		menubar.addItem("Ausloggen", new Command() {
+			public void execute() {
+				signOutLink.setHref(loginInfo.getLogoutUrl());
+				com.google.gwt.user.client.Window.open(signOutLink.getHref(), "_self", "");
+			}
+		});
 
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(menubar);
+	}
 
+	class LoginCallback implements AsyncCallback<LoginInfo> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+		}
+
+		@Override
+		public void onSuccess(LoginInfo result) {
+			loginInfo = result;
+		}
 	}
 }
-
