@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.LoginInfo;
-import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3.logoutClickHandler;
 import de.hdm.itprojektss18Gruppe3.client.gui.report.HTMLResultPanel;
 import de.hdm.itprojektss18Gruppe3.client.gui.report.ReportSelectMenu;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;

@@ -44,7 +44,7 @@ body {
 	height: 45px;
 	color: white;
 	font-family: 'Ubuntu', sans-serif;
-	font-weight: 1.5%;
+	font-weight: 700;
 	padding: 15px;
 	text-shadow: 1.5px 1.5px grey;
 	letter-spacing: 0.01em;
@@ -295,13 +295,15 @@ body {
 	background-repeat: no-repeat;
 	background-position: right;
 	height: 25px;
-	width: 120px;
+	width: 200px;
 	font-size: 1.1em;
 	margin-right: 5px;
+	border: none;
+	font-family: 'Ubuntu', sans-serif !important;
 }
 
 .searchTextBox:hover {
-	background-size: 18%;
+	background-size: 10%;
 }
 
 .detailSearchTextbox {
@@ -403,6 +405,7 @@ body {
 }
 
 /* .GWT WIDGET FORMATIERUNGEN */
+
 .gwt-DialogBox .Caption {
 	background: white;
 	cursor: default;
@@ -480,3 +483,93 @@ body {
 	vertical-align: super;
 }
 
+.menuBarImage {
+	background-image: url("/images/arrow_down.svg") !important;
+	background-repeat: no-repeat;
+	background-position: right;
+	background-size: 15px;
+}
+
+.gwt-MenuBar table {
+	height: inherit;
+}
+
+.gwt-MenuBar {
+   cursor: default;  
+}
+
+.gwt-MenuBar .gwt-MenuItem {
+   cursor: pointer !important;
+   font-family: 'Ubuntu', sans-serif !important;
+   font-size: 14px;
+   font-weight: 500 !important;
+}
+
+.gwt-MenuBar .gwt-MenuItem-selected {
+   background: #E3E8F3;
+   background-image: none !important;
+}
+
+.gwt-MenuBar-horizontal {
+   background: #e3e8f3 url(images/hborder.png) repeat-x 0px -2003px;
+   border: none !important;
+}
+
+.gwt-MenuBar-horizontal .gwt-MenuItem {
+   padding: 5px 14px !important;
+   vertical-align: bottom;
+   color: #494949;
+   line-height: 25px;
+}
+
+.gwt-MenuBar-horizontal .gwt-MenuItemSeparator {
+   width: 1px;
+   padding: 0px;
+   margin: 0px;
+   border: 0px;
+   border-left: 1px solid #ccc;
+   background: white;
+}
+
+.gwt-MenuBar-horizontal .gwt-MenuItemSeparator .menuSeparatorInner {
+   width: 1px;
+   height: 1px;
+   background: white; 
+}
+
+.gwt-MenuBar-vertical {
+   margin-top: 0px;
+   margin-left: 0px;
+   background: white;
+}
+
+.gwt-MenuBar-vertical table {
+   border-collapse: collapse;
+}
+
+.gwt-MenuBar-vertical .gwt-MenuItem {
+   padding: 5px 40px 5px 5px !important;
+   font-family: 'Ubuntu', sans-serif !important;
+   font-weight: 300 !important;
+   font-size: calc !important;
+}
+
+.gwt-MenuBar-vertical .gwt-MenuItemSeparator {
+   padding: 2px 0px;
+}
+
+.gwt-MenuBar-vertical .gwt-MenuItemSeparator .menuSeparatorInner {
+   height: 1px;
+   padding: 0px;
+   border: 0px;
+   border-top: 1px solid #ccc;
+   overflow: hidden;
+}
+
+.gwt-MenuBar-vertical .subMenuIcon {
+   padding-right: 4px;
+}
+
+.gwt-MenuBar-vertical .subMenuIcon-selected {
+   background: #E3E8F3;
+}

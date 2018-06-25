@@ -198,10 +198,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 		
 		suchErgebnisPanel.setStylePrimaryName("cellListWidgetContainerPanel");
-		hPanel.add(zurueck);
-		hPanel.setStylePrimaryName("menuBarLabelContainer");
-		RootPanel.get("menubar").clear();
-		RootPanel.get("menubar").add(hPanel);
+
 		this.add(eingabeText);
 		this.add(layout);
 		this.add(suchErgebnisPanel);

@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -35,11 +36,8 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label welcomeMessage = new Label(
-			"Willkommen beim Kontaktmanager");
-	private Label loginMessage= new Label("Bitte loggen Sie sich mit Ihrem"
-			+ " Google Account ein");
-//	private Label instructionMessage = new Label("Clientauswahl");
+	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
+	private Label loginMessage = new Label("Bitte loggen Sie sich mit Ihrem" + " Google Account ein");
 	private Anchor signInLink = new Anchor("Sign In");
 	private Anchor signOutLink = new Anchor("Sign Out");
 
@@ -49,10 +47,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private TextBox textBox = new TextBox();
 	private Button suchenButton = new Button("Detailsuche");
 	private Button logoutButton = new Button("Ausloggen");
-//	private Button zumReportGenerator = new Button("Report-Generator");
-//	private Button zumKontaktmanager = new Button("Kontaktmanager");
 	private Button loginButton = new Button("LOGIN");
-//	private Button zurClientAuswahl = new Button("Zurück zur Client-Auswahl");
 
 	@Override
 	public void onModuleLoad() {
@@ -72,11 +67,10 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		loginPanel.add(loginMessage);
 		loginPanel.add(loginButton);
 		RootPanel.get("content").add(loginPanel);
-
 	}
 
 	private void loadKontaktmanager() {
-		textBox.addKeyPressHandler(new KeyPressHandler(){
+		textBox.addKeyPressHandler(new KeyPressHandler() {
 
 			@Override
 			public void onKeyPress(KeyPressEvent event) {
@@ -85,76 +79,29 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 					RootPanel.get("content").clear();
 					RootPanel.get("content").add(panelSuche);
 					textBox.setText("");
-				}			
+				}
 			}
 		});
 		HorizontalPanel flowpanel = new HorizontalPanel();
-//		Cookies.setCookie("logout", loginInfo.getLogoutUrl());
-		logoutButton.addClickHandler(new logoutClickHandler());
-		logoutButton.setStylePrimaryName("logoutButton");
-		suchenButton.setStylePrimaryName("logoutButton");
-		suchenButton.addClickHandler(new SuchenClickHandler());
-		textBox.setMaxLength(15);
+		// Cookies.setCookie("logout", loginInfo.getLogoutUrl());
 		textBox.setStylePrimaryName("searchTextBox");
+		textBox.setMaxLength(100);
+		textBox.getElement().setPropertyString("placeholder", " Schnellsuche...");
 		flowpanel.add(textBox);
-		flowpanel.add(suchenButton);
-		flowpanel.add(logoutButton);
 		flowpanel.setStylePrimaryName("logoutBarContainer");
-		RootPanel.get("logout").add(flowpanel);//hPanelBar.add(logoutButton);
+		RootPanel.get("logout").add(flowpanel);// hPanelBar.add(logoutButton);
 		RootPanel.get("leftmenutree").clear();
-		RootPanel.get("menubar").clear();
-//		RootPanel.get("menubar").add(hPanelBar);
-		
 		AllKontaktView kontaktView = new AllKontaktView();
-		
-		//AUFRUF DES BAUMS
+
+		// AUFRUF DES BAUMS
 		CustomTreeModel ctm = new CustomTreeModel();
 		RootPanel.get("leftmenutree").clear();
 		RootPanel.get("leftmenutree").add(ctm);
 
-
 		signOutLink.setHref(loginInfo.getLogoutUrl());
+
+		Menubar mb = new Menubar();
 	}
-
-	public class logoutClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			signOutLink.setHref(loginInfo.getLogoutUrl());
-			Window.open(signOutLink.getHref(), "_self", "");
-
-		}
-	}
-
-//	class ClientAuswahlClickHandler implements ClickHandler {
-//
-//		@Override
-//		public void onClick(ClickEvent event) {
-//			signInLink.setHref(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html");
-//			Window.open(signInLink.getHref(), "_self", "");
-//		}
-//
-//	}
-
-//	class zumReportClickHandler implements ClickHandler {
-//
-//		@Override
-//		public void onClick(ClickEvent event) {
-//			RootPanel.get("menubar").clear();
-//			signInLink.setHref(GWT.getHostPageBaseURL() + "KontaktmanagerReport.html");
-//			Window.open(signInLink.getHref(), "_self", "");
-//		}
-//
-//	}
-//
-//	class zumKontaktmanagerClickHandler implements ClickHandler {
-//
-//		@Override
-//		public void onClick(ClickEvent event) {
-//			
-//		}
-//
-//	}
 
 	class loginButtonClickHandler implements ClickHandler {
 
@@ -268,15 +215,14 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		}
 	}
 
-	public class SuchenClickHandler implements ClickHandler {
+	public static class SuchenCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
 			DisclosurePanelSuche panelSuche = new DisclosurePanelSuche();
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(panelSuche);
 		}
-
 	}
 
 }
