@@ -82,7 +82,7 @@ public class KontaktmanagerReport implements EntryPoint {
 
 		loginPanel.add(loginLabel);
 		loginPanel.add(loginButton);
-		RootPanel.get("content").add(loginPanel);
+		RootPanel.get("contentReport").add(loginPanel);
 
 	}
 	class FindNutzerCallback implements AsyncCallback<Nutzer> {

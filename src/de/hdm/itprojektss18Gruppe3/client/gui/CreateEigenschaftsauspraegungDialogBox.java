@@ -123,23 +123,32 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 		public void onClick(ClickEvent event) {
 			String input = tbEigenschaft.getValue();
 			String inputAuspraegung = tbEigenschaftsauspraegung.getValue();
-			if (input.equals("PLZ") || input.equals("Telefonnummer")) {
-				if (!inputAuspraegung.matches("[0-9]*")) {
-					Window.alert("Für diese Eigenschaft müssen Sie Zahlen als Ausprägung eingeben!");
-				} else {
-					kontaktmanagerVerwaltung.createEigenschaftsauspraegung(tbEigenschaftsauspraegung.getValue(),
-							kontakt.getId(), 0, tbEigenschaft.getValue(), new createEigenschaftsauspraegungCallback());
-				}
-			} else if (input.equals("Geburtsdatum")) {
-				if (!inputAuspraegung.matches("[0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9]")) {
-					Window.alert("Bitte beachten Sie das Format: TT.MM.YYYY");
-				} else {
-					kontaktmanagerVerwaltung.createEigenschaftsauspraegung(tbEigenschaftsauspraegung.getValue(),
-							kontakt.getId(), 0, tbEigenschaft.getValue(), new createEigenschaftsauspraegungCallback());
-				}
+
+			if (input.equals("") || inputAuspraegung.equals("")) {
+				Window.alert("Bitte beide Felder ausfüllen");
+				
 			} else {
-				kontaktmanagerVerwaltung.createEigenschaftsauspraegung(tbEigenschaftsauspraegung.getValue(),
-						kontakt.getId(), 0, tbEigenschaft.getValue(), new createEigenschaftsauspraegungCallback());
+
+				if (input.equals("PLZ") || input.equals("Telefonnummer")) {
+					if (!inputAuspraegung.matches("[0-9]*")) {
+						Window.alert("Für diese Eigenschaft müssen Sie Zahlen als Ausprägung eingeben!");
+					} else {
+						kontaktmanagerVerwaltung.createEigenschaftsauspraegung(tbEigenschaftsauspraegung.getValue(),
+								kontakt.getId(), 0, tbEigenschaft.getValue(),
+								new createEigenschaftsauspraegungCallback());
+					}
+				} else if (input.equals("Geburtsdatum")) {
+					if (!inputAuspraegung.matches("[0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9]")) {
+						Window.alert("Bitte beachten Sie das Format: TT.MM.YYYY");
+					} else {
+						kontaktmanagerVerwaltung.createEigenschaftsauspraegung(tbEigenschaftsauspraegung.getValue(),
+								kontakt.getId(), 0, tbEigenschaft.getValue(),
+								new createEigenschaftsauspraegungCallback());
+					}
+				} else {
+					kontaktmanagerVerwaltung.createEigenschaftsauspraegung(tbEigenschaftsauspraegung.getValue(),
+							kontakt.getId(), 0, tbEigenschaft.getValue(), new createEigenschaftsauspraegungCallback());
+				}
 			}
 		}
 

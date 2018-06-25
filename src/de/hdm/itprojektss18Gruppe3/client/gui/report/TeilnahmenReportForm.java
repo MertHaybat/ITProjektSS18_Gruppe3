@@ -84,7 +84,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 		this.add(boxTeilhabender);
 		this.add(btAllKontaktTeilhaberschaften);
 
-		RootPanel.get("content").add(this);
+		RootPanel.get("contentReport").add(this);
 
 		btAllKontaktTeilhaberschaften.addClickHandler(new AllKontaktTeilhaberschaftenClickHandler());
 
@@ -240,7 +240,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("email"));
 			vpanel.add(new AllKontaktTeilhaberschaften(nutzer.getMail(), boxTeilhabender.getValue()));
-			RootPanel.get("content").add(vpanel);
+			RootPanel.get("contentReport").add(vpanel);
 //			if (boxTeilhabender.getValue() == "Allen") {
 //
 //				vpanel.clear();
@@ -248,7 +248,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 //
 //					vpanel.add(new AllKontaktTeilhaberschaften(boxEigentümer.getValue(), nutzer.getMail()));
 //
-//					RootPanel.get("content").add(vpanel);
+//					RootPanel.get("contentReport").add(vpanel);
 //				}
 //			} else {
 //				if (boxEigentümer.getValue() == null) {
@@ -261,7 +261,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 //						vpanel.clear();
 //						vpanel.add(
 //								new AllKontaktTeilhaberschaften(boxEigentümer.getValue(), boxTeilhabender.getValue()));
-//						RootPanel.get("content").add(vpanel);
+//						RootPanel.get("contentReport").add(vpanel);
 //
 //					}
 //				}
@@ -278,7 +278,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 // vpanel.add(new
 // AllKontaktTeilhaberschaften(lbNutzerEigentuemer.getSelectedValue(),
 // lbNutzerTeilhabender.getSelectedValue()));
-// RootPanel.get("content").add(vpanel);
+// RootPanel.get("contentReport").add(vpanel);
 //
 // }
 //

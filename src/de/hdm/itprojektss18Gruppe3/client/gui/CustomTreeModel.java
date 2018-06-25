@@ -113,7 +113,12 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 //			kontaktlistView.getMenuBarContainerFlowPanel();
 			if (selection instanceof Kontaktliste) {
 				setSelectedKontaktliste((Kontaktliste) selection);
-				AllKontaktView allkontaktView = new AllKontaktView(getSelectedKontaktliste());
+				if(getSelectedKontaktliste().getBezeichnung().equals("Eigene Kontakte")){
+					AllKontaktView allkontaktView = new AllKontaktView();
+				} else {
+					AllKontaktView allkontaktView = new AllKontaktView(getSelectedKontaktliste());
+					
+				}
 //				allkontaktView.getAllKontakteCellTableContainer().clear();
 			} else if (selection instanceof Kontakt) {
 				setSelectedKontakt((Kontakt) selection);
@@ -138,6 +143,9 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 		@Override
 		public void onSuccess(Vector<Kontaktliste> result) {
+			Kontaktliste eigeneKontakte = new Kontaktliste();
+			eigeneKontakte.setBezeichnung("Eigene Kontakte");
+			kontaktlistenDataProvider.getList().add(eigeneKontakte);
 			Kontaktliste kontaktliste = new Kontaktliste();
 			kontaktliste.setBezeichnung("Empfangene Kontakte");
 			result.add(kontaktliste);
@@ -192,29 +200,6 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			if (((Kontaktliste) value).getBezeichnung().equals("Empfangene Kontakte")) {
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-//				kontaktmanagerVerwaltung.findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(nutzer.getId(),
-//						new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>() {
-//
-//							@Override
-//							public void onFailure(Throwable caught) {
-//								Window.alert("Fehler beim Laden" + caught.getMessage());
-//							}
-//
-//							@Override
-//							public void onSuccess(Vector<NutzerTeilhaberschaftKontaktWrapper> result) {
-//								Vector<Kontakt> kontakt = new Vector<Kontakt>();
-//								for (NutzerTeilhaberschaftKontaktWrapper wrapper : result) {
-//								
-//									kontakt.add(wrapper.getKontakt());
-//
-//								}
-//								for (Kontakt k : kontakt) {
-//									kontaktProvider.getList().add(k);
-//								}
-//							}
-//
-//						});
-				
 				kontaktmanagerVerwaltung.findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(nutzer.getId(), new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>() {
 
 					@Override
@@ -232,6 +217,24 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 						}
 						for (Kontakt k : kontakt) {
+							kontaktProvider.getList().add(k);
+						}
+					}
+				});
+			}
+			if (((Kontaktliste) value).getBezeichnung().equals("Eigene Kontakte")) {
+				Nutzer nutzer = new Nutzer();
+				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+				kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AsyncCallback<Vector<Kontakt>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Fehler beim Laden" + caught.getMessage());
+					}
+
+					@Override
+					public void onSuccess(Vector<Kontakt> result) {
+						for (Kontakt k : result) {
 							kontaktProvider.getList().add(k);
 						}
 					}
@@ -285,12 +288,17 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				sb.appendHtmlConstant("<table width='100%'><td>");
 				sb.appendEscaped(value.getBezeichnung());
 				sb.appendHtmlConstant("</td><td style='float: right'>");
-				if (value.getStatus() == 0) {
-					sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\" style=\"vertical-align: middle;\">");
-
-				} else if (value.getStatus() == 1) {
-
-					sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\" style=\"vertical-align: middle;\">");
+				if (value.getBezeichnung().equals("Eigene Kontakte") || value.getBezeichnung().equals("Empfangene Kontakte")){
+					
+					
+				} else {
+					if (value.getStatus() == 0) {
+						sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\" style=\"vertical-align: middle;\">");
+						
+					} else if (value.getStatus() == 1) {
+						
+						sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\" style=\"vertical-align: middle;\">");
+					}
 				}
 				sb.appendHtmlConstant("</td></table>");
 			}

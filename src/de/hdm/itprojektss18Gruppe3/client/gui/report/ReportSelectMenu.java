@@ -37,8 +37,8 @@ public class ReportSelectMenu extends HorizontalPanel{
 		@Override
 		public void onClick(ClickEvent event) {
 			AllKontakte allKontakteReport = new AllKontakte();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(allKontakteReport);
+			RootPanel.get("contentReport").clear();
+			RootPanel.get("contentReport").add(allKontakteReport);
 		}
 
 	}
@@ -48,8 +48,8 @@ public class ReportSelectMenu extends HorizontalPanel{
 		@Override
 		public void onClick(ClickEvent event) {
 			TeilnahmenReportForm teilnahmenReportForm = new TeilnahmenReportForm();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(teilnahmenReportForm);
+			RootPanel.get("contentReport").clear();
+			RootPanel.get("contentReport").add(teilnahmenReportForm);
 		}
 
 	}
@@ -59,8 +59,8 @@ public class ReportSelectMenu extends HorizontalPanel{
 		@Override
 		public void onClick(ClickEvent event) {
 			EigenschaftenReportForm eigenschaftenReportForm = new EigenschaftenReportForm();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(eigenschaftenReportForm);
+			RootPanel.get("contentReport").clear();
+			RootPanel.get("contentReport").add(eigenschaftenReportForm);
 		}
 
 	}

@@ -266,6 +266,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		headline.addColumn(new Column("Status"));
 		headline.addColumn(new Column("Ersteller"));
 		headline.addColumn(new Column("Eigenschaften"));
+		headline.addColumn(new Column("Erzeugungsdatum"));
+		headline.addColumn(new Column("Modifkationsdatum"));
 //		for (Eigenschaft eigenschaft2 : eigenschaften) {
 //			headline.addColumn(new Column(eigenschaft2.getBezeichnung()));
 //		}
@@ -290,27 +292,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			}
 			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
 			
-//					for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : auspraegungen) {
-//						if(eigenschaft2.getBezeichnung().equals(eigenschaftsAuspraegungWrapper.getEigenschaft().getBezeichnung())){
 			kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
-//						}
-//					}
-					
-//					);
-			
-			
-//			for (Eigenschaft eigenschaft2 : eigenschaften) {
-//				for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : auspraegungen) {
-//					if(eigenschaft2.getBezeichnung().equals(eigenschaftsAuspraegungWrapper.getEigenschaft().getBezeichnung())){
-//						kontakte.addColumn(new Column(eigenschaftsAuspraegungWrapper.toString()));
-//					}
-//				}
-//			}
-			
+			kontakte.addColumn(new Column(kontakt.getErzeugungsdatum().toString()));
+			kontakte.addColumn(new Column(kontakt.getModifikationsdatum().toString()));
 			
 			
 			result.addRow(kontakte);
-//			result.addRow(eigenschaftRow);
 		}
 		return result;
 	}
