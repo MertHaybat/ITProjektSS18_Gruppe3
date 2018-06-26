@@ -1797,6 +1797,64 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return kontaktVector;		
 	}
 	
+	@Override
+	public Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findKontaktlisteTeilhaberschaftEigentuemer(int eigentuemerID) throws IllegalArgumentException{
+		Vector<Teilhaberschaft> teilhaberschaft = findTeilhaberschaftByEigentuemerID(eigentuemerID);
+		Vector<Teilhaberschaft> filterTeilhabeschaft = new Vector<Teilhaberschaft>();
+		Vector<NutzerTeilhaberschaftKontaktlisteWrapper> wrapper = new Vector<NutzerTeilhaberschaftKontaktlisteWrapper>();
+		
+		for (Teilhaberschaft teilhaberschaft2 : teilhaberschaft) {
+			if(teilhaberschaft2.getKontaktlisteID() != 0){
+				filterTeilhabeschaft.add(teilhaberschaft2);
+			}
+		}
+		
+		for (Teilhaberschaft teilhaberschaft2 : filterTeilhabeschaft) {
+			wrapper.add(new NutzerTeilhaberschaftKontaktlisteWrapper(findNutzerByID(teilhaberschaft2.getTeilhabenderID()), teilhaberschaft2, findKontaktlisteByID(teilhaberschaft2.getKontaktlisteID())));
+		}
+		
+		return wrapper;
+	}
+	
+	@Override
+	public Vector<NutzerTeilhaberschaftKontaktWrapper> findKontaktTeilhaberschaftEigentuemer(int eigentuemerID) throws IllegalArgumentException{
+		Vector<Teilhaberschaft> teilhaberschaft = findTeilhaberschaftByEigentuemerID(eigentuemerID);
+		Vector<Teilhaberschaft> filterTeilhabeschaft = new Vector<Teilhaberschaft>();
+		Vector<NutzerTeilhaberschaftKontaktWrapper> wrapper = new Vector<NutzerTeilhaberschaftKontaktWrapper>();
+		
+		for (Teilhaberschaft teilhaberschaft2 : teilhaberschaft) {
+			if(teilhaberschaft2.getKontaktID() != 0 && teilhaberschaft2.getEigenschaftsauspraegungID() == 0){
+				filterTeilhabeschaft.add(teilhaberschaft2);
+			}
+		}
+		
+		for (Teilhaberschaft teilhaberschaft2 : filterTeilhabeschaft) {
+			wrapper.add(new NutzerTeilhaberschaftKontaktWrapper(findNutzerByID(teilhaberschaft2.getTeilhabenderID()), teilhaberschaft2, findKontaktByID(teilhaberschaft2.getKontaktID())));
+		}
+		
+		return wrapper;
+	}
+	@Override
+	public Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftEigentuemer(int eigentuemerID) throws IllegalArgumentException{
+		Vector<Teilhaberschaft> teilhaberschaft = findTeilhaberschaftByEigentuemerID(eigentuemerID);
+		Vector<Teilhaberschaft> filterTeilhabeschaft = new Vector<Teilhaberschaft>();
+		Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> wrapper = new Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>();
+		
+		for (Teilhaberschaft teilhaberschaft2 : teilhaberschaft) {
+			if(teilhaberschaft2.getKontaktID() != 0 && teilhaberschaft2.getEigenschaftsauspraegungID() != 0){
+				filterTeilhabeschaft.add(teilhaberschaft2);
+			}
+		}
+		
+		for (Teilhaberschaft teilhaberschaft2 : filterTeilhabeschaft) {
+			Eigenschaftsauspraegung auspraegung = findEigenschaftsauspraegungById(teilhaberschaft2.getEigenschaftsauspraegungID());
+			Eigenschaft eigenschaft = findEigenschaftByEigenschaftID(auspraegung.getEigenschaftID());
+			wrapper.add(new NutzerTeilhaberschaftEigenschaftAuspraegungWrapper(findNutzerByID(teilhaberschaft2.getTeilhabenderID()), teilhaberschaft2, eigenschaft, auspraegung, findKontaktByID(teilhaberschaft2.getKontaktID())));
+		}
+		
+		return wrapper;
+	}
+	
 }
 
 	// @Override

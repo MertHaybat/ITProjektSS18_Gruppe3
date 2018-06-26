@@ -1,6 +1,5 @@
 package de.hdm.itprojektss18Gruppe3.shared;
 
-import java.util.Date;
 import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
@@ -219,6 +218,15 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(int eigentuemerID, int teilhabenderID,
 			AsyncCallback<Vector<Kontakt>> callback);
+
+	void findKontaktlisteTeilhaberschaftEigentuemer(int eigentuemerID,
+			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktlisteWrapper>> callback);
+
+	void findKontaktTeilhaberschaftEigentuemer(int eigentuemerID,
+			AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>> callback);
+
+	void findAuspraegungTeilhaberschaftEigentuemer(int eigentuemerID,
+			AsyncCallback<Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>> callback);
 
 
 
