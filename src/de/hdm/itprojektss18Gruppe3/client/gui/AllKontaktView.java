@@ -106,6 +106,9 @@ public class AllKontaktView extends MainFrame {
 	private KontaktlistView klisteView = new KontaktlistView();
 
 	public AllKontaktView() {
+		Kontaktliste dummyKontaktliste = new Kontaktliste();
+		dummyKontaktliste.setBezeichnung("Eigene Kontakte");
+		this.kontaktliste = dummyKontaktliste;
 		headline = new HTML("Alle Kontakte in Ihrem Kontaktmanager");
 		super.onLoad();
 		Nutzer nutzer = new Nutzer();
@@ -114,7 +117,7 @@ public class AllKontaktView extends MainFrame {
 
 	}
 
-	public AllKontaktView(final Kontaktliste k) {
+	public AllKontaktView(Kontaktliste k) {
 
 		this.kontaktliste = k;
 
@@ -149,28 +152,8 @@ public class AllKontaktView extends MainFrame {
 	}
 
 	public void run() {
-		// visitColumn.setFieldUpdater(new VisitProfileUpdate());
+		
 		Menubar mb = new Menubar();
-
-		menuBarContainerFlowPanel.add(zurueckButton);
-		menuBarContainerFlowPanel.add(teilhaberschaftVerwaltenButton);
-		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
-		zurueckButton.setStylePrimaryName("mainButton");
-		addTeilhaberschaftKontaktlisteButton.setStylePrimaryName("mainButton");
-		deleteKontaktfromListeButton.setStylePrimaryName("mainButton");
-		kontaktlisteLoeschen.setStylePrimaryName("mainButton");
-		kontaktHinzufuegenButton.setStylePrimaryName("mainButton");
-		addKontaktButton.setStylePrimaryName("mainButton");
-		teilhaberschaftVerwaltenButton.setStylePrimaryName("mainButton");
-		deleteKontaktButton.setStylePrimaryName("mainButton");
-		addKontaktToKontaktlistButton.setStylePrimaryName("mainButton");
-		addTeilhaberschaftKontaktButton.setStylePrimaryName("mainButton");
-		addKontaktlisteButton.setStylePrimaryName("mainButton");
-		teilhaberschaftButton.setStylePrimaryName("mainButton");
-		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
-		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
-		menuBarContainerPanel.setStylePrimaryName("menuBarLabelContainer");
-		menuBarContainerPanel.add(menuBarContainerFlowPanel);
 
 		allKontakteCellTable.setEmptyTableWidget(new Label("Diese Kontaktliste ist leer"));
 
@@ -181,11 +164,11 @@ public class AllKontaktView extends MainFrame {
 
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
 		allKontakteCellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		allKontakteCellTable.setColumnWidth(checkColumn, 20, Unit.PX);
+		allKontakteCellTable.setColumnWidth(checkColumn, 1, Unit.PCT);
 		allKontakteCellTable.addColumn(kontaktnameColumn, "Kontaktname");
-		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 50, Unit.EM);
+		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 100, Unit.PCT);
 		allKontakteCellTable.addColumn(iconColumn, "");
-		allKontakteCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
+		allKontakteCellTable.setColumnWidth(iconColumn, 1, Unit.PCT);
 
 		allKontakteCellTableContainer.setStylePrimaryName("cellListWidgetContainerPanel");
 		vPanel.setStylePrimaryName("cellListWidgetContainerPanel");
@@ -274,11 +257,8 @@ public class AllKontaktView extends MainFrame {
 					menuBarContainerFlowPanel.add(deleteKontaktfromListeButton);
 					menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
 					menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
-
 				}
-
 			}
-
 		}
 	}
 
@@ -303,8 +283,13 @@ public class AllKontaktView extends MainFrame {
 		@Override
 		public void execute() {
 			if (kontaktliste != null) {
+				if(kontaktliste.getBezeichnung().equals("Empfangene Kontakte") || kontaktliste.getBezeichnung().equals("Eigene Kontakte")) {
+					Window.alert("Diese Kontaktliste kann nicht gelöscht werden!");
+					return;
+				}
 				DeleteKontaktlisteDialogBox deleteKontakt = new DeleteKontaktlisteDialogBox(kontaktliste);
 				deleteKontakt.center();
+				kontaktliste = null;
 			} else {
 				Window.alert("Bitte wählen Sie zunächst die Kontaktliste aus, die gelöscht werden soll!");
 			}
@@ -427,28 +412,27 @@ public class AllKontaktView extends MainFrame {
 
 	public static class DeleteKontaktDialogBox extends DialogBox {
 		private VerticalPanel vPanel = new VerticalPanel();
-		private HorizontalPanel hPanel = new HorizontalPanel();
-		private FlexTable flextable1 = new FlexTable();
-		private Label abfrage = new Label("Möchten Sie den Kontakt löschen? Dies führt dazu,"
-				+ " dass der Kontakt in allen Kontaktlisten gelöscht wird.");
-		private Button ja = new Button("Ja");
-		private Button nein = new Button("Nein");
+		private VerticalPanel hPanel = new VerticalPanel();
+		private HorizontalPanel buttonPanel = new HorizontalPanel();
+		private Label abfrage = new Label("Soll dieser Kontakt wirklich gelöscht und aus allen Kontaktlisten"
+				+ " entfernt werden?");
+		private Button jaButton = new Button("Löschen");
+		private Button neinButton = new Button("Abbrechen");
 		private ArrayList<Kontakt> kontakt = new ArrayList<>();
 
 		public DeleteKontaktDialogBox(ArrayList<Kontakt> k) {
 			kontakt = k;
-			ja.addClickHandler(new DeleteKontaktClickHandler());
-			nein.addClickHandler(new AbortDeleteClickHandler());
-			hPanel.add(ja);
-			hPanel.add(nein);
-			flextable1.setWidget(0, 0, abfrage);
-			flextable1.setWidget(1, 0, hPanel);
-			vPanel.add(flextable1);
+			jaButton.addClickHandler(new DeleteKontaktClickHandler());
+			neinButton.addClickHandler(new AbortDeleteClickHandler());
+			buttonPanel.add(jaButton);
+			buttonPanel.add(neinButton);
+			hPanel.add(abfrage);
+			hPanel.add(new HTML("<br>"));
+			hPanel.add(buttonPanel);
+			vPanel.add(hPanel);
 			this.setTitle("Kontakt löschen");
 			this.add(vPanel);
-
-			ja.setStylePrimaryName("mainButton");
-			nein.setStylePrimaryName("mainButton");
+			this.setGlassEnabled(true);
 		}
 
 		public class AbortDeleteClickHandler implements ClickHandler {
@@ -483,6 +467,9 @@ public class AllKontaktView extends MainFrame {
 				Window.alert("Der Kontakt wurde erfolgreich gelöscht.");
 				hide();
 				AllKontaktView akw = new AllKontaktView();
+				CustomTreeModel ctm = new CustomTreeModel();
+				RootPanel.get("leftmenutree").clear();
+				RootPanel.get("leftmenutree").add(ctm);
 			}
 		}
 	}

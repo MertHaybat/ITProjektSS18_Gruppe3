@@ -1,5 +1,6 @@
 .cellTableWidget {
   overflow: scroll;
+  width: 120%;
 }
 .cellTableFirstColumn {
   

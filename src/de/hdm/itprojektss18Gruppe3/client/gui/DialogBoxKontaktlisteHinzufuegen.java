@@ -61,8 +61,6 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 		nutzer.setMail(Cookies.getCookie("mail"));
 		kontaktliste.setSelectionModel(selectionModel, selectionEventManager);
 		speichern.addClickHandler(new AddClickHandler());
-		speichern.setStylePrimaryName("mainButton");
-		abbrechen.setStylePrimaryName("mainButton");
 		abbrechen.addClickHandler(new AbortClickHandler());
 		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzer.getId(), new AllKontaktlisteByNutzerCallback());
 	}
@@ -74,8 +72,6 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 		nutzer.setMail(Cookies.getCookie("mail"));
 		kontaktliste.setSelectionModel(selectionModel, selectionEventManager);
 		speichern.addClickHandler(new AddClickHandler());
-		speichern.setStylePrimaryName("mainButton");
-		abbrechen.setStylePrimaryName("mainButton");
 		abbrechen.addClickHandler(new AbortClickHandler());
 		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzer.getId(), new AllKontaktlisteByNutzerCallback());
 	}

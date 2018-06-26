@@ -85,9 +85,6 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
 			AllKontaktView allkontaktView = new AllKontaktView();
-
-//			RootPanel.get("content").clear();
-//			RootPanel.get("content").add(kontaktlisteBox);	
 		}
 	}
 	

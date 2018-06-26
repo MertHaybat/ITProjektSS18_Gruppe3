@@ -192,6 +192,7 @@ body {
 
 .labelSize1 {
 	font-size: 1.1em;
+	margin-right: 5px;
 }
 
 .kontaktFormText {
@@ -237,10 +238,14 @@ body {
 }
 
 .cellListWidgetContainerPanel {
-	width: auto;
+	width: 80%;
 	height: auto;
 	margin-left: 1em;
 	margin-top: 2em;
+}
+
+.cellListWidgetContainerPanel table {
+	width: 100%;
 }
 
 .kontaktCellTableView {
@@ -265,6 +270,10 @@ body {
 .treeContainerPanel {
 	height: 500px;
 	overflow: scrollable;
+}
+
+.centerPanel {
+	margin: 2px auto;
 }
 
 /* REPORT GENERATOR FORMATIERUNG */

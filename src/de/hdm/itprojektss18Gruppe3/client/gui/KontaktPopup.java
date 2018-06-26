@@ -83,9 +83,7 @@ public class KontaktPopup extends PopupPanel{
 		
 		vPanel.add(flextable1);
 		this.add(vPanel);
-		
-		speichern.setStylePrimaryName("mainButton");
-		abbrechen.setStylePrimaryName("mainButton");
+		this.setGlassEnabled(true);
 	}
 	
 	
