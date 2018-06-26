@@ -117,6 +117,10 @@ body {
 	box-shadow: 3px 2px 2px grey;
 }
 
+#leftmenutree table {
+	width: 100%;
+}
+
 #leftmenu .headline {
 	font-size: 1.8em;
 }

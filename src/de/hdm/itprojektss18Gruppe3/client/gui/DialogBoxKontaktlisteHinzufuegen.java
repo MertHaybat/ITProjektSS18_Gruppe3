@@ -53,6 +53,19 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			.getKontaktVerwaltung();
 	private final Handler<Kontaktliste> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
+	
+	public DialogBoxKontaktlisteHinzufuegen(Kontakt k) {
+		kontakte.add(k);
+		Nutzer nutzer = new Nutzer();
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+		nutzer.setMail(Cookies.getCookie("mail"));
+		kontaktliste.setSelectionModel(selectionModel, selectionEventManager);
+		speichern.addClickHandler(new AddClickHandler());
+		speichern.setStylePrimaryName("mainButton");
+		abbrechen.setStylePrimaryName("mainButton");
+		abbrechen.addClickHandler(new AbortClickHandler());
+		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzer.getId(), new AllKontaktlisteByNutzerCallback());
+	}
 
 	public DialogBoxKontaktlisteHinzufuegen(ArrayList<Kontakt> k){
 		kontakte=k;

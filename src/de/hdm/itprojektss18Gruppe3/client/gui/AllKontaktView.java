@@ -418,7 +418,8 @@ public class AllKontaktView extends MainFrame {
 			if (allKontakteSelectedArrayList.size() != 0) {
 				DeleteKontaktDialogBox db = new DeleteKontaktDialogBox(allKontakteSelectedArrayList);
 				db.center();
-			} else {
+			} 
+			else {
 				Window.alert("Es muss zuerst ein Kontakt ausgewählt werden!");
 			}
 		}
@@ -536,7 +537,9 @@ public class AllKontaktView extends MainFrame {
 				 */
 
 				if (clickedAt - initialClick < 300) {
+					allKontakteSelectedArrayList.add(event.getValue());
 					KontaktForm kf = new KontaktForm(event.getValue());
+
 				}
 
 				initialClick = System.currentTimeMillis();

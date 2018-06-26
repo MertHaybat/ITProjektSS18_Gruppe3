@@ -81,6 +81,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 	}
 
 	public void run() {
+		this.setAnimationEnabled(true);
 		Column<Nutzer, String> nutzertxtColumn = new Column<Nutzer, String>(new TextCell()) {
 
 			@Override

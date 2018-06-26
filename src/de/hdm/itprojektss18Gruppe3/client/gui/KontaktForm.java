@@ -43,6 +43,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.MainFrame;
+import de.hdm.itprojektss18Gruppe3.client.Menubar;
 import de.hdm.itprojektss18Gruppe3.client.gui.CreateEigenschaftsauspraegungDialogBox.createEigenschaftsauspraegungCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
@@ -73,7 +74,6 @@ public class KontaktForm extends MainFrame {
 	private Kontakt k = null;
 	private Kontaktliste kontaktliste = null;
 
-	private Button deleteContact = null;
 	private Button addAuspraegung = new Button("+");
 	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
 	private Button deleteTeilhaberschaftButton = new Button("Teilhaberschaft löschen");
@@ -84,8 +84,8 @@ public class KontaktForm extends MainFrame {
 	private VerticalPanel vPanel3 = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private HorizontalPanel kontaktLabelkontaktName = new HorizontalPanel();
-	private HorizontalPanel tableButtonPanel = new HorizontalPanel();	
-	
+	private HorizontalPanel tableButtonPanel = new HorizontalPanel();
+
 	private Label modifikationsdatum = new Label("Modifikationsdatum: ");
 	private Label erstellungsdatum = new Label("Erstellungsdatum: ");
 	private Label kontaktNameLabel = new Label("Kontaktname: ");
@@ -100,8 +100,8 @@ public class KontaktForm extends MainFrame {
 	private EditTextCell editEigenschaft = new EditTextCell();
 	private SingleSelectionModel<EigenschaftsAuspraegungWrapper> ssm = new SingleSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private Vector<Teilhaberschaft> teilhaberschaftVector = new Vector<Teilhaberschaft>();
-	private Vector<EigenschaftsAuspraegungWrapper> resultWrapperVector = new Vector<EigenschaftsAuspraegungWrapper>(); 
-	
+	private Vector<EigenschaftsAuspraegungWrapper> resultWrapperVector = new Vector<EigenschaftsAuspraegungWrapper>();
+
 	private CellTableAuspraegungWrapper.IconColumn iconColumn = celltable.new IconColumn();
 
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(
@@ -146,80 +146,85 @@ public class KontaktForm extends MainFrame {
 	};
 
 	public KontaktForm() {
-		deleteContact = new Button("Abbrechen");
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		nutzer.setMail(Cookies.getCookie("mail"));
 		kontaktmanagerVerwaltung.createKontakt("Neuer Kontakt", 0, nutzer.getId(), new CreateKontaktCallback());
-		deleteContact.addClickHandler(new DeleteChangesClickHandler());
 		super.onLoad();
 	}
 
 	public KontaktForm(Kontakt kontakt) {
 		this.k = kontakt;
-		deleteContact = new Button("Löschen");
 		hPanel.add(zurueckZuAllKontaktView);
 		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
 		kontaktNameBox.setValue(kontakt.getName());
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		nutzer.setMail(Cookies.getCookie("mail"));
-		
-		kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), kontakt.getId(), new AllAuspraegungenCallback());
 
-		
+		kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), kontakt.getId(),
+				new AllAuspraegungenCallback());
+
 		modifikationsdatum.setText("Zuletzt geändert am: " + dtf.format(kontakt.getModifikationsdatum()));
 		erstellungsdatum.setText("Erstellt am: " + dtf.format(kontakt.getErzeugungsdatum()));
-		deleteContact.addClickHandler(new DeleteChangesClickHandler());
 		vPanel2.add(modifikationsdatum);
 		vPanel2.add(erstellungsdatum);
+		Menubar mb = new Menubar(k);
 		super.onLoad();
 
 	}
 
-//	public KontaktForm(Kontakt kontakt, Kontaktliste kontaktliste) {
-//		this.k = kontakt;
-//		this.kontaktliste = kontaktliste;
-//		deleteContact = new Button("Löschen");
-//		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
-//		kontaktNameBox.setValue(kontakt.getName());
-//		Nutzer nutzer = new Nutzer();
-//		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-//		kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), kontakt.getId(), new AllAuspraegungenCallback());
-//		modifikationsdatum.setText("Zuletzt geändert am: " + dtf.format(kontakt.getModifikationsdatum()));
-//		erstellungsdatum.setText("Erstellt am: " + dtf.format(kontakt.getErzeugungsdatum()));
-//		deleteContact.addClickHandler(new DeleteChangesClickHandler());
-//		vPanel2.add(modifikationsdatum);
-//		vPanel2.add(erstellungsdatum);
-//		super.onLoad();
-//	}
-//
-//	public KontaktForm(Kontakt kontakt, Teilhaberschaft teilhaberschaft) {
-//		this.k = kontakt;
-//		this.teilhaberschaft = teilhaberschaft;
-//		deleteContact = new Button("Löschen");
-//		hPanel.add(zurueckZuAllKontaktView);
-//		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
-//		kontaktNameBox.setValue(kontakt.getName());
-//		Nutzer nutzer = new Nutzer();
-//		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-//		nutzer.setMail(Cookies.getCookie("mail"));
-//		
-//		kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), kontakt.getId(), new AllAuspraegungenCallback());
-//		modifikationsdatum.setText("Zuletzt geändert am: " + dtf.format(kontakt.getModifikationsdatum()));
-//		erstellungsdatum.setText("Erstellt am: " + dtf.format(kontakt.getErzeugungsdatum()));
-//
-//		Button kontaktHinzufuegen = new Button("Eigenen Kontakten Hinzufügen");
-//		kontaktHinzufuegen.addClickHandler(new KontaktHinzufuegenClickHandler());
-//		vPanel3.add(kontaktHinzufuegen);
-//		deleteContact.addClickHandler(new DeleteTeilhaberschaftClickHandler());
-//		vPanel2.add(modifikationsdatum);
-//		vPanel2.add(erstellungsdatum);
-//		super.onLoad();
-//	}
+	// public KontaktForm(Kontakt kontakt, Kontaktliste kontaktliste) {
+	// this.k = kontakt;
+	// this.kontaktliste = kontaktliste;
+	// deleteContact = new Button("Löschen");
+	// zurueckZuAllKontaktView.addClickHandler(new
+	// ZurueckZuKontaktClickHandler());
+	// kontaktNameBox.setValue(kontakt.getName());
+	// Nutzer nutzer = new Nutzer();
+	// nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+	// kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(),
+	// kontakt.getId(), new AllAuspraegungenCallback());
+	// modifikationsdatum.setText("Zuletzt geändert am: " +
+	// dtf.format(kontakt.getModifikationsdatum()));
+	// erstellungsdatum.setText("Erstellt am: " +
+	// dtf.format(kontakt.getErzeugungsdatum()));
+	// deleteContact.addClickHandler(new DeleteChangesClickHandler());
+	// vPanel2.add(modifikationsdatum);
+	// vPanel2.add(erstellungsdatum);
+	// super.onLoad();
+	// }
+	//
+	// public KontaktForm(Kontakt kontakt, Teilhaberschaft teilhaberschaft) {
+	// this.k = kontakt;
+	// this.teilhaberschaft = teilhaberschaft;
+	// deleteContact = new Button("Löschen");
+	// hPanel.add(zurueckZuAllKontaktView);
+	// zurueckZuAllKontaktView.addClickHandler(new
+	// ZurueckZuKontaktClickHandler());
+	// kontaktNameBox.setValue(kontakt.getName());
+	// Nutzer nutzer = new Nutzer();
+	// nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+	// nutzer.setMail(Cookies.getCookie("mail"));
+	//
+	// kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(),
+	// kontakt.getId(), new AllAuspraegungenCallback());
+	// modifikationsdatum.setText("Zuletzt geändert am: " +
+	// dtf.format(kontakt.getModifikationsdatum()));
+	// erstellungsdatum.setText("Erstellt am: " +
+	// dtf.format(kontakt.getErzeugungsdatum()));
+	//
+	// Button kontaktHinzufuegen = new Button("Eigenen Kontakten Hinzufügen");
+	// kontaktHinzufuegen.addClickHandler(new KontaktHinzufuegenClickHandler());
+	// vPanel3.add(kontaktHinzufuegen);
+	// deleteContact.addClickHandler(new DeleteTeilhaberschaftClickHandler());
+	// vPanel2.add(modifikationsdatum);
+	// vPanel2.add(erstellungsdatum);
+	// super.onLoad();
+	// }
 
 	public void run() {
-	
+
 		deleteTeilhaberschaftButton.setStylePrimaryName("mainButton");
 		addAuspraegung.setStylePrimaryName("addButton");
 		zurueckZuAllKontaktView.setStylePrimaryName("mainButton");
@@ -229,28 +234,24 @@ public class KontaktForm extends MainFrame {
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
 
 		hPanel.add(zurueckZuAllKontaktView);
-		
-		
-//		celltable.setSelectionModel(celltable.getSelectionModel());
+
+		// celltable.setSelectionModel(celltable.getSelectionModel());
 
 		kontaktNameLabel.setStylePrimaryName("kontaktFormText");
 		kontaktLabelkontaktName.add(kontaktNameLabel);
 		kontaktLabelkontaktName.add(kontaktNameBox);
-		tableButtonPanel.add(deleteContact);
 		tableButtonPanel.add(addAuspraegung);
 		flextable.setWidget(0, 0, kontaktLabelkontaktName);
 		flextable.setWidget(2, 0, celltable);
 
-
 		vPanel.add(flextable);
 		vPanel.setStylePrimaryName("kontaktCellTableView");
 		vPanel2.setStylePrimaryName("kontaktCellTableView");
-		
+
 		this.add(vPanel);
 		this.add(vPanel3);
 		this.add(vPanel2);
-		hPanel.setStylePrimaryName("menuBarLabelContainer");
-		RootPanel.get("menubar").add(hPanel);
+
 		RootPanel.get("content").add(vPanel);
 		RootPanel.get("content").add(vPanel3);
 		RootPanel.get("content").add(vPanel2);
@@ -261,7 +262,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
-			
+
 			selection.getLastSelectedObject().setWertEigenschaftsauspraegungValue(value);
 			selection.getLastSelectedObject()
 					.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
@@ -284,11 +285,11 @@ public class KontaktForm extends MainFrame {
 					KontaktForm kontaktform = new KontaktForm(k);
 				} else {
 					kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
-	}
+				}
 			} else {
 				kontaktmanagerVerwaltung.saveEigenschaftsauspraegung(auspraegung, new UpdateAuspraegungCallback());
-	}
-		
+			}
+
 		}
 
 	}
@@ -396,22 +397,12 @@ public class KontaktForm extends MainFrame {
 
 	}
 
-	public class DeleteChangesClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			DeleteKontaktDialogBox db = new DeleteKontaktDialogBox();
-			db.center();
-
-		}
-
-	}
-
 	public class CreateEigenschaftAuspraegungClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			CreateEigenschaftsauspraegungDialogBox dialogbox = new CreateEigenschaftsauspraegungDialogBox(k, kontaktliste);
+			CreateEigenschaftsauspraegungDialogBox dialogbox = new CreateEigenschaftsauspraegungDialogBox(k,
+					kontaktliste);
 			dialogbox.center();
 		}
 
@@ -506,9 +497,10 @@ public class KontaktForm extends MainFrame {
 			for (EigenschaftsAuspraegungWrapper eigenschaftsauspraegung : result) {
 				auspraegungVector.add(eigenschaftsauspraegung.getAuspraegung());
 			}
-			
-			kontaktmanagerVerwaltung.findTeilhaberschaftString(nutzer.getId(), auspraegungVector, new AuspraegungTeilhaberschaftCallback());
-		
+
+			kontaktmanagerVerwaltung.findTeilhaberschaftString(nutzer.getId(), auspraegungVector,
+					new AuspraegungTeilhaberschaftCallback());
+
 			celltable.setRowData(0, result);
 			celltable.setRowCount(result.size(), true);
 			for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : result) {
@@ -520,7 +512,7 @@ public class KontaktForm extends MainFrame {
 
 	}
 
-	public class AuspraegungTeilhaberschaftCallback implements AsyncCallback<String>{
+	public class AuspraegungTeilhaberschaftCallback implements AsyncCallback<String> {
 		@Override
 		public void onFailure(Throwable caught) {
 			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
@@ -528,7 +520,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onSuccess(String result) {
-			if(result.equals("teilhaberschaft")){
+			if (result.equals("teilhaberschaft")) {
 				wertEigenschaftColumn = celltable.new WertEigenschaftColumn(clickEigenschaft);
 				wertAuspraegungColumn = celltable.new WertAuspraegungColumn(clickEigenschaft);
 				celltable.addColumn(wertEigenschaftColumn, "");
@@ -537,7 +529,7 @@ public class KontaktForm extends MainFrame {
 				celltable.setSelectionModel(ssm);
 				deleteTeilhaberschaftButton.addClickHandler(new DeleteTeilhaberschaftAuspraegungClickHandler());
 				hPanel.add(deleteTeilhaberschaftButton);
-				
+
 			} else {
 				celltable.addColumn(wertEigenschaftColumn, "");
 				celltable.setColumnWidth(wertEigenschaftColumn, 7, Unit.EM);
@@ -545,11 +537,12 @@ public class KontaktForm extends MainFrame {
 				celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 				celltable.addColumn(iconColumn, "");
 				flextable.setWidget(15, 0, tableButtonPanel);
-				
+
 			}
 		}
-		
+
 	}
+
 	public class DeleteTeilhaberschaftAuspraegungClickHandler implements ClickHandler {
 
 		@Override
@@ -560,11 +553,13 @@ public class KontaktForm extends MainFrame {
 			t.setKontaktID(ssm.getSelectedObject().getPersonIdEigenschaftsauspraegungValue());
 			t.setEigenschaftsauspraegungID(ssm.getSelectedObject().getAuspraegung().getId());
 			t.setTeilhabenderID(nutzer.getId());
-			kontaktmanagerVerwaltung.deleteTeilhaberschaftByTeilhaberschaft(t, new DeleteTeilhaberschaftAuspraegungCallback());
+			kontaktmanagerVerwaltung.deleteTeilhaberschaftByTeilhaberschaft(t,
+					new DeleteTeilhaberschaftAuspraegungCallback());
 		}
-		
+
 	}
-	public class DeleteTeilhaberschaftAuspraegungCallback implements AsyncCallback<Void>{
+
+	public class DeleteTeilhaberschaftAuspraegungCallback implements AsyncCallback<Void> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -575,8 +570,9 @@ public class KontaktForm extends MainFrame {
 		public void onSuccess(Void result) {
 			AllKontaktView allkontaktView = new AllKontaktView();
 		}
-		
+
 	}
+
 	public class CreateKontaktCallback implements AsyncCallback<Kontakt> {
 
 		@Override
@@ -589,64 +585,11 @@ public class KontaktForm extends MainFrame {
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("mail"));
-			kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), result.getId(), new AllAuspraegungenCallback());
+			kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), result.getId(),
+					new AllAuspraegungenCallback());
 			kontaktNameBox.setValue(result.getName());
 			k = result;
 		}
 
 	}
-
-	public class DeleteKontaktDialogBox extends DialogBox {
-		private VerticalPanel vPanel = new VerticalPanel();
-		private HorizontalPanel hPanel = new HorizontalPanel();
-		private Label abfrage = new HTML("Soll der Kontakt " + k.getName() + " wirklich gelöscht werden?<br><br>");
-		private Button ja = new Button("Ja");
-		private Button nein = new Button("Nein");
-
-		public DeleteKontaktDialogBox() {
-			ja.addClickHandler(new DeleteKontaktClickHandler());
-			nein.addClickHandler(new AbortDeleteClickHandler());
-			vPanel.add(abfrage);
-			hPanel.add(ja);
-			hPanel.add(nein);
-			vPanel.add(hPanel);
-			this.setTitle("Vorgang abbrechen");
-			this.add(vPanel);
-		}
-
-		public class AbortDeleteClickHandler implements ClickHandler {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				hide();
-			}
-
-		}
-
-		public class DeleteKontaktClickHandler implements ClickHandler {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				kontaktmanagerVerwaltung.deleteKontaktByOwner(k, new DeleteKontaktCallback());
-			}
-		}
-
-		public class DeleteKontaktCallback implements AsyncCallback<Void> {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Der Vorgang konnte nicht abgebrochen werden: " + caught.getMessage());
-			}
-
-			@Override
-			public void onSuccess(Void result) {
-				Window.alert("Der Vorgang wurde erfolgreich abgebrochen.");
-				hide();
-				AllKontaktView allKontaktView = new AllKontaktView();
-			}
-
-		}
-
-	}
 }
-
