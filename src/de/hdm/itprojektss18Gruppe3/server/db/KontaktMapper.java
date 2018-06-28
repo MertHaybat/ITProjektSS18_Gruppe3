@@ -22,7 +22,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.*;
  */
 public class KontaktMapper extends PersonMapper{
 	
-	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
 	/**
 	 * Die Klasse KontaktMapper wird nur einmal instantiiert.
@@ -124,7 +124,7 @@ public class KontaktMapper extends PersonMapper{
 	 */
 	public Kontakt updateKontakt(Kontakt kontakt) {
 		String sql = "UPDATE kontakt SET name= ?, modifikationsdatum= ?, status= ? WHERE id= ? ";
-		java.sql.Date sqlDate1 = new java.sql.Date(kontakt.getModifikationsdatum().getTime());
+		java.sql.Timestamp sqlDate1 = new java.sql.Timestamp(kontakt.getModifikationsdatum().getTime());
 		
 		
 		/**
@@ -136,7 +136,7 @@ public class KontaktMapper extends PersonMapper{
 			PreparedStatement stmt = con.prepareStatement(sql);
 			
 			stmt.setString(1, kontakt.getName());
-			stmt.setDate(2, sqlDate1);
+			stmt.setTimestamp(2, sqlDate1);//setDate(2, sqlDate1);
 			stmt.setInt(3, kontakt.getStatus());
 			stmt.setInt(4, kontakt.getId());
 			stmt.executeUpdate();
@@ -217,7 +217,7 @@ public class KontaktMapper extends PersonMapper{
 
 		try {
 
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE `id` = ?");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE `id` = ? ORDER BY name ASC");
 
 			stmt.setInt(1, kontaktID);
 			ResultSet rs = stmt.executeQuery();
@@ -231,8 +231,8 @@ public class KontaktMapper extends PersonMapper{
 
 				kontakt.setId(rs.getInt("id"));
 				kontakt.setName(rs.getString("name"));
-				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setErzeugungsdatum(rs.getTimestamp("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getTimestamp("modifikationsdatum"));
 				kontakt.setStatus(rs.getInt("status"));
 				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				k = kontakt;
@@ -282,8 +282,8 @@ public class KontaktMapper extends PersonMapper{
 				
 				kontakt.setId(rs.getInt("id"));
 				kontakt.setName(rs.getString("name"));
-				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setErzeugungsdatum(rs.getTimestamp("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getTimestamp("modifikationsdatum"));
 				kontakt.setStatus(rs.getInt("status"));
 				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				
@@ -329,7 +329,7 @@ public class KontaktMapper extends PersonMapper{
 		Vector<Kontakt> result = new Vector<Kontakt>();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE nutzerid= ?");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE nutzerid= ? ORDER BY name ASC");
 			
 			stmt.setInt(1, nutzerID);
 			
@@ -343,8 +343,8 @@ public class KontaktMapper extends PersonMapper{
 				
 				kontakt.setId(rs.getInt("id"));
 				kontakt.setName(rs.getString("name"));
-				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setErzeugungsdatum(rs.getTimestamp("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getTimestamp("modifikationsdatum"));
 				kontakt.setStatus(rs.getInt("status"));
 				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				
@@ -401,8 +401,8 @@ public class KontaktMapper extends PersonMapper{
 //				
 //				kontakt.setId(rs.getInt("id"));
 //				kontakt.setName(rs.getString("name"));
-//				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-//				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+//				kontakt.setErzeugungsdatum(rs.getTimestamp("erzeugungsdatum"));
+//				kontakt.setModifikationsdatum(rs.getTimestamp("modifikationsdatum"));
 //				kontakt.setStatus(rs.getInt("status"));
 //				kontakt.setNutzerID(rs.getInt("nutzerid"));
 //				
@@ -450,7 +450,7 @@ public class KontaktMapper extends PersonMapper{
 			PreparedStatement stmt = con.prepareStatement("SELECT `kontakt`.`id`, `kontakt`.`name`, `kontakt`.`erzeugungsdatum`, `kontakt`.`modifikationsdatum`, `kontakt`.`status`, `kontaktliste`.`id` "
 					+ "FROM `kontaktliste` INNER JOIN `kontaktkontaktliste` "
 					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id` INNER JOIN `kontakt` "
-					+ "ON `kontaktkontaktliste`.`kontaktid` = `kontakt`.`id` WHERE `kontaktliste`.`id` = ?");
+					+ "ON `kontaktkontaktliste`.`kontaktid` = `kontakt`.`id` WHERE `kontaktliste`.`id` = ? ORDER BY name ASC ");
 			
 			stmt.setInt(1, kontaktlisteID);
 			ResultSet rs = stmt.executeQuery();
@@ -463,8 +463,8 @@ public class KontaktMapper extends PersonMapper{
 				
 				kontakt.setId(rs.getInt("kontakt.id"));
 				kontakt.setName(rs.getString("name"));
-				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setErzeugungsdatum(rs.getTimestamp("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getTimestamp("modifikationsdatum"));
 				kontakt.setStatus(rs.getInt("status"));
 				
 				/**
@@ -556,8 +556,8 @@ public class KontaktMapper extends PersonMapper{
 //				
 //				kontakt.setId(rs.getInt("id"));
 //				kontakt.setName(rs.getString("name"));
-//				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-//				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+//				kontakt.setErzeugungsdatum(rs.getTimestamp("erzeugungsdatum"));
+//				kontakt.setModifikationsdatum(rs.getTimestamp("modifikationsdatum"));
 //				kontakt.setStatus(rs.getInt("status"));
 //				kontakt.setNutzerID(rs.getInt("nutzerid"));
 //				k=kontakt;
@@ -593,7 +593,7 @@ public class KontaktMapper extends PersonMapper{
 
 		try {
 
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE `name` = ?");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM kontakt WHERE `name` = ? ORDER BY name ASC");
 
 			stmt.setString(1, name);
 			ResultSet rs = stmt.executeQuery();
@@ -607,8 +607,8 @@ public class KontaktMapper extends PersonMapper{
 
 				kontakt.setId(rs.getInt("id"));
 				kontakt.setName(rs.getString("name"));
-				kontakt.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-				kontakt.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				kontakt.setErzeugungsdatum(rs.getTimestamp("erzeugungsdatum"));
+				kontakt.setModifikationsdatum(rs.getTimestamp("modifikationsdatum"));
 				kontakt.setStatus(rs.getInt("status"));
 				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				k = kontakt;
@@ -653,7 +653,7 @@ public class KontaktMapper extends PersonMapper{
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM `kontakt` "
 					+ "WHERE `name` LIKE '"+kontakt.getName()+"' "
-							+ "AND `nutzerid` = "+kontakt.getNutzerID()+"");
+							+ "AND `nutzerid` = "+kontakt.getNutzerID()+" ORDER BY name ASC");
 				
 			ResultSet rs = stmt.executeQuery();
 			/**
@@ -665,8 +665,8 @@ public class KontaktMapper extends PersonMapper{
 
 				k1.setId(rs.getInt("id"));
 				k1.setName(rs.getString("name"));
-				k1.setErzeugungsdatum(rs.getDate("erzeugungsdatum"));
-				k1.setModifikationsdatum(rs.getDate("modifikationsdatum"));
+				k1.setErzeugungsdatum(rs.getTimestamp("erzeugungsdatum"));
+				k1.setModifikationsdatum(rs.getTimestamp("modifikationsdatum"));
 				k1.setStatus(rs.getInt("status"));
 				k1.setNutzerID(rs.getInt("nutzerid"));
 

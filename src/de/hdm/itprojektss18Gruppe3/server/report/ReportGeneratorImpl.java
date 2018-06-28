@@ -1,11 +1,9 @@
 package de.hdm.itprojektss18Gruppe3.server.report;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
-
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
-import org.eclipse.jdt.internal.compiler.ast.ForeachStatement;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -38,7 +36,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	   * da diese den Zugriff auf die BusinessObjects hat.
 	   */
 	private KontaktmanagerAdministration kontaktmanagerAdministration = null;
-
+	private SimpleDateFormat dtf = new SimpleDateFormat("dd.MM.yyyy 'um' HH:mm");
 	
 	/**
 	 * Ein No-Argument-Konstruktor für die Client-seitige Erzeugung von
@@ -129,8 +127,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				kontakte.addColumn(new Column("Nicht Geteilt"));
 				kontakte.addColumn(new Column(""));
 				kontakte.addColumn(new Column(""));
-				kontakte.addColumn(new Column(kontakt.getKontakt().getErzeugungsdatum().toString()));
-				kontakte.addColumn(new Column(kontakt.getKontakt().getModifikationsdatum().toString()));
+				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getErzeugungsdatum()).toString()));
+				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getModifikationsdatum()).toString()));
 				
 				result.addRow(kontakte);
 				
@@ -139,8 +137,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				kontakte.addColumn(new Column("Empfangen"));
 				kontakte.addColumn(new Column(kontakt.getNutzer().getMail()));
 				kontakte.addColumn(new Column(""));
-				kontakte.addColumn(new Column(kontakt.getKontakt().getErzeugungsdatum().toString()));
-				kontakte.addColumn(new Column(kontakt.getKontakt().getModifikationsdatum().toString()));
+				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getErzeugungsdatum()).toString()));
+				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getModifikationsdatum()).toString()));
 				
 				result.addRow(kontakte);
 				
@@ -150,8 +148,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				kontakte.addColumn(new Column("Geteilt"));
 				kontakte.addColumn(new Column(""));
 				kontakte.addColumn(new Column(kontakt.getNutzer().getMail()));
-				kontakte.addColumn(new Column(kontakt.getKontakt().getErzeugungsdatum().toString()));
-				kontakte.addColumn(new Column(kontakt.getKontakt().getModifikationsdatum().toString()));
+				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getErzeugungsdatum()).toString()));
+				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getModifikationsdatum()).toString()));
 				
 				result.addRow(kontakte);
 			}
@@ -222,8 +220,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				kontakte.addColumn(new Column("Nicht Geteilt"));
 			}
 			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
-			kontakte.addColumn(new Column(kontakt.getErzeugungsdatum().toString()));
-			kontakte.addColumn(new Column(kontakt.getModifikationsdatum().toString()));
+			kontakte.addColumn(new Column(dtf.format(kontakt.getErzeugungsdatum()).toString()));
+			kontakte.addColumn(new Column(dtf.format(kontakt.getModifikationsdatum()).toString()));
 			result.addRow(kontakte);
 		}
 		return result;
@@ -293,8 +291,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
 			
 			kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
-			kontakte.addColumn(new Column(kontakt.getErzeugungsdatum().toString()));
-			kontakte.addColumn(new Column(kontakt.getModifikationsdatum().toString()));
+			kontakte.addColumn(new Column(dtf.format(kontakt.getErzeugungsdatum()).toString()));
+			kontakte.addColumn(new Column(dtf.format(kontakt.getModifikationsdatum()).toString()));
 			
 			
 			result.addRow(kontakte);

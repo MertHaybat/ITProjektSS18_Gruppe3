@@ -14,8 +14,8 @@ public class EigenschaftsAuspraegungWrapper implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Eigenschaft eigenschaft = new Eigenschaft();
-	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
+	private Eigenschaft eigenschaft = null;
+	private Eigenschaftsauspraegung auspraegung = null;
 	
 	
 	public EigenschaftsAuspraegungWrapper(){
@@ -103,8 +103,11 @@ public class EigenschaftsAuspraegungWrapper implements Serializable {
 		this.auspraegung.setStatus(status);
 	}
 	public String toString(){
-		return "<table><tr><td>"+this.eigenschaft.getBezeichnung()+":</td></tr>"
-				+ "<tr><td>" +this.auspraegung.getWert() +"</td></tr></table>";
+		return "<table><tr><td>"+this.eigenschaft.getBezeichnung()+":</td>"
+				+ "<td>" +this.auspraegung.getWert() +"</td></tr></table>";
+	
+	
 	}
+	
 }
 

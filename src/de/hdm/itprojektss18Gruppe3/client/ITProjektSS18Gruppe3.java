@@ -70,18 +70,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	}
 
 	private void loadKontaktmanager() {
-		textBox.addKeyPressHandler(new KeyPressHandler() {
-
-			@Override
-			public void onKeyPress(KeyPressEvent event) {
-				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-					DisclosurePanelSuche panelSuche = new DisclosurePanelSuche(textBox.getValue());
-					RootPanel.get("content").clear();
-					RootPanel.get("content").add(panelSuche);
-					textBox.setText("");
-				}
-			}
-		});
+		textBox.addKeyPressHandler(new TextBoxKeyHandler());
 		HorizontalPanel flowpanel = new HorizontalPanel();
 		// Cookies.setCookie("logout", loginInfo.getLogoutUrl());
 		textBox.setStylePrimaryName("searchTextBox");
@@ -102,7 +91,19 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 		Menubar mb = new Menubar();
 	}
-
+	
+	class TextBoxKeyHandler implements KeyPressHandler{
+		@Override
+		public void onKeyPress(KeyPressEvent event) {
+			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+				DisclosurePanelSuche panelSuche = new DisclosurePanelSuche(textBox.getValue());
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(panelSuche);
+				textBox.setText("");
+			}
+		}
+		
+	}
 	class loginButtonClickHandler implements ClickHandler {
 
 		@Override
@@ -110,7 +111,6 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			signInLink.setHref(loginInfo.getLoginUrl());
 			Window.open(signInLink.getHref(), "_self", "");
 		}
-
 	}
 
 	class LoginCallback implements AsyncCallback<LoginInfo> {
@@ -187,7 +187,6 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 				Cookies.setCookie("email", result.getMail());
 				Cookies.setCookie("id", result.getId() + "");
 				loadKontaktmanager();
-				hide();
 			}
 
 		}
@@ -196,6 +195,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
+				hide();
 				kontaktmanagerVerwaltung.createNutzer(googleMail, new CreateNutzerCallback());
 
 			}

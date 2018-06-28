@@ -4,10 +4,15 @@ import java.util.Vector;
 
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -36,7 +41,12 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 	private HorizontalPanel allKontakteCellTableContainer = new HorizontalPanel();
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
-	private HTML headline = new HTML();
+	private HTML headline = new HTML("Teilhaberschaften verwalten");
+	private HTML nutzerVerwalten = new HTML("Nutzer verwalten");
+	private HTML auspraegungVerwalten = new HTML("Geteilte Eigenschaftsausprägungen");
+	private HTML kontakteVerwalten = new HTML("Geteilte Kontakte");
+	private HTML kontaktlisteVerwalten = new HTML("Geteilte Kontaktlisten");
+	private Anchor nutzerAnchor = new Anchor("Nutzer löschen");
 	
 	private CellTableTeilhaberschaftAuspraegung teilhaberschaftAuspraegung = new CellTableTeilhaberschaftAuspraegung();
 	private CellTableTeilhaberschaftKontakt	teilhaberschaftKontakt = new CellTableTeilhaberschaftKontakt();
@@ -100,7 +110,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		teilhaberschaftKontakt.setColumnWidth(teilhaberschaftKontaktCheckColumn, 20, Unit.PX);
 		teilhaberschaftKontakt.addColumn(teilhaberschaftKontaktColumn, "Kontaktname");
 		teilhaberschaftKontakt.setColumnWidth(teilhaberschaftKontaktColumn, 10, Unit.PX);
-		teilhaberschaftKontakt.addColumn(teilhaberschaftNutzerColumn, "Nutzer");
+		teilhaberschaftKontakt.addColumn(teilhaberschaftNutzerColumn, "Teilhabender");
 		teilhaberschaftKontakt.setColumnWidth(teilhaberschaftNutzerColumn, 10, Unit.PX);
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
@@ -108,12 +118,53 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		kontaktmanagerVerwaltung.findKontaktTeilhaberschaftEigentuemer(nutzer.getId(), new KontaktCallback());
 		kontaktmanagerVerwaltung.findAuspraegungTeilhaberschaftEigentuemer(nutzer.getId(), new AuspraegungCallback());
 		
+		nutzerAnchor.addClickHandler(new DeleteNutzerClickHandler());
+		
+		headline.setStylePrimaryName("h2");
+		nutzerVerwalten.setStylePrimaryName("h2");
+		
+		vPanel.add(headline);
+		vPanel.add(auspraegungVerwalten);
 		vPanel.add(teilhaberschaftAuspraegung);
+		vPanel.add(kontakteVerwalten);
 		vPanel.add(teilhaberschaftKontakt);
+		vPanel.add(kontaktlisteVerwalten);
 		vPanel.add(teilhaberschaftKontaktliste);
+		vPanel.add(nutzerVerwalten);
+		vPanel.add(nutzerAnchor);
 
 		RootPanel.get("content").add(vPanel);
 	}
+	
+	public class DeleteNutzerClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+			boolean deleteNutzer = Window.confirm("Möchten Sie den Nutzer löschen?");
+			if(deleteNutzer == true){
+				Nutzer nutzer = new Nutzer();
+				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+				nutzer.setMail(Cookies.getCookie("email"));
+				kontaktmanagerVerwaltung.deleteNutzer(nutzer, new DeleteNutzerCallback());	
+			} 
+		}
+		
+	}
+	public class DeleteNutzerCallback implements AsyncCallback<Void>{
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Löschen des Nutzers: " + caught.getMessage());
+		}
+
+		@Override
+		public void onSuccess(Void result) {
+			Window.alert("Nutzer wurde gelöscht");
+			Window.open(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html", "_self", "");
+		}
+		
+	}
+	
 	public class AuspraegungCallback implements AsyncCallback<Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>>{
 
 		@Override
