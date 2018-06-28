@@ -60,8 +60,6 @@ public class AllKontaktView extends MainFrame {
 
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel allKontakteCellTableContainer = new HorizontalPanel();
-	private FlowPanel menuBarContainerFlowPanel = new FlowPanel();
-	private VerticalPanel menuBarContainerPanel = new VerticalPanel();
 	private Button kontaktlisteLoeschen = new Button("Kontaktliste löschen");
 	private Button teilhaberschaftButton = new Button("Teilhaberschaft löschen");
 	private Button kontaktHinzufuegenButton = new Button("Kontakt hinzufügen");
@@ -119,7 +117,7 @@ public class AllKontaktView extends MainFrame {
 
 	public AllKontaktView(Kontaktliste k) {
 
-		this.kontaktliste = k;
+		kontaktliste = k;
 
 		allKontakteSelectedArrayList.clear();
 
@@ -127,16 +125,11 @@ public class AllKontaktView extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		if (k.getBezeichnung().equals("Empfangene Kontakte")) {
 			headline = new HTML("Alle Kontakte, die Sie als Empfänger geteilt bekommen haben");
-			// klisteView = new KontaktlistView();
-			// klisteView.getMenuBarContainerFlowPanel().add(teilhaberschaftButton);
-			menuBarContainerFlowPanel.add(teilhaberschaftButton);
 			teilhaberschaftButton.addClickHandler(new TeilhaberschaftButtonClickHandler());
 			kontaktmanagerVerwaltung.findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(nutzer.getId(),
 					new TeilhaberschaftKontakteCallback());
 		} else {
 			headline = new HTML("Alle Kontakte in der Kontaktliste " + k.getBezeichnung());
-			kontaktmanagerVerwaltung.findKontaktlisteByTeilhabenderID(nutzer.getId(),
-					new TeilhaberschaftKontaktlisteCallback());
 			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
 
 		}
@@ -153,7 +146,7 @@ public class AllKontaktView extends MainFrame {
 
 	public void run() {
 		
-		Menubar mb = new Menubar();
+		Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
 
 		allKontakteCellTable.setEmptyTableWidget(new Label("Diese Kontaktliste ist leer"));
 
@@ -222,46 +215,6 @@ public class AllKontaktView extends MainFrame {
 
 	}
 
-	class TeilhaberschaftKontaktlisteCallback implements AsyncCallback<Vector<Kontaktliste>> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
-		}
-
-		@Override
-		public void onSuccess(Vector<Kontaktliste> result) {
-			int o = result.size();
-
-			if (result.size() == 0) {
-				menuBarContainerFlowPanel.add(deleteKontaktButton);
-				menuBarContainerFlowPanel.add(kontaktlisteLoeschen);
-				menuBarContainerFlowPanel.add(kontaktHinzufuegenButton);
-				menuBarContainerFlowPanel.add(deleteKontaktfromListeButton);
-				menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
-				menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
-
-			}
-
-			for (int i = 0; i < result.size(); i++) {
-				if (result.elementAt(i).getId() == kontaktliste.getId()) {
-					menuBarContainerFlowPanel.add(teilhaberschaftButton);
-					menuBarContainerFlowPanel.add(kontaktHinzufuegenButton);
-
-				}
-
-				if (i + 1 == result.size() && result.elementAt(i).getId() != kontaktliste.getId()) {
-					menuBarContainerFlowPanel.add(deleteKontaktButton);
-					menuBarContainerFlowPanel.add(kontaktlisteLoeschen);
-					menuBarContainerFlowPanel.add(kontaktHinzufuegenButton);
-					menuBarContainerFlowPanel.add(deleteKontaktfromListeButton);
-					menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktButton);
-					menuBarContainerFlowPanel.add(addTeilhaberschaftKontaktlisteButton);
-				}
-			}
-		}
-	}
-
 	public static class DeleteKontaktAusKontaktlisteCommand implements Command {
 
 		@Override
@@ -283,10 +236,6 @@ public class AllKontaktView extends MainFrame {
 		@Override
 		public void execute() {
 			if (kontaktliste != null) {
-				if(kontaktliste.getBezeichnung().equals("Empfangene Kontakte") || kontaktliste.getBezeichnung().equals("Eigene Kontakte")) {
-					Window.alert("Diese Kontaktliste kann nicht gelöscht werden!");
-					return;
-				}
 				DeleteKontaktlisteDialogBox deleteKontakt = new DeleteKontaktlisteDialogBox(kontaktliste);
 				deleteKontakt.center();
 				kontaktliste = null;
@@ -501,6 +450,7 @@ public class AllKontaktView extends MainFrame {
 			allKontakteSelectedArrayList
 					.addAll(((MultiSelectionModel<Kontakt>) allKontakteCellTable.getSsmAuspraegung()).getSelectedSet());
 
+			Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
 		}
 
 	}

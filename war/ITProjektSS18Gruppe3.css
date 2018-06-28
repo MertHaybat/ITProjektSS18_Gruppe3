@@ -86,20 +86,24 @@ body {
 	display: inline-block;
 }
 
-#logout {
-	width: auto;
-	float: right;
-	margin-right: 10px;
-	height: inherit;
+#menubar table {
+	width: 100%;
 }
 
-#logout .logoutBarContainer {
-	height: inherit;
-	display: inline-block;
+#menubar table tbody tr td:last-child {
+	position: absolute;
+	right: 16%;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	border: none;
+	background: none;
 }
 
-.logoutBarContainer tr {
-	height: 40px;
+#menubar table tbody tr {
+	position: relative;
 }
 
 .menuBarLabelContainer tr {
@@ -115,6 +119,12 @@ body {
 	margin-right: 1%;
 	background-color: rgba(255, 255, 255, 0.8);
 	box-shadow: 3px 2px 2px grey;
+}
+
+.logoutBarContainer {
+	position: relative;
+	z-index: 99;
+	width: 100px;
 }
 
 #leftmenutree table {
@@ -155,9 +165,9 @@ body {
 }
 
 #footer {
-	height: 80px;
+	height: 40px;
 	width: 89.5%;
-	margin: 20px auto;
+	margin: 10px auto;
 	border: 2px solid black;
 	background: linear-gradient(to top, #3399ff 0%, #99ccff 100%);
 	box-shadow: 5px 5px 2.5px grey;
@@ -310,7 +320,7 @@ body {
 	height: 25px;
 	width: 200px;
 	font-size: 1.1em;
-	margin-right: 5px;
+	margin-right: 15px;
 	border: none;
 	font-family: 'Ubuntu', sans-serif !important;
 }
@@ -501,6 +511,12 @@ body {
 	background-repeat: no-repeat;
 	background-position: right;
 	background-size: 15px;
+}
+
+.menuBarAlignRight {
+   width: 100%;
+   background: none;
+   border: none;
 }
 
 .gwt-MenuBar table {

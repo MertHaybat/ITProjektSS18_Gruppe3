@@ -1,11 +1,13 @@
 package de.hdm.itprojektss18Gruppe3.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -20,6 +22,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3.FindNutzerCallback;
@@ -31,18 +34,22 @@ import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.LoginService;
 import de.hdm.itprojektss18Gruppe3.shared.LoginServiceAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 
 public class Menubar extends MenuBar {
 
 	private LoginInfo loginInfo = null;
 	private Anchor signOutLink = new Anchor("Sign Out");
+	private HorizontalPanel hp = new HorizontalPanel();
 
 	private MenuBar menubar = new MenuBar();
 	private MenuBar kontaktMenu = new MenuBar(true);
 	private MenuBar kontaktlisteMenu = new MenuBar(true);
 	private MenuBar teilhaberschaftMenu = new MenuBar(true);
 
-	private Kontakt k = null;
+	private Kontakt kontakt = null;
+	private Kontaktliste kontaktliste = null;
+	private ArrayList<Kontakt> allKontakteSelectedArrayList = null;
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
@@ -63,24 +70,53 @@ public class Menubar extends MenuBar {
 			new AllKontaktView.DeleteKontaktlisteCommand());
 	private MenuItem shareKontaktliste = new MenuItem("Kontaktliste teilen",
 			new AllKontaktView.AddTeilhaberschaftKontaktlisteCommand());
-	private MenuItem manageTeilhaberschaften = new MenuItem("Teilhaberschaften verwalten",
+	private MenuItem manageTeilhaberschaften = new MenuItem("Verwaltung",
 			new AllKontaktView.TeilhaberschaftVerwaltenCommand());
 	private MenuItem searchMenu = new MenuItem("Detailsuche", new ITProjektSS18Gruppe3.SuchenCommand());
-
+	
 	public Menubar() {
 		RootPanel.get("menubar").clear();
 		run();
 	}
 
 	public Menubar(Kontakt k) {
-		this.k = k;
+		kontakt = k;
 		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
 		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
 		addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
 		run();
 	}
+	
+	public Menubar(Kontaktliste kl, ArrayList<Kontakt> allKontakteSelectedArrayList) {
+		this.allKontakteSelectedArrayList = allKontakteSelectedArrayList;
+		kontaktliste = kl;
+		if(kontaktliste.getBezeichnung().equals("Empfangene Kontakte") || kontaktliste.getBezeichnung().equals("Eigene Kontakte")) {
+			deleteKontaktliste.setVisible(false);
+			shareKontaktliste.setVisible(false);
+			addNewKontaktToKontaktliste.setVisible(false);
+		}
+		
+		if(allKontakteSelectedArrayList.size() == 0) {
+			deleteKontakt.setVisible(false);
+			shareKontakt.setVisible(false);
+			addKontaktToKontaktliste.setVisible(false);
+			deleteKontaktFromKontaktliste.setVisible(false);
+		}
+		run();
+	}
 
 	public void run() {
+		TextBox textBox = new TextBox();
+		HorizontalPanel flowpanel = new HorizontalPanel();
+		textBox.setStylePrimaryName("searchTextBox");
+		textBox.setMaxLength(100);
+		textBox.getElement().setPropertyString("placeholder", " Schnellsuche...");
+		flowpanel.add(textBox);
+		flowpanel.setStylePrimaryName("logoutBarContainer");
+
+		
+		
+		
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html", new LoginCallback());
 
@@ -106,7 +142,9 @@ public class Menubar extends MenuBar {
 		menubar.addSeparator();
 		menubar.addItem("Kontaktliste", kontaktlisteMenu).addStyleName("menuBarImage");
 		menubar.addSeparator();
-		menubar.addItem("Teilhaberschaft", teilhaberschaftMenu).addStyleName("menuBarImage");
+		menubar.addItem(manageTeilhaberschaften);
+		menubar.addSeparator();
+		menubar.addSeparator().setStylePrimaryName("menuBarAlignRight");
 		menubar.addSeparator();
 		menubar.addItem(searchMenu);
 		menubar.addSeparator();
@@ -118,8 +156,10 @@ public class Menubar extends MenuBar {
 		});
 		menubar.addSeparator();
 
+		hp.add(menubar);
+		hp.add(flowpanel);
 		RootPanel.get("menubar").clear();
-		RootPanel.get("menubar").add(menubar);
+		RootPanel.get("menubar").add(hp);
 	}
 
 	class LoginCallback implements AsyncCallback<LoginInfo> {
@@ -147,7 +187,7 @@ public class Menubar extends MenuBar {
 		private DialogBox db = new DialogBox();
 		private VerticalPanel vPanel = new VerticalPanel();
 		private FlowPanel buttonPanel = new FlowPanel();
-		private Label abfrage = new HTML("Soll der Kontakt " + k.getName() + " wirklich gelöscht werden?<br><br>");
+		private Label abfrage = new HTML("Soll der Kontakt " + kontakt.getName() + " wirklich gelöscht werden?<br><br>");
 		private Button jaButton = new Button("Löschen");
 		private Button neinButton = new Button("Abbrechen");
 
@@ -176,7 +216,7 @@ public class Menubar extends MenuBar {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				kontaktmanagerVerwaltung.deleteKontaktByOwner(k, new DeleteKontaktCallback());
+				kontaktmanagerVerwaltung.deleteKontaktByOwner(kontakt, new DeleteKontaktCallback());
 			}
 		}
 
@@ -202,7 +242,7 @@ public class Menubar extends MenuBar {
 
 		@Override
 		public void execute() {
-			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(k);
+			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontakt);
 			dialogbox.center();
 		}
 
@@ -212,7 +252,7 @@ public class Menubar extends MenuBar {
 
 		@Override
 		public void execute() {
-			DialogBoxKontaktlisteHinzufuegen db = new DialogBoxKontaktlisteHinzufuegen(k);
+			DialogBoxKontaktlisteHinzufuegen db = new DialogBoxKontaktlisteHinzufuegen(kontakt);
 			db.center();
 		}
 
