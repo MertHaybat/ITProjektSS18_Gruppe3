@@ -92,7 +92,7 @@ public class KontaktForm extends MainFrame {
 	private TextBox kontaktNameBox = new TextBox();
 
 	private Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
-	private DateTimeFormat dtf = DateTimeFormat.getFormat("dd.MMMM.yyyy");
+	private DateTimeFormat dtf = DateTimeFormat.getFormat("dd.MM.yyyy 'um' HH:mm");
 
 	private NoSelectionModel<EigenschaftsAuspraegungWrapper> selection = new NoSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private CellTableAuspraegungWrapper celltable = new CellTableAuspraegungWrapper(selection);
@@ -101,30 +101,12 @@ public class KontaktForm extends MainFrame {
 	private SingleSelectionModel<EigenschaftsAuspraegungWrapper> ssm = new SingleSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private Vector<Teilhaberschaft> teilhaberschaftVector = new Vector<Teilhaberschaft>();
 	private Vector<EigenschaftsAuspraegungWrapper> resultWrapperVector = new Vector<EigenschaftsAuspraegungWrapper>();
-
+	private String eigenschaft = "";
+	
 	private CellTableAuspraegungWrapper.IconColumn iconColumn = celltable.new IconColumn();
 
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(
-			editEigenschaft) {
-		@Override
-		public void onBrowserEvent(Context context, Element elem, EigenschaftsAuspraegungWrapper object,
-				NativeEvent event) {
-			super.onBrowserEvent(context, elem, object, event);
-
-			if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
-
-				if (object.getBezeichnungEigenschaftValue() == "") {
-					kontaktmanagerVerwaltung.deleteEigenschaftsauspraegungById(
-							object.getEigenschaftsauspraegungObject(object.getIDEigenschaftsauspraegungValue()),
-							new DeleteEigenschaftsauspraegung());
-				}
-
-			}
-			super.onBrowserEvent(context, elem, object, event);
-
-		}
-
-	};
+			clickEigenschaft);
 
 	private CellTableAuspraegungWrapper.WertAuspraegungColumn wertAuspraegungColumn = celltable.new WertAuspraegungColumn(
 			editEigenschaft) {
@@ -133,9 +115,9 @@ public class KontaktForm extends MainFrame {
 				NativeEvent event) {
 			super.onBrowserEvent(context, elem, object, event);
 
-			if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
-				setFieldUpdater(new WertAuspraegungFieldUpdater());
-			}
+//			if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
+			setFieldUpdater(new WertAuspraegungFieldUpdater());
+//			}
 			if (object.getWertEigenschaftsauspraegungValue() == "") {
 				kontaktmanagerVerwaltung.deleteEigenschaftsauspraegungById(
 						object.getEigenschaftsauspraegungObject(object.getIDEigenschaftsauspraegungValue()),
@@ -164,7 +146,6 @@ public class KontaktForm extends MainFrame {
 
 		kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), kontakt.getId(),
 				new AllAuspraegungenCallback());
-
 		modifikationsdatum.setText("Zuletzt geändert am: " + dtf.format(kontakt.getModifikationsdatum()));
 		erstellungsdatum.setText("Erstellt am: " + dtf.format(kontakt.getErzeugungsdatum()));
 		vPanel2.add(modifikationsdatum);
@@ -228,7 +209,6 @@ public class KontaktForm extends MainFrame {
 		deleteTeilhaberschaftButton.setStylePrimaryName("mainButton");
 		addAuspraegung.setStylePrimaryName("addButton");
 		zurueckZuAllKontaktView.setStylePrimaryName("mainButton");
-		wertEigenschaftColumn.setFieldUpdater(new WertEigenschaftFieldUpdater());
 
 		kontaktNameBox.addKeyPressHandler(new KontaktTextBoxKeyPressHandler());
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
@@ -257,7 +237,6 @@ public class KontaktForm extends MainFrame {
 		RootPanel.get("content").add(vPanel2);
 
 	}
-
 	public class WertAuspraegungFieldUpdater implements FieldUpdater<EigenschaftsAuspraegungWrapper, String> {
 
 		@Override
@@ -292,15 +271,6 @@ public class KontaktForm extends MainFrame {
 
 		}
 
-	}
-
-	public class WertEigenschaftFieldUpdater implements FieldUpdater<EigenschaftsAuspraegungWrapper, String> {
-		@Override
-		public void update(int index, EigenschaftsAuspraegungWrapper object, String value) {
-			object.setBezeichnungEigenschaftValue(value);
-			selection.getLastSelectedObject().setBezeichnungEigenschaftValue(value);
-
-		}
 	}
 
 	public class KontaktHinzufuegenClickHandler implements ClickHandler {
