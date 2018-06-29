@@ -25,7 +25,8 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 
 	private Button btAllAuspraegungen = new Button("Report Starten");
 
-	private ListBox listboxEigenschaften = new ListBox();
+//	private ListBox tbEigenschaft = new ListBox();
+	private TextBox tbEigenschaft = new TextBox();
 	private TextBox tbAuspraegung = new TextBox();
 
 	private Label labelbEigenschaft = new Label("Eigenschaften: ");
@@ -35,15 +36,15 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 
 	public EigenschaftenReportForm() {
 
-		reportverwaltung.findAllEigenschaften(new EigenschaftenCallback());
+//		reportverwaltung.findAllEigenschaften(new EigenschaftenCallback());
 
-		listboxEigenschaften.setVisibleItemCount(1);
+//		tbEigenschaft.setVisibleItemCount(1);
 
-		listboxEigenschaften.setStylePrimaryName("listbox-report");
+//		tbEigenschaft.setStylePrimaryName("listbox-report");
 		btAllAuspraegungen.setStylePrimaryName("reportButton");
 
 		this.add(labelbEigenschaft);
-		this.add(listboxEigenschaften);
+		this.add(tbEigenschaft);
 		this.add(labelAuspraegung);
 		this.add(tbAuspraegung);
 		this.add(btAllAuspraegungen);
@@ -57,28 +58,34 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			vpanel.clear();
-			vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(listboxEigenschaften.getSelectedValue(),
-					tbAuspraegung.getValue()));
-			RootPanel.get("contentReport").add(vpanel);
+			
+			if(tbEigenschaft.getValue().equals("") && tbAuspraegung.getValue().equals("")){
+				Window.alert("Bitte Eigenschaft oder Ausprägung eingeben");
+			} else {
+				vpanel.clear();
+				vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(tbEigenschaft.getValue(),
+						tbAuspraegung.getValue()));
+				RootPanel.get("contentReport").add(vpanel);
+				
+			}
 		}
 		
 	}
 
-	class EigenschaftenCallback implements AsyncCallback<Vector<Eigenschaft>> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			Window.alert("Fehler beim Laden aus der Datenbank" + caught.getMessage());
-		}
-
-		@Override
-		public void onSuccess(Vector<Eigenschaft> result) {
-			// TODO Auto-generated method stub
-			for (Eigenschaft eigenschaft : result) {
-				listboxEigenschaften.addItem(eigenschaft.getBezeichnung());
-			}
-		}
-
-	}
+//	class EigenschaftenCallback implements AsyncCallback<Vector<Eigenschaft>> {
+//
+//		@Override
+//		public void onFailure(Throwable caught) {
+//			Window.alert("Fehler beim Laden aus der Datenbank" + caught.getMessage());
+//		}
+//
+//		@Override
+//		public void onSuccess(Vector<Eigenschaft> result) {
+//			// TODO Auto-generated method stub
+//			for (Eigenschaft eigenschaft : result) {
+//				tbEigenschaft.addItem(eigenschaft.getBezeichnung());
+//			}
+//		}
+//
+//	}
 }

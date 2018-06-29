@@ -294,9 +294,8 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				} else {
 					if (value.getStatus() == 0) {
 						sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\" style=\"vertical-align: middle;\">");
-						
+											
 					} else if (value.getStatus() == 1) {
-						
 						sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\" style=\"vertical-align: middle;\">");
 					}
 				}

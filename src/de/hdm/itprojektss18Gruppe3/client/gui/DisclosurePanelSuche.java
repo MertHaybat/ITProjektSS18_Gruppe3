@@ -59,7 +59,8 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	private VerticalPanel suchErgebnisZweiPanel = new VerticalPanel();
 	private VerticalPanel suchErgebnisPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
-
+	private HorizontalPanel hButtonPanel = new HorizontalPanel();
+			
 	private Label eingabeText = new Label("Geben Sie die Suchkriterien ein");
 	private Label kontaktLabel = new Label("Kontaktname:");
 	private String eigenschaftLabel = "Eigenschaft: ";
@@ -92,8 +93,8 @@ public class DisclosurePanelSuche extends VerticalPanel {
 	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = kontaktCellTable.new KontaktnameColumn(clickCell);
 	private CellTableKontakt.IconColumn iconColumn = kontaktCellTable.new IconColumn(clickCell);
 	private ClickableTextCell clickEigenschaft = new ClickableTextCell();
-	private CellTableAuspraegungWrapper celltable = new CellTableAuspraegungWrapper(selection);
 
+	private CellTableAuspraegungWrapper celltable = new CellTableAuspraegungWrapper(selection);
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(clickEigenschaft);
 	private CellTableAuspraegungWrapper.WertAuspraegungColumn wertAuspraegungColumn = celltable.new WertAuspraegungColumn(clickEigenschaft);
 	
@@ -139,10 +140,12 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		kontakt.setName(kontaktTextbox.getValue());
 
-		checkBoxKontakt.getValue();
-		checkBoxTeilhaber.getValue();
+//		checkBoxKontakt.getValue();
+//		checkBoxTeilhaber.getValue();
 
 		//kontaktTextbox.setStylePrimaryName("suchTextbox");
+		hButtonPanel.add(startButton);
+		hButtonPanel.add(filterLoeschenButton);
 		FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
 		this.setSpacing(6);
 		layout.setCellSpacing(6);
@@ -163,8 +166,8 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		advancedOptions.setWidget(3, 0, checkBoxTeilhaber);
 		disc.setContent(advancedOptions);
 		layout.setWidget(3, 0, disc);
-		layout.setWidget(4, 1, startButton);
-		layout.setWidget(4, 2, filterLoeschenButton);
+		layout.setWidget(4, 0, hButtonPanel);
+		
 
 		cellFormatter.setColSpan(0, 0, 2);
 		cellFormatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
@@ -187,8 +190,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		kontaktCellTable.addColumn(iconColumn, "");
 		kontaktCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
 		kontaktCellTable.setEmptyTableWidget(emptyListMessage);
-		kontaktCellTable.setWidth("250%");
-		kontaktCellTable.addCellPreviewHandler(new PreviewClickHander());
+//		kontaktCellTable.addCellPreviewHandler(new PreviewClickHander());
 		celltable.setSelectionModel(selection);
 
 		
@@ -198,11 +200,12 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 		
 		suchErgebnisPanel.setStylePrimaryName("cellListWidgetContainerPanel");
-
+		hPanel.add(suchErgebnisPanel);
+		hPanel.add(suchErgebnisZweiPanel);
 		this.add(eingabeText);
 		this.add(layout);
-		this.add(suchErgebnisPanel);
-		this.add(suchErgebnisZweiPanel);
+		this.add(hPanel);
+//		this.add(suchErgebnisZweiPanel);
 	}
 	
 	public class SelectionHandlerAuspraegung implements SelectionChangeEvent.Handler{
@@ -438,15 +441,15 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		}
 	}
 	
-	public class PreviewClickHander implements CellPreviewEvent.Handler<Kontakt> {
-
-		@Override
-		public void onCellPreview(CellPreviewEvent<Kontakt> event) {
-			
-			if(Event.getTypeInt(event.getNativeEvent().getType()) == Event.ONCLICK){
-				
-					KontaktForm kf = new KontaktForm(event.getValue());
-				}
-		}
-	}
+//	public class PreviewClickHander implements CellPreviewEvent.Handler<Kontakt> {
+//
+//		@Override
+//		public void onCellPreview(CellPreviewEvent<Kontakt> event) {
+//			
+//			if(Event.getTypeInt(event.getNativeEvent().getType()) == Event.ONCLICK){
+//					
+//					KontaktForm kf = new KontaktForm(event.getValue());
+//				}
+//		}
+//	}
 }

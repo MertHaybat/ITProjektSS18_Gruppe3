@@ -1,13 +1,17 @@
 package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
+import de.hdm.itprojektss18Gruppe3.client.gui.CellTableTeilhaberschaftKontakt.PreviewClickHander;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 
 /**
@@ -29,6 +33,7 @@ public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilha
 	}
 	public void run(){
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
+		this.addCellPreviewHandler(new PreviewClickHander());
 	}
 	
 	public class TeilhaberschaftNutzer extends Column <NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>{
@@ -90,5 +95,17 @@ public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilha
 			return ssmAuspraegung.isSelected(object);
 		}
 		
+	}
+	public class PreviewClickHander implements Handler<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> {
+		@Override
+		public void onCellPreview(CellPreviewEvent<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> event) {
+			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
+
+				final NutzerTeilhaberschaftEigenschaftAuspraegungWrapper value = event.getValue();
+				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
+				event.getDisplay().getSelectionModel().setSelected(value, state);
+				event.setCanceled(true);
+			}
+		}
 	}
 }

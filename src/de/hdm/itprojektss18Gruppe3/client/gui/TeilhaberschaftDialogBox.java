@@ -204,7 +204,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		public void onKeyPress(KeyPressEvent event) {
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
 				if (box.getValue() == "") {
-					 Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
+					 
 				} else {
 
 					Nutzer nutzer = new Nutzer();
@@ -276,10 +276,15 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onClick(ClickEvent event) {
-
-			for (Nutzer nutzersuggest : nutzerSuggestbox) {
-				kontaktmanagerVerwaltung.checkEmail(nutzersuggest.getMail(), new KontaktFindNutzerByMailCallback());
-
+			
+			if(nutzerSuggestbox.size() == 0){
+				Window.alert("Sie müssen mindestens eine E-Mail Adresse angeben.");
+			} else {
+				
+				for (Nutzer nutzersuggest : nutzerSuggestbox) {
+					kontaktmanagerVerwaltung.checkEmail(nutzersuggest.getMail(), new KontaktFindNutzerByMailCallback());
+					
+				}
 			}
 
 		}

@@ -163,7 +163,8 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findKontaktByName(Kontakt k, AsyncCallback<Vector<Kontakt>> callback);
 
-	void findEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft, AsyncCallback<Vector<Kontakt>> callback);
+	void findEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft,
+			AsyncCallback<Vector<Kontakt>> callback);
 
 	void findTeilhaberschaftKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung,
 			String eigenschaft, AsyncCallback<Vector<Kontakt>> callback);

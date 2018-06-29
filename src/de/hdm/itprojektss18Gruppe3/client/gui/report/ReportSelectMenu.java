@@ -3,13 +3,13 @@ package de.hdm.itprojektss18Gruppe3.client.gui.report;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.AllKontakte;
 
-public class ReportSelectMenu extends HorizontalPanel{
+public class ReportSelectMenu extends FlowPanel{
 
 	private Button bt1 = new Button("Alle Kontakte Report");
 	private Button bt2 = new Button("Alle Teilhaberschaften Report");

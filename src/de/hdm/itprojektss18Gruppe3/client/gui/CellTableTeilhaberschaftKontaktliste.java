@@ -2,13 +2,16 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
+import de.hdm.itprojektss18Gruppe3.client.gui.CellTableTeilhaberschaftKontakt.PreviewClickHander;
 
 /**
  * Klasse, um eine Teilhaberschaft und ihre Kontaktliste(-n) zu verwalten - innerhalb einer Tabelle
@@ -27,8 +30,8 @@ public class CellTableTeilhaberschaftKontaktliste extends CellTable <NutzerTeilh
 	}
 
 	private void run() {
-		// TODO Auto-generated method stub
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
+		this.addCellPreviewHandler(new PreviewClickHander());
 	}
 	
 	public class TeilhaberschaftKontaktliste extends Column <NutzerTeilhaberschaftKontaktlisteWrapper, String>{
@@ -62,5 +65,17 @@ public class CellTableTeilhaberschaftKontaktliste extends CellTable <NutzerTeilh
 			return ssmAuspraegung.isSelected(object);
 		}
 		
+	}
+	public class PreviewClickHander implements Handler<NutzerTeilhaberschaftKontaktlisteWrapper> {
+		@Override
+		public void onCellPreview(CellPreviewEvent<NutzerTeilhaberschaftKontaktlisteWrapper> event) {
+			if (BrowserEvents.CLICK.equals(event.getNativeEvent().getType())) {
+
+				final NutzerTeilhaberschaftKontaktlisteWrapper value = event.getValue();
+				final Boolean state = !event.getDisplay().getSelectionModel().isSelected(value);
+				event.getDisplay().getSelectionModel().setSelected(value, state);
+				event.setCanceled(true);
+			}
+		}
 	}
 }

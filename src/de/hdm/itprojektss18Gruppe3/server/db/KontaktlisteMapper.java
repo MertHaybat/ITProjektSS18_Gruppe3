@@ -307,6 +307,7 @@ public class KontaktlisteMapper {
 				kontaktliste.setId(rs.getInt("id"));
 				kontaktliste.setBezeichnung(rs.getString("bezeichnung"));
 				kontaktliste.setNutzerID(rs.getInt("nutzerid"));
+				kontaktliste.setStatus(rs.getInt("status"));
 				
 				/**
 				 * Hinzufügen des neuen Objekts zum Ergebnisvektor

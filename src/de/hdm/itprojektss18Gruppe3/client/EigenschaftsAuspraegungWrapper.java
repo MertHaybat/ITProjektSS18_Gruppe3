@@ -6,6 +6,7 @@ import com.google.gwt.user.client.Window;
 
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 
 public class EigenschaftsAuspraegungWrapper implements Serializable {
 	
@@ -13,7 +14,7 @@ public class EigenschaftsAuspraegungWrapper implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private Eigenschaft eigenschaft = null;
 	private Eigenschaftsauspraegung auspraegung = null;
 	
@@ -33,6 +34,7 @@ public class EigenschaftsAuspraegungWrapper implements Serializable {
 		this.eigenschaft = eigenschaft;
 		this.auspraegung = auspraegung;
 	}
+
 	public Eigenschaft getEigenschaft() {
 		return eigenschaft;
 	}

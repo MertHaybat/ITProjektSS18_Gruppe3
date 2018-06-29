@@ -274,7 +274,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 		}
 		if (eigenschaftsauspraegungID != 0 & kontaktID != 0){
-			Vector<Teilhaberschaft> t = this.teilhaberschaftMapper.findTeilhaberschaftByKontaktAndTeilhaber(kontaktID, teilhabenderID);
+			Vector<Teilhaberschaft> t = this.teilhaberschaftMapper.findTeilhaberschaftByAuspraegungIDAndNutzerID(kontaktID, teilhabenderID);
 			if(t.size()!=0){
 				return null;
 			}
@@ -292,17 +292,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 				
 			}
 		}
-//		for (Teilhaberschaft teilhaberschaft2 : teilhaberschaften) {
-//			if (teilhaberschaft2.getKontaktlisteID() != kontaktlisteID
-//					&& teilhaberschaft2.getEigenschaftsauspraegungID() != eigenschaftsauspraegungID
-//					&& teilhaberschaft2.getKontaktID() != kontaktID) {
-//				return this.teilhaberschaftMapper.createTeilhaberschaft(teilhaberschaft);
-//
-//			} else {
-//				return null;
-//			}
-//
-//		}
+
 		return this.teilhaberschaftMapper.createTeilhaberschaft(teilhaberschaft);
 	}
 
