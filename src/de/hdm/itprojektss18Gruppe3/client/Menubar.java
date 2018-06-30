@@ -1,6 +1,7 @@
 package de.hdm.itprojektss18Gruppe3.client;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
@@ -25,8 +26,6 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3.FindNutzerCallback;
-import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3.LoginCallback;
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
 import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktTeilen;
 import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktlisteHinzufuegen;
@@ -36,13 +35,20 @@ import de.hdm.itprojektss18Gruppe3.shared.LoginServiceAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 
+/*
+* Klasse für die Menüleiste. Hier werden die Menüpunkte entsprechend dem geladen, 
+* was aufgrund der Aktion des Nutzers im Moment möglich ist. Auch ist hier die TextBox
+* für die schnelle Suche integriert
+*/
 public class Menubar extends MenuBar {
 
 	private LoginInfo loginInfo = null;
 	private Anchor signOutLink = new Anchor("Sign Out");
 	private HorizontalPanel hp = new HorizontalPanel();
+	private TextBox textBox = new TextBox();
 
 	private MenuBar menubar = new MenuBar();
+	private MenuBar menubarRightSide = new MenuBar();
 	private MenuBar kontaktMenu = new MenuBar(true);
 	private MenuBar kontaktlisteMenu = new MenuBar(true);
 	private MenuBar teilhaberschaftMenu = new MenuBar(true);
@@ -74,6 +80,13 @@ public class Menubar extends MenuBar {
 			new AllKontaktView.TeilhaberschaftVerwaltenCommand());
 	private MenuItem searchMenu = new MenuItem("Detailsuche", new ITProjektSS18Gruppe3.SuchenCommand());
 	
+	
+	/*
+	 * Über verschiedene Konstruktoren, die jeweils verschiedene Parameter
+	 * erwarten, kann so der jeweilige Command, der hinter einem MenüItem steckt,
+	 * angepasst werden. Dadurch kann z.B. kein Kontakt gelöscht werden, wenn der Nutzer
+	 * gerade eine Kontaktliste angeklickt hat.
+	 */
 	public Menubar() {
 		RootPanel.get("menubar").clear();
 		run();
@@ -105,17 +118,12 @@ public class Menubar extends MenuBar {
 		run();
 	}
 
+	
+	/*
+	 * In der run Methode werden die MenuBars und MenuItems dann entsprechend zusammengeführt
+	 * und in das RootPanel eingebunden.
+	 */
 	public void run() {
-		TextBox textBox = new TextBox();
-		HorizontalPanel flowpanel = new HorizontalPanel();
-		textBox.setStylePrimaryName("searchTextBox");
-		textBox.setMaxLength(100);
-		textBox.getElement().setPropertyString("placeholder", " Schnellsuche...");
-		flowpanel.add(textBox);
-		flowpanel.setStylePrimaryName("logoutBarContainer");
-
-		
-		
 		
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html", new LoginCallback());
@@ -144,22 +152,28 @@ public class Menubar extends MenuBar {
 		menubar.addSeparator();
 		menubar.addItem(manageTeilhaberschaften);
 		menubar.addSeparator();
-		menubar.addSeparator().setStylePrimaryName("menuBarAlignRight");
-		menubar.addSeparator();
-		menubar.addItem(searchMenu);
-		menubar.addSeparator();
-		menubar.addItem("Ausloggen", new Command() {
+		
+		textBox.setStylePrimaryName("searchTextBox");
+		textBox.setMaxLength(100);
+		textBox.getElement().setPropertyString("placeholder", " Schnellsuche...");
+		
+		menubarRightSide.addSeparator();
+		menubarRightSide.addItem(searchMenu);
+		menubarRightSide.addSeparator();
+		menubarRightSide.addItem("Ausloggen", new Command() {
 			public void execute() {
 				signOutLink.setHref(loginInfo.getLogoutUrl());
 				com.google.gwt.user.client.Window.open(signOutLink.getHref(), "_self", "");
 			}
 		});
-		menubar.addSeparator();
-
+		
 		hp.add(menubar);
-		hp.add(flowpanel);
+		hp.add(textBox);
+		hp.add(menubarRightSide);
+
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(hp);
+
 	}
 
 	class LoginCallback implements AsyncCallback<LoginInfo> {
@@ -174,6 +188,12 @@ public class Menubar extends MenuBar {
 		}
 	}
 
+	
+	/*
+	 * Die verschiedenen Commands, die den MenuItems übergeben werden, sind im Folgenden
+	 * aufgeführt. Je nach Aktion werden die verschiedenen Klassen, die eine Aktion wie 
+	 * z.B. das Löschen eines Kontaktes durchführen, aufgerufen.
+	 */
 	class DeleteKontaktCommand implements Command {
 
 		@Override
