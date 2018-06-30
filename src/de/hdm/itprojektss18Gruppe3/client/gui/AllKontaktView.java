@@ -7,101 +7,101 @@ import java.util.Vector;
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.CellPreviewEvent;
+import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.CellPreviewEvent.Handler;
-import com.google.gwt.cell.client.Cell.Context;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NativeEvent;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
-import de.hdm.itprojektss18Gruppe3.client.MainFrame;
-import de.hdm.itprojektss18Gruppe3.client.Menubar;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
-import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktlisteHinzufuegen.AddClickHandler;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
+/**
+ * Die Klasse AllKontaktView ist die Ansicht für die Kontaktlisten die angeklickt werden.
+ * Hier werden die Kontakte in einer Kontaktliste im Div-Container content angezeigt.
+ * Erbt von der Basis-Klasse MainFrame
+ * 
+ * @version 1.0 30 June 2018
+ * @author Mert
+ *
+ */
 public class AllKontaktView extends MainFrame {
 
+	/**
+	 * Instanziierung des Proxy Objekts für den Editor
+	 */
+	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
+			.getKontaktVerwaltung();
+	
+	/**
+	 * Instanziierung der GUI Elemente: VerticalPanel, HorizontalPanel, Button, Anchor, HTML und CheckboxCell
+	 */
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel allKontakteCellTableContainer = new HorizontalPanel();
-	private Button kontaktlisteLoeschen = new Button("Kontaktliste löschen");
+	
 	private Button teilhaberschaftButton = new Button("Teilhaberschaft löschen");
-	private Button kontaktHinzufuegenButton = new Button("Kontakt hinzufügen");
-	private Button addKontaktButton = new Button("Neuer Kontakt");
-	private Button deleteKontaktButton = new Button("Kontakt löschen");
-	private Button addKontaktToKontaktlistButton = new Button("Kontakt in Kontaktliste");
-	private Button addTeilhaberschaftKontaktButton = new Button("Kontakt teilen");
-	private Button addKontaktlisteButton = new Button("Neue Kontaktliste");
-	private Button deleteKontaktfromListeButton = new Button("Kontakt entfernen");
-	private Button addTeilhaberschaftKontaktlisteButton = new Button("Kontaktliste teilen");
-	private Button zurueckButton = new Button("Alle Kontakte");
-	private Button teilhaberschaftVerwaltenButton = new Button("Teilhaberschaft verwalten");
-
+	
+	private Anchor signOutLink = new Anchor();
+	
 	private HTML headline = new HTML();
+	private CheckboxCell checkBoxCell = new CheckboxCell(true, false);
 
-	private Teilhaberschaft teilhaberschaft = null;
-
+	/**
+	 * Instanziierung und Deklarierung von Listen die für die Verwaltung der BO's notwendig sind.
+	 */
 	private static ArrayList<Kontakt> allKontakteSelectedArrayList = new ArrayList<>();
 	private ArrayList<Kontakt> allKontakteByUserArrayList = new ArrayList<>();
 	private List<Kontakt> allSelectedKontakte = new ArrayList<>();
 	private static ProvidesKey<Kontakt> keyProvider;
 
-	private Anchor signOutLink = new Anchor();
-	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
-			.getKontaktVerwaltung();
+	/**
+	 * Deklarierung der BusinessObjects die verwendet werden.
+	 */
+	private Teilhaberschaft teilhaberschaft = null;
 	private Nutzer nutzerausdb = null;
 	private static Kontaktliste kontaktliste = null;
-
 	private Kontakt kontakt = null;
 
-	private CellTableKontakt allKontakteCellTable = new CellTableKontakt();
-
-	private CheckboxCell checkBoxCell = new CheckboxCell(true, false);
+	/**
+	 * Instanziierung der Cell's
+	 */
 	private ButtonCell buttonCell = new ButtonCell();
 	private TextCell textCell = new TextCell();
 	private ClickableTextCell clickCell = new ClickableTextCell();
+	
+	/**
+	 * Instanziierung des CellTables, welches verwendet wird. Damit auch die Columns, die als Innere Klasse in der CellTable Klasse sind.
+	 */
+	private CellTableKontakt allKontakteCellTable = new CellTableKontakt();
 	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(
 			clickCell);
 	private CellTableKontakt.CheckColumn checkColumn = allKontakteCellTable.new CheckColumn(checkBoxCell);
 	private CellTableKontakt.IconColumn iconColumn = allKontakteCellTable.new IconColumn(textCell);
 
-	private KontaktlistView klisteView = new KontaktlistView();
 
 	public AllKontaktView() {
 		Kontaktliste dummyKontaktliste = new Kontaktliste();
@@ -136,13 +136,7 @@ public class AllKontaktView extends MainFrame {
 		super.onLoad();
 	}
 
-	public HorizontalPanel getAllKontakteCellTableContainer() {
-		return allKontakteCellTableContainer;
-	}
-
-	public void setAllKontakteCellTableContainer(HorizontalPanel allKontakteCellTableContainer) {
-		this.allKontakteCellTableContainer = allKontakteCellTableContainer;
-	}
+	
 
 	public void run() {
 		

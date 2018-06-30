@@ -9,8 +9,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.itprojektss18Gruppe3.client.MainFrame;
-
 /**
  * 
  * HTML Seite von Impressum wird angezeigt

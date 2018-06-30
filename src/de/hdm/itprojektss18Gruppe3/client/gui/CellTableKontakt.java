@@ -41,10 +41,6 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 		return ssmAuspraegung;
 	}
 
-//	public void setSsmAuspraegung(MultiSelectionModel<Kontakt> ssmAuspraegung) {
-//		this.ssmAuspraegung = ssmAuspraegung;
-//	}
-
 	public void run(){
 		this.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));
 	}

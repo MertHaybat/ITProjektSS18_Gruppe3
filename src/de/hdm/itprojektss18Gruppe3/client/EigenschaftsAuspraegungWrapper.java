@@ -2,34 +2,52 @@ package de.hdm.itprojektss18Gruppe3.client;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.Window;
 
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 
+/**
+ * Wrapper Klasse für Eigenschaft und Eigenschaftsausprägung. Wird benötigt unteranderem für die CellTables
+ * @author Mert
+ *
+ */
 public class EigenschaftsAuspraegungWrapper implements Serializable {
-	
 	/**
-	 * 
+	 * Dient zum Serialisieren von Objekten für eine RPC fähigen Austausch zwischen Server und Client.
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Deklarieren von Eigenschaft und Eigenschaftsauspraegung
+	 */
 	private Eigenschaft eigenschaft = null;
 	private Eigenschaftsauspraegung auspraegung = null;
 	
-	
+	/**
+	 * No Argument Konstruktor
+	 */
 	public EigenschaftsAuspraegungWrapper(){
-		
 	}
 	
+	/**
+	 * 
+	 * @param eigenschaft
+	 */
 	public EigenschaftsAuspraegungWrapper(Eigenschaft eigenschaft){
 		this.eigenschaft = eigenschaft;
 	}
+	/**
+	 * 
+	 * @param auspraegung
+	 */
 	public EigenschaftsAuspraegungWrapper(Eigenschaftsauspraegung auspraegung){
 		this.auspraegung = auspraegung;
 	}
-	
+	/**
+	 * 
+	 * @param eigenschaft
+	 * @param auspraegung
+	 */
 	public EigenschaftsAuspraegungWrapper(Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung){
 		this.eigenschaft = eigenschaft;
 		this.auspraegung = auspraegung;

@@ -2,7 +2,6 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -42,9 +41,6 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private HorizontalPanel labelPanel = new HorizontalPanel();
 
-	private HorizontalPanel treeContainer = new HorizontalPanel();
-
-	private Kontaktliste kontaktliste = new Kontaktliste();
 	
 	/**
 	 * Instanziierung vom Label "kontaktlisteLabel" welches als Hilfe für die TextBox dient, damit erkenntlich ist welche Angabe in die TextBox eingetragen werden soll

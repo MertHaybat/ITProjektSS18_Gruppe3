@@ -5,26 +5,25 @@ import java.util.Vector;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
 import de.hdm.itprojektss18Gruppe3.server.db.EigenschaftMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.EigenschaftsauspraegungMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.KontaktKontaktlisteMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.KontaktMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.KontaktlisteMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.NutzerMapper;
-import de.hdm.itprojektss18Gruppe3.server.db.PersonMapper;
 import de.hdm.itprojektss18Gruppe3.server.db.TeilhaberschaftMapper;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministration;
+import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
-import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
-import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
-import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
-import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
-import de.hdm.itprojektss18Gruppe3.client.gui.DisclosurePanelSuche.FindKontaktByNameCallback;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
-import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
@@ -61,13 +60,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * abgleicht.
 	 */
 	private NutzerMapper nutzerMapper = null;
-
-	/**
-	 * Referenz auf den PersonMapper, der Personobjekte mit der Datenbank
-	 * abgleicht.
-	 */
-	@SuppressWarnings("unused")
-	private PersonMapper personMapper = null;
 
 	/**
 	 * Referenz auf den EigenschaftsauspraegungMapper, der
@@ -115,7 +107,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		this.kontaktlisteMapper = KontaktlisteMapper.kontaktlisteMapper();
 		this.kontaktMapper = KontaktMapper.kontaktMapper();
 		this.nutzerMapper = NutzerMapper.nutzerMapper();
-		this.personMapper = PersonMapper.personMapper();
 		this.eigenschaftMapper = EigenschaftMapper.eigenschaftMapper();
 		this.eigenschaftsauspraegungMapper = EigenschaftsauspraegungMapper.eigenschaftsauspraegungMapper();
 		this.teilhaberschaftMapper = TeilhaberschaftMapper.teilhaberschaftMapper();
@@ -509,23 +500,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 		return eigenschaft;
 	}
-
-	/**
-	 * Alle Kontakte von einer Eigenschaftsausprägung anzeigen lassen. Dies ist
-	 * die Suchfunktion in einer einzelnen Kontaktliste.
-	 * 
-	 * @param e;
-	 *            Objekt der Klasse Eigenschaftsausprägung
-	 * @return Vector des Typs Kontakt
-	 * @throws IllegalArgumentException
-	 */
-	@Override
-	public Vector<Kontakt> findAllKontaktByEigenschaftsauspraegung(Eigenschaftsauspraegung e)
-			throws IllegalArgumentException {
-		// TODO
-		return null;
-	}
-
+	
 	/**
 	 * Alle Eigenschaftsausprägungen einer Eigenschaft anzeigen lassen
 	 * 
@@ -542,7 +517,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Alle Eigenschaftsausprägung durch dessen Wert anzeigen lassen. Diese
-	 * Methode ist Teil der Suchfunktion
+	 * Methode ist Teil der Suchfunktion.
+	 * 
 	 * 
 	 * @param e;
 	 *            Objekt der Klasse Eigenschaftsausprägung
@@ -948,17 +924,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * Methode zur Bearbeitung einer Person 
-	 * @param p
-	 *            - Übergabeparamater von Person, die geändert werden soll
-	 * @throws IllegalArgumentException
-	 */
-	@Override
-	public void savePerson(Person p) throws IllegalArgumentException {
-		personMapper.updatePerson(p);
-	}
-
-	/**
 	 * Methode zur Bearbeitung einer Teilhaberschaft
 	 * @param t
 	 *            - Übergabeparameter von Teilhaberschaft, die geändert werden
@@ -968,66 +933,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	@Override
 	public void saveTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException {
 		teilhaberschaftMapper.updateTeilhaberschaft(t);
-	}
-
-	/**
-	 * Wurde noch nicht getestet.. Kommentare folgen!
-	 *
-	 */
-	@Override
-	public Vector<Kontakt> suchFunktion(Nutzer nutzer, Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung)
-			throws IllegalArgumentException {
-		// TODO
-		// Suchfunktion für Eigenschaftsauspraegung in allen Kontakten
-
-		// Nach dem Wert in der Tabelle Eigenschaftsauspraegung schauen, Wird
-		// gefiltert nach Wert und EigenschaftID
-		Vector<Eigenschaftsauspraegung> auspraegungen = findAllEigenschaftsauspraegungByWertAndEigenschaft(auspraegung,
-				eigenschaft);
-
-		// In Teilhaberschaft nach den geteilten Auspraegungen suchen. Wenn es
-		// nicht geteilte Ausprägungen gibt, nicht anzeigen.
-
-		Vector<Teilhaberschaft> teilhaberschaftenKontakte = findAllTeilhaberschaftenByTeilhabenderID(nutzer.getId());
-		Vector<Kontakt> teilhabendeKontakte = new Vector<Kontakt>();
-		for (int i = 0; i < teilhaberschaftenKontakte.size(); i++) {
-			teilhabendeKontakte.add(findKontaktByID(teilhaberschaftenKontakte.elementAt(i).getKontaktID()));
-		}
-
-		// In Teilhaberschaft nach den geteilten Kontaktlisten suchen.
-		Kontaktliste k = new Kontaktliste();
-		Vector<Kontakt> teilhabendeKontaktlistenKontakte = new Vector<Kontakt>();
-		Vector<Kontakt> allKontaktlisteKontakte = new Vector<Kontakt>();
-		for (int o = 0; o < teilhaberschaftenKontakte.size(); o++) {
-			k.setId(teilhaberschaftenKontakte.elementAt(o).getKontaktlisteID());
-			allKontaktlisteKontakte = findAllKontakteByKontaktlisteID(k);
-			teilhabendeKontaktlistenKontakte.addAll(allKontaktlisteKontakte);
-		}
-
-		// In den Kontakten nach der NutzerID filtern (alle Kontakte von mir)
-		Vector<Kontakt> alleKontakte = findAllKontaktByNutzerID(nutzer.getId());
-		Vector<Kontakt> alleKontakteVonTeilnahmen = findAllKontakteByTeilhabenderID(nutzer.getId());
-		Vector<Kontakt> allContacts = new Vector<Kontakt>();
-
-		allContacts.addAll(alleKontakteVonTeilnahmen);
-		allContacts.addAll(alleKontakte);
-		allContacts.addAll(teilhabendeKontakte);
-		allContacts.addAll(teilhabendeKontaktlistenKontakte);
-
-		Vector<Kontakt> allFilteredContacts = new Vector<Kontakt>();
-
-		for (int p = 0; p < auspraegungen.size(); p++) {
-			for (int x = 0; x < allContacts.size(); x++) {
-
-				int personID = auspraegungen.elementAt(p).getPersonID();
-
-				if (personID == allContacts.elementAt(x).getId()) {
-					allFilteredContacts.add(allContacts.elementAt(x));
-				}
-			}
-		}
-
-		return allFilteredContacts;
 	}
 
 	/**
@@ -1051,7 +956,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 */
 	@Override
 	public Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
-		// TODO
 		Vector<Teilhaberschaft> teilhaberschaftVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
 		Vector<Kontakt> kontakteVector = new Vector<Kontakt>();
 		Vector<Teilhaberschaft> filteredTeilhaberschaftenVector = new Vector<Teilhaberschaft>();
@@ -1207,9 +1111,18 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return this.nutzerMapper.findAllNutzer();
 	}
 
+	/**
+	 * Auslesen aller Eigenschaften und Eigenschaftsausprägungen eines Kontakts.
+	 * 
+	 * Erst werden alle ausgelesen und in den Vector 'eigenschaft' eingespeichert.
+	 * Anschließend wird überprüft, ob der Kontakt bereits welche Eigenschaftsausprägungen hat. Wenn das nicht so ist werden die fünf Basis Ausprägungen angelegt.
+	 * 
+	 * Anschließend werden alle Eigenschaften und Ausprägungen in einem Wrapper Vector gebündelt und zurück gegeben.
+	 * 
+	 */
 	@Override
-	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftHybrid(Person person) throws IllegalArgumentException {
-		Vector<Eigenschaftsauspraegung> auspraegung = findAllEigenschaftsauspraegungByPersonID(person);
+	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftHybrid(Kontakt kontakt) throws IllegalArgumentException {
+		Vector<Eigenschaftsauspraegung> auspraegung = findAllEigenschaftsauspraegungByPersonID(kontakt);
 
 		Vector<Eigenschaft> eigenschaft = new Vector<Eigenschaft>();
 
@@ -1222,12 +1135,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
 
 		if (auspraegung.isEmpty()) {
-			createEigenschaftsauspraegung(" ", person.getId(), 0, "Vorname");
-			createEigenschaftsauspraegung(" ", person.getId(), 0, "Nachname");
-			createEigenschaftsauspraegung(" ", person.getId(), 0, "Geburtsdatum");
-			createEigenschaftsauspraegung(" ", person.getId(), 0, "Telefonnummer");
-			createEigenschaftsauspraegung(" ", person.getId(), 0, "E-Mail");
-			auspraegungVector = findAllEigenschaftsauspraegungByPersonID(person);
+			createEigenschaftsauspraegung(" ", kontakt.getId(), 0, "Vorname");
+			createEigenschaftsauspraegung(" ", kontakt.getId(), 0, "Nachname");
+			createEigenschaftsauspraegung(" ", kontakt.getId(), 0, "Geburtsdatum");
+			createEigenschaftsauspraegung(" ", kontakt.getId(), 0, "Telefonnummer");
+			createEigenschaftsauspraegung(" ", kontakt.getId(), 0, "E-Mail");
+			auspraegungVector = findAllEigenschaftsauspraegungByPersonID(kontakt);
 			for (int t = 1; t < 6; t++) {
 				eigenschaft.add(findEigenschaftByEigenschaftID(t));
 			}
@@ -1263,22 +1176,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 */
 	@Override
 	public void deleteKontaktByID(Kontakt k) throws IllegalArgumentException {
-		deleteKontaktKontaktlisteByKontakt(k);
-		deleteEigenschaftsauspraegungByKontakt(k);
-		deleteTeilhaberschaftByKontakt(k);
+		this.deleteKontaktKontaktlisteByKontakt(k);
+		this.deleteEigenschaftsauspraegungByKontakt(k);
+		this.deleteTeilhaberschaftByKontakt(k);
 		this.kontaktMapper.deleteKontakt(k);
 	}
 
-	/**
-	 * Methode um alle Nutzer über die Mail zurückgeben
-	 * @param: mail
-	 * @throws IllegalArgumentException
-	 */
-	@Override
-	public Vector<Nutzer> findAllNutzerByEmail(String mail) throws IllegalArgumentException {
-
-		return null;
-	}
 	
 	/**
 	 * Methode um KontaktKontaktliste zu löschen
@@ -1288,20 +1191,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 */
 	@Override
 	public void deleteKontaktKontaktliste(KontaktKontaktliste kon) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		this.kontaktKontaktlisteMapper.deleteKontaktKontaktlisteByKontaktKontaktliste(kon);
-	}
-
-	/**
-	 * Methode um alle Eigenschaften eines Kontaktes zurückzugeben
-	 * @param: k
-	 * 			Übergabeparameter der Klasse Kontakt
-	 * @throws IllegalArgumentException
-	 */
-	@Override
-	public Vector<Eigenschaft> findAllEigenschaftByKontakt(Kontakt k) throws IllegalArgumentException {
-
-		return null;
 	}
 
 	/**
@@ -1319,7 +1209,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	@Override
 	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int teilhabenderID)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		Vector<Teilhaberschaft> teilhaberschaftVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
 		Vector<Kontaktliste> kontaktlisteVector = new Vector<Kontaktliste>();
 
@@ -1331,17 +1220,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	}
 
-	// @Override
-	// public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int
-	// teilhabenderID)
-	// throws IllegalArgumentException {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
-
 	@Override
 	public Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		return this.kontaktlisteMapper.findKontaktlisteByID(kontaktlisteID);
 	}
 
@@ -1484,8 +1364,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
 		Vector<Teilhaberschaft> kontaktlisteTeilhabenderVector = new Vector<Teilhaberschaft>();
 		Vector<Kontaktliste> kontaktlisteVector = new Vector<Kontaktliste>();
-		Kontaktliste kontaktliste = new Kontaktliste();
-
+		
 		for (Teilhaberschaft teilhaberschaft : teilhabenderVector) {
 			if (teilhaberschaft.getKontaktlisteID() != 0) {
 				kontaktlisteTeilhabenderVector.add(teilhaberschaft);
@@ -1539,13 +1418,17 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return this.teilhaberschaftMapper.findTeilhaberschaftByKontaktID(kontaktID);
 	}
 
-	
+	/**
+	 * Auslesen aller Kontakte einer Kontakt Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<NutzerTeilhaberschaftKontaktWrapper> findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(
 			int teilhabenderID) throws IllegalArgumentException {
 		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
 		Vector<Teilhaberschaft> kontaktTeilhabenderVector = new Vector<Teilhaberschaft>();
-		Vector<Kontakt> kontakteVector = new Vector<Kontakt>();
 		Vector<NutzerTeilhaberschaftKontaktWrapper> wrapperVector = new Vector<NutzerTeilhaberschaftKontaktWrapper>();
 
 		for (Teilhaberschaft teilhaberschaft : teilhabenderVector) {
@@ -1560,7 +1443,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 		return wrapperVector;
 	}
-
+	/**
+	 * Auslesen aller Eigenschaftsausprägung einer Eigenschaftsausprägung Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftKontaktWrapperByTeilhaberschaft(
 			int teilhabenderID) throws IllegalArgumentException {
@@ -1584,7 +1472,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		
 		return wrapperVector;
 	}
-
+	/**
+	 * Auslesen aller Kontaktlisten einer Kontaktlisten Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findNutzerTeilhaberschaftKontaktlisteWrapper(
 			int teilhabenderID) throws IllegalArgumentException {
@@ -1593,18 +1486,25 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		Vector<NutzerTeilhaberschaftKontaktlisteWrapper> wrapperVector = new Vector<NutzerTeilhaberschaftKontaktlisteWrapper>();
 
 		for (Teilhaberschaft teilhaberschaft : teilhabenderVector) {
-			if(teilhaberschaft.getKontaktlisteID() != 0){
-				kontaktlisteTeilhabenderVector.add(teilhaberschaft); 
+			if (teilhaberschaft.getKontaktlisteID() != 0) {
+				kontaktlisteTeilhabenderVector.add(teilhaberschaft);
 			}
 		}
-		
+
 		for (Teilhaberschaft teilhabender : kontaktlisteTeilhabenderVector) {
-			wrapperVector.add(new NutzerTeilhaberschaftKontaktlisteWrapper(findNutzerByID(teilhabender.getEigentuemerID()),
-					teilhabender, findKontaktlisteByID(teilhabender.getKontaktlisteID())));
-		
-	}
+			wrapperVector
+					.add(new NutzerTeilhaberschaftKontaktlisteWrapper(findNutzerByID(teilhabender.getEigentuemerID()),
+							teilhabender, findKontaktlisteByID(teilhabender.getKontaktlisteID())));
+
+		}
 		return wrapperVector;
 	}
+	/**
+	 * Auslesen aller Eigenschaftsausprägungen eines Kontakt Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<Kontakt> findTeilhabendeKontakteAuspraegungen(int teilhabenderID) throws IllegalArgumentException {
 		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
@@ -1632,15 +1532,18 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	public void deleteTeilhaberschaftByTeilhaberschaft (Teilhaberschaft t) throws IllegalArgumentException{
 		this.teilhaberschaftMapper.deleteTeilhaberschaftByTeilhabender(t);
 	}
-	
+	/**
+	 * Auslesen aller Eigenschaftsausprägungen eines Kontakt Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<NutzerTeilhaberschaftKontaktWrapper> findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(
 			int teilhabenderID) throws IllegalArgumentException {
 		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
 		Vector<Teilhaberschaft> kontaktTeilhabenderVector = new Vector<Teilhaberschaft>();
-		Vector<Kontakt> kontakteVector = new Vector<Kontakt>();
 		Vector<NutzerTeilhaberschaftKontaktWrapper> wrapperVector = new Vector<NutzerTeilhaberschaftKontaktWrapper>();
-		Vector<NutzerTeilhaberschaftKontaktWrapper> wrapperFilteredVector = new Vector<NutzerTeilhaberschaftKontaktWrapper>();
 		int kontaktID = 0;
 
 		for (Teilhaberschaft teilhaberschaft : teilhabenderVector) {
@@ -1660,7 +1563,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 		return wrapperVector;
 	}
-	
+	/**
+	 * Auslesen aller Eigenschaftsausprägungen eines Kontakt Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftAndAuspraegungByKontakt (int nutzerID, int kontaktID) throws IllegalArgumentException{
 		Kontakt k = new Kontakt();
@@ -1713,6 +1621,9 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		
 	}
 	
+	/**
+	 * Überprüfung, ob eine Eigenschaftsausprägung Teilhaberschaft bereits existiert
+	 */
 	@Override
 	public String findTeilhaberschaftString(int nutzerid, Vector<Eigenschaftsauspraegung> auspraegung) throws IllegalArgumentException{
 		Vector<Teilhaberschaft> teilhaberschaftVector = new Vector<Teilhaberschaft>();
@@ -1729,7 +1640,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		}
 		
 	}
-
+	/**
+	 * Auslesen aller Kontakte einer Kontakt Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<NutzerTeilhaberschaftKontaktWrapper> findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer)
 			throws IllegalArgumentException {
@@ -1767,7 +1683,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return wrapperVector;
 
 	}
-	
+	/**
+	 * Auslesen aller Kontakte einer Kontakt Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<Kontakt> findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(int eigentuemerID, int teilhabenderID) throws IllegalArgumentException{
 		Vector<Teilhaberschaft> teilhaberschaft = this.teilhaberschaftMapper.findTeilhaberschaftByEigentuemerAndTeilhaber(eigentuemerID, teilhabenderID);
@@ -1787,6 +1708,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return kontaktVector;		
 	}
 	
+	/**
+	 * Auslesen aller Kontaktliste einer Kontaktliste Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findKontaktlisteTeilhaberschaftEigentuemer(int eigentuemerID) throws IllegalArgumentException{
 		Vector<Teilhaberschaft> teilhaberschaft = findTeilhaberschaftByEigentuemerID(eigentuemerID);
@@ -1805,7 +1732,12 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		
 		return wrapper;
 	}
-	
+	/**
+	 * Auslesen aller Kontakte einer Kontakt Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<NutzerTeilhaberschaftKontaktWrapper> findKontaktTeilhaberschaftEigentuemer(int eigentuemerID) throws IllegalArgumentException{
 		Vector<Teilhaberschaft> teilhaberschaft = findTeilhaberschaftByEigentuemerID(eigentuemerID);
@@ -1824,6 +1756,13 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		
 		return wrapper;
 	}
+	
+	/**
+	 * Auslesen aller Ausprägungen einer Eigenschaftsausprägung Teilhaberschaft
+	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
+	 * 
+	 * Dann werden alle einem Wrapper Vector hinzugefügt
+	 */
 	@Override
 	public Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftEigentuemer(int eigentuemerID) throws IllegalArgumentException{
 		Vector<Teilhaberschaft> teilhaberschaft = findTeilhaberschaftByEigentuemerID(eigentuemerID);
@@ -1847,11 +1786,4 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	
 }
 
-	// @Override
-	// public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaftID(int
-	// teilhabenderID)
-	// throws IllegalArgumentException {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
 	

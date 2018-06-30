@@ -42,8 +42,6 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
-import de.hdm.itprojektss18Gruppe3.client.MainFrame;
-import de.hdm.itprojektss18Gruppe3.client.Menubar;
 import de.hdm.itprojektss18Gruppe3.client.gui.CreateEigenschaftsauspraegungDialogBox.createEigenschaftsauspraegungCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;

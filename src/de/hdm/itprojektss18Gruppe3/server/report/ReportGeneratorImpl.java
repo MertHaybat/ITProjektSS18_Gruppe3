@@ -1,6 +1,5 @@
 package de.hdm.itprojektss18Gruppe3.server.report;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
@@ -16,7 +15,6 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteByTeilhaberschaftReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.Column;
@@ -251,7 +249,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Eigenschaftsauspraegung ea = new Eigenschaftsauspraegung();
 		ea.setWert(auspraegung);
 		
-		Vector<Eigenschaft> eigenschaften = this.getKontaktVerwaltung().findAllEigenschaften();
 		KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport result = new KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport();
 
 
@@ -342,7 +339,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	}
 	
 	@Override
-	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftWrapper(Person p)throws IllegalArgumentException {
+	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftWrapper(Kontakt p)throws IllegalArgumentException {
 		if (this.getKontaktVerwaltung() == null) {
 			return null;
 		}

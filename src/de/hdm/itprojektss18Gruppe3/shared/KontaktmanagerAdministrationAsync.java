@@ -60,8 +60,6 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findEigenschaftByEigenschaftIDFromPerson(Eigenschaftsauspraegung e, AsyncCallback<Eigenschaft> callback);
 
-	void findAllKontaktByEigenschaftsauspraegung(Eigenschaftsauspraegung e, AsyncCallback<Vector<Kontakt>> callback);
-
 	void findAllEigenschaftsauspraegungByEigenschaftID(Eigenschaft e,
 			AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
 
@@ -93,8 +91,6 @@ public interface KontaktmanagerAdministrationAsync {
 			
 	void saveNutzer(Nutzer n, AsyncCallback<Void> callback);
 			
-	void savePerson(Person p, AsyncCallback<Void> callback);
-			
 	void saveTeilhaberschaft(Teilhaberschaft t, AsyncCallback<Void> callback);
 
 	void deleteAllTeilhaberschaftByOwner(Nutzer n, AsyncCallback<Void> callback);
@@ -114,9 +110,6 @@ public interface KontaktmanagerAdministrationAsync {
 	void deleteEigenschaftsauspraegungByKontakt(Kontakt k, AsyncCallback<Void> callback);
 
 	void deleteKontaktKontaktlisteByKontakt(Kontakt k, AsyncCallback<Void> callback);
-
-	void suchFunktion(Nutzer nutzer, Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung,
-			AsyncCallback<Vector<Kontakt>> callback);
 
 	void findAllEigenschaftsauspraegungByWertAndEigenschaft(Eigenschaftsauspraegung e, Eigenschaft eigenschaft,
 			AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
@@ -144,16 +137,12 @@ public interface KontaktmanagerAdministrationAsync {
 
 	void findAllNutzer(AsyncCallback<Vector<Nutzer>> callback);
 
-	void findEigenschaftHybrid(Person person,
+	void findEigenschaftHybrid(Kontakt kontakt,
 			  AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> callback);
 
 	void deleteKontaktByID(Kontakt k, AsyncCallback<Void> callback);
 
-	void findAllNutzerByEmail(String mail, AsyncCallback<Vector<Nutzer>> callback);
-
 	void deleteKontaktKontaktliste(KontaktKontaktliste kon, AsyncCallback<Void> callback);
-
-	void findAllEigenschaftByKontakt(Kontakt k, AsyncCallback<Vector<Eigenschaft>> callback);
 
 	void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t, AsyncCallback<Void> callback);
 

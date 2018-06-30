@@ -4,9 +4,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
@@ -14,43 +11,61 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
 import de.hdm.itprojektss18Gruppe3.client.gui.CustomTreeModel;
 import de.hdm.itprojektss18Gruppe3.client.gui.DisclosurePanelSuche;
+import de.hdm.itprojektss18Gruppe3.client.gui.Footer;
+import de.hdm.itprojektss18Gruppe3.client.gui.Menubar;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.LoginService;
 import de.hdm.itprojektss18Gruppe3.shared.LoginServiceAsync;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * EntryPoint-Klasse des Moduls: itprojektss18gruppe3
+ * 
+ * Info: Da die GUI-Klassen nur eine Instanziierung benötigen für das Ausführen auf der Oberfläche
+ * werden die Objekte als unused markiert. Um dies zu umgehen und evtl. missverständnisse zu vermeiden
+ * werden "unused-warnings" ausgeblendet.
+ * 
+ * @version 1.10 30 June 2018
+ * @author Mert
+ *
  */
+@SuppressWarnings("unused")
 public class ITProjektSS18Gruppe3 implements EntryPoint {
+	
+	/**
+	 * Deklarierung der Klasse LoginInfo für die Google API
+	 */
 	private LoginInfo loginInfo = null;
+	
+	/**
+	 * Instanziierung der GUI Objekten: Panels, Label, Anchor und Button
+	 */
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private HorizontalPanel footerPanel = new HorizontalPanel();
+	
 	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
 	private Label loginMessage = new Label("Bitte loggen Sie sich mit Ihrem" + " Google Account ein");
 	private Anchor signInLink = new Anchor("Sign In");
 	private Anchor signOutLink = new Anchor("Sign Out");
 
+	private Button loginButton = new Button("LOGIN");
+	
+	/**
+	 * Instanziierung des Proxys
+	 */
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
 
-	private TextBox textBox = new TextBox();
-	private Button suchenButton = new Button("Detailsuche");
-	private Button logoutButton = new Button("Ausloggen");
-	private Button loginButton = new Button("LOGIN");
-
-
+	/**
+	 * onModuleLoad des Moduls: itprojektss18gruppe3
+	 * Ist die main-Methode in einem GWT-Projekt
+	 */
 	@Override
 	public void onModuleLoad() {
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
@@ -58,6 +73,9 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 	}
 
+	/**
+	 * Die loadLogin() Methode wird verwendet für das Anzeigen der API
+	 */
 	private void loadLogin() {
 
 		loginButton.addClickHandler(new loginButtonClickHandler());
@@ -72,29 +90,12 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		Footer footer = new Footer();
 	}
 
+	/**
+	 * Die loadKontaktmanager() Methode wird aufgerufen wenn der User bereits existiert. 
+	 * Der User wird weitergeleitet auf den Kontaktmanager
+	 */
 	private void loadKontaktmanager() {
 		Footer footer = new Footer();
-		textBox.addKeyPressHandler(new KeyPressHandler() {
-
-			@Override
-			public void onKeyPress(KeyPressEvent event) {
-				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-					DisclosurePanelSuche panelSuche = new DisclosurePanelSuche(textBox.getValue());
-					RootPanel.get("content").clear();
-					RootPanel.get("content").add(panelSuche);
-					textBox.setText("");
-				}
-			}
-		});
-//		HorizontalPanel flowpanel = new HorizontalPanel();
-//		// Cookies.setCookie("logout", loginInfo.getLogoutUrl());
-//		textBox.setStylePrimaryName("searchTextBox");
-//		textBox.setMaxLength(100);
-//		textBox.getElement().setPropertyString("placeholder", " Schnellsuche...");
-//		flowpanel.add(textBox);
-//		flowpanel.setStylePrimaryName("logoutBarContainer");
-//		RootPanel.get("logout").add(flowpanel);// hPanelBar.add(logoutButton);
-//		RootPanel.get("leftmenutree").clear();
 		AllKontaktView kontaktView = new AllKontaktView();
 
 		// AUFRUF DES BAUMS
@@ -107,6 +108,10 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		Menubar mb = new Menubar();
 	}
 
+	/**
+	 * Nested Class für den Login Button
+	 * 
+	 */
 	class loginButtonClickHandler implements ClickHandler {
 
 		@Override
@@ -117,6 +122,12 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 	}
 
+	/**
+	 * Nested Class für den Login Callback
+	 * In der onSuccess wird überprüft, ob der User eingeloggt. Wenn er eingeloggt ist, wird mit der checkEmail
+	 * überprüft ob die E-Mail Adresse bereits in der Datenbank existiert. 
+	 * 
+	 */
 	class LoginCallback implements AsyncCallback<LoginInfo> {
 
 		@Override
@@ -137,6 +148,12 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 	}
 
+	/**
+	 * Nested Class für den AsyncCallback checkEmail
+	 * Wenn der User bereits existiert werden zwei Cookies erstellt und der Kontaktmanager geladen.
+	 * Wenn nicht wird eine DialogBox geöffnet, für die Abfrage, ob der User sich registrieren will.
+	 *
+	 */
 	class FindNutzerCallback implements AsyncCallback<Nutzer> {
 
 		@Override
@@ -149,6 +166,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			if (result != null) {
 				Cookies.setCookie("email", result.getMail());
 				Cookies.setCookie("id", result.getId() + "");
+				Cookies.setCookie("signout", loginInfo.getLogoutUrl());
 				loadKontaktmanager();
 			} else {
 				CreateNutzerDialogBox dialogbox = new CreateNutzerDialogBox(loginInfo.getEmailAddress());
@@ -158,15 +176,30 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		}
 
 	}
-
+	
+	/**
+	 * Nested Class einer DialogBox für die Nutzer Erstellung Abfrage.
+	 * @author Mert
+	 *
+	 */
 	class CreateNutzerDialogBox extends DialogBox {
+		/**
+		 * Instanziierung der GUI-Elemente 
+		 */
 		private Label frage = new Label(
 				"Sie haben noch keinen Nutzer auf diesem Kontaktmanager. Möchten Sie einen neuen Nutzer anlegen?");
 		private Button ja = new Button("Ja");
 		private Button nein = new Button("Nein");
-		private String googleMail = "";
 		private VerticalPanel vpanel = new VerticalPanel();
+		/**
+		 * Instanziierung der googleMail. Diese speichert später die übergebene gmail Adresse.
+		 */
+		private String googleMail = "";
 
+		/**
+		 * Konstruktor der aufgerufen wird.
+		 * @param mail: Email Adresse des angemeldeten Nutzers.
+		 */
 		public CreateNutzerDialogBox(String mail) {
 			googleMail = mail;
 			ja.addClickHandler(new CreateNutzerClickHandler());
@@ -178,6 +211,10 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 
 		}
 
+		/**
+		 * Nested Class in der DialogBox. Wenn Nutzer einen User erstellen möchte, gibt es diesen Callback Aufruf.
+		 *
+		 */
 		class CreateNutzerCallback implements AsyncCallback<Nutzer> {
 
 			@Override
@@ -188,24 +225,33 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			@Override
 			public void onSuccess(Nutzer result) {
 				Window.alert("Ihr Nutzer wurde erfolgreich angelegt");
+				Cookies.setCookie("signout", loginInfo.getLogoutUrl());
 				Cookies.setCookie("email", result.getMail());
 				Cookies.setCookie("id", result.getId() + "");
-				loadKontaktmanager();
 				hide();
+				loadKontaktmanager();
 			}
 
 		}
-
+		/**
+		 * Nested Class in der DialogBox. Wenn Nutzer einen User erstellen möchte, gibt es diesen ClickHandler Aufruf.
+		 *
+		 */
 		class CreateNutzerClickHandler implements ClickHandler {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				kontaktmanagerVerwaltung.createNutzer(googleMail, new CreateNutzerCallback());
-
+	
 			}
 
 		}
 
+		/**
+		 * Nested Class in der DialogBox. Wenn Nutzer keinen User erstellen möchte, gibt es diesen ClickHandler Aufruf.
+		 * Der User wird dann auf die Startseite weitergeleitet.
+		 *
+		 */
 		class DontCreateNutzerClickHandler implements ClickHandler {
 
 			@Override
@@ -217,8 +263,8 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			}
 
 		}
+		
 	}
-
 	public static class SuchenCommand implements Command {
 
 		@Override

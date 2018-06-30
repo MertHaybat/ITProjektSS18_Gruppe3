@@ -15,7 +15,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
  * oder das Suchen nach mehreren Möglichkeiten etc. implementiert. Somit kann ein Objekt für die Datenbank-Struktur umgewandelt, 
  * aber es kann auch von der Datenbank-Struktur als Objekt wieder umgewandelt werden.
  * 
- * @version @version 1.10 14 May 2018
+ * @version 1.10 14 May 2018
  * @author Giuseppe Galati und wahidvanaki
  *
  */

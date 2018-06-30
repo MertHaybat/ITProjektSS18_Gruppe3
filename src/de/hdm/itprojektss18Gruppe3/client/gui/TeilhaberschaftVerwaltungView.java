@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
-import de.hdm.itprojektss18Gruppe3.client.MainFrame;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
@@ -114,6 +113,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		teilhaberschaftKontakt.setColumnWidth(teilhaberschaftNutzerColumn, 10, Unit.PX);
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+		
 		kontaktmanagerVerwaltung.findKontaktlisteTeilhaberschaftEigentuemer(nutzer.getId(), new KontaktlisteCallback());
 		kontaktmanagerVerwaltung.findKontaktTeilhaberschaftEigentuemer(nutzer.getId(), new KontaktCallback());
 		kontaktmanagerVerwaltung.findAuspraegungTeilhaberschaftEigentuemer(nutzer.getId(), new AuspraegungCallback());
@@ -134,6 +134,21 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		vPanel.add(nutzerAnchor);
 
 		RootPanel.get("content").add(vPanel);
+	}
+	
+	public class TeilhaberschaftDeleteCallback implements AsyncCallback<Void>{
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Void result) {
+			TeilhaberschaftVerwaltungView teilhaberschaftVerwaltung = new TeilhaberschaftVerwaltungView();
+		}
+		
 	}
 	
 	public class DeleteNutzerClickHandler implements ClickHandler{
@@ -159,8 +174,10 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 		@Override
 		public void onSuccess(Void result) {
+			Anchor signOutLink = new Anchor();
 			Window.alert("Nutzer wurde gelöscht");
-			Window.open(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html", "_self", "");
+			signOutLink.setHref(Cookies.getCookie("signout"));
+			Window.open(signOutLink.getHref(), "_self", "");
 		}
 		
 	}
@@ -210,5 +227,6 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		}
 		
 	}
+	
 
 }

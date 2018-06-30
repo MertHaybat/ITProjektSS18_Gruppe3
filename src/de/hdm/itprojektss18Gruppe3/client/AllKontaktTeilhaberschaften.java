@@ -8,19 +8,38 @@ import de.hdm.itprojektss18Gruppe3.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteByTeilhaberschaftReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.HTMLReportWriter;
 
+/**
+ * Die Klasse für den Callback des ersten Reports: Alle Kontakte einer Teilhaberschaft.
+ * 
+ * @version 1.0 30 June 2018
+ * @author Mert
+ *
+ */
 public class AllKontaktTeilhaberschaften extends HTMLResultPanel{
+	
+	/**
+	 * Instanziierung des Proxy Objekts für den Report Generator
+	 */
 	ReportGeneratorAsync reportverwaltung = ClientsideSettings.getReportGenerator();
 	
-	public AllKontaktTeilhaberschaften(String lbNutzerEigentuemer, String lbNutzerTeilhabender) {
+	/**
+	 * Konstruktor der Klasse AllKontaktTeilhaberschaften
+	 * 
+	 * @param eigentuemer: In der GUI eigegebene Eigentümer einer Teilhaberschaft
+	 * @param teilhabender: In der GUI eigegebene Teilhaber einer Teilhaberschaft
+	 */
+	public AllKontaktTeilhaberschaften(String eigentuemer, String teilhabender) {
 		
 	
-		reportverwaltung.createAlleKontakteByTeilhaberschaftReport(lbNutzerEigentuemer, lbNutzerTeilhabender,
+		reportverwaltung.createAlleKontakteByTeilhaberschaftReport(eigentuemer, teilhabender,
 				new CreateAlleKontakteByTeilhaberschaftCallback());
 		
 	}
 
 	
-	
+	/**
+	 * Nested Class für den AsyncCallback createAlleKontakteByTeilhaberschaftReport
+	 */
 	class CreateAlleKontakteByTeilhaberschaftCallback implements AsyncCallback<AlleKontakteByTeilhaberschaftReport> {
 
 		@Override

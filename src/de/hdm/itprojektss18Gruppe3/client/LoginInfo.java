@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Login RPC Dienst - Ergebnis des Login-Dienstes soll ein Objekt der Klasse "LoginInfo" sein, in der alle
  * benötigten Elemente eines angemeldeten Nutzers verfügbar sind.
  * 
+ * @version 1.0 30 June 2018
  * @author Mert in Anlehnung an die Folien "GWT Benutzungsschnittstellen"
  *
  */

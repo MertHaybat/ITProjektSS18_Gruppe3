@@ -1,12 +1,13 @@
-package de.hdm.itprojektss18Gruppe3.client;
+package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import java.util.ArrayList;
-
-import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -14,21 +15,19 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView;
-import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktTeilen;
-import de.hdm.itprojektss18Gruppe3.client.gui.DialogBoxKontaktlisteHinzufuegen;
+import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
+import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3;
+import de.hdm.itprojektss18Gruppe3.client.LoginInfo;
+import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3.SuchenCommand;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.LoginService;
 import de.hdm.itprojektss18Gruppe3.shared.LoginServiceAsync;
@@ -163,9 +162,11 @@ public class Menubar extends MenuBar {
 		menubarRightSide.addItem("Ausloggen", new Command() {
 			public void execute() {
 				signOutLink.setHref(loginInfo.getLogoutUrl());
-				com.google.gwt.user.client.Window.open(signOutLink.getHref(), "_self", "");
+				Window.open(signOutLink.getHref(), "_self", "");
 			}
 		});
+		
+		textBox.addKeyPressHandler(new TextBoxKeyPressHandler());
 		
 		hp.add(menubar);
 		hp.add(textBox);
@@ -175,7 +176,23 @@ public class Menubar extends MenuBar {
 		RootPanel.get("menubar").add(hp);
 
 	}
+	
+	class TextBoxKeyPressHandler implements KeyPressHandler {
 
+		@Override
+		public void onKeyPress(KeyPressEvent event) {
+			// TODO Auto-generated method stub
+
+			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+				DisclosurePanelSuche panelSuche = new DisclosurePanelSuche(textBox.getValue());
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(panelSuche);
+				textBox.setText("");
+			}
+		}
+
+	}
+			
 	class LoginCallback implements AsyncCallback<LoginInfo> {
 
 		@Override
@@ -244,13 +261,12 @@ public class Menubar extends MenuBar {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				com.google.gwt.user.client.Window
-						.alert("Der Vorgang konnte nicht abgeschlossen werden: " + caught.getMessage());
+				Window.alert("Der Vorgang konnte nicht abgeschlossen werden: " + caught.getMessage());
 			}
 
 			@Override
 			public void onSuccess(Void result) {
-				com.google.gwt.user.client.Window.alert("Der Kontakt wurde erfolgreich gelöscht.");
+				Window.alert("Der Kontakt wurde erfolgreich gelöscht.");
 				db.hide();
 				AllKontaktView allKontaktView = new AllKontaktView();
 			}

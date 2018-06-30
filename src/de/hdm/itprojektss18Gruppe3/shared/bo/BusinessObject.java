@@ -24,7 +24,10 @@ import java.io.Serializable;
  */
 
 public abstract class BusinessObject implements Serializable {
-
+	
+	/**
+	 * Dient zum Serialisieren von Objekten für eine RPC fähigen Austausch zwischen Server und Client.
+	 */
 	private static final long serialVersionUID = 1L;
 
 	  /**

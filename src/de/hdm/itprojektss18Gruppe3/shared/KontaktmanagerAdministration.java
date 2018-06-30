@@ -1,6 +1,5 @@
 package de.hdm.itprojektss18Gruppe3.shared;
 
-import java.util.Date;
 import java.util.Vector;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -186,15 +185,6 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	public Eigenschaft findEigenschaftByEigenschaftIDFromPerson(Eigenschaftsauspraegung e) throws IllegalArgumentException;
 	
 	/**
-	 * Alle Kontakte von einer Eigenschaftsausprägung anzeigen lassen. Dies ist die Suchfunktion.
-	 * 
-	 * @param e; Objekt der Klasse Eigenschaftsausprägung
-	 * @return Vector des Typs Kontakt
-	 * @throws IllegalArgumentException
-	 */
-	public Vector <Kontakt> findAllKontaktByEigenschaftsauspraegung(Eigenschaftsauspraegung e) throws IllegalArgumentException;
-	
-	/**
 	 * Alle Eigenschaftsausprägungen einer Eigenschaft anzeigen lassen
 	 * 
 	 * @param e; Objekt der Klasse Eigenschaft
@@ -333,20 +323,6 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	public void saveNutzer(Nutzer n) throws IllegalArgumentException;
 
-//	/**
-//	 * 
-//	 * @param nutzer - Objekt der Klasse Nutzer
-//	 * @throws IllegalArgumentException
-//	 */
-//	public void saveNutzer2(Nutzer nutzer) throws IllegalArgumentException;
-
-	/**
-	 * 
-	 * @param p - Objekt der Klasse Person
-	 * @throws IllegalArgumentException
-	 */
-	public void savePerson(Person p) throws IllegalArgumentException;
-
 	/**
 	 * 
 	 * @param t - Objekt der Klasse Teilhaberschaft
@@ -425,45 +401,109 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteKontaktKontaktlisteByKontakt(Kontakt k) throws IllegalArgumentException;
-
-	public Vector<Kontakt> suchFunktion(Nutzer nutzer, Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException;
-	
-	public Vector<Kontakt> findAllKontaktByNutzerID(int nutzerID) throws IllegalArgumentException;
-	
-	public Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID);
-
-	public void deleteEigenschaftsauspraegungById(Eigenschaftsauspraegung e) throws IllegalArgumentException;
-
-	public void deleteTeilhaberschaftByEigenschaftsauspraegungID(Teilhaberschaft t) throws IllegalArgumentException;
-
-	public void deleteTeilhaberschaftById(Teilhaberschaft t) throws IllegalArgumentException;
-	
-	public Vector<Kontakt> findAllKontaktByTeilhaberschaften(int teilhabenderID, int eigentuemerID) throws IllegalArgumentException;
-
-	public Nutzer findNutzerByID(int nutzerID) throws IllegalArgumentException;
-
-	public void deleteKontaktlisteByID(Kontaktliste k) throws IllegalArgumentException;
-	
-	public void deleteKontaktKontaktlisteByID(KontaktKontaktliste kk) throws IllegalArgumentException;
-
-	public Vector<Nutzer> findAllNutzer() throws IllegalArgumentException;
-	
-	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftHybrid(Person person) throws IllegalArgumentException;
-	
-	public void deleteKontaktByID(Kontakt k) throws IllegalArgumentException;
-	
-	public Vector<Nutzer> findAllNutzerByEmail(String mail) throws IllegalArgumentException;
-	
-	public void deleteKontaktKontaktliste(KontaktKontaktliste kon) throws IllegalArgumentException;
 	
 	/**
-	 * Alle Eigenschaften eines Kontakts anzeigen lassen. Dies ist die Suchfunktion.
+	 * Anzeigen aller Kontakte gefiltert nach der nutzerID
 	 * 
-	 * @param k; Objekt der Klasse Kontakt
-	 * @return Vector des Typs Eigenschaft
+	 * @param nutzerID - ist der Übergabeparameter für die ID des Nutzers, der angemeldet ist
+	 * @return Vector<Kontakt> - Alle Kontakte die der Nutzer erstellt hat
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Eigenschaft> findAllEigenschaftByKontakt(Kontakt k) throws IllegalArgumentException;
+	public Vector<Kontakt> findAllKontaktByNutzerID(int nutzerID) throws IllegalArgumentException;
+	
+	/**
+	 * Anzeigen aller Kontakte, die ein Nutzer nach einer Teilhaberschaft erhalten hat
+	 * 
+	 * @param teilhabenderID - ist der Übergabeparameter für die ID des Nutzers, der angemeldet ist
+	 * @return Vector<Kontakt> - Alle Kontakte die der Nutzer geteilt bekommen hat
+	 */
+	public Vector<Kontakt> findAllKontakteByTeilhabenderID(int teilhabenderID);
+
+	/**
+	 * Löschen einer Eigenschaftsausprägung nach der Id
+	 * 
+	 * @param e - Objekt der Klasse Eigenschaftsauspraegung
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteEigenschaftsauspraegungById(Eigenschaftsauspraegung e) throws IllegalArgumentException;
+	
+	/**
+	 * Löschen einer Teilhaberschaft nach der EigenschaftsausprägungID
+	 * 
+	 * @param t - Objekt der Klasse Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteTeilhaberschaftByEigenschaftsauspraegungID(Teilhaberschaft t) throws IllegalArgumentException;
+
+	/**
+	 * Löschen einer Teilhaberschaft nach der ID
+	 * 
+	 * @param t - Objekt der Klasse Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteTeilhaberschaftById(Teilhaberschaft t) throws IllegalArgumentException;
+	
+	/**
+	 * Anzeigen aller Kontakte die mit dem angemeldeten Nutzer geteilt wurden.
+	 * 
+	 * @param teilhabenderID - ID des teilhabendenen Nutzers
+	 * @param eigentuemerID - ID des Eigentümers 
+	 * @return Vector<Kontakt> - Alle Kontakte ausgehend von einer Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Kontakt> findAllKontaktByTeilhaberschaften(int teilhabenderID, int eigentuemerID) throws IllegalArgumentException;
+
+	/**
+	 * Nutzer mit der anhand der ID finden
+	 * 
+	 * @param nutzerID - ID des angemeldeten Nutzers
+	 * @return Nutzer Objekt
+	 * @throws IllegalArgumentException
+	 */
+	public Nutzer findNutzerByID(int nutzerID) throws IllegalArgumentException;
+
+	/**
+	 * Löschen einer Kontaktliste anhand der Kontaktliste ID
+	 * 
+	 * @param k - Objekt der Klasse Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteKontaktlisteByID(Kontaktliste k) throws IllegalArgumentException;
+	
+	/**
+	 * Löschen einer KontaktKontaktliste Beziehung. Wird verwendet wenn ein Kontakt aus einer Kontaktliste gelöscht werden soll.
+	 * 
+	 * @param kk
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteKontaktKontaktlisteByID(KontaktKontaktliste kk) throws IllegalArgumentException;
+
+	/**
+	 * Alle Nutzer Anzeigen
+	 * 
+	 * @return Vector<Nutzer> - Vector des Typs Nutzer, welches alle Nutzer zurück gibt
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Nutzer> findAllNutzer() throws IllegalArgumentException;
+	
+	/**
+	 * Alle Eigenschaften und Eigenschaftsauspraegungen eines Kontakts ausgeben
+	 * 
+	 * @param kontakt - Kontakt der übergeben wird, um die Eigenschaften und Ausprägungen zu finden
+	 * @return Vector<EigenschaftsAuspraegungWrapper> Alle Eigenschaften und Eigenschaftsauspraegungen gebündelt in einem Wrapper Vector 
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftHybrid(Kontakt kontakt) throws IllegalArgumentException;
+	
+	/**
+	 * Löschen eines Kontaktes mit der Kontakt ID
+	 * @param k - Der Übergebene Kontakt, der gelöscht wird
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteKontaktByID(Kontakt k) throws IllegalArgumentException;
+	
+	
+	public void deleteKontaktKontaktliste(KontaktKontaktliste kon) throws IllegalArgumentException;
 	
 	/**
 	 * Löschen einer Teilhaberschaft anhand der Kontaktliste ID

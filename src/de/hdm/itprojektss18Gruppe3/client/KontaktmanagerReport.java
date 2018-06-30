@@ -1,4 +1,4 @@
-package de.hdm.itprojektss18Gruppe3.client.gui;
+package de.hdm.itprojektss18Gruppe3.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -15,8 +15,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
-import de.hdm.itprojektss18Gruppe3.client.LoginInfo;
 import de.hdm.itprojektss18Gruppe3.client.gui.report.HTMLResultPanel;
 import de.hdm.itprojektss18Gruppe3.client.gui.report.ReportSelectMenu;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;

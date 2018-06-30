@@ -1,4 +1,4 @@
-package de.hdm.itprojektss18Gruppe3.client;
+package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -8,8 +8,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
-import de.hdm.itprojektss18Gruppe3.client.gui.Impressum;
 
 public class Footer extends HorizontalPanel {
 	

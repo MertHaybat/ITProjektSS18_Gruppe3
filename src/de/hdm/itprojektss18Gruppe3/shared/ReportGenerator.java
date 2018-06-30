@@ -4,15 +4,12 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
-import de.hdm.itprojektss18Gruppe3.shared.bo.Person;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteByTeilhaberschaftReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport;
@@ -79,7 +76,7 @@ public interface ReportGenerator extends RemoteService {
 
 	  public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) throws IllegalArgumentException;
 
-	  public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftWrapper(Person p) throws IllegalArgumentException;
+	  public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftWrapper(Kontakt kontakt) throws IllegalArgumentException;
 
 	  Vector<NutzerTeilhaberschaftKontaktWrapper> findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer);
 
