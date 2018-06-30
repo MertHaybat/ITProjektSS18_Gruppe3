@@ -153,6 +153,18 @@ body {
 	box-shadow: 5px 5px 2.5px grey;
 }
 
+#footer .footerPanel {
+	height: inherit;
+	float: right;
+	color: #3d3d3d;
+}
+
+#footer .footerPanel table tbody tr td {
+	width: auto;
+	height: inherit;
+	float: right;
+}
+
 /* TEXT FORMATIERUNGEN */
 .landingPageWelcomeMessage {
 	font-size: 3.0em;
@@ -281,6 +293,15 @@ body {
 }
 
 /* BUTTON FORMATIERUNGEN */
+.impressumButton {
+	background: none;
+	color: #3d3d3d;
+	border: none;
+	cursor: pointer;
+	text-decoration: underline;
+	padding-left: 4px;
+}
+
 .addButton {
 	text-align: center;
 	margin-left: 10px;
@@ -360,7 +381,7 @@ body {
 	font-family: 'Ubuntu', sans-serif;
 	padding: 8px 0px 8px 0px;
 	text-align: center;
-	margin-top: 25px;
+	margin-top: 5%;
 	opacity: 0.7;
 }
 

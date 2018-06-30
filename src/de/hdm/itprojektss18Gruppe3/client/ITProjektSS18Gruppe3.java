@@ -36,6 +36,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
+	private HorizontalPanel footerPanel = new HorizontalPanel();
 	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
 	private Label loginMessage = new Label("Bitte loggen Sie sich mit Ihrem" + " Google Account ein");
 	private Anchor signInLink = new Anchor("Sign In");
@@ -48,6 +49,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 	private Button suchenButton = new Button("Detailsuche");
 	private Button logoutButton = new Button("Ausloggen");
 	private Button loginButton = new Button("LOGIN");
+
 
 	@Override
 	public void onModuleLoad() {
@@ -67,9 +69,11 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		loginPanel.add(loginMessage);
 		loginPanel.add(loginButton);
 		RootPanel.get("content").add(loginPanel);
+		Footer footer = new Footer();
 	}
 
 	private void loadKontaktmanager() {
+		Footer footer = new Footer();
 		textBox.addKeyPressHandler(new KeyPressHandler() {
 
 			@Override
