@@ -41,7 +41,23 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	public Nutzer createNutzer(String mail) throws IllegalArgumentException;
 	
-	Kontakt createKontakt(String name, int status, int nutzerID);
+	/**
+	 * Anlegen eines Kontakts
+	 * 
+	 * @param name;
+	 *            ist der Name des Kontakts
+	 * @param erzeugungsdatum;
+	 *            zeigt den Zeitpunkt der Erstellung des Kontakts an
+	 * @param modifikationsdatum;
+	 *            zeigt an, wann der Kontakt zuletzt modifiziert wurde
+	 * @param status;
+	 *            status sagt aus, ob der Kontakt geteilt oder nicht geteilt
+	 *            wurde
+	 * @param nutzerID;
+	 *            Übergabeparameter des Fremdschlüssels für den Kontakt
+	 * @return Kontakt; Zurückgegeben wird ein Objekt der Klasse Kontakt
+	 */
+	public Kontakt createKontakt(String name, int status, int nutzerID);
 	
 	/**
 	 * Auslesen aller Kontakte.
@@ -513,12 +529,39 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	public void deleteTeilhaberschaftByKontaktlisteID(Teilhaberschaft t) throws IllegalArgumentException;
 	
-	Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int teilhabenderID) throws IllegalArgumentException;
+	/**
+	 * Methode zur Ausgabe aller Kontaktlisten die mit einem bestimmten Nutzer geteilt wurden
+	 * @param teilhabenderID - Übergabeparameter der Klasse Teilhaberschaft
+	 * @return Vector des Typs Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int teilhabenderID) throws IllegalArgumentException;
 
-	Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException;
+	/**
+	 * Ausgeben einer Kontaktliste über deren Primärschlüssel
+	 * @param kontaktlisteID - ID der Kontaktliste
+	 * @return Objekt der Klasse Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
+	public Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException;
 
+	/**
+	 * Methode um einen Kontakt suchen zu können
+	 * @param: t
+	 * 			Übergabeparameter der Klasse Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Kontakt> findKontaktByName(Kontakt k) throws IllegalArgumentException;
 	
+	/**
+	 * Suchen und ausgeben der eigenen Kontakte, die Teile der übergebenen Parameter enthalten
+	 * 
+	 * @param nutzer - Objekt der Klasse Nutzer
+	 * @param eigenschaftsauspraegung - Objekt der Klasse Eigenschaftsauspraegung
+	 * @param eigenschaft - Objekt der Klasse Eigenschaft
+	 * @return Vector des Typs Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Kontakt> findEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException;
 	
 	/**
@@ -527,19 +570,54 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @param nutzer - Objekt der Klasse Nutzer
 	 * @param eigenschaftsauspraegung - Objekt der Klasse Eigenschaftsauspraegung
 	 * @param eigenschaft - Objekt der Klasse Eigenschaft
-	 * @return Vector<Kontakt> Alle Kontakte, mit dem suchenden Nutzer geteilt wurden
+	 * @return Vector<Kontakt> Alle Kontakte, die mit dem suchenden Nutzer geteilt wurden
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Kontakt> findTeilhaberschaftKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException;
 	
+
+	/**
+	 * Suchen und ausgeben der selbst erstellten Kontakte und der Kontakte, 
+	 * die mit einem geteilt wurden und Teile der übergebenen Parameter enthalten
+	 * @param nutzer - Objekt der Klasse Nutzer
+	 * @param eigenschaftsauspraegung - Objekt der Klasse Eigenschaftsauspraegung
+	 * @param eigenschaft - Objekt der Klasse Eigenschaft
+	 * @return Vector<Kontakt> Alle Kontakte, die die entsprechenden Eigenschaften und
+	 * 							Ausprägungen haben
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Kontakt> findTeilhaberUndEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException;
 
+	/**
+	 * Methode zum Ausgeben aller Kontakte über den Primärschlüssel des Eigentümers
+	 * @param eigentuemerID - ID des Eigentümers
+	 * @return Vector <Kontakt> Alle Kontakte des Eigentümers
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Kontakt> findAllKontakteByEigentuemerID(int eigentuemerID) throws IllegalArgumentException;
 	
+	/**
+	 * Methode um eine Eigenschaftsausprägung über ihren Primärschlüssel zu finden
+	 * @param: eigenschaftsauspraegungID
+	 * @return Eigenschaftsauspraegung			
+	 * @throws IllegalArgumentException
+	 */
 	public Eigenschaftsauspraegung findEigenschaftsauspraegungById(int eigenschaftsauspraegungID) throws IllegalArgumentException;
 
+	/**
+	 * Methode zum Ausgeben eines Kontakts über die Primärschlüssel des Teilhabenden
+	 * @param teilhabenderID - ID des Teilhabers
+	 * @return Vector<Kontakt> Alle Kontakte des Teilhabenden
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Kontakt> findKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
 	
+	/**
+	 * Ausgeben von Kontaktlisten über die den Primärschlüssel des Teilhabenden
+	 * @param teilhabenderID
+	 * @return Vector<Kontaktliste> Alle Kontaktlisten des Teilhabers
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Kontaktliste> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
 	
 	public Kontaktliste findKontaktlistByName(String bezeichnung, int nutzerid) throws IllegalArgumentException;

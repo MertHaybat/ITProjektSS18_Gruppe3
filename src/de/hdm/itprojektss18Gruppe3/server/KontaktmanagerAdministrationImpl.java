@@ -937,7 +937,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um alle Kontakte eines Nutzers zurückgeben
-	 * @param nutzerID
+	 * @param: nutzerID
 	 * 			Übergabeparameter der ID des Nutzers
 	 * @return Vector des Typs Kontakt
 	 * @throws IllegalArgumentException
@@ -1026,9 +1026,9 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * Methode zum Auslesen aller Kontakte zu Teilhaberschaften
 	 * 
 	 * @param teilhabenderID
-	 * 				- Übergabeparameter der ID des Teilhabenden
-	 * @param eigentuemerID
-	 * 				- Übergabeparameter der ID des Eigentümers
+	 * 			Übergabeparameter der ID des Teilhabenden
+	 * 		  eigentuemerID
+	 * 			Übergabeparameter der ID des Eigentümers
 	 * @return Vector des Typs Kontakt
 	 * @throws IllegalArgumentException
 	 */
@@ -1070,8 +1070,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um alle Nutzer über den Primärschlüssel zurückgeben
-	 * @param nutzerID
-	 * 				- Übergabeparameter der ID des Nutzers
+	 * @param: nutzerID
+	 * 			Übergabeparameter der ID des Nutzers
 	 * @return Ein Objekt der Klasse Nutzer wird zurükgegeben 
 	 * @throws IllegalArgumentException
 	 */
@@ -1179,7 +1179,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um einen Kontakt über seine ID zu löschen
-	 * @param k
+	 * @param: k
 	 * 			Übergabeparameter der Klasse Kontakt
 	 * @throws IllegalArgumentException
 	 */
@@ -1194,7 +1194,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	
 	/**
 	 * Methode um KontaktKontaktliste zu löschen
-	 * @param kon
+	 * @param: kon
 	 * 			Übergabeparameter der Klasse KontaktKontaktliste 
 	 * @throws IllegalArgumentException
 	 */
@@ -1205,7 +1205,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um eine Teilhaberschaft einer Kontaktliste zu löschen 
-	 * @param t
+	 * @param: t
 	 * 			Übergabeparameter der Klasse Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
@@ -1238,12 +1238,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * Methode zum Auslesen einer Kontaktliste über den Primärschlüssel kontaktlisteID
-	 * 
-	 * @param kontaktlisteID
-	 * 			Übergabeparameter der Klasse Kontaktliste
-	 * @return Kontaktlistenobjekt
-	 * @throws IllegalArgumentException
+	 * Ausgeben einer Kontaktliste über deren Primärschlüssel
 	 */
 	@Override
 	public Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException {
@@ -1252,9 +1247,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um einen Kontakt suchen zu können
-	 * @param t
+	 * @param: t
 	 * 			Übergabeparameter der Klasse Kontakt
-	 * @return Vector des Typs Kontakt
 	 * @throws IllegalArgumentException
 	 */
 	@Override
@@ -1283,15 +1277,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Suchen und ausgeben der eigenen Kontakte, die Teile der übergebenen Parameter enthalten
-	 * 
-	 * @param nutzer
-	 * 			Objekt der Klasse Nutzer
-	 * @param eigenschaftsauspraegung
-	 * 			Objekt der Klasse Eigenschaftsauspraegung
-	 * @param eigenschaft
-	 * 			Objekt der Klasse Eigenschaft
-	 * @return Vector des Typs Kontakt
-	 * @throws IllegalArgumentException
 	 */
 	@Override
 	public Vector<Kontakt> findEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException {
@@ -1376,9 +1361,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um eine Eigenschaftsausprägung über ihren Primärschlüssel zu finden
-	 * 
-	 * @param eigenschaftsauspraegungID
-	 * 			Primärschlüssel des Eigenschaftsausprägungsobjekts
+	 * @param: eigenschaftsauspraegungID
 	 * @return Eigenschaftsauspraegung			
 	 * @throws IllegalArgumentException
 	 */
@@ -1390,11 +1373,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode zum Ausgeben eines Kontakts über die Primärschlüssel des Teilhabenden
-	 * 
-	 * @param teilhabenderID
-	 * 			Primärschlüssel des Teilhabenden
-	 * @return Vector des Typs Kontakt
-	 * @throws IllegalArgumentException
 	 */
 	@Override
 	public Vector<Kontakt> findKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
@@ -1419,11 +1397,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Ausgeben von Kontaktlisten über die den Primärschlüssel des Teilhabenden
-	 * 
-	 * @param teilhabenderID
-	 * 			Pirmärschlüssel des Teilhabers
-	 * @return Vector des Typs Kontaktliste
-	 * @throws IllegalArgumentException
 	 */
 	@Override
 	public Vector<Kontaktliste> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
@@ -1595,10 +1568,6 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Löschen der Teilhaberschaft über das übergebene Teilhaberschaftobjekt
-	 * 
-	 * @param t
-	 * 			Objekt der Klasse Teilhaberschaft
-	 * @throws IllegalArgumentException
 	 */
 	@Override
 	public void deleteTeilhaberschaftByTeilhaberschaft (Teilhaberschaft t) throws IllegalArgumentException{
@@ -1762,6 +1731,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return wrapperVector;
 
 	}
+	
 	/**
 	 * Auslesen aller Kontakte einer Kontakt Teilhaberschaft
 	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
@@ -1863,6 +1833,10 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return wrapper;
 	}
 	
+	/**
+	 * Methode zum Ausgeben aller Kontakte, 
+	 * die die übergebenen Eigenschaften und Ausprägungen enthalten
+	 */
 	@Override 
 	public Vector<Kontakt> findAllKontakteEigenschaftAuspraegung(Nutzer nutzer, Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException{
 		
