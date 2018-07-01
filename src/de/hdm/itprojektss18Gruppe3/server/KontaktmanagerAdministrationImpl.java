@@ -937,7 +937,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um alle Kontakte eines Nutzers zurückgeben
-	 * @param: nutzerID
+	 * @param nutzerID
 	 * 			Übergabeparameter der ID des Nutzers
 	 * @return Vector des Typs Kontakt
 	 * @throws IllegalArgumentException
@@ -1026,9 +1026,9 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 * Methode zum Auslesen aller Kontakte zu Teilhaberschaften
 	 * 
 	 * @param teilhabenderID
-	 * 			Übergabeparameter der ID des Teilhabenden
-	 * 		  eigentuemerID
-	 * 			Übergabeparameter der ID des Eigentümers
+	 * 				- Übergabeparameter der ID des Teilhabenden
+	 * @param eigentuemerID
+	 * 				- Übergabeparameter der ID des Eigentümers
 	 * @return Vector des Typs Kontakt
 	 * @throws IllegalArgumentException
 	 */
@@ -1070,8 +1070,8 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um alle Nutzer über den Primärschlüssel zurückgeben
-	 * @param: nutzerID
-	 * 			Übergabeparameter der ID des Nutzers
+	 * @param nutzerID
+	 * 				- Übergabeparameter der ID des Nutzers
 	 * @return Ein Objekt der Klasse Nutzer wird zurükgegeben 
 	 * @throws IllegalArgumentException
 	 */
@@ -1179,7 +1179,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um einen Kontakt über seine ID zu löschen
-	 * @param: k
+	 * @param k
 	 * 			Übergabeparameter der Klasse Kontakt
 	 * @throws IllegalArgumentException
 	 */
@@ -1194,7 +1194,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	
 	/**
 	 * Methode um KontaktKontaktliste zu löschen
-	 * @param: kon
+	 * @param kon
 	 * 			Übergabeparameter der Klasse KontaktKontaktliste 
 	 * @throws IllegalArgumentException
 	 */
@@ -1205,7 +1205,7 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um eine Teilhaberschaft einer Kontaktliste zu löschen 
-	 * @param: t
+	 * @param t
 	 * 			Übergabeparameter der Klasse Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
@@ -1237,6 +1237,14 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	}
 
+	/**
+	 * Methode zum Auslesen einer Kontaktliste über den Primärschlüssel kontaktlisteID
+	 * 
+	 * @param kontaktlisteID
+	 * 			Übergabeparameter der Klasse Kontaktliste
+	 * @return Kontaktlistenobjekt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Kontaktliste findKontaktlisteByID(int kontaktlisteID) throws IllegalArgumentException {
 		return this.kontaktlisteMapper.findKontaktlisteByID(kontaktlisteID);
@@ -1244,8 +1252,9 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um einen Kontakt suchen zu können
-	 * @param: t
+	 * @param t
 	 * 			Übergabeparameter der Klasse Kontakt
+	 * @return Vector des Typs Kontakt
 	 * @throws IllegalArgumentException
 	 */
 	@Override
@@ -1272,6 +1281,18 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return kontaktVector;
 	}
 
+	/**
+	 * Suchen und ausgeben der eigenen Kontakte, die Teile der übergebenen Parameter enthalten
+	 * 
+	 * @param nutzer
+	 * 			Objekt der Klasse Nutzer
+	 * @param eigenschaftsauspraegung
+	 * 			Objekt der Klasse Eigenschaftsauspraegung
+	 * @param eigenschaft
+	 * 			Objekt der Klasse Eigenschaft
+	 * @return Vector des Typs Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Kontakt> findEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException {
 		Eigenschaft eigenschaftAusDB = findEigenschaftByBezeichnung(eigenschaft);
@@ -1288,6 +1309,9 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			return filteredKontakte;
 	}
 
+	/**
+	 * Suchen und ausgeben der Kontakte, die mit einem geteilt wurden und Teile der übergebenen Parameter enthalten
+	 */
 	@Override
 	public Vector<Kontakt> findTeilhaberschaftKontakteBySuche(Nutzer nutzer,
 		Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException {
@@ -1313,6 +1337,10 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return filteredKontakte;
 	}
 
+	/**
+	 * Suchen und ausgeben der selbst erstellten Kontakte und der Kontakte, 
+	 * die mit einem geteilt wurden und Teile der übergebenen Parameter enthalten
+	 */
 	@Override
 	public Vector<Kontakt> findTeilhaberUndEigeneKontakteBySuche(Nutzer nutzer,
 			Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException {
@@ -1326,6 +1354,9 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return alleKontakte;
 	}
 
+	/**
+	 * Methode zum Ausgeben aller Kontakte über den Primärschlüssel des Eigentümers
+	 */
 	@Override
 	public Vector<Kontakt> findAllKontakteByEigentuemerID(int eigentuemerID) throws IllegalArgumentException {
 		Vector<Teilhaberschaft> eigentuemerVector = findTeilhaberschaftByEigentuemerID(eigentuemerID);
@@ -1345,7 +1376,9 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	/**
 	 * Methode um eine Eigenschaftsausprägung über ihren Primärschlüssel zu finden
-	 * @param: eigenschaftsauspraegungID
+	 * 
+	 * @param eigenschaftsauspraegungID
+	 * 			Primärschlüssel des Eigenschaftsausprägungsobjekts
 	 * @return Eigenschaftsauspraegung			
 	 * @throws IllegalArgumentException
 	 */
@@ -1355,6 +1388,14 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return this.eigenschaftsauspraegungMapper.findEigenschaftsauspraegungByID(eigenschaftsauspraegungID);
 	}
 
+	/**
+	 * Methode zum Ausgeben eines Kontakts über die Primärschlüssel des Teilhabenden
+	 * 
+	 * @param teilhabenderID
+	 * 			Primärschlüssel des Teilhabenden
+	 * @return Vector des Typs Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Kontakt> findKontakteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
 		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
@@ -1376,6 +1417,14 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return kontakteVector;
 	}
 
+	/**
+	 * Ausgeben von Kontaktlisten über die den Primärschlüssel des Teilhabenden
+	 * 
+	 * @param teilhabenderID
+	 * 			Pirmärschlüssel des Teilhabers
+	 * @return Vector des Typs Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Kontaktliste> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException {
 		Vector<Teilhaberschaft> teilhabenderVector = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
@@ -1544,11 +1593,18 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return kontakteVector;
 	}
 
-	
+	/**
+	 * Löschen der Teilhaberschaft über das übergebene Teilhaberschaftobjekt
+	 * 
+	 * @param t
+	 * 			Objekt der Klasse Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public void deleteTeilhaberschaftByTeilhaberschaft (Teilhaberschaft t) throws IllegalArgumentException{
 		this.teilhaberschaftMapper.deleteTeilhaberschaftByTeilhabender(t);
 	}
+	
 	/**
 	 * Auslesen aller Eigenschaftsausprägungen eines Kontakt Teilhaberschaft
 	 * Es werden erst alle restlichen Teilhaberschaften gelöscht und in einen Vector gespeichert. 
@@ -1627,11 +1683,17 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return wrapperVectorFiltered;
 	}
 	
+	/**
+	 * Ausgeben der Teilhaberschaften zwischen Teilhaber und Kontakt
+	 */
 	@Override
 	public Vector<Teilhaberschaft> findTeilhaberschaftByKontaktAndTeilhaber(int nutzerid, int kontaktid) throws IllegalArgumentException{
 		return this.teilhaberschaftMapper.findTeilhaberschaftByKontaktAndTeilhaber(nutzerid, kontaktid);
 	}
 	
+	/**
+	 * Ausgeben der Teilhaberschaft über die Ausprägung und den Nutzer
+	 */
 	@Override
 	public Vector<Teilhaberschaft> findTeilhaberschaftByAuspraegungIDAndNutzerID(int nutzerid, int auspraegungid) throws IllegalArgumentException{
 		return this.teilhaberschaftMapper.findTeilhaberschaftByAuspraegungIDAndNutzerID(auspraegungid, nutzerid);

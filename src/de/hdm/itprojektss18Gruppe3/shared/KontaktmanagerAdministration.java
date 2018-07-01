@@ -521,6 +521,15 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	
 	public Vector<Kontakt> findEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException;
 	
+	/**
+	 * Suchen und ausgeben der Kontakte, die mit einem geteilt wurden und Teile der übergebenen Parameter enthalten
+	 * 
+	 * @param nutzer - Objekt der Klasse Nutzer
+	 * @param eigenschaftsauspraegung - Objekt der Klasse Eigenschaftsauspraegung
+	 * @param eigenschaft - Objekt der Klasse Eigenschaft
+	 * @return Vector<Kontakt> Alle Kontakte, mit dem suchenden Nutzer geteilt wurden
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Kontakt> findTeilhaberschaftKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException;
 	
 	public Vector<Kontakt> findTeilhaberUndEigeneKontakteBySuche(Nutzer nutzer, Eigenschaftsauspraegung eigenschaftsauspraegung, String eigenschaft) throws IllegalArgumentException;
