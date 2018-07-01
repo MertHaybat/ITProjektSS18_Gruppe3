@@ -1022,7 +1022,16 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		this.eigenschaftsauspraegungMapper.deleteEigenschaftsauspraegung(e);
 	}
 
-	
+	/**
+	 * Methode zum Auslesen aller Kontakte zu Teilhaberschaften
+	 * 
+	 * @param teilhabenderID
+	 * 			Übergabeparameter der ID des Teilhabenden
+	 * 		  eigentuemerID
+	 * 			Übergabeparameter der ID des Eigentümers
+	 * @return Vector des Typs Kontakt
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Kontakt> findAllKontaktByTeilhaberschaften(int teilhabenderID, int eigentuemerID)
 			throws IllegalArgumentException {
@@ -1206,6 +1215,14 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 	}
 
+	/**
+	 * Methode zur Ausgabe aller Kontaktlisten die mit einem bestimmten Nutzer geteilt wurden
+	 * 
+	 * @param teilhabenderID
+	 * 			Übergabeparameter der Klasse Teilhaberschaft
+	 * @return Vector des Typs Kontaktliste
+	 * @throws IllegalArgumentException
+	 */
 	@Override
 	public Vector<Kontaktliste> findAllKontaktlisteByTeilhaberschaft(int teilhabenderID)
 			throws IllegalArgumentException {
