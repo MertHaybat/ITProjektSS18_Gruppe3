@@ -56,17 +56,8 @@ public interface ReportGenerator extends RemoteService {
 	  public abstract AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(String a, String b)
 				throws IllegalArgumentException;
 	
-	  /**
-	   * Diese Methode sucht Kontakte mit übergebenen Eigenschaften und Ausprägungen.
-	   * 
-	   * @param eig; die Eigenschaft, nach der gesucht werden soll
-	   * 		auspraegung; die Eigenschaftsausprägung, nach der gesucht werden soll
-	   * 
-	   * @return Kontakte, die bestimmte Eigenschaften und Eigenschaftsausprägungen besitzen
-	   * @throws IllegalArgumentException
-	   */
-	  public abstract KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(
-			String eig, String auspraegung) throws IllegalArgumentException;
+	  KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(
+			String nutzer, String eig, String auspraegung);
 
 	  public Vector<Nutzer> findNutzer() throws IllegalArgumentException;
 

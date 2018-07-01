@@ -22,7 +22,7 @@ public interface ReportGeneratorAsync {
 	void createAlleKontakteByTeilhaberschaftReport(String a, String b,
 			AsyncCallback<AlleKontakteByTeilhaberschaftReport> callback);
 
-	void createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(String eig, String auspraegung,
+	void createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(String nutzer, String eig, String auspraegung,
 			AsyncCallback<KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport> callback);
 
 	void findNutzer(AsyncCallback<Vector<Nutzer>> callback);

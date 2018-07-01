@@ -18,8 +18,11 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteByTeilhaberschaftReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.Column;
+import de.hdm.itprojektss18Gruppe3.shared.report.CompositeParagraph;
 import de.hdm.itprojektss18Gruppe3.shared.report.KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport;
+import de.hdm.itprojektss18Gruppe3.shared.report.Report;
 import de.hdm.itprojektss18Gruppe3.shared.report.Row;
+import de.hdm.itprojektss18Gruppe3.shared.report.SimpleParagraph;
 
 /**
  * 
@@ -68,6 +71,22 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	  protected KontaktmanagerAdministration getKontaktVerwaltung() {
 	    return this.kontaktmanagerAdministration;
 	  }
+	  
+	  protected void addImprint(Report r) {
+		  
+		    /*
+		     * Das Imressum soll mehrzeilig sein.
+		     */
+		    CompositeParagraph imprint = new CompositeParagraph();
+
+		    imprint.addSubParagraph(new SimpleParagraph("Kontaktmanager der HdM"));
+		    imprint.addSubParagraph(new SimpleParagraph("Nobelstraße 10"));
+		    imprint.addSubParagraph(new SimpleParagraph("70569 Stuttgart"));
+
+		    // Das eigentliche Hinzufügen des Impressums zum Report.
+		    r.setImprint(imprint);
+
+		  }
 	
 	
 	/**
@@ -87,14 +106,19 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		else{
 			
 		
+		Vector<NutzerTeilhaberschaftKontaktWrapper> allContacts = new Vector<NutzerTeilhaberschaftKontaktWrapper>();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
 		
 		AlleKontakteReport result = new AlleKontakteReport();
+		result.setTitle("Alle Kontakte im Kontaktmanager");
+		this.addImprint(result);
 		
-		Vector<NutzerTeilhaberschaftKontaktWrapper> allContacts = new Vector<NutzerTeilhaberschaftKontaktWrapper>();
-		
-		result.setTitle("Alle Kontakte im Kontaktmanager für " + nutzer.getMail());
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
 		result.setCreated(simpleDateFormat.format(new Date()));
+		
+		CompositeParagraph header = new CompositeParagraph();
+		header.addSubParagraph(new SimpleParagraph("Nutzer: " + nutzer.getMail()));
+		
+		result.setHeaderData(header);
 		
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));
@@ -184,14 +208,20 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 		Nutzer nutzerEigentuemer = findNutzerByMail(eigentuemer);
 		Nutzer nutzerTeilnehmer = findNutzerByMail(teilnehmer);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
 		
 		Vector<Kontakt> alleKontakteByTeilhaberschaft = new Vector<Kontakt>();
 		AlleKontakteByTeilhaberschaftReport result = new AlleKontakteByTeilhaberschaftReport();
-
 		result.setTitle("Alle Kontakte der Teilhaberschaften zwischen zwei Nutzern");
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
+		this.addImprint(result);
+		
 		result.setCreated(simpleDateFormat.format(new Date()));
+		
+		CompositeParagraph header = new CompositeParagraph();
+		header.addSubParagraph(new SimpleParagraph("Nutzer: " + eigentuemer));
 
+		result.setHeaderData(header);	
+		
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));
 //		headline.addColumn(new Column("Status"));
@@ -239,22 +269,29 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 */
 	@Override
 	public KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(
-			String eig, String auspraegung) throws IllegalArgumentException {
+			String nutzer, String eig, String auspraegung) throws IllegalArgumentException {
 
 		if (this.getKontaktVerwaltung() == null) {
 			return null;
 		}
 		
+		Nutzer loggedinNutzer = findNutzerByMail(nutzer);
 		Eigenschaft eigenschaft = findEigenschaftByBezeichnung(eig);
 		Eigenschaftsauspraegung ea = new Eigenschaftsauspraegung();
 		ea.setWert(auspraegung);
 		
 		KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport result = new KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport();
-
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
 
 		result.setTitle("Kontakte mit angegebenen Eigenschaften und Ausprägungen");
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
+		this.addImprint(result);
+		
 		result.setCreated(simpleDateFormat.format(new Date()));
+		
+		CompositeParagraph header = new CompositeParagraph();
+		header.addSubParagraph(new SimpleParagraph("Nutzer: " + nutzer));
+		result.setHeaderData(header);
+		
 
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));
@@ -270,7 +307,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		result.addRow(headline);
 		
 		Vector<Kontakt> kontakteMitBestimmtenEigenschaftenUndAuspraegungen = this.getKontaktVerwaltung()
-					.findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(eigenschaft, ea);	
+					.findAllKontakteEigenschaftAuspraegung(loggedinNutzer, eigenschaft, ea);	
 		Vector<EigenschaftsAuspraegungWrapper> auspraegungen = new Vector<EigenschaftsAuspraegungWrapper>();
 		
 		for (Kontakt kontakt : kontakteMitBestimmtenEigenschaftenUndAuspraegungen) {

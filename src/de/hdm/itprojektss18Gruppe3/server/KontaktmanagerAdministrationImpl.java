@@ -1784,6 +1784,29 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return wrapper;
 	}
 	
+	@Override 
+	public Vector<Kontakt> findAllKontakteEigenschaftAuspraegung(Nutzer nutzer, Eigenschaft eigenschaft, Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException{
+		
+		Vector<Kontakt> teilhabendeKontakteAll = findTeilhabendeKontakteAuspraegungen(nutzer.getId());
+		Vector<Kontakt> eigeneKontakte = findAllKontaktByNutzerID(nutzer.getId());
+		Vector<Kontakt> allFoundContacts = findAllKontakteByEigenschaftUndEigenschaftsauspraegungen(eigenschaft, auspraegung);
+		Vector<Kontakt> filteredContact = new Vector<Kontakt>();
+		
+		for (Kontakt kontakt : teilhabendeKontakteAll) {
+			eigeneKontakte.add(kontakt);
+		}
+		
+		for (Kontakt alleKontakt : allFoundContacts) {
+			for (Kontakt eigeneKontakte2 : eigeneKontakte) {
+				if(alleKontakt.getId() == eigeneKontakte2.getId()){
+					filteredContact.add(eigeneKontakte2);
+				}
+			}
+		}
+		
+		
+		return filteredContact;
+	}
 }
 
 	

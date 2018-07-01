@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -18,6 +19,7 @@ import de.hdm.itprojektss18Gruppe3.client.AllKontaktEigenschaftenAndAuspraegunge
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 public class EigenschaftenReportForm extends HorizontalPanel {
 
@@ -58,12 +60,14 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			nutzer.setMail(Cookies.getCookie("email"));
 			if(tbEigenschaft.getValue().equals("") && tbAuspraegung.getValue().equals("")){
 				Window.alert("Bitte Eigenschaft oder Ausprägung eingeben");
 			} else {
 				vpanel.clear();
-				vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(tbEigenschaft.getValue(),
+				vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(nutzer.getMail(), tbEigenschaft.getValue(),
 						tbAuspraegung.getValue()));
 				RootPanel.get("contentReport").add(vpanel);
 				

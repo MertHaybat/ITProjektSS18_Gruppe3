@@ -28,9 +28,9 @@ public class AllKontaktEigenschaftenAndAuspraegungen extends HTMLResultPanel {
 	 * @param eigenschaft: In der GUI eingegebene Eigenschaft
 	 * @param auspraegung: In der GUI eingegebene Eigenschaftsausprägung
 	 */
-	public AllKontaktEigenschaftenAndAuspraegungen(String eigenschaft, String auspraegung) {
+	public AllKontaktEigenschaftenAndAuspraegungen(String nutzer, String eigenschaft, String auspraegung) {
 
-		reportverwaltung.createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(eigenschaft, auspraegung,
+		reportverwaltung.createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(nutzer, eigenschaft, auspraegung,
 				new AllKontaktEigenschaftAndAuspraegungenCallback());
 	}
 
