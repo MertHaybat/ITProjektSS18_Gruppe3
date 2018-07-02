@@ -45,6 +45,10 @@ public class KontaktmanagerReport implements EntryPoint {
 
 
 	}
+	/**
+	 * Erstellen eines LoginCallbacks 
+	 *
+	 */
 	class LoginCallback implements AsyncCallback<LoginInfo> {
 
 		@Override
@@ -64,6 +68,10 @@ public class KontaktmanagerReport implements EntryPoint {
 		}
 
 	}
+	/**
+	 * CLickHandler für den LoginButton
+	 *
+	 */
 	class loginButtonClickHandler implements ClickHandler {
 
 		@Override
@@ -73,6 +81,9 @@ public class KontaktmanagerReport implements EntryPoint {
 		}
 
 	}
+	/**
+	 * 
+	 */
 	private void loadLogin() {
 
 		loginButton.addClickHandler(new loginButtonClickHandler());
@@ -82,6 +93,10 @@ public class KontaktmanagerReport implements EntryPoint {
 		RootPanel.get("contentReport").add(loginPanel);
 
 	}
+	/**
+	 * Callback-Methode um Nutzer zu suchen
+	 *
+	 */
 	class FindNutzerCallback implements AsyncCallback<Nutzer> {
 
 		@Override
@@ -103,6 +118,10 @@ public class KontaktmanagerReport implements EntryPoint {
 		}
 
 	}
+	/**
+	 * ClickHandler für den logout
+	 *
+	 */
 	public class logoutClickHandler implements ClickHandler {
 
 		@Override
