@@ -6,6 +6,11 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
+/**
+ * 
+ * @author ersinbarut
+ * Wrapperklasse um in der GUI Teilhaberschaften zu verwalten/anzuzeigen (in dem Fall Nutzer und Kontaktliste)
+ */
 public class NutzerTeilhaberschaftKontaktlisteWrapper implements Serializable {
 
 	/**
@@ -13,6 +18,9 @@ public class NutzerTeilhaberschaftKontaktlisteWrapper implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * Deklarierung der Attribute 
+	 */
 	private Nutzer nutzer = null;
 	private Teilhaberschaft teilhaberschaft = null;
 	private Kontaktliste kontaktliste = null;

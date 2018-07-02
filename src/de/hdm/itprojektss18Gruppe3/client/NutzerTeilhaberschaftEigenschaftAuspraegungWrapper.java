@@ -7,7 +7,11 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
-
+/**
+ * 
+ * @author ersinbarut
+ * Wrapperklasse um in der GUI Teilhaberschaften zu verwalten/anzuzeigen (in dem Fall Nutzer, Eigenschaft und Ausprägung)
+ */
 public class NutzerTeilhaberschaftEigenschaftAuspraegungWrapper implements Serializable {
 
 	/**
@@ -15,6 +19,9 @@ public class NutzerTeilhaberschaftEigenschaftAuspraegungWrapper implements Seria
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Anlegen der Attribute
+	 */
 	private Nutzer nutzer = null;
 	private Teilhaberschaft teilhaberschaft = null;
 	private Eigenschaft eigenschaft = null;
@@ -22,6 +29,9 @@ public class NutzerTeilhaberschaftEigenschaftAuspraegungWrapper implements Seria
 	private Kontakt kontakt = null;
 
 
+	/**
+	 * default Konstruktor
+	 */
 	public NutzerTeilhaberschaftEigenschaftAuspraegungWrapper() {
 
 	}
