@@ -677,36 +677,114 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	Vector<Kontakt> findTeilhabendeKontakteAuspraegungen(int teilhabenderID) throws IllegalArgumentException;
 
+	/**
+	 * Löschen der Teilhaberschaft 
+	 * @param t
+	 * @throws IllegalArgumentException
+	 */
 	void deleteTeilhaberschaftByTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Eigenschaftsausprägung und der Kontakte bei empfangengen Kontakten 
+	 * @param teilhabenderID
+	 * @return Vector<NutzerTeilhaberschaftKontaktWrapper>, Eigenschaftsausprägungen der empfangenen Kontakte 
+	 * @throws IllegalArgumentException
+	 */
 	Vector<NutzerTeilhaberschaftKontaktWrapper> findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(
 			int teilhabenderID) throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Eigenschaften, der Ausprägungen des jeweiligen Kontaktes 
+	 * @param nutzerID
+	 * @param kontaktID
+	 * @return Vector<EigenschaftsAuspraegungWrapper>, Eigenschaft und Ausprägung des Kontaktes
+	 * @throws IllegalArgumentException
+	 */
 	Vector<EigenschaftsAuspraegungWrapper> findEigenschaftAndAuspraegungByKontakt(int nutzerID, int kontaktID)
 			throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Teilhaberschaft nach Primärschlüssel des Nutzers und der Ausprägung
+	 * @param nutzerid
+	 * @param auspraegungid
+	 * @return Vector<Teilhaberschaft>, Teilhaberschaft 
+	 * @throws IllegalArgumentException
+	 */
 	Vector<Teilhaberschaft> findTeilhaberschaftByAuspraegungIDAndNutzerID(int nutzerid, int auspraegungid)
 			throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Teilhaberschaft nach Primärschlüssel des Kontaktes und des Nutzers
+	 * @param nutzerid
+	 * @param kontaktid
+	 * @return Vector<Teilhaberschaft>, Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
 	Vector<Teilhaberschaft> findTeilhaberschaftByKontaktAndTeilhaber(int nutzerid, int kontaktid)
 			throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Teilhaberschaft, nach Primärschlüssel des Nutzers und der Vector<Eigenschaftsauspraegung> auspraegung
+	 * @param nutzerid
+	 * @param auspraegung
+	 * @return Teilhaberschaft
+	 */
 	String findTeilhaberschaftString(int nutzerid, Vector<Eigenschaftsauspraegung> auspraegung);
 
+	/**
+	 * Ausgabe der Kontakte und Teilhaberschaften nach Nutzerobjekt 
+	 * @param nutzer
+	 * @return Vector<NutzerTeilhaberschaftKontaktWrapper>, Kontakte und Teilhaberschaften
+	 * @throws IllegalArgumentException
+	 */
 	Vector<NutzerTeilhaberschaftKontaktWrapper> findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer) throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Kontakte und Teilhaberschaft nach Primärschlüssel der Eigentümer und des Teilhabender 
+	 * @param eigentuemerID
+	 * @param teilhabenderID
+	 * @return Vector<Kontakt>, Kontakt und Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
 	Vector<Kontakt> findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(int eigentuemerID, int teilhabenderID)
 			throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Kontaktliste in einer Teilhaberschaft als Eigentümer, nach Primärschlüssel Eigentümer 
+	 * @param eigentuemerID
+	 * @return Vector<NutzerTeilhaberschaftKontaktlisteWrapper>, Kontaktliste 
+	 * @throws IllegalArgumentException
+	 */
 	Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findKontaktlisteTeilhaberschaftEigentuemer(int eigentuemerID)
 			throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Kontakte in einer Teilhaberschaft als Eigentümer, nach Primärschlüssel Eigentümer
+	 * @param eigentuemerID
+	 * @return Vector<NutzerTeilhaberschaftKontaktWrapper>, Kontakte 
+	 * @throws IllegalArgumentException
+	 */
 	Vector<NutzerTeilhaberschaftKontaktWrapper> findKontaktTeilhaberschaftEigentuemer(int eigentuemerID)
 			throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Ausprägungen in einer Teilhaberschaft als Eigentümer, nach Primärschlüssel des Eigentümers
+	 * @param eigentuemerID
+	 * @return Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>, Ausprägung
+	 * @throws IllegalArgumentException
+	 */
 	Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftEigentuemer(
 			int eigentuemerID) throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Kontakte der Eigenschaften und der Ausprägungen, anhand der Objekte Nutzer, Eigenschaft und 
+	 * Eigenschaftsauspraegung
+	 * @param nutzer
+	 * @param eigenschaft
+	 * @param auspraegung
+	 * @return Vector<Kontakt>, Kontakte, Eigenschaften und Eigenschaftsausprägungen
+	 * @throws IllegalArgumentException
+	 */
 	Vector<Kontakt> findAllKontakteEigenschaftAuspraegung(Nutzer nutzer, Eigenschaft eigenschaft,
 			Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException; 
 
