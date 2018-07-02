@@ -620,18 +620,61 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 */
 	public Vector<Kontaktliste> findKontaktlisteByTeilhabenderID(int teilhabenderID) throws IllegalArgumentException;
 	
+	/**
+	 * Ausgeben von Kontaktlisten über den Primärschlüssel des Nutzers
+	 * @param bezeichnung
+	 * @param nutzerid
+	 * @return Kontaktliste des Nutzers
+	 * @throws IllegalArgumentException
+	 */
 	public Kontaktliste findKontaktlistByName(String bezeichnung, int nutzerid) throws IllegalArgumentException;
 	
+	/**
+	 * Ausgeben von Nutzern über den Primärschlüssel des Kontakts
+	 * @param kontaktID
+	 * @return Vector <Nutzer> Nutzer des Kontakts
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Nutzer> findNutzerByKontaktID(int kontaktID) throws IllegalArgumentException;
 	
+	/**
+	 * Ausgeben von Teilhaberschaft über Primärschlüssel des Kontakts
+	 * @param kontaktID
+	 * @return Vector<Teilhaberschaft> Teilhaberschaft(-en) des Kontakts
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Teilhaberschaft> findTeilhaberschaftByKontaktID(int kontaktID) throws IllegalArgumentException;
 	
+	/**
+	 * Ausgeben bei Verwaltung Teilhaberschaften, die Kontakte 
+	 * @param teilhabenderID
+	 * @return Vector <NutzerTeilhaberschaftKontaktWrapper>
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<NutzerTeilhaberschaftKontaktWrapper> findNutzerTeilhaberschaftKontaktWrapperByTeilhaberschaft(int teilhabenderID) throws IllegalArgumentException;
 	
+	/**
+	 * Ausgabe bei Verwaltung der Teilhaberschaften, die Eigenschaften und Ausprägungen der Kontakte 
+	 * @param teilhabenderID
+	 * @return Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> Alle Eigenschaften Ausprägungen der Kontakte in der Teilhaberschaft
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftKontaktWrapperByTeilhaberschaft(int teilhabenderID) throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe bei Verwaltung der Teilhaberschaften, die Kontaktliste mit den Kontakten der Kontaktliste 
+	 * @param teilhabenderID
+	 * @return Vector<NutzerTeilhaberschaftKontaktlisteWrapper>, die Kontaktlisten, mit den Kontakten, der Liste
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findNutzerTeilhaberschaftKontaktlisteWrapper(int teilhabenderID) throws IllegalArgumentException;
 
+	/**
+	 * Ausgabe der Ausprägungen der Kontakte der Teilhaberschaft 
+	 * @param teilhabenderID
+	 * @return <Kontakt> findTeilhabendeKontakteAuspraegungen, die Ausprägung der empfangenen Kontakte 
+	 * @throws IllegalArgumentException
+	 */
 	Vector<Kontakt> findTeilhabendeKontakteAuspraegungen(int teilhabenderID) throws IllegalArgumentException;
 
 	void deleteTeilhaberschaftByTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException;
