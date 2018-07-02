@@ -56,21 +56,68 @@ public interface ReportGenerator extends RemoteService {
 	  public abstract AlleKontakteByTeilhaberschaftReport createAlleKontakteByTeilhaberschaftReport(String a, String b)
 				throws IllegalArgumentException;
 	
+	  /**
+	   * Diese Methode sucht alle Kontakte mit bestimmten Eigenschaften und Ausprägungen und gibt diese zurück 
+	   * @param nutzer
+	   * @param eig
+	   * @param auspraegung
+	   * @return Alle Kontakte einer bestimmten Eigenschaft und Ausprägung 
+	   */
 	  KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport createKontakteMitBestimmtenEigenschaftenUndAuspraegungenReport(
 			String nutzer, String eig, String auspraegung);
 
+	  /**
+	   * Diese Methode sucht einen Nutzer  
+	   * @return <Nutzer>
+	   * @throws IllegalArgumentException
+	   */
 	  public Vector<Nutzer> findNutzer() throws IllegalArgumentException;
 
+	  /**
+	   * Diese Methode sucht einen Nutzer über seine Email 
+	   * @param email
+	   * @return Nutzer 
+	   * @throws IllegalArgumentException
+	   */
 	  public Nutzer findNutzerByMail(String email) throws IllegalArgumentException;
 
+	  /**
+	   * Diese Methode sucht alle Eigenschaften und lädt sie in einen Vektor
+	   * @return Vector<Eigenschaft>
+	   * @throws IllegalArgumentException
+	   */
 	  public Vector<Eigenschaft> findAllEigenschaften() throws IllegalArgumentException;
 
+	  /**
+	   * Diese Methode sucht eine Eigenschaft nach ihrer Bezeichnung
+	   * @param bezeichnung
+	   * @return Eigenschaft
+	   * @throws IllegalArgumentException
+	   */
 	  public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) throws IllegalArgumentException;
 
+	  /**
+	   * Diese Methode sucht die Eigenschaften nach eines Kontakt-Objektes
+	   * @param kontakt
+	   * @return Vector<EigenschaftsAuspraegungWrapper>
+	   * @throws IllegalArgumentException
+	   */
 	  public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftWrapper(Kontakt kontakt) throws IllegalArgumentException;
 
+	  /**
+	   * Diese Methode sucht alle Kontakte und Teilhaberschaften anhand eines Nutzer-Objektes und
+	   * lädt sie in einen Vektor 
+	   * @param nutzer
+	   * @return  Vector<NutzerTeilhaberschaftKontaktWrapper>
+	   */
 	  Vector<NutzerTeilhaberschaftKontaktWrapper> findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer);
 
+	  /**
+	   * Diese Methode gibt den Nutzer einer Teilhaberschaft zurück anhand des Primärschlüssels des Teilhabenden
+	   * @param teilhaberid
+	   * @return Nutzer der bestimmten Teilhaberschaft (anhand der ID)
+	   * @throws IllegalArgumentException
+	   */
 	  Nutzer nutzerTeilhaberschaft(int teilhaberid) throws IllegalArgumentException;
 
 }
