@@ -2,35 +2,25 @@ package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import java.util.Vector;
 
-import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.cell.client.Cell.Context;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.cell.client.ClickableTextCell;
+import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
-import com.google.gwt.view.client.CellPreviewEvent;
-import com.google.gwt.view.client.NoSelectionModel;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionChangeEvent.Handler;
-import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -39,13 +29,12 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
-import de.hdm.itprojektss18Gruppe3.client.gui.AllKontaktView.PreviewClickHander;
-import de.hdm.itprojektss18Gruppe3.client.gui.CellTableAuspraegungWrapper.WertAuspraegungColumn;
-import de.hdm.itprojektss18Gruppe3.client.gui.CellTableAuspraegungWrapper.WertEigenschaftColumn;
-import de.hdm.itprojektss18Gruppe3.client.gui.KontaktForm.AllAuspraegungenCallback;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
@@ -140,10 +129,6 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		kontakt.setName(kontaktTextbox.getValue());
 
-//		checkBoxKontakt.getValue();
-//		checkBoxTeilhaber.getValue();
-
-		//kontaktTextbox.setStylePrimaryName("suchTextbox");
 		hButtonPanel.add(startButton);
 		hButtonPanel.add(filterLoeschenButton);
 		FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
@@ -184,13 +169,16 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		kontaktmanagerVerwaltung.findAllEigenschaften(new AllEigenschaftenCallback());
 		
 		ssmKontakt.addSelectionChangeHandler(new SelectionHandlerAuspraegung());
-		kontaktCellTable.getSsmAuspraegung().addSelectionChangeHandler(new SelectionHandlerAuspraegung());
+//		kontaktCellTable.getSsmAuspraegung().addSelectionChangeHandler(new SelectionHandlerAuspraegung());
 		kontaktCellTable.setSelectionModel(ssmKontakt);
+		ssmKontakt.addSelectionChangeHandler(new SelectionHandlerAuspraegung());
 		kontaktCellTable.addColumn(kontaktnameColumn, "Kontaktname");
 		kontaktCellTable.addColumn(iconColumn, "");
 		kontaktCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
 		kontaktCellTable.setEmptyTableWidget(emptyListMessage);
 //		kontaktCellTable.addCellPreviewHandler(new PreviewClickHander());
+		
+		kontaktCellTable.addDomHandler(new KontaktFormDoubleClickHandler(), DoubleClickEvent.getType());
 		celltable.setSelectionModel(selection);
 
 		
@@ -206,6 +194,14 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		this.add(layout);
 		this.add(hPanel);
 //		this.add(suchErgebnisZweiPanel);
+	}
+	public class KontaktFormDoubleClickHandler implements DoubleClickHandler{
+
+		@Override
+		public void onDoubleClick(DoubleClickEvent event) {
+			KontaktForm kontaktform = new KontaktForm(ssmKontakt.getSelectedObject());
+		}
+		
 	}
 	
 	public class SelectionHandlerAuspraegung implements SelectionChangeEvent.Handler{
