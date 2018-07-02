@@ -30,9 +30,10 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
  *
  */
 public class CreateKontaktlisteDialogBox extends DialogBox {
-	
+
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	private CustomTreeModel ctm = null;
+	private Kontaktliste kontaktliste = null;
 	/**
 	 * Instanziierung vom VerticalPanel 
 	 */
@@ -41,42 +42,52 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private HorizontalPanel labelPanel = new HorizontalPanel();
 
-	
+
 	/**
 	 * Instanziierung vom Label "kontaktlisteLabel" welches als Hilfe für die TextBox dient, damit erkenntlich ist welche Angabe in die TextBox eingetragen werden soll
 	 */
 	private Label kontaktlisteLabel = new Label("Bezeichnung: ");
-	
+
 	/**
 	 * Instanziierung der TextBox namens "tkontaktliste"
 	 */
 	private TextBox tkontaktliste = new TextBox();
-	
+
 	/**
 	 * Instanziierung der Buttons "speichern" und "abbrechen"
 	 * @see bspeichern, babbrechen 
 	 */
 	private Button bspeichern = new Button("Speichern");
 	private Button babbrechen = new Button("Abbrechen");
-		
+
 	/**
 	 * Non-Argument-Konstruktor
 	 */
 	public CreateKontaktlisteDialogBox() {
+		this.setText("Neue Kontaktliste erstellen");
+		bspeichern.addClickHandler(new insertKontaktlisteClickHandler());
 		run();
 	}
-	
+
+	/*
+	 * Argument Konstruktor mit einer Kontaktliste als Parameter, 
+	 * durch den eine bestehende Kontaktliste umbenannt werden kann.
+	 */
+	public CreateKontaktlisteDialogBox(Kontaktliste kl) {
+		this.kontaktliste = kl;
+		tkontaktliste.setValue(kl.getBezeichnung());
+		this.setText("Neue Bezeichnung für die Kontaktliste");
+		bspeichern.addClickHandler(new updateKontaktlisteClickHandler());
+		run();
+	}
+
 	public void run(){
-		
-		this.setText("Neue Kontaktliste erstellen");
 		hPanel.add(bspeichern);
 		hPanel.add(babbrechen);
 		kontaktlisteLabel.setStylePrimaryName("labelSize1");
 		labelPanel.add(kontaktlisteLabel);
 		labelPanel.add(tkontaktliste);
 
-
-		bspeichern.addClickHandler(new insertKontaktlisteClickHandler());
 		babbrechen.addClickHandler(new closeKontaktlisteClickHandler());
 
 		vPanel.add(labelPanel);
@@ -84,9 +95,8 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 		vPanel.add(hPanel);
 		vPanel.setWidth("300px");
 		this.add(vPanel);
-		
 	}
-	
+
 	public class createKontaktlisteCallback implements AsyncCallback<Kontaktliste> {
 
 		@Override
@@ -105,7 +115,24 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 			RootPanel.get("leftmenutree").add(ctm);		
 		}
 	}
-	
+
+	public class saveKontaktlisteCallback implements AsyncCallback<Void> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Ändern: " + caught.getMessage());	
+		}
+
+		@Override
+		public void onSuccess(Void result) {
+			Window.alert("Kontaktliste wurde umbenannt");
+			ctm = new CustomTreeModel();
+			hide();
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);	
+		}
+	}
+
 	public class insertKontaktlisteClickHandler implements ClickHandler {
 
 		@Override
@@ -116,13 +143,21 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 			hide();
 		}
 	}
-	
+
 	public class closeKontaktlisteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			hide();
 		}
-		
+
+	}
+
+	public class updateKontaktlisteClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			kontaktmanagerVerwaltung.saveKontaktliste(kontaktliste, new saveKontaktlisteCallback());
+		}	
 	}
 }

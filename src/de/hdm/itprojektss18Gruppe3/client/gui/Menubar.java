@@ -1,6 +1,7 @@
 package de.hdm.itprojektss18Gruppe3.client.gui;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -20,13 +21,17 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.MultiSelectionModel;
 
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3;
 import de.hdm.itprojektss18Gruppe3.client.LoginInfo;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.client.ITProjektSS18Gruppe3.SuchenCommand;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.LoginService;
@@ -35,10 +40,10 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 
 /*
-* Klasse für die Menüleiste. Hier werden die Menüpunkte entsprechend dem geladen, 
-* was aufgrund der Aktion des Nutzers im Moment möglich ist. Auch ist hier die TextBox
-* für die schnelle Suche integriert
-*/
+ * Klasse für die Menüleiste. Hier werden die Menüpunkte entsprechend dem geladen, 
+ * was aufgrund der Aktion des Nutzers im Moment möglich ist. Auch ist hier die TextBox
+ * für die schnelle Suche integriert
+ */
 public class Menubar extends MenuBar {
 
 	private LoginInfo loginInfo = null;
@@ -48,13 +53,17 @@ public class Menubar extends MenuBar {
 
 	private MenuBar menubar = new MenuBar();
 	private MenuBar menubarRightSide = new MenuBar();
-	private MenuBar kontaktMenu = new MenuBar(true);
-	private MenuBar kontaktlisteMenu = new MenuBar(true);
+	private MenuBar addMenu = new MenuBar(true);
+	private MenuBar alterMenu = new MenuBar(true);
+	private MenuBar deleteMenu = new MenuBar(true);
+	private MenuBar shareMenu = new MenuBar(true);
 	private MenuBar teilhaberschaftMenu = new MenuBar(true);
 
 	private Kontakt kontakt = null;
 	private Kontaktliste kontaktliste = null;
 	private ArrayList<Kontakt> allKontakteSelectedArrayList = null;
+	private ArrayList<MenuItem> allMenuItems = new ArrayList<MenuItem>();
+	private ArrayList<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> selectedTeilhaberschaftAuspraegung = null;
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
@@ -63,6 +72,7 @@ public class Menubar extends MenuBar {
 	private MenuItem deleteKontakt = new MenuItem("Kontakt löschen", new AllKontaktView.KontaktDeleteCommand());
 	private MenuItem shareKontakt = new MenuItem("Kontakt teilen",
 			new AllKontaktView.AddTeilhaberschaftKontaktCommand());
+	private MenuItem alterKontakt = new MenuItem("Kontakt bearbeiten", new AlterKontaktCommand());
 	private MenuItem addKontaktToKontaktliste = new MenuItem("Kontakt zur Kontaktliste hinzufügen",
 			new AllKontaktView.AddKontaktToKontaktlisteCommand());
 	private MenuItem addKontaktliste = new MenuItem("Neue Kontaktliste erstellen",
@@ -71,15 +81,18 @@ public class Menubar extends MenuBar {
 			new AllKontaktView.AddNewKontaktToKontaktlisteCommand());
 	private MenuItem deleteKontaktFromKontaktliste = new MenuItem("Kontakt aus dieser Kontaktliste löschen",
 			new AllKontaktView.DeleteKontaktAusKontaktlisteCommand());
+	private MenuItem renameKontaktliste = new MenuItem("Kontaktliste umbenennen",
+			new AllKontaktView.RenameKontaktlisteCommand());
 	private MenuItem deleteKontaktliste = new MenuItem("Kontaktliste löschen",
 			new AllKontaktView.DeleteKontaktlisteCommand());
 	private MenuItem shareKontaktliste = new MenuItem("Kontaktliste teilen",
 			new AllKontaktView.AddTeilhaberschaftKontaktlisteCommand());
-	private MenuItem manageTeilhaberschaften = new MenuItem("Verwaltung",
+	private MenuItem manageTeilhaberschaften = new MenuItem("Teilhaberschaften",
 			new AllKontaktView.TeilhaberschaftVerwaltenCommand());
+	private MenuItem deleteTeilhaberschaften = new MenuItem("Teilhaberschaft löschen",
+			new TeilhaberschaftVerwaltungView.DeleteTeilhaberschaft());
 	private MenuItem searchMenu = new MenuItem("Detailsuche", new ITProjektSS18Gruppe3.SuchenCommand());
-	
-	
+
 	/*
 	 * Über verschiedene Konstruktoren, die jeweils verschiedene Parameter
 	 * erwarten, kann so der jeweilige Command, der hinter einem MenüItem steckt,
@@ -88,74 +101,116 @@ public class Menubar extends MenuBar {
 	 */
 	public Menubar() {
 		RootPanel.get("menubar").clear();
+		addMenuItemsToArray();
+
+
 		run();
 	}
 
 	public Menubar(Kontakt k) {
-		kontakt = k;
+		addMenuItemsToArray();
+		this.kontakt = k;
+		deleteKontakt.setEnabled(true);
+		shareKontakt.setEnabled(true);
+		addKontaktToKontaktliste.setEnabled(true);
+
 		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
 		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
 		addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
+
 		run();
 	}
-	
+
 	public Menubar(Kontaktliste kl, ArrayList<Kontakt> allKontakteSelectedArrayList) {
+		addMenuItemsToArray();
 		this.allKontakteSelectedArrayList = allKontakteSelectedArrayList;
-		kontaktliste = kl;
-		if(kontaktliste.getBezeichnung().equals("Empfangene Kontakte") || kontaktliste.getBezeichnung().equals("Eigene Kontakte")) {
-			deleteKontaktliste.setVisible(false);
-			shareKontaktliste.setVisible(false);
-			addNewKontaktToKontaktliste.setVisible(false);
+		this.kontaktliste = kl;
+		if(!kontaktliste.getBezeichnung().equals("Empfangene Kontakte") || !kontaktliste.getBezeichnung().equals("Eigene Kontakte")) {
+			deleteKontaktliste.setEnabled(true);
+			shareKontaktliste.setEnabled(true);
+			addNewKontaktToKontaktliste.setEnabled(true);
+			renameKontaktliste.setEnabled(true);
+			addKontaktToKontaktliste.setEnabled(true);
 		}
-		
-		if(allKontakteSelectedArrayList.size() == 0) {
-			deleteKontakt.setVisible(false);
-			shareKontakt.setVisible(false);
-			addKontaktToKontaktliste.setVisible(false);
-			deleteKontaktFromKontaktliste.setVisible(false);
+
+		if(allKontakteSelectedArrayList.size() > 0) {
+			deleteKontakt.setEnabled(true);
+			shareKontakt.setEnabled(true);
+			addKontaktToKontaktliste.setEnabled(true);
+			deleteKontaktFromKontaktliste.setEnabled(true);
+			alterKontakt.setEnabled(true);
 		}
 		run();
 	}
 
-	
+	public Menubar(MultiSelectionModel<NutzerTeilhaberschaftKontaktWrapper> ssmAuspraegung) {
+		addMenuItemsToArray();
+		deleteTeilhaberschaften.setEnabled(true);
+		run();
+	}
+
+	public void addMenuItemsToArray() {
+		allMenuItems.add(deleteKontakt);
+		allMenuItems.add(shareKontakt);
+		allMenuItems.add(alterKontakt);
+		allMenuItems.add(addKontaktToKontaktliste);
+		allMenuItems.add(deleteKontaktFromKontaktliste);
+		allMenuItems.add(deleteKontaktliste);
+		allMenuItems.add(shareKontaktliste);
+		allMenuItems.add(addNewKontaktToKontaktliste);
+		allMenuItems.add(renameKontaktliste);
+		allMenuItems.add(deleteTeilhaberschaften);
+
+		for(MenuItem item : allMenuItems) {
+			item.setEnabled(false);
+		}
+	}
+
 	/*
 	 * In der run Methode werden die MenuBars und MenuItems dann entsprechend zusammengeführt
 	 * und in das RootPanel eingebunden.
 	 */
 	public void run() {
-		
+
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html", new LoginCallback());
 
-		kontaktMenu.addItem(addKontakt);
-		kontaktMenu.addItem(deleteKontakt);
-		kontaktMenu.addItem(shareKontakt);
-		kontaktMenu.addItem(addKontaktToKontaktliste);
+		addMenu.addItem(addKontakt);
+		addMenu.addItem(addKontaktliste);
+		addMenu.addItem(addNewKontaktToKontaktliste);
 
-		kontaktlisteMenu.addItem(addKontaktliste);
-		kontaktlisteMenu.addItem(addNewKontaktToKontaktliste);
-		kontaktlisteMenu.addItem(deleteKontaktFromKontaktliste);
-		kontaktlisteMenu.addItem(deleteKontaktliste);
-		kontaktlisteMenu.addItem(shareKontaktliste);
+		alterMenu.addItem(alterKontakt);
+		alterMenu.addItem(addKontaktToKontaktliste);
+		alterMenu.addItem(renameKontaktliste);
 
-		teilhaberschaftMenu.addItem(manageTeilhaberschaften);
+		shareMenu.addItem(shareKontakt);
+		shareMenu.addItem(shareKontaktliste);
+
+		deleteMenu.addItem(deleteKontakt);
+		deleteMenu.addItem(deleteKontaktliste);
+		deleteMenu.addItem(deleteKontaktFromKontaktliste);
+		deleteMenu.addItem(deleteTeilhaberschaften);
 
 		menubar.setAutoOpen(true);
 		menubar.setAnimationEnabled(true);
 		menubar.setWidth("auto");
 		menubar.setHeight("inherit");
 
-		menubar.addItem("Kontakt", kontaktMenu).addStyleName("menuBarImage");
+		menubar.addItem("Erstellen", addMenu).addStyleName("menuBarImage");
 		menubar.addSeparator();
-		menubar.addItem("Kontaktliste", kontaktlisteMenu).addStyleName("menuBarImage");
+		menubar.addItem("Ändern", alterMenu).addStyleName("menuBarImage");
+		menubar.addSeparator();
+		menubar.addItem("Teilen", shareMenu).addStyleName("menuBarImage");
+		menubar.addSeparator();
+		menubar.addItem("Löschen", deleteMenu).addStyleName("menuBarImage");
 		menubar.addSeparator();
 		menubar.addItem(manageTeilhaberschaften);
 		menubar.addSeparator();
-		
+
 		textBox.setStylePrimaryName("searchTextBox");
 		textBox.setMaxLength(100);
 		textBox.getElement().setPropertyString("placeholder", " Schnellsuche...");
-		
+
 		menubarRightSide.addSeparator();
 		menubarRightSide.addItem(searchMenu);
 		menubarRightSide.addSeparator();
@@ -165,9 +220,16 @@ public class Menubar extends MenuBar {
 				Window.open(signOutLink.getHref(), "_self", "");
 			}
 		});
-		
+
 		textBox.addKeyPressHandler(new TextBoxKeyPressHandler());
-		
+
+		for(MenuItem item : allMenuItems) {
+			if(!item.isEnabled()) {
+				item.setStylePrimaryName("disabledMenuBar");
+			}
+		}
+
+
 		hp.add(menubar);
 		hp.add(textBox);
 		hp.add(menubarRightSide);
@@ -176,7 +238,7 @@ public class Menubar extends MenuBar {
 		RootPanel.get("menubar").add(hp);
 
 	}
-	
+
 	class TextBoxKeyPressHandler implements KeyPressHandler {
 
 		@Override
@@ -192,7 +254,7 @@ public class Menubar extends MenuBar {
 		}
 
 	}
-			
+
 	class LoginCallback implements AsyncCallback<LoginInfo> {
 
 		@Override
@@ -205,7 +267,7 @@ public class Menubar extends MenuBar {
 		}
 	}
 
-	
+
 	/*
 	 * Die verschiedenen Commands, die den MenuItems übergeben werden, sind im Folgenden
 	 * aufgeführt. Je nach Aktion werden die verschiedenen Klassen, die eine Aktion wie 
@@ -292,6 +354,16 @@ public class Menubar extends MenuBar {
 			db.center();
 		}
 
+	}
+
+	public class AlterKontaktCommand implements Command {
+
+		@Override
+		public void execute() {
+			KontaktForm kf = new KontaktForm(allKontakteSelectedArrayList.get(0));
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(kf);
+		}
 	}
 
 }

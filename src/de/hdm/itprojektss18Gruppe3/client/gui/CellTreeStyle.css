@@ -1,7 +1,8 @@
 .cellTreeEmptyMessage {
-	padding-left: 14px;
-	font-style: italic;
-	font-family: 'Kalam ', cursive;
+	padding-left: 15px;
+	font-weight: 200;
+	font-family: 'Encode Sans Condensed', cursive;
+	margin-left: 15px;
 }
 
 .cellTreeItem {
@@ -11,9 +12,9 @@
 }
 
 .cellTreeItem tr td {
-	font-family: 'Kalam', cursive;
-	font-weight: 300;
-	font-size: 16px;
+	font-family: 'Encode Sans Condensed', cursive;
+	font-weight: 200;
+	font-size: 15px;
 	letter-spacing: 0.3px;
 }
 
@@ -32,17 +33,16 @@
 }
 
 .cellTreeTopItem {
-	font-weight: bold;
+	font-weight: 400;
 	color: #3f3f3f;
 	margin-top: 15px;
 	padding: 1px 13px 1px 10px !important;
 }
 
 .cellTreeTopItem tr td {
-	font-family: 'Kalam', bold;
+	font-family: 'Encode Sans Condensed';
+	font-weight: 400;
 	font-size: 16px;
-	letter-spacing: 0.3px;
-	font-weight: 500;
 }
 
 .cellTreeTopItemImageValue {

@@ -72,7 +72,7 @@ public class KontaktForm extends MainFrame {
 	private Kontakt k = null;
 	private Kontaktliste kontaktliste = null;
 
-	private Button addAuspraegung = new Button("+");
+	private Button addAuspraegung = new Button("Eigenschaft hinzufügen");
 	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
 	private Button deleteTeilhaberschaftButton = new Button("Teilhaberschaft löschen");
 
@@ -84,9 +84,10 @@ public class KontaktForm extends MainFrame {
 	private HorizontalPanel kontaktLabelkontaktName = new HorizontalPanel();
 	private HorizontalPanel tableButtonPanel = new HorizontalPanel();
 
+	private HTML headline = new HTML("Kontaktansicht");
 	private Label modifikationsdatum = new Label("Modifikationsdatum: ");
 	private Label erstellungsdatum = new Label("Erstellungsdatum: ");
-	private Label kontaktNameLabel = new Label("Kontaktname: ");
+	private Label kontaktNameLabel = new Label("Nickname: ");
 	private TextBox kontaktNameBox = new TextBox();
 
 	private Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
@@ -100,7 +101,7 @@ public class KontaktForm extends MainFrame {
 	private Vector<Teilhaberschaft> teilhaberschaftVector = new Vector<Teilhaberschaft>();
 	private Vector<EigenschaftsAuspraegungWrapper> resultWrapperVector = new Vector<EigenschaftsAuspraegungWrapper>();
 	private String eigenschaft = "";
-	
+
 	private CellTableAuspraegungWrapper.IconColumn iconColumn = celltable.new IconColumn();
 
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(
@@ -113,9 +114,9 @@ public class KontaktForm extends MainFrame {
 				NativeEvent event) {
 			super.onBrowserEvent(context, elem, object, event);
 
-//			if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
+			//			if (event.getKeyCode() == KeyCodes.KEY_ENTER) {
 			setFieldUpdater(new WertAuspraegungFieldUpdater());
-//			}
+			//			}
 			if (object.getWertEigenschaftsauspraegungValue() == "") {
 				kontaktmanagerVerwaltung.deleteEigenschaftsauspraegungById(
 						object.getEigenschaftsauspraegungObject(object.getIDEigenschaftsauspraegungValue()),
@@ -130,11 +131,11 @@ public class KontaktForm extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		nutzer.setMail(Cookies.getCookie("mail"));
 		kontaktmanagerVerwaltung.createKontakt("Neuer Kontakt", 0, nutzer.getId(), new CreateKontaktCallback());
-		super.onLoad();
+
 	}
 
 	public KontaktForm(Kontakt kontakt) {
-		this.k = kontakt;
+		k = kontakt;
 		hPanel.add(zurueckZuAllKontaktView);
 		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
 		kontaktNameBox.setValue(kontakt.getName());
@@ -148,88 +149,40 @@ public class KontaktForm extends MainFrame {
 		erstellungsdatum.setText("Erstellt am: " + dtf.format(kontakt.getErzeugungsdatum()));
 		vPanel2.add(modifikationsdatum);
 		vPanel2.add(erstellungsdatum);
-		Menubar mb = new Menubar(k);
-		super.onLoad();
 
 	}
 
-	// public KontaktForm(Kontakt kontakt, Kontaktliste kontaktliste) {
-	// this.k = kontakt;
-	// this.kontaktliste = kontaktliste;
-	// deleteContact = new Button("Löschen");
-	// zurueckZuAllKontaktView.addClickHandler(new
-	// ZurueckZuKontaktClickHandler());
-	// kontaktNameBox.setValue(kontakt.getName());
-	// Nutzer nutzer = new Nutzer();
-	// nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-	// kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(),
-	// kontakt.getId(), new AllAuspraegungenCallback());
-	// modifikationsdatum.setText("Zuletzt geändert am: " +
-	// dtf.format(kontakt.getModifikationsdatum()));
-	// erstellungsdatum.setText("Erstellt am: " +
-	// dtf.format(kontakt.getErzeugungsdatum()));
-	// deleteContact.addClickHandler(new DeleteChangesClickHandler());
-	// vPanel2.add(modifikationsdatum);
-	// vPanel2.add(erstellungsdatum);
-	// super.onLoad();
-	// }
-	//
-	// public KontaktForm(Kontakt kontakt, Teilhaberschaft teilhaberschaft) {
-	// this.k = kontakt;
-	// this.teilhaberschaft = teilhaberschaft;
-	// deleteContact = new Button("Löschen");
-	// hPanel.add(zurueckZuAllKontaktView);
-	// zurueckZuAllKontaktView.addClickHandler(new
-	// ZurueckZuKontaktClickHandler());
-	// kontaktNameBox.setValue(kontakt.getName());
-	// Nutzer nutzer = new Nutzer();
-	// nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-	// nutzer.setMail(Cookies.getCookie("mail"));
-	//
-	// kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(),
-	// kontakt.getId(), new AllAuspraegungenCallback());
-	// modifikationsdatum.setText("Zuletzt geändert am: " +
-	// dtf.format(kontakt.getModifikationsdatum()));
-	// erstellungsdatum.setText("Erstellt am: " +
-	// dtf.format(kontakt.getErzeugungsdatum()));
-	//
-	// Button kontaktHinzufuegen = new Button("Eigenen Kontakten Hinzufügen");
-	// kontaktHinzufuegen.addClickHandler(new KontaktHinzufuegenClickHandler());
-	// vPanel3.add(kontaktHinzufuegen);
-	// deleteContact.addClickHandler(new DeleteTeilhaberschaftClickHandler());
-	// vPanel2.add(modifikationsdatum);
-	// vPanel2.add(erstellungsdatum);
-	// super.onLoad();
-	// }
-
 	public void run() {
-
-		deleteTeilhaberschaftButton.setStylePrimaryName("mainButton");
-		addAuspraegung.setStylePrimaryName("addButton");
-		zurueckZuAllKontaktView.setStylePrimaryName("mainButton");
 
 		kontaktNameBox.addKeyPressHandler(new KontaktTextBoxKeyPressHandler());
 		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
-
+		headline.setStylePrimaryName("h3");
 		hPanel.add(zurueckZuAllKontaktView);
 
 		// celltable.setSelectionModel(celltable.getSelectionModel());
 
 		kontaktNameLabel.setStylePrimaryName("kontaktFormText");
+		kontaktNameBox.setStylePrimaryName("kontaktFormTextBox");
 		kontaktLabelkontaktName.add(kontaktNameLabel);
 		kontaktLabelkontaktName.add(kontaktNameBox);
 		tableButtonPanel.add(addAuspraegung);
-		flextable.setWidget(0, 0, kontaktLabelkontaktName);
-		flextable.setWidget(2, 0, celltable);
+		addAuspraegung.setStylePrimaryName("mainButton");
 
-		vPanel.add(flextable);
-		vPanel.setStylePrimaryName("kontaktCellTableView");
-		vPanel2.setStylePrimaryName("kontaktCellTableView");
+		vPanel.add(headline);
+		vPanel.add(new HTML("<br><br>"));
+		vPanel.add(kontaktLabelkontaktName);
+		vPanel.add(new HTML("<br>"));
+		vPanel.add(celltable);
+		vPanel.add(new HTML("<br>"));		
+		vPanel.add(addAuspraegung);
+		vPanel.setStylePrimaryName("kontaktFormPanel");
+		vPanel2.setStylePrimaryName("kontaktFormPanel");
 
 		this.add(vPanel);
 		this.add(vPanel3);
 		this.add(vPanel2);
 
+		Menubar mb = new Menubar(k);
 		RootPanel.get("content").add(vPanel);
 		RootPanel.get("content").add(vPanel3);
 		RootPanel.get("content").add(vPanel2);
@@ -242,7 +195,7 @@ public class KontaktForm extends MainFrame {
 
 			selection.getLastSelectedObject().setWertEigenschaftsauspraegungValue(value);
 			selection.getLastSelectedObject()
-					.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
+			.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
 			auspraegung.setWert(object.getWertEigenschaftsauspraegungValue());
 			auspraegung.setId(object.getIDEigenschaftsauspraegungValue());
 			auspraegung.setPersonID(object.getPersonIdEigenschaftsauspraegungValue());
@@ -499,11 +452,12 @@ public class KontaktForm extends MainFrame {
 				hPanel.add(deleteTeilhaberschaftButton);
 
 			} else {
-				celltable.addColumn(wertEigenschaftColumn, "");
-				celltable.setColumnWidth(wertEigenschaftColumn, 7, Unit.EM);
-				celltable.addColumn(wertAuspraegungColumn, "");
-				celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
+				celltable.addColumn(wertEigenschaftColumn, "Eigenschaft");
+				celltable.setColumnWidth(wertEigenschaftColumn, 40, Unit.EM);
+				celltable.addColumn(wertAuspraegungColumn, "Wert");
+				celltable.setColumnWidth(wertAuspraegungColumn, 55, Unit.EM);
 				celltable.addColumn(iconColumn, "");
+				celltable.setColumnWidth(iconColumn, 5, Unit.PCT);
 				flextable.setWidget(15, 0, tableButtonPanel);
 
 			}

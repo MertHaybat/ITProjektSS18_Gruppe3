@@ -8,6 +8,7 @@ import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -112,7 +113,7 @@ public class AllKontaktView extends MainFrame {
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
-
+		Menubar mb = new Menubar();
 	}
 
 	public AllKontaktView(Kontaktliste k) {
@@ -133,14 +134,13 @@ public class AllKontaktView extends MainFrame {
 			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
 
 		}
+		Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
 		super.onLoad();
 	}
 
 	
 
 	public void run() {
-		
-		Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
 
 		allKontakteCellTable.setEmptyTableWidget(new Label("Diese Kontaktliste ist leer"));
 
@@ -152,7 +152,7 @@ public class AllKontaktView extends MainFrame {
 		iconColumn.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
 		allKontakteCellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		allKontakteCellTable.setColumnWidth(checkColumn, 1, Unit.PCT);
-		allKontakteCellTable.addColumn(kontaktnameColumn, "Kontaktname");
+		allKontakteCellTable.addColumn(kontaktnameColumn, "Nickname");
 		allKontakteCellTable.setColumnWidth(kontaktnameColumn, 100, Unit.PCT);
 		allKontakteCellTable.addColumn(iconColumn, "");
 		allKontakteCellTable.setColumnWidth(iconColumn, 1, Unit.PCT);
@@ -252,6 +252,21 @@ public class AllKontaktView extends MainFrame {
 			}
 		}
 	}
+	
+	public static class RenameKontaktlisteCommand implements Command {
+
+		@Override
+		public void execute() {
+			if (kontaktliste == null) {
+				Window.alert("Bitte wählen Sie eine Kontaktliste aus, in welche der  "
+						+ "neu zu erstellende Kontakt eingefügt werden soll!");
+			} else if (kontaktliste != null) {
+				CreateKontaktlisteDialogBox createKL = new CreateKontaktlisteDialogBox(kontaktliste);
+				createKL.center();
+			}
+		}
+		
+	}
 
 	class DeleteTeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
 
@@ -306,9 +321,7 @@ public class AllKontaktView extends MainFrame {
 		public void execute() {
 			ArrayList<Kontakt> selectedKontakteInCellTable = new ArrayList<Kontakt>();
 			selectedKontakteInCellTable = allKontakteSelectedArrayList;
-			if (selectedKontakteInCellTable.size() == 0) {
-				Window.alert("Es muss zuerst ein Kontakt ausgewählt werden!");
-			} else if (selectedKontakteInCellTable.size() == 1) {
+			if (selectedKontakteInCellTable.size() == 1) {
 				TeilhaberschaftDialogBox dialogBox = new TeilhaberschaftDialogBox(allKontakteSelectedArrayList);
 				dialogBox.center();
 			} else if (selectedKontakteInCellTable.size() > 1) {
@@ -343,13 +356,9 @@ public class AllKontaktView extends MainFrame {
 
 		@Override
 		public void execute() {
-			if (allKontakteSelectedArrayList.size() != 0) {
-				DeleteKontaktDialogBox db = new DeleteKontaktDialogBox(allKontakteSelectedArrayList);
-				db.center();
-			} 
-			else {
-				Window.alert("Es muss zuerst ein Kontakt ausgewählt werden!");
-			}
+			DeleteKontaktDialogBox db = new DeleteKontaktDialogBox(allKontakteSelectedArrayList);
+			db.center();
+
 		}
 	}
 
@@ -468,9 +477,9 @@ public class AllKontaktView extends MainFrame {
 				 */
 
 				if (clickedAt - initialClick < 300) {
-					allKontakteSelectedArrayList.add(event.getValue());
 					KontaktForm kf = new KontaktForm(event.getValue());
-
+					RootPanel.get("content").clear();
+					RootPanel.get("content").add(kf);
 				}
 
 				initialClick = System.currentTimeMillis();

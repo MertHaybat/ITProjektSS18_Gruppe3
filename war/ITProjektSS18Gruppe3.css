@@ -4,7 +4,7 @@ html {
 	background-image: url("/images/backgroundimg.jpg");
 	background-repeat: repeat;
 	background-size: cover;
-	font-family:
+	font-family: 'Encode Sans Condensed', cursive;
 }
 
 body {
@@ -40,14 +40,13 @@ body {
 }
 
 #headline {
-	font-size: 2.9em;
-	height: 45px;
+	font-size: 4em;
 	color: white;
-	font-family: 'Ubuntu', sans-serif;
-	font-weight: 700;
+	font-family: 'Encode Sans Condensed', cursive;
+	font-weight: 100;
 	padding: 15px;
-	text-shadow: 1.5px 1.5px grey;
-	letter-spacing: 0.01em;
+	text-shadow: 1px 1px cornflowerblue;
+	letter-spacing: 0.08em;
 }
 
 #logo {
@@ -156,7 +155,8 @@ body {
 #footer .footerPanel {
 	height: inherit;
 	float: right;
-	color: #3d3d3d;
+	color: aliceblue;
+	opacity: 0.75;
 }
 
 #footer .footerPanel table tbody tr td {
@@ -171,13 +171,13 @@ body {
 	font-weight: bold;
 	color: #535353;
 	text-align: center;
-	font-family: 'Kalam', bold;
+	font-family: 'Encode Sans Condensed', bold;
 	letter-spacing: 0.5px;
 }
 
 .landingPageLoginMessage {
-	margin-top: 20px;
-	font-family: 'Kalam', cursive;
+	margin-top: 40px;
+	font-family: 'Encode Sans Condensed', cursive;
 	text-align: center;
 	font-size: 1.8em;
 	color: #777777;
@@ -187,8 +187,17 @@ body {
 	font-size: 1.3em;
 	margin: 10px 0px 5px 10px;
 	color: #3d3d3d;
-	font-family: 'Kalam', cursive !important;
-	font-weight: 300;
+	font-family: 'Encode Sans Condensed', cursive !important;
+	font-weight: 500;
+	font-size: 1.5em;
+}
+
+.h3 {
+	font-size: 1.3em;
+	margin: 10px 0px 5px 0px;
+	color: #3d3d3d;
+	font-family: 'Encode Sans Condensed', cursive !important;
+	font-weight: 500;
 	font-size: 1.5em;
 }
 
@@ -212,10 +221,16 @@ body {
 	font-size: 1.7em;
 	font-weight: bold;
 	color: #494949;
-	margin-top: 10px;
+	margin-top: 20px;
 	margin-bottom: 10px;
 	text-align: center;
-	font-family: 'Kalam', cursive;
+	font-family: 'Encode Sans Condensed', cursive;
+}
+
+.teilhaberschaftLabel {
+	font-size: 1.2em;
+	font-family: 'Encode Sans Condensed', cursive !important;
+	font-weight: 400;
 }
 
 /** WIDGET & PANEL FORMATIERUNGEN*/
@@ -278,6 +293,29 @@ body {
 	margin: 2px auto;
 }
 
+.teilhaberschaftVerwaltungPanel {
+	width: 70%;
+	height: auto;
+	margin-left: 2em;
+	margin-top: 2em;
+}
+
+.teilhaberschaftVerwaltungPanel table {
+	width: 100%;
+}
+
+.kontaktFormPanel {
+	width: 40%;
+	height: auto;
+	margin-left: 2em;
+	margin-top: 2em;
+}
+
+.kontaktFormPanel table {
+	width: 100%;
+}
+
+
 /* REPORT GENERATOR FORMATIERUNG */
 .listbox-report {
 	position: relative;
@@ -295,7 +333,7 @@ body {
 /* BUTTON FORMATIERUNGEN */
 .impressumButton {
 	background: none;
-	color: #3d3d3d;
+	color: aliceblue;
 	border: none;
 	cursor: pointer;
 	text-decoration: underline;
@@ -322,7 +360,7 @@ body {
 	height: 25px;
 	width: 200px;
 	font-size: 1.1em;
-	margin-right: 15px;
+	margin-right: 25px;
 	float: right;
 	border: none !important;
 	box-shadow: 0px 0px 3px #96A1BD !important;
@@ -331,6 +369,21 @@ body {
 
 .searchTextBox:hover {
 	background-size: 12.5%;
+	box-shadow: 0px 0px 8px #96A1BD !important;
+}
+
+.kontaktFormTextBox {
+	background-color white;
+	height: 25px;
+	width: 200px;
+	font-size: 1.1em;
+	margin-right: 25px;
+	float: left;
+	border: none !important;
+	box-shadow: 0px 0px 3px #96A1BD !important;
+}
+
+.kontaktFormTextBox:hover {
 	box-shadow: 0px 0px 8px #96A1BD !important;
 }
 
@@ -381,7 +434,7 @@ body {
 	font-family: 'Ubuntu', sans-serif;
 	padding: 8px 0px 8px 0px;
 	text-align: center;
-	margin-top: 5%;
+	margin-top: 4.5%;
 	opacity: 0.7;
 }
 
@@ -507,6 +560,7 @@ body {
 	background-repeat: no-repeat;
 	background-position: right;
 	background-size: 15px;
+	background-position-x: 96%;
 }
 
 .menuBarAlignRight {
@@ -520,7 +574,7 @@ body {
 }
 
 .gwt-MenuBar {
-   cursor: default;  
+   cursor: pointer !important;
 }
 
 .gwt-MenuBar .gwt-MenuItem {
@@ -541,7 +595,7 @@ body {
 }
 
 .gwt-MenuBar-horizontal .gwt-MenuItem {
-   padding: 5px 14px !important;
+   padding: 5px 17px !important;
    vertical-align: bottom;
    color: #494949;
    line-height: 25px;
@@ -597,4 +651,13 @@ body {
 
 .gwt-MenuBar-vertical .subMenuIcon-selected {
    background: #E3E8F3;
+}
+
+.disabledMenuBar {
+   padding: 5px 40px 5px 5px !important;
+   font-family: 'Ubuntu', sans-serif !important;
+   font-weight: 300 !important;
+   font-size: 14px;
+   color: #d9d9d9!important;
+   cursor: default !important;
 }

@@ -5,10 +5,12 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 
+import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftEigenschaftAuspraegungWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktWrapper;
 import de.hdm.itprojektss18Gruppe3.client.NutzerTeilhaberschaftKontaktlisteWrapper;
 import de.hdm.itprojektss18Gruppe3.client.gui.CellTableTeilhaberschaftKontakt.PreviewClickHander;
@@ -26,7 +28,12 @@ public class CellTableTeilhaberschaftKontaktliste extends CellTable <NutzerTeilh
 			DefaultSelectionEventManager.createCheckboxManager();
 
 	public CellTableTeilhaberschaftKontaktliste (){
+		this.setEmptyTableWidget(new Label("Keine Teilhaberschaften vorhanden"));
 		run();
+	}
+	
+	public MultiSelectionModel<NutzerTeilhaberschaftKontaktlisteWrapper> getSelectionModel() {
+		return ssmAuspraegung;
 	}
 
 	private void run() {

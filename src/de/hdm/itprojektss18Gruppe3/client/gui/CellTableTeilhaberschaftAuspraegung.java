@@ -4,6 +4,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -26,14 +27,20 @@ public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilha
 		= new MultiSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>();
 	private final Handler<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
-	
-	
+
 	public CellTableTeilhaberschaftAuspraegung(){
 		run();
 	}
+	
+	public MultiSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> getSelectionModel() {
+		return ssmAuspraegung;
+	}
+	
 	public void run(){
+		this.setEmptyTableWidget(new Label("Keine Teilhaberschaften vorhanden"));
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
 		this.addCellPreviewHandler(new PreviewClickHander());
+		
 	}
 	
 	public class TeilhaberschaftNutzer extends Column <NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>{
@@ -94,7 +101,7 @@ public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilha
 		public Boolean getValue(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper object) {
 			return ssmAuspraegung.isSelected(object);
 		}
-		
+	
 	}
 	public class PreviewClickHander implements Handler<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> {
 		@Override

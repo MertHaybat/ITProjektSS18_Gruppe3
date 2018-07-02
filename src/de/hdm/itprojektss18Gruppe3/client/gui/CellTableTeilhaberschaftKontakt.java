@@ -4,6 +4,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -26,8 +27,13 @@ public class CellTableTeilhaberschaftKontakt extends CellTable<NutzerTeilhabersc
 			DefaultSelectionEventManager.createCheckboxManager();
 	
 	public CellTableTeilhaberschaftKontakt(){
+		this.setEmptyTableWidget(new Label("Keine Teilhaberschaften vorhanden"));
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
 		this.addCellPreviewHandler(new PreviewClickHander());
+	}
+	
+	public MultiSelectionModel<NutzerTeilhaberschaftKontaktWrapper> getSelectionModel() {
+		return ssmAuspraegung;
 	}
 	
 	public class TeilhaberschaftNutzer extends Column<NutzerTeilhaberschaftKontaktWrapper, String>{
