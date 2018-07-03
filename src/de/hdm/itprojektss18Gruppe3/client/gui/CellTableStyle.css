@@ -1,6 +1,6 @@
 .cellTableWidget {
   overflow: scroll;
-  width: 120%;
+  width: auto;
 }
 .cellTableFirstColumn {
   
@@ -17,19 +17,21 @@
   overflow: hidden;
 }
 .cellTableHeader {
-  border-bottom: 1.3px solid #2a2a2a;
-  padding: 3px 15px;
-  font-size: 1.3em;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 1px 15px;
+  font-size: 1.15em;
   text-align: left;
-  color: #484848;
+  color: #3b3b3b;
   overflow: hidden;
+  font-weight: 100;
+  text-shadow: none;
 }
 .cellTableCell {
   padding: 2px 15px;
   overflow: hidden;
-  height: 30px;
+  height: 25px;
   font-size: 1.1em;
-  color: black;
+  color: #3b3b3b;
 }
 .cellTableFirstColumnFooter {
   
@@ -48,7 +50,8 @@
   cursor: hand;
 }
 .cellTableSortableHeader:hover {
-  color: #6c6b6b;
+  color: black;
+ transform: scale(1.1);
 }
 .cellTableSortedHeaderAscending {
 }
@@ -56,41 +59,52 @@
 }
 .cellTableOddRow {
   background: #ffffff;
+    border: selectionBorderWidth solid #ffffff;
 }
 .cellTableOddRowCell {
-  border: selectionBorderWidth solid #ffffff;
+
 }
 .cellTableEvenRow {
   background: #f3f7fb;
+  border: selectionBorderWidth solid #f3f7fb;
 }
 .cellTableEvenRowCell {
-  border: selectionBorderWidth solid #f3f7fb;
+
 }
 .cellTableHoveredRow {
   background: #eee;
+ transform: scale(1.01);
 }
 .cellTableHoveredRowCell {
   border: selectionBorderWidth solid #eee;
 }
 .cellTableKeyboardSelectedRow {
   background: #cceeff;
+  border: 1px solid #cceeff !important;
 }
 .cellTableKeyboardSelectedRowCell {
-  border: selectionBorderWidth solid #cceeff;
+  border: 1px solid #cceeff !important;
 }
 .cellTableSelectedRow {
   background: #80bfff;
-  color: white;
   height: auto;
   overflow: auto;
+  border: selectionBorderWidth solid #80bfff;
 }
+
+.cellTableSelectedRow:hover {
+ transform: scale(1.01);
+	}
+	
 .cellTableSelectedRowCell {
+  border: 1px solid #80bfff !important;
 }
 /**
  * The keyboard selected cell is visible over selection.
  */
 .cellTableKeyboardSelectedCell {
 }
+
 .cellTableLoading {
   margin: 30px;
 }

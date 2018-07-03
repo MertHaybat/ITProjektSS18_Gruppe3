@@ -121,6 +121,7 @@ body {
 	border: 2px solid black;
 	background-color: rgba(255, 255, 255, 0.7);
 	box-shadow: 3px 2px 2px grey;
+	overflow: auto;
 }
 
 .kontaktDecoratorPanel {
@@ -314,6 +315,10 @@ body {
 	width: 100%;
 }
 
+.buttonPanelBox {
+	margin: auto auto;
+}
+
 .buttonPanelBox table tbody tr td:last-child {
 	width: inherit;
 	margin: auto auto;
@@ -472,6 +477,10 @@ body {
 	transform: scale(1.1);
 }
 
+.centerTextDialogBox {
+	text-align: center;
+}
+
 /* .GWT WIDGET FORMATIERUNGEN */
 
 .gwt-DialogBox .Caption {
@@ -504,7 +513,6 @@ body {
 .gwt-DialogBox .dialogMiddleCenterInner table tbody tr {
 	display: table;
 	margin: auto auto;
-	width: 100%;
 }
 
 .gwt-DialogBox .dialogMiddleCenterInner table tbody tr:last-child {
@@ -538,10 +546,18 @@ body {
 	margin-left: 20px;
 	display: inline-block;
 	vertical-align: baseline;
+	background-color white;
+	height: auto;
+	width: auto;
+	font-size: 1.1em;
+	border: none !important;
+	box-shadow: 0px 0px 3px #96A1BD !important;
 }
 
-.serverResponseLabelError {
-	color: red;
+.gwt-SuggestBoxPopup {
+    background-color: white;
+    border-radius: 8px;
+
 }
 
 .reportButton {
@@ -680,10 +696,4 @@ body {
    font-size: 14px;
    color: #d9d9d9!important;
    cursor: default !important;
-}
-
-.com-google-gwt-user-cellview-client-CellTable-Style-cellTableHeader {
-	text-shadow: none !important;
-	border-bottom: 1px solid #6f7277 !important;
-	color: #615f5f!important;
 }

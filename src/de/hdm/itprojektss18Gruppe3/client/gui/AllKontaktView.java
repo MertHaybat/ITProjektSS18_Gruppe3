@@ -9,6 +9,7 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -57,17 +58,17 @@ public class AllKontaktView extends MainFrame {
 	 */
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
-	
+
 	/**
 	 * Instanziierung der GUI Elemente: VerticalPanel, HorizontalPanel, Button, Anchor, HTML und CheckboxCell
 	 */
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel allKontakteCellTableContainer = new HorizontalPanel();
-	
+
 	private Button teilhaberschaftButton = new Button("Teilhaberschaft löschen");
-	
+
 	private Anchor signOutLink = new Anchor();
-	
+
 	private HTML headline = new HTML();
 	private CheckboxCell checkBoxCell = new CheckboxCell(true, false);
 
@@ -93,7 +94,7 @@ public class AllKontaktView extends MainFrame {
 	private ButtonCell buttonCell = new ButtonCell();
 	private TextCell textCell = new TextCell();
 	private ClickableTextCell clickCell = new ClickableTextCell();
-	
+
 	/**
 	 * Instanziierung des CellTables, welches verwendet wird. Damit auch die Columns, die als Innere Klasse in der CellTable Klasse sind.
 	 */
@@ -138,7 +139,7 @@ public class AllKontaktView extends MainFrame {
 		super.onLoad();
 	}
 
-	
+
 
 	public void run() {
 
@@ -252,7 +253,7 @@ public class AllKontaktView extends MainFrame {
 			}
 		}
 	}
-	
+
 	public static class RenameKontaktlisteCommand implements Command {
 
 		@Override
@@ -265,7 +266,7 @@ public class AllKontaktView extends MainFrame {
 				createKL.center();
 			}
 		}
-		
+
 	}
 
 	class DeleteTeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
@@ -366,11 +367,11 @@ public class AllKontaktView extends MainFrame {
 		private VerticalPanel vPanel = new VerticalPanel();
 		private VerticalPanel hPanel = new VerticalPanel();
 		private HorizontalPanel buttonPanel = new HorizontalPanel();
-		private Label abfrage = new Label("Soll dieser Kontakt wirklich gelöscht und aus allen Kontaktlisten"
-				+ " entfernt werden?");
+		private ArrayList<Kontakt> kontakt = new ArrayList<>();
+		private Label abfrageLöschung = null;
 		private Button jaButton = new Button("Löschen");
 		private Button neinButton = new Button("Abbrechen");
-		private ArrayList<Kontakt> kontakt = new ArrayList<>();
+
 
 		public DeleteKontaktDialogBox(ArrayList<Kontakt> k) {
 			kontakt = k;
@@ -378,11 +379,23 @@ public class AllKontaktView extends MainFrame {
 			neinButton.addClickHandler(new AbortDeleteClickHandler());
 			buttonPanel.add(jaButton);
 			buttonPanel.add(neinButton);
-			hPanel.add(abfrage);
+			buttonPanel.setStylePrimaryName("buttonPanelBox");
+
+			if(k.size() == 1) {
+				abfrageLöschung = new Label("Soll der Kontakt " + k.get(0).getName() + " wirklich gelöscht werden?");
+				hPanel.add(abfrageLöschung);
+				this.setText("Kontakt löschen");
+			} else if (k.size() > 1) {
+				abfrageLöschung = new Label("Sollen die " + k.size() + " ausgewählten Kontakte wirklich gelöscht werden?");
+				hPanel.add(abfrageLöschung);
+				this.setText("Kontakte löschen");
+			}
+
+			abfrageLöschung.setStylePrimaryName("centerTextDialogBox");
 			hPanel.add(new HTML("<br>"));
 			hPanel.add(buttonPanel);
 			vPanel.add(hPanel);
-			this.setText("Kontakt löschen");
+
 			this.add(vPanel);
 			this.setGlassEnabled(true);
 			this.setAnimationEnabled(true);
@@ -450,7 +463,7 @@ public class AllKontaktView extends MainFrame {
 		public void onSelectionChange(SelectionChangeEvent event) {
 			allKontakteSelectedArrayList.clear();
 			allKontakteSelectedArrayList
-					.addAll(((MultiSelectionModel<Kontakt>) allKontakteCellTable.getSsmAuspraegung()).getSelectedSet());
+			.addAll(((MultiSelectionModel<Kontakt>) allKontakteCellTable.getSsmAuspraegung()).getSelectedSet());
 
 			Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
 		}
@@ -477,8 +490,8 @@ public class AllKontaktView extends MainFrame {
 
 				if (clickedAt - initialClick < 300) {
 					KontaktForm kf = new KontaktForm(event.getValue());
-//					RootPanel.get("content").clear();
-//					RootPanel.get("content").add(kf);
+					//					RootPanel.get("content").clear();
+					//					RootPanel.get("content").add(kf);
 				}
 
 				initialClick = System.currentTimeMillis();

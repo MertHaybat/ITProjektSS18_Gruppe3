@@ -185,19 +185,16 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 			if(selectionKontaktAuspraegung.getSelectedSet().size() > 0) {
 				for(NutzerTeilhaberschaftKontaktWrapper t : selectionKontaktAuspraegung.getSelectedSet()) {
 					kontaktmanagerVerwaltung.deleteTeilhaberschaftByID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
-					t.getKontakt().setStatus(0);
 				}
 			}
 			if(selectionEigenschaftAuspraegung.getSelectedSet().size() > 0) {
 				for(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper t : selectionEigenschaftAuspraegung.getSelectedSet()) {
 					kontaktmanagerVerwaltung.deleteTeilhaberschaftByEigenschaftsauspraegungID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
-					t.getEigenschaftsauspraegung().setStatus(0);
 				}
 			}
 			if(selectionKontaktlisteAuspraegung.getSelectedSet().size() > 0) {
 				for(NutzerTeilhaberschaftKontaktlisteWrapper t : selectionKontaktlisteAuspraegung.getSelectedSet()) {
 					kontaktmanagerVerwaltung.deleteTeilhaberschaftByKontaktlisteID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
-					t.getKontaktliste().setStatus(0);
 				}
 			}
 

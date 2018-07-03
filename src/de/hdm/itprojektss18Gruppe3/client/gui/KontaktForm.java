@@ -136,9 +136,6 @@ public class KontaktForm extends MainFrame {
 
 	public KontaktForm(Kontakt kontakt) {
 		k = kontakt;
-		Window.alert("kotakt" + kontakt.getId());
-//		hPanel.add(zurueckZuAllKontaktView);
-//		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
 		kontaktNameBox.setValue(kontakt.getName());
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
@@ -154,13 +151,9 @@ public class KontaktForm extends MainFrame {
 	}
 
 	public void run() {
-
+		celltable.setWidth("130%");
 		kontaktNameBox.addKeyPressHandler(new KontaktTextBoxKeyPressHandler());
 		headline.setStylePrimaryName("h3");
-		hPanel.add(zurueckZuAllKontaktView);
-
-		// celltable.setSelectionModel(celltable.getSelectionModel());
-
 		kontaktNameLabel.setStylePrimaryName("kontaktFormText");
 		kontaktNameBox.setStylePrimaryName("kontaktFormTextBox");
 		kontaktLabelkontaktName.add(kontaktNameLabel);
@@ -169,11 +162,12 @@ public class KontaktForm extends MainFrame {
 		vPanel.add(headline);
 		vPanel.add(new HTML("<br><br>"));
 		vPanel.add(kontaktLabelkontaktName);
-		vPanel.add(new HTML("<br>"));
+		vPanel.add(new HTML("<br><br>"));
 		vPanel.add(celltable);
 		vPanel.add(new HTML("<br>"));		
 		vPanel.setStylePrimaryName("kontaktFormPanel");
 		vPanel2.setStylePrimaryName("kontaktFormPanel");
+		vPanel3.setStylePrimaryName("kontaktFormPanel");
 
 		this.add(vPanel);
 		this.add(vPanel3);
@@ -366,7 +360,7 @@ public class KontaktForm extends MainFrame {
 					vPanel3.clear();
 				}
 			};
-			timer.schedule(1000);
+			timer.schedule(3000);
 
 		}
 

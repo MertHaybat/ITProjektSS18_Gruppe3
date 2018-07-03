@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -120,12 +121,14 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
 		hPanel.add(sichern);
 		hPanel.add(abbrechen);
-		flextable1.setWidget(0, 0, abfrage);
-		flextable1.setWidget(1, 0, box);
-		flextable1.setWidget(2, 0, selectedNutzerCT);
-		flextable1.setWidget(3, 0, hPanel);
+		hPanel.setStylePrimaryName("buttonPanelBox");
+		vPanel.add(abfrage);
+		vPanel.add(new HTML("<br>"));
+		vPanel.add(box);
+		vPanel.add(new HTML("<br>"));
+		vPanel.add(selectedNutzerCT);
 
-		vPanel.add(flextable1);
+		vPanel.add(hPanel);
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		box.setStylePrimaryName("gwt-SuggestBox");
 		sichern.setStylePrimaryName("mainButton");
