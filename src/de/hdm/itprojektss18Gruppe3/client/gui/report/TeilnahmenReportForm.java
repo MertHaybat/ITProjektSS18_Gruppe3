@@ -58,7 +58,7 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 	private List<Nutzer> nutzerSuggestbox = new ArrayList<>();
 	private CellTable<Nutzer> selectedNutzerCT = new CellTable<Nutzer>();
 	private ListDataProvider<Nutzer> nutzerDataProvider = new ListDataProvider<Nutzer>(nutzerSuggestbox);
-	private Nutzer nutzerausdb = null;
+
 
 	private Label lbTeilhabender = new Label("Teilhaber: ");
 
@@ -68,19 +68,9 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 
 		reportverwaltung.findNutzer(new NutzerForTeilhaberschaftCallback());
 
-//		lbNutzerEigentuemer.setVisibleItemCount(1);
-//		lbNutzerTeilhabender.setVisibleItemCount(1);
-//
-//		lbNutzerTeilhabender.setStylePrimaryName("listbox-report");
-//		lbNutzerEigentuemer.setStylePrimaryName("listbox-report");
 		btAllKontaktTeilhaberschaften.setStylePrimaryName("reportButton");
-//		lbNutzerTeilhabender.addItem("Alle");
 
-//		this.add(lbEigentuemer);
-//		this.add(lbNutzerEigentuemer);
-//		this.add(boxEigentümer);
 		this.add(lbTeilhabender);
-//		this.add(lbNutzerTeilhabender);
 		this.add(boxTeilhabender);
 		this.add(btAllKontaktTeilhaberschaften);
 
@@ -88,130 +78,12 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 
 		btAllKontaktTeilhaberschaften.addClickHandler(new AllKontaktTeilhaberschaftenClickHandler());
 
-		Column<Nutzer, String> nutzertxtColumn = new Column<Nutzer, String>(new TextCell()) {
-
-			@Override
-			public String getValue(Nutzer object) {
-				return object.getMail();
-			}
-		};
-		Column<Nutzer, String> buttonColumn1 = new Column<Nutzer, String>(new ButtonCell()) {
-			@Override
-			public String getValue(Nutzer x) {
-				return "x";
-
-			}
-
-			@Override
-			public void onBrowserEvent(Context context, Element elem, Nutzer object, NativeEvent event) {
-				super.onBrowserEvent(context, elem, object, event);
-				if (event.getButton() == NativeEvent.BUTTON_LEFT) {
-					nutzerDataProvider.getList().remove(object);
-					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
-					selectedNutzerCT.redraw();
-				}
-			}
-		};
-
-//		oracleNutzerTeilhabender.add("Alle");
-//		boxEigentümer.setStylePrimaryName("gwt-SuggestBox");
 		boxTeilhabender.setStylePrimaryName("gwt-SuggestBox");
-//		reportverwaltung.findNutzer(new getNutzerCallback());
-//		boxEigentümer.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
-//		boxTeilhabender.addKeyPressHandler(new NutzerTeilhabenderHinzufuegenKeyPressHandler());
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
 
 		this.add(vpanel);
 
 	}
-
-	public class FindNutzerByEmail implements AsyncCallback<Nutzer> {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onSuccess(Nutzer result) {
-			nutzerausdb = result;
-
-		}
-
-	}
-
-//	public class NutzerHinzufuegenKeyPressHandler implements KeyPressHandler {
-//
-//		@Override
-//		public void onKeyPress(KeyPressEvent event) {
-//			// TODO Auto-generated method stub
-//			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-//				if (boxEigentümer.getValue() == "") {
-//					// Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
-//				} else {
-//
-//					Nutzer nutzer = new Nutzer();
-//					nutzer.setMail(boxEigentümer.getValue());
-//
-//					nutzerSuggestbox.add(nutzer);
-//					boxEigentümer.setValue("");
-//					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-//					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
-//				}
-//			}
-//
-//		}
-//
-//	}
-
-	public class NutzerTeilhabenderHinzufuegenKeyPressHandler implements KeyPressHandler {
-
-		@Override
-		public void onKeyPress(KeyPressEvent event) {
-			// TODO Auto-generated method stub
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-				if (boxTeilhabender.getValue() == "") {
-					// Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
-				} else {
-
-					Nutzer nutzer = new Nutzer();
-					nutzer.setMail(boxTeilhabender.getValue());
-
-					nutzerSuggestbox.add(nutzer);
-					boxTeilhabender.setValue("");
-					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
-				}
-			}
-
-		}
-
-	}
-
-//	class getNutzerCallback implements AsyncCallback<Vector<Nutzer>> {
-//
-//		@Override
-//		public void onFailure(Throwable caught) {
-//			// TODO Auto-generated method stub
-//
-//		}
-//
-//		@Override
-//		public void onSuccess(Vector<Nutzer> result) {
-//			for (Nutzer nutzer : result) {
-//				nutzerListe.add(nutzer);
-//
-//			}
-//			for (Nutzer nutzer : nutzerListe) {
-////				oracleNutzerEigentümer.add(nutzer.getMail());
-//				oracleNutzerTeilhabender.add(nutzer.getMail());
-//
-//			}
-//		}
-//
-//	}
 
 	class NutzerForTeilhaberschaftCallback implements AsyncCallback<Vector<Nutzer>> {
 
@@ -224,7 +96,6 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 		public void onSuccess(Vector<Nutzer> result) {
 			// TODO
 			for (Nutzer nutzer : result) {
-//				oracleNutzerEigentümer.add(nutzer.getMail());
 				oracleNutzerTeilhabender.add(nutzer.getMail());
 			}
 		}
@@ -235,52 +106,18 @@ public class TeilnahmenReportForm extends HorizontalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			vpanel.clear();
-			Nutzer nutzer = new Nutzer();
-			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-			nutzer.setMail(Cookies.getCookie("email"));
-			vpanel.add(new AllKontaktTeilhaberschaften(nutzer.getMail(), boxTeilhabender.getValue()));
-			RootPanel.get("contentReport").add(vpanel);
-//			if (boxTeilhabender.getValue() == "Allen") {
-//
-//				vpanel.clear();
-//				for (Nutzer nutzer : nutzerListe) {
-//
-//					vpanel.add(new AllKontaktTeilhaberschaften(boxEigentümer.getValue(), nutzer.getMail()));
-//
-//					RootPanel.get("contentReport").add(vpanel);
-//				}
-//			} else {
-//				if (boxEigentümer.getValue() == null) {
-//					Window.alert("Für diesen Nutzer liegen keine gespeicherten Teilhaberschaften vor.");
-//
-//				} else {
-//					if (boxTeilhabender.getValue() == null) {
-//						Window.alert("Für diesen Nutzer liegen keine gespeicherten Teilhaberschaften vor.");
-//					} else {
-//						vpanel.clear();
-//						vpanel.add(
-//								new AllKontaktTeilhaberschaften(boxEigentümer.getValue(), boxTeilhabender.getValue()));
-//						RootPanel.get("contentReport").add(vpanel);
-//
-//					}
-//				}
-//			}
+			if(boxTeilhabender.getValue().equals("")){
+				Window.alert("Bitte geben Sie eine E-Mail Adresse ein.");
+			} else {
+				
+				vpanel.clear();
+				Nutzer nutzer = new Nutzer();
+				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+				nutzer.setMail(Cookies.getCookie("email"));
+				vpanel.add(new AllKontaktTeilhaberschaften(nutzer.getMail(), boxTeilhabender.getValue()));
+				RootPanel.get("contentReport").add(vpanel);
+			}
 
 		}
 	}
 }
-
-// if (lbNutzerTeilhabender.getSelectedValue() == "Alle") {
-// vpanel.add();
-//
-// }
-// vpanel.add(new
-// AllKontaktTeilhaberschaften(lbNutzerEigentuemer.getSelectedValue(),
-// lbNutzerTeilhabender.getSelectedValue()));
-// RootPanel.get("contentReport").add(vpanel);
-//
-// }
-//
-// }
-// }

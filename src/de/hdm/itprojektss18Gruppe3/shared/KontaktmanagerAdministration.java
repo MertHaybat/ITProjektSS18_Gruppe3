@@ -786,6 +786,12 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	Vector<Kontakt> findAllKontakteEigenschaftAuspraegung(Nutzer nutzer, Eigenschaft eigenschaft,
-			Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException; 
+			Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException;
+
+	Vector<Teilhaberschaft> findAllTeilhaberschaftByKontaktliste(int kontaktlisteID) throws IllegalArgumentException;
+
+	Vector<Teilhaberschaft> findAllTeilhaberschaftByAuspraegung(int auspraegungID) throws IllegalArgumentException;
+
+	Vector<EigenschaftsAuspraegungWrapper> findAllEigenschaftsauspraegungWrapper(Nutzer nutzer, Kontakt kontakt); 
 
 }

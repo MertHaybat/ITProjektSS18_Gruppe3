@@ -24,16 +24,16 @@ public class ReportSelectMenu extends FlowPanel {
 			.getKontaktVerwaltung();
 
 	private LoginInfo loginInfo = null;
-	private Button bt1 = new Button("Alle Kontakte Report");
-	private Button bt2 = new Button("Alle Teilhaberschaften Report");
-	private Button bt3 = new Button("Alle Eigenschaften Report");
+	private Button bt1 = new Button("Alle Kontakte");
+	private Button bt2 = new Button("Alle Teilhaberschaften");
+	private Button bt3 = new Button("Alle Eigenschaften");
 	private Button logoutButton = new Button("Logout");
 	private Anchor signInLink = new Anchor();
 	private Anchor signOutLink = new Anchor("Sign Out");
 
 	public ReportSelectMenu() {
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
-		loginService.login(GWT.getHostPageBaseURL() + "ITProjektSS18Gruppe3.html", new LoginCallback());
+		loginService.login(GWT.getHostPageBaseURL() + "KontaktmanagerReport.html", new LoginCallback());
 
 		bt1.addClickHandler(new reportEinsClickHandler());
 		bt1.setStylePrimaryName("mainButton");

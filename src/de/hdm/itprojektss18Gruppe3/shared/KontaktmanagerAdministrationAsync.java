@@ -221,6 +221,13 @@ public interface KontaktmanagerAdministrationAsync {
 	void findAllKontakteEigenschaftAuspraegung(Nutzer nutzer, Eigenschaft eigenschaft,
 			Eigenschaftsauspraegung auspraegung, AsyncCallback<Vector<Kontakt>> callback);
 
+	void findAllTeilhaberschaftByKontaktliste(int kontaktlisteID, AsyncCallback<Vector<Teilhaberschaft>> callback);
+
+	void findAllTeilhaberschaftByAuspraegung(int auspraegungID, AsyncCallback<Vector<Teilhaberschaft>> callback);
+
+	void findAllEigenschaftsauspraegungWrapper(Nutzer nutzer, Kontakt kontakt,
+			AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> callback);
+
 	
 	
 }
