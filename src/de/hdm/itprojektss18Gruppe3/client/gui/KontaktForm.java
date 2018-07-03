@@ -22,6 +22,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -69,10 +70,9 @@ public class KontaktForm extends MainFrame {
 
 	private Eigenschaftsauspraegung auspraegung = new Eigenschaftsauspraegung();
 	private Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
-	private Kontakt k = null;
-	private Kontaktliste kontaktliste = null;
+	private static Kontakt k = null;
+	private static Kontaktliste kontaktliste = null;
 
-	private Button addAuspraegung = new Button("Eigenschaft hinzufügen");
 	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
 	private Button deleteTeilhaberschaftButton = new Button("Teilhaberschaft löschen");
 
@@ -155,7 +155,6 @@ public class KontaktForm extends MainFrame {
 	public void run() {
 
 		kontaktNameBox.addKeyPressHandler(new KontaktTextBoxKeyPressHandler());
-		addAuspraegung.addClickHandler(new CreateEigenschaftAuspraegungClickHandler());
 		headline.setStylePrimaryName("h3");
 		hPanel.add(zurueckZuAllKontaktView);
 
@@ -165,8 +164,6 @@ public class KontaktForm extends MainFrame {
 		kontaktNameBox.setStylePrimaryName("kontaktFormTextBox");
 		kontaktLabelkontaktName.add(kontaktNameLabel);
 		kontaktLabelkontaktName.add(kontaktNameBox);
-		tableButtonPanel.add(addAuspraegung);
-		addAuspraegung.setStylePrimaryName("mainButton");
 
 		vPanel.add(headline);
 		vPanel.add(new HTML("<br><br>"));
@@ -174,7 +171,6 @@ public class KontaktForm extends MainFrame {
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(celltable);
 		vPanel.add(new HTML("<br>"));		
-		vPanel.add(addAuspraegung);
 		vPanel.setStylePrimaryName("kontaktFormPanel");
 		vPanel2.setStylePrimaryName("kontaktFormPanel");
 
@@ -318,10 +314,10 @@ public class KontaktForm extends MainFrame {
 
 	}
 
-	public class CreateEigenschaftAuspraegungClickHandler implements ClickHandler {
+	public static class CreateEigenschaftAuspraegungCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
 			CreateEigenschaftsauspraegungDialogBox dialogbox = new CreateEigenschaftsauspraegungDialogBox(k,
 					kontaktliste);
 			dialogbox.center();

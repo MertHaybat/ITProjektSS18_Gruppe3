@@ -53,6 +53,9 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 	public DeleteKontaktlisteDialogBox(Kontaktliste kontaktlisteToDelete) {
 		this.kontaktlisteToDelete = kontaktlisteToDelete;
 		this.setText("Kontaktliste löschen");
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
 		infoLabel = new HTML("Möchten Sie die Kontaktliste " + kontaktlisteToDelete.getBezeichnung() + " wirklich löschen?<br><br>");
 		flextable1.setWidget(0, 0, deleteButton);
 		flextable1.setWidget(0, 1, abortButton);

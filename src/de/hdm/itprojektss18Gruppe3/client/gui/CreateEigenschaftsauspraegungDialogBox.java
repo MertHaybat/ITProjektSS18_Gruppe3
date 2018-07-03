@@ -57,14 +57,14 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 		/**
 		 * Struktur des linken VerticalPanels über FlexTables 
 		 */
-		flextable1.setWidget(0, 0, eigenschaftLabel);
 		flextable1.setWidget(1, 0, tbEigenschaft);
-		flextable1.setWidget(0, 3, auspraegungLabel);
+		tbEigenschaft.getElement().setPropertyString("placeholder", " Eigenschaft");
 		flextable1.setWidget(1, 3, tbEigenschaftsauspraegung);
-		flextable1.setWidget(3, 0, hPanel);
-
+		tbEigenschaftsauspraegung.getElement().setPropertyString("placeholder", " Ausprägung");
 
 		vPanel.add(flextable1);
+		hPanel.setStylePrimaryName("buttonPanelBox");
+		vPanel.add(hPanel);
 		this.add(vPanel);
 
 		/**
@@ -76,6 +76,11 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 		//CSS Style für die Buttons übernehmen
 		erstellen.setStylePrimaryName("mainButton");
 		abbrechen.setStylePrimaryName("mainButton");
+		
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
+		this.setText("Neue Kontakteigenschaft erstellen");
 		
 	}
 

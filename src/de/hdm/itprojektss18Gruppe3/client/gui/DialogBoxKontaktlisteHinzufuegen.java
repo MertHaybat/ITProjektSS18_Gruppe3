@@ -81,6 +81,11 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 		 * Fall, so wird ihm der Hinweis angezeigt, dass die gewünschte Aktion nicht möglich ist.
 		 */	
 		public void run() {
+			this.setGlassEnabled(true);
+			this.setAnimationEnabled(true);
+			this.setAutoHideEnabled(true);
+			this.setText("Kontakt zur Kontaktliste hinzufügen");
+			kontaktliste.setWidth("100%");
 			if(allKontaktlistenResult.size() > 0) {
 			Column<Kontaktliste, String> kontaktnameColumn = new Column<Kontaktliste, String>(new TextCell()) {
 				@Override

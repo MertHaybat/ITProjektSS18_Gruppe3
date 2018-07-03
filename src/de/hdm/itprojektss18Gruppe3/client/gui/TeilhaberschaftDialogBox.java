@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -131,15 +132,20 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	}
 
 	public void run() {
-		setText("Wählen Sie die zu teilenden Eigenschaften aus sowie die Person, mit der Sie den Kontakt teilen möchten");
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
+		
+		this.setText("Kontakt/Kontakteigenschaften teilen");
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
 		ftTeilhaberschaft.setWidget(1, 0, kt);
-		ftTeilhaberschaft.setWidget(2, 0, kontaktTeilenCB);
-		ftTeilhaberschaft.setWidget(3, 0, lb2);
-		ftTeilhaberschaft.setWidget(4, 0, box);
-		ftTeilhaberschaft.setWidget(5, 0, selectedNutzerCT);
-		ftTeilhaberschaft.setWidget(6, 1, b1);
-		ftTeilhaberschaft.setWidget(6, 2, b2);
+		ftTeilhaberschaft.setWidget(2, 0, new HTML("<br>"));
+		ftTeilhaberschaft.setWidget(3, 0, kontaktTeilenCB);
+		ftTeilhaberschaft.setWidget(4, 0, lb2);
+		ftTeilhaberschaft.setWidget(5, 0, box);
+		ftTeilhaberschaft.setWidget(6, 0, selectedNutzerCT);
+		ftTeilhaberschaft.setWidget(7, 1, b1);
+		ftTeilhaberschaft.setWidget(7, 2, b2);
 
 		kontaktmanagerVerwaltung.findAllNutzer(new getAllNutzerCallback());
 

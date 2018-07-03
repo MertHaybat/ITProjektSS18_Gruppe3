@@ -114,6 +114,9 @@ public class AllKontaktView extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
 		Menubar mb = new Menubar();
+		CustomTreeModel ctm = new CustomTreeModel();
+		RootPanel.get("leftmenutree").clear();
+		RootPanel.get("leftmenutree").add(ctm);
 	}
 
 	public AllKontaktView(Kontaktliste k) {
@@ -382,9 +385,11 @@ public class AllKontaktView extends MainFrame {
 			hPanel.add(new HTML("<br>"));
 			hPanel.add(buttonPanel);
 			vPanel.add(hPanel);
-			this.setTitle("Kontakt löschen");
+			this.setText("Kontakt löschen");
 			this.add(vPanel);
 			this.setGlassEnabled(true);
+			this.setAnimationEnabled(true);
+			this.setAutoHideEnabled(true);
 		}
 
 		public class AbortDeleteClickHandler implements ClickHandler {
@@ -419,9 +424,6 @@ public class AllKontaktView extends MainFrame {
 				Window.alert("Der Kontakt wurde erfolgreich gelöscht.");
 				hide();
 				AllKontaktView akw = new AllKontaktView();
-				CustomTreeModel ctm = new CustomTreeModel();
-				RootPanel.get("leftmenutree").clear();
-				RootPanel.get("leftmenutree").add(ctm);
 			}
 		}
 	}

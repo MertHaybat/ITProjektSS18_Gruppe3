@@ -73,7 +73,9 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		flextable1.setWidget(0, 0, bBestaetigen);
 		flextable1.setWidget(0, 1, bAbbrechen);
 		vPanel.add(flextable1);
-		setGlassEnabled(true);
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
 		
 		vPanel.add(hPanel1);
 		vPanel.add(hPanel2);
@@ -98,7 +100,9 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		flextable1.setWidget(0, 0, bBestaetigen);
 		flextable1.setWidget(0, 1, bAbbrechen);
 		vPanel.add(flextable1);
-		setGlassEnabled(true);
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
 		
 		vPanel.add(hPanel1);
 		vPanel.add(hPanel2);

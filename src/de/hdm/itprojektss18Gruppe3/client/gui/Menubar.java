@@ -72,6 +72,7 @@ public class Menubar extends MenuBar {
 	private MenuItem deleteKontakt = new MenuItem("Kontakt löschen", new AllKontaktView.KontaktDeleteCommand());
 	private MenuItem shareKontakt = new MenuItem("Kontakt teilen",
 			new AllKontaktView.AddTeilhaberschaftKontaktCommand());
+	private MenuItem addKontaktEigenschaft = new MenuItem("Neue Eigenschaft für Kontakt", new KontaktForm.CreateEigenschaftAuspraegungCommand());
 	private MenuItem alterKontakt = new MenuItem("Kontakt bearbeiten", new AlterKontaktCommand());
 	private MenuItem addKontaktToKontaktliste = new MenuItem("Kontakt zur Kontaktliste hinzufügen",
 			new AllKontaktView.AddKontaktToKontaktlisteCommand());
@@ -113,6 +114,7 @@ public class Menubar extends MenuBar {
 		deleteKontakt.setEnabled(true);
 		shareKontakt.setEnabled(true);
 		addKontaktToKontaktliste.setEnabled(true);
+		addKontaktEigenschaft.setEnabled(true);
 
 		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
 		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
@@ -125,7 +127,7 @@ public class Menubar extends MenuBar {
 		addMenuItemsToArray();
 		this.allKontakteSelectedArrayList = allKontakteSelectedArrayList;
 		this.kontaktliste = kl;
-		if(!kontaktliste.getBezeichnung().equals("Empfangene Kontakte") || !kontaktliste.getBezeichnung().equals("Eigene Kontakte")) {
+		if(!kontaktliste.getBezeichnung().equals("Empfangene Kontakte") && !kontaktliste.getBezeichnung().equals("Eigene Kontakte")) {
 			deleteKontaktliste.setEnabled(true);
 			shareKontaktliste.setEnabled(true);
 			addNewKontaktToKontaktliste.setEnabled(true);
@@ -153,6 +155,7 @@ public class Menubar extends MenuBar {
 		allMenuItems.add(deleteKontakt);
 		allMenuItems.add(shareKontakt);
 		allMenuItems.add(alterKontakt);
+		allMenuItems.add(addKontaktEigenschaft);
 		allMenuItems.add(addKontaktToKontaktliste);
 		allMenuItems.add(deleteKontaktFromKontaktliste);
 		allMenuItems.add(deleteKontaktliste);
@@ -177,6 +180,7 @@ public class Menubar extends MenuBar {
 
 		addMenu.addItem(addKontakt);
 		addMenu.addItem(addKontaktliste);
+		addMenu.addItem(addKontaktEigenschaft);
 		addMenu.addItem(addNewKontaktToKontaktliste);
 
 		alterMenu.addItem(alterKontakt);

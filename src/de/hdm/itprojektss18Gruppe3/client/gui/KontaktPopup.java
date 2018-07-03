@@ -36,7 +36,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.KontaktKontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
-public class KontaktPopup extends PopupPanel{
+public class KontaktPopup extends DialogBox {
 	
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
@@ -48,7 +48,6 @@ public class KontaktPopup extends PopupPanel{
 	private Button abbrechen = new Button("Abbrechen");
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private Kontaktliste kontaktliste = new Kontaktliste();
-	private CustomTreeModel ctm = new CustomTreeModel();
 	
 	
 	public KontaktPopup(){
@@ -69,7 +68,12 @@ public class KontaktPopup extends PopupPanel{
 	
 	
 	public void run(){
-		setAnimationEnabled(true);
+
+		this.setText("Neuen Kontakt erstellen");
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
+
 		ktNameTa.setReadOnly(true);
 		ktNameTa.setValue("Name des neuen Kontaktes");
 		ktNameTa.addClickHandler(new KontaktClickHandler());
@@ -148,6 +152,7 @@ public class KontaktPopup extends PopupPanel{
 			hide();
 			kontaktmanagerVerwaltung.createKontaktKontaktliste(result.getId(), kontaktliste.getId(), new CreateKontaktKontaktlisteCallback());
 			KontaktForm kontaktForm = new KontaktForm(result);
+			CustomTreeModel ctm = new CustomTreeModel();
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
 		}
@@ -180,6 +185,7 @@ public class KontaktPopup extends PopupPanel{
 			hide();
 			Window.alert("Kontakt wurde erfolgreich erstellt.");
 			KontaktForm kontaktForm = new KontaktForm(result);
+			CustomTreeModel ctm = new CustomTreeModel();
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
 		}

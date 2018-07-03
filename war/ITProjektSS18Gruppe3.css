@@ -208,7 +208,6 @@ body {
 
 .kontaktFormText {
 	margin-right: 10px;
-	margin-top: 5px;
 	font-size: 1.2em;
 }
 
@@ -315,6 +314,11 @@ body {
 	width: 100%;
 }
 
+.buttonPanelBox table tbody tr td:last-child {
+	width: inherit;
+	margin: auto auto;
+	display: table;
+}
 
 /* REPORT GENERATOR FORMATIERUNG */
 .listbox-report {
@@ -474,8 +478,8 @@ body {
 }
 
 .gwt-DialogBox {
-	width: 400px;
-	height: 400px;
+	max-width: 500px;
+	height: auto;
 }
 
 .gwt-DialogBox .dialogContent {
@@ -490,6 +494,17 @@ body {
 	padding: 15px;
 	background: white;
 	margin-left: 60px;
+}
+
+.gwt-DialogBox .dialogMiddleCenterInner table tbody tr {
+	display: table;
+	margin: auto auto;
+	width: 100%;
+}
+
+.gwt-DialogBox .dialogMiddleCenterInner table tbody tr:last-child {
+	display: table;
+	margin: auto auto;
 }
 
 .gwt-Button {

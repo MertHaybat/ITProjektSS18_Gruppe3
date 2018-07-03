@@ -65,6 +65,9 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 	 */
 	public CreateKontaktlisteDialogBox() {
 		this.setText("Neue Kontaktliste erstellen");
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
 		bspeichern.addClickHandler(new insertKontaktlisteClickHandler());
 		run();
 	}

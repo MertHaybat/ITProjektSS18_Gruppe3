@@ -70,18 +70,23 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 	public DialogBoxKontaktTeilen(ArrayList<Kontakt> k) {
 		kontakt = k;
+		this.setText("Kontakt teilen");
 		sichern.addClickHandler(new CreateKontaktTeilhaberschaftClickHandler());
 		run();
 	}
 
 	public DialogBoxKontaktTeilen(Kontaktliste kontaktliste) {
 		this.kontaktliste = kontaktliste;
+		this.setText("Kontaktliste teilen");
 		sichern.addClickHandler(new CreateKontaktlisteTeilhaberschaftClickHandler());
 		run();
 	}
 
 	public void run() {
+		this.setGlassEnabled(true);
 		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
+
 		Column<Nutzer, String> nutzertxtColumn = new Column<Nutzer, String>(new TextCell()) {
 
 			@Override
@@ -125,7 +130,6 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 		sichern.setStylePrimaryName("mainButton");
 		abbrechen.setStylePrimaryName("mainButton");
 
-		this.setTitle("Kontakte teilen");
 		this.add(vPanel);
 	}
 
