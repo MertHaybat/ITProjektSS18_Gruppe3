@@ -480,8 +480,8 @@ public class AllKontaktView extends MainFrame {
 
 				if (clickedAt - initialClick < 300) {
 					KontaktForm kf = new KontaktForm(event.getValue());
-					RootPanel.get("content").clear();
-					RootPanel.get("content").add(kf);
+//					RootPanel.get("content").clear();
+//					RootPanel.get("content").add(kf);
 				}
 
 				initialClick = System.currentTimeMillis();
