@@ -187,12 +187,13 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		celltable.addColumn(wertAuspraegungColumn, "");
 		celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 		
-		suchErgebnisPanel.setStylePrimaryName("cellListWidgetContainerPanel");
+	//	suchErgebnisPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		hPanel.add(suchErgebnisPanel);
 		hPanel.add(suchErgebnisZweiPanel);
 		this.add(eingabeText);
 		this.add(layout);
 		this.add(hPanel);
+		this.setStylePrimaryName("disclosureSearchPanel");
 //		this.add(suchErgebnisZweiPanel);
 	}
 	public class KontaktFormDoubleClickHandler implements DoubleClickHandler{

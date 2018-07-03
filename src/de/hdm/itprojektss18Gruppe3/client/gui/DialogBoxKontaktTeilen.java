@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
@@ -40,7 +41,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings
 			.getKontaktVerwaltung();
-	
+
 	private VerticalPanel vPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private FlexTable flextable1 = new FlexTable();
@@ -48,10 +49,10 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 	private Label abfrage = new Label("Wählen Sie die Teilnehmer aus: ");
 	private Button sichern = new Button("Speichern");
 	private Button abbrechen = new Button("Abbrechen");
-	
+
 	private ArrayList<Kontakt> kontakt = new ArrayList<>();
 	private List<Nutzer> nutzerListe = new ArrayList<>();
-	
+
 	private Nutzer nutzerausdb = null;
 
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
@@ -123,7 +124,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 		flextable1.setWidget(1, 0, box);
 		flextable1.setWidget(2, 0, selectedNutzerCT);
 		flextable1.setWidget(3, 0, hPanel);
-		
+
 		vPanel.add(flextable1);
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		box.setStylePrimaryName("gwt-SuggestBox");
@@ -185,7 +186,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 		@Override
 		public void onSuccess(Nutzer result) {
-			
+
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("mail"));
@@ -221,7 +222,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				nutzer.setMail(Cookies.getCookie("mail"));
-					if (kontakt.size() > 0) {
+				if (kontakt.size() > 0) {
 					for (Kontakt kontakt : kontakt) {
 						kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontakt.getId(), 0, result.getId(),
 								nutzer.getId(), new createTeilhaberschaftCallback());
@@ -267,7 +268,9 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 				Window.alert("Teilhaberschaft erfolgreich erstellt");
 			}
 			hide();
-
+			CustomTreeModel ctm = new CustomTreeModel();
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
 		}
 
 	}

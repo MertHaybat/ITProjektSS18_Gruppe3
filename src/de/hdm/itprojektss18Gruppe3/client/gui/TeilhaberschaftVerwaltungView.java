@@ -146,13 +146,13 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		nutzerVerwalten.setStylePrimaryName("h3");
 
 		vPanel.add(headline);
-		vPanel.add(new HTML("<br>"));
+		vPanel.add(new HTML("<br><br>"));
 		vPanel.add(auspraegungVerwalten);
 		vPanel.add(teilhaberschaftAuspraegung);
-		vPanel.add(new HTML("<br><br>"));
+		vPanel.add(new HTML("<br><br><br>"));
 		vPanel.add(kontakteVerwalten);
 		vPanel.add(teilhaberschaftKontakt);
-		vPanel.add(new HTML("<br><br>"));
+		vPanel.add(new HTML("<br><br><br>"));
 		vPanel.add(kontaktlisteVerwalten);
 		vPanel.add(teilhaberschaftKontaktliste);
 		vPanel.add(new HTML("<br><br><br>"));

@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.CellPreviewEvent;
@@ -62,7 +63,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 	private final MultiSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = new MultiSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private final MultiSelectionModel<Eigenschaft> eigenschaftModel = new MultiSelectionModel<Eigenschaft>();
-	
+
 	private FlexTable ftTeilhaberschaft = new FlexTable();
 
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
@@ -70,14 +71,14 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private List<Nutzer> nutzerListe = new ArrayList<>();
 	private List<Nutzer> nutzerSuggestbox = new ArrayList<>();
 	private CheckBox kontaktTeilenCB = new CheckBox("Gesamten Kontakt teilen");
-	
-	
+
+
 	private Nutzer nutzerausdb = null;
 	private Label lb1 = new Label("Wählen Sie die Eigenschaften aus, die Sie teilen möchten: ");
 	private Label lb2 = new Label("Mit wem möchten Sie diese Eigenschaften teilen: ");
 	private Button b1 = new Button("Teilen");
 	private Button b2 = new Button("Abbrechen");
-	
+
 	private Kontakt kontaktNeu = new Kontakt();
 
 	private final Handler<EigenschaftsAuspraegungWrapper> selectionEventManager = DefaultSelectionEventManager
@@ -93,7 +94,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private ButtonCell btCell = new ButtonCell();
 	private TextCell textCell = new TextCell();
 	private ClickableTextCell clickableCell = new ClickableTextCell();
-	
+
 	private CellTableNutzer selectedNutzerCT = new CellTableNutzer();
 	private CellTableNutzer.ButtonColumn buttonBox = selectedNutzerCT.new ButtonColumn(btCell){
 		@Override
@@ -107,14 +108,14 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 			}
 		}
 	};
-	
+
 	private CellTableNutzer.NutzerColumn nutzerBox = selectedNutzerCT.new NutzerColumn(textCell);
-	
+
 	private CellTableAuspraegungWrapper kt = new CellTableAuspraegungWrapper(ssmAuspraegung);
 	private CellTableAuspraegungWrapper.CheckBoxBolumn checkBoxAuspraegung = kt.new CheckBoxBolumn(cbCell);
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn eigenschaftColumn = kt.new WertEigenschaftColumn(clickableCell);
 	private CellTableAuspraegungWrapper.WertAuspraegungColumn auspraegungColumn = kt.new WertAuspraegungColumn(clickableCell);
-	
+
 	public TeilhaberschaftDialogBox(Kontakt kontakt) {
 		kontaktNeu = kontakt;
 		kontaktmanagerVerwaltung.findEigenschaftHybrid(kontaktNeu, new EigenschaftAuspraegungCallback());
@@ -135,7 +136,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		this.setGlassEnabled(true);
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
-		
+
 		this.setText("Kontakt/Kontakteigenschaften teilen");
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
 		ftTeilhaberschaft.setWidget(1, 0, kt);
@@ -151,26 +152,26 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		eigenschaftCT.setSelectionModel(eigenschaftModel, eigenschaftSelectionEventManager);
 
-//		eigenschaftCT.addCellPreviewHandler(new EigenschaftPreviewClickHander());
+		//		eigenschaftCT.addCellPreviewHandler(new EigenschaftPreviewClickHander());
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		b1.addClickHandler(new insertTeilhaberschaftClickHandler());
 		b2.addClickHandler(new closeDialogBoxClickHandler());
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 
 		ssmAuspraegung.addSelectionChangeHandler(new SelectionHandlerAuspraegung());
-		
+
 		kontaktTeilenCB.addClickHandler(new CheckBoxClickHandler());
-		
+
 		nutzerDataProvider.addDataDisplay(selectedNutzerCT);
 		selectedNutzerCT.addColumn(nutzerBox, "");
 		selectedNutzerCT.addColumn(buttonBox, "");
 
-		
-		
+
+
 		kt.addColumn(checkBoxAuspraegung, ""); 
 		kt.addColumn(eigenschaftColumn, "");
 		kt.addColumn(auspraegungColumn, "");
-		
+
 		this.add(ftTeilhaberschaft);
 	}
 	public class CheckBoxClickHandler implements ClickHandler{
@@ -179,7 +180,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		public void onClick(ClickEvent event) {
 			ssmAuspraegung.clear();
 		}
-		
+
 	}
 	public class SelectionHandlerAuspraegung implements SelectionChangeEvent.Handler{
 
@@ -187,7 +188,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		public void onSelectionChange(SelectionChangeEvent event) {
 			kontaktTeilenCB.setValue(false);
 		}
-		
+
 	}
 	public class FindNutzerByEmail implements AsyncCallback<Nutzer> {
 
@@ -195,7 +196,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		public void onFailure(Throwable caught) {
 			Window.alert("Fehler beim Laden der Daten" + caught.getMessage());
 		}
-		
+
 		@Override
 		public void onSuccess(Nutzer result) {
 			nutzerausdb = result;
@@ -210,7 +211,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		public void onKeyPress(KeyPressEvent event) {
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
 				if (box.getValue() == "") {
-					 
+
 				} else {
 
 					Nutzer nutzer = new Nutzer();
@@ -282,14 +283,14 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			
+
 			if(nutzerSuggestbox.size() == 0){
 				Window.alert("Sie müssen mindestens eine E-Mail Adresse angeben.");
 			} else {
-				
+
 				for (Nutzer nutzersuggest : nutzerSuggestbox) {
 					kontaktmanagerVerwaltung.checkEmail(nutzersuggest.getMail(), new KontaktFindNutzerByMailCallback());
-					
+
 				}
 			}
 
@@ -307,27 +308,27 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				nutzer.setMail(Cookies.getCookie("mail"));
-				
+
 				if (kontaktTeilenCB.getValue() == true){
 					kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(), 0, result.getId(),
 							nutzer.getId(), new createTeilhaberschaftCallback());
 				} else {
 					List<EigenschaftsAuspraegungWrapper> eListe = new ArrayList<>();
-					
+
 					for (EigenschaftsAuspraegungWrapper auspraegung : ssmAuspraegung.getSelectedSet()) {
 						eListe.add(auspraegung);
 					}
 					for (int i = 0; i < eListe.size(); i++) {
-						
+
 						kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(),
 								eListe.get(i).getIDEigenschaftsauspraegungValue(), result.getId(), nutzer.getId(),
 								new createTeilhaberschaftCallback());
-						
+
 					}
-					
+
 				}
-				
-				
+
+
 			}
 		}
 	}
@@ -349,9 +350,12 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 				Window.alert("Teilhaberschaft erfolgreich erstellt");
 			}
 			hide();
+			CustomTreeModel ctm = new CustomTreeModel();
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
 
 		}
-		}
+	}
 
 
 	class getAllNutzerCallback implements AsyncCallback<Vector<Nutzer>> {
