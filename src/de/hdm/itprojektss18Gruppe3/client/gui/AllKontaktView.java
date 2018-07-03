@@ -114,9 +114,6 @@ public class AllKontaktView extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		kontaktmanagerVerwaltung.findAllKontaktByNutzerID(nutzer.getId(), new AllKontaktByNutzerCallback());
 		Menubar mb = new Menubar();
-		CustomTreeModel ctm = new CustomTreeModel();
-		RootPanel.get("leftmenutree").clear();
-		RootPanel.get("leftmenutree").add(ctm);
 	}
 
 	public AllKontaktView(Kontaktliste k) {
