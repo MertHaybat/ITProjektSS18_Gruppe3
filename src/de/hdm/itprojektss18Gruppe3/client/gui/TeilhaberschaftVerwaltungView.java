@@ -167,8 +167,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override
@@ -253,8 +252,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override
@@ -268,8 +266,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override
@@ -283,8 +280,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override
