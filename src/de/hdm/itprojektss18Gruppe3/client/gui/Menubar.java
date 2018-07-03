@@ -132,7 +132,6 @@ public class Menubar extends MenuBar {
 			shareKontaktliste.setEnabled(true);
 			addNewKontaktToKontaktliste.setEnabled(true);
 			renameKontaktliste.setEnabled(true);
-			addKontaktToKontaktliste.setEnabled(true);
 		}
 
 		if(allKontakteSelectedArrayList.size() > 0) {
@@ -295,12 +294,17 @@ public class Menubar extends MenuBar {
 		private Button neinButton = new Button("Abbrechen");
 
 		public DeleteKontaktDialogBox() {
+			db.setGlassEnabled(true);
 			db.setAnimationEnabled(true);
+			db.setAutoHideEnabled(true);
+			db.setText("Kontakt löschen");
 			jaButton.addClickHandler(new DeleteKontaktClickHandler());
 			neinButton.addClickHandler(new AbortDeleteClickHandler());
+			abfrage.setStylePrimaryName("centerTextDialogBox");
 			vPanel.add(abfrage);
 			buttonPanel.add(jaButton);
 			buttonPanel.add(neinButton);
+			buttonPanel.setStylePrimaryName("buttonPanelBox");
 			vPanel.add(buttonPanel);
 			db.add(vPanel);
 			db.center();
@@ -365,8 +369,6 @@ public class Menubar extends MenuBar {
 		@Override
 		public void execute() {
 			KontaktForm kf = new KontaktForm(allKontakteSelectedArrayList.get(0));
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(kf);
 		}
 	}
 

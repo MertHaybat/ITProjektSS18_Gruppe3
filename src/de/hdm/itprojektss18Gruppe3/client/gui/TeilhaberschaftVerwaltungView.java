@@ -167,8 +167,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override
@@ -185,25 +184,16 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 			if(selectionKontaktAuspraegung.getSelectedSet().size() > 0) {
 				for(NutzerTeilhaberschaftKontaktWrapper t : selectionKontaktAuspraegung.getSelectedSet()) {
 					kontaktmanagerVerwaltung.deleteTeilhaberschaftByID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
-					CustomTreeModel ctm = new CustomTreeModel();
-					RootPanel.get("leftmenutree").clear();
-					RootPanel.get("leftmenutree").add(ctm);
 				}
 			}
 			if(selectionEigenschaftAuspraegung.getSelectedSet().size() > 0) {
 				for(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper t : selectionEigenschaftAuspraegung.getSelectedSet()) {
-					kontaktmanagerVerwaltung.deleteTeilhaberschaftByID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
-					CustomTreeModel ctm = new CustomTreeModel();
-					RootPanel.get("leftmenutree").clear();
-					RootPanel.get("leftmenutree").add(ctm);
+					kontaktmanagerVerwaltung.deleteTeilhaberschaftByEigenschaftsauspraegungID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
 				}
 			}
 			if(selectionKontaktlisteAuspraegung.getSelectedSet().size() > 0) {
 				for(NutzerTeilhaberschaftKontaktlisteWrapper t : selectionKontaktlisteAuspraegung.getSelectedSet()) {
-					kontaktmanagerVerwaltung.deleteTeilhaberschaftByID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
-					CustomTreeModel ctm = new CustomTreeModel();
-					RootPanel.get("leftmenutree").clear();
-					RootPanel.get("leftmenutree").add(ctm);
+					kontaktmanagerVerwaltung.deleteTeilhaberschaftByKontaktlisteID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
 				}
 			}
 
@@ -262,8 +252,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override
@@ -277,8 +266,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override
@@ -292,8 +280,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override

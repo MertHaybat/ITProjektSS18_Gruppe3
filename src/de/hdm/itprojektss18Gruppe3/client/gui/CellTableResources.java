@@ -16,9 +16,9 @@ import com.google.gwt.user.cellview.client.CellTable.Style;
 
 public interface CellTableResources extends CellTable.Resources {
 
-	    public static CellTableResources INSTANCE = GWT.create(CellTableResources.class);
-
+    interface TableStyle extends CellTable.Style {
+}
 	    @Override
-	    @Source("CellTableStyle.css")
+	    @Source({ CellTable.Style.DEFAULT_CSS, "CellTableStyle.css" })
 	    public Style cellTableStyle();
-	}
+}

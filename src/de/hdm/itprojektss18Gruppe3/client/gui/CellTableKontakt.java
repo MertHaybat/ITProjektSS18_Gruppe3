@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
@@ -27,6 +28,7 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 	private MultiSelectionModel<Kontakt> ssmAuspraegung = new MultiSelectionModel<Kontakt>();
 	private final Handler<Kontakt> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
+	private CellTable cellTable = new CellTable<Kontakt>(15, (com.google.gwt.user.cellview.client.CellTable.Resources) GWT.create(CellTableResources.class));
 	
 	public CellTableKontakt(){
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);

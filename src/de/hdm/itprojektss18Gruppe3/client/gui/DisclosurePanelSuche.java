@@ -308,8 +308,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Suchen aufgetreten: " + caught.getMessage());
 		}
 
 		@Override
@@ -356,8 +355,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			
+			Window.alert("Fehler beim Suchen aufgetreten: " + caught.getMessage());
 		}
 
 		@Override
@@ -374,8 +372,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Suchen aufgetreten: " + caught.getMessage());
 		}
 
 		@Override
@@ -393,8 +390,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Suchen aufgetreten: " + caught.getMessage());
 		}
 
 		@Override
@@ -424,8 +420,7 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
+			Window.alert("Fehler beim Suchen aufgetreten: " + caught.getMessage());
 		}
 
 		@Override
