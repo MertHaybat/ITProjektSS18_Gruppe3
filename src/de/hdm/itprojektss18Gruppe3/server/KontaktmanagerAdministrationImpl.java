@@ -1932,5 +1932,30 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 		return wrapper;
 		
 	}
+	
+	@Override
+	public Vector<Eigenschaftsauspraegung> findAllGeteiltAndEigeneAuspraegungen(int nutzerID) throws IllegalArgumentException{
+		
+		Vector<Teilhaberschaft> allTeilhaberschaften = this.findAllTeilhaberschaftenByTeilhabenderID(nutzerID);
+		
+		Vector<Kontakt> kontakte = this.findAllKontaktByNutzerID(nutzerID);
+		Vector<EigenschaftsAuspraegungWrapper> wrapper = new Vector<EigenschaftsAuspraegungWrapper>();
+		
+		for (Teilhaberschaft teilhaberschaft : allTeilhaberschaften) {
+			kontakte.add(findKontaktByID(teilhaberschaft.getKontaktID()));
+		}
+		Nutzer nutzer = new Nutzer();
+		nutzer.setId(nutzerID);
+		
+		for (Kontakt kontakt : kontakte) {
+			wrapper.addAll(this.findAllEigenschaftsauspraegungWrapper(nutzer, kontakt));
+		}
+		Vector<Eigenschaftsauspraegung> auspraegungen = new Vector<Eigenschaftsauspraegung>();
+
+		for (EigenschaftsAuspraegungWrapper eigenschaftsAuspraegungWrapper : wrapper) {
+			auspraegungen.add(eigenschaftsAuspraegungWrapper.getAuspraegung());
+		}
+		return auspraegungen;
+	}
 }
 	

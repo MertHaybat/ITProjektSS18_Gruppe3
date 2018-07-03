@@ -228,6 +228,9 @@ public interface KontaktmanagerAdministrationAsync {
 	void findAllEigenschaftsauspraegungWrapper(Nutzer nutzer, Kontakt kontakt,
 			AsyncCallback<Vector<EigenschaftsAuspraegungWrapper>> callback);
 
+	void findAllGeteiltAndEigeneAuspraegungen(int nutzerID, AsyncCallback<Vector<Eigenschaftsauspraegung>> callback);
+
+
 	
 	
 }

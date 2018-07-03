@@ -19,6 +19,7 @@ import de.hdm.itprojektss18Gruppe3.client.AllKontaktEigenschaftenAndAuspraegunge
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 public class EigenschaftenReportForm extends HorizontalPanel {
@@ -33,16 +34,15 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 
 	private Label labelbEigenschaft = new Label("Eigenschaften: ");
 	private Label labelAuspraegung = new Label("Eigenschaftsausprägung: ");
-
+	private Vector<Eigenschaftsauspraegung> auspraegungVector = new Vector<Eigenschaftsauspraegung>();
 	private VerticalPanel vpanel = new VerticalPanel();
 
 	public EigenschaftenReportForm() {
 
-//		reportverwaltung.findAllEigenschaften(new EigenschaftenCallback());
-
-//		tbEigenschaft.setVisibleItemCount(1);
-
-//		tbEigenschaft.setStylePrimaryName("listbox-report");
+		Nutzer nutzer = new Nutzer();
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+		nutzer.setMail(Cookies.getCookie("email"));
+		reportverwaltung.findAllAuspraegungen(nutzer.getId(), new AllAuspraeungenCallback());
 		btAllAuspraegungen.setStylePrimaryName("reportButton");
 
 		this.add(labelbEigenschaft);
@@ -52,24 +52,48 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 		this.add(btAllAuspraegungen);
 
 		RootPanel.get("contentReport").add(this);
-
 		btAllAuspraegungen.addClickHandler(new AllAuspraegungenClickHandler());
 	}
-	
+	class AllAuspraeungenCallback implements AsyncCallback<Vector<Eigenschaftsauspraegung>>{
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Vector<Eigenschaftsauspraegung> result) {
+			auspraegungVector = result;
+		}
+		
+	}
 	class AllAuspraegungenClickHandler implements ClickHandler{
 
 		@Override
 		public void onClick(ClickEvent event) {
+			boolean vorhanden = false;
+			for (Eigenschaftsauspraegung eigenschaftsauspraegung : auspraegungVector) {
+				if(tbAuspraegung.getValue().equals(eigenschaftsauspraegung.getWert())){
+					vorhanden = true;
+				}
+			}
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("email"));
 			if(tbEigenschaft.getValue().equals("") && tbAuspraegung.getValue().equals("")){
 				Window.alert("Bitte Eigenschaft oder Ausprägung eingeben");
 			} else {
-				vpanel.clear();
-				vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(nutzer.getMail(), tbEigenschaft.getValue(),
-						tbAuspraegung.getValue()));
-				RootPanel.get("contentReport").add(vpanel);
+				if(vorhanden == true || tbAuspraegung.getValue().equals("")){
+					vpanel.clear();
+					vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(nutzer.getMail(), tbEigenschaft.getValue(),
+							tbAuspraegung.getValue()));
+					RootPanel.get("contentReport").add(vpanel);
+					
+				} else {
+					Window.alert("Keine Kontakte mit der eingegebenen Eigenschaftsausprägung vorhanden");
+				}
+				
 				
 			}
 		}

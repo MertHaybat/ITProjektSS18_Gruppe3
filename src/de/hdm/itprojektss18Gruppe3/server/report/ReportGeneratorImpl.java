@@ -306,8 +306,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Vector<Kontakt> kontakteMitBestimmtenEigenschaftenUndAuspraegungen = this.getKontaktVerwaltung()
 					.findAllKontakteEigenschaftAuspraegung(loggedinNutzer, eigenschaft, ea);	
 		Vector<EigenschaftsAuspraegungWrapper> auspraegungen = new Vector<EigenschaftsAuspraegungWrapper>();
-		
+		int kontaktID = 0;
 		for (Kontakt kontakt : kontakteMitBestimmtenEigenschaftenUndAuspraegungen) {
+			if(kontakt.getId() != kontaktID){
 			Row kontakte = new Row();
 			kontakte.addColumn(new Column(kontakt.getName()));
 			
@@ -321,11 +322,20 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			
 			
 			result.addRow(kontakte);
+			}
+			kontaktID = kontakt.getId();
 		}
 		return result;
 	}
+	@Override
+	public Vector<Eigenschaftsauspraegung> findAllAuspraegungen(int nutzerID) throws IllegalArgumentException {
 
+		if (this.getKontaktVerwaltung() == null) {
+			return null;
+		}
 
+		return this.getKontaktVerwaltung().findAllGeteiltAndEigeneAuspraegungen(nutzerID);
+	}
 	@Override
 	public Vector<Nutzer> findNutzer() throws IllegalArgumentException {
 
