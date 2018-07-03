@@ -131,12 +131,13 @@ public class KontaktForm extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		nutzer.setMail(Cookies.getCookie("mail"));
 		kontaktmanagerVerwaltung.createKontakt("Neuer Kontakt", 0, nutzer.getId(), new CreateKontaktCallback());
-		super.onLoad();
+		RootPanel.get("content").clear();
+		RootPanel.get("content").add(this);
+//		super.onLoad();
 	}
 
 	public KontaktForm(Kontakt kontakt) {
 		k = kontakt;
-		Window.alert("kotakt" + kontakt.getId());
 //		hPanel.add(zurueckZuAllKontaktView);
 //		zurueckZuAllKontaktView.addClickHandler(new ZurueckZuKontaktClickHandler());
 		kontaktNameBox.setValue(kontakt.getName());
@@ -150,7 +151,9 @@ public class KontaktForm extends MainFrame {
 		erstellungsdatum.setText("Erstellt am: " + dtf.format(kontakt.getErzeugungsdatum()));
 		vPanel2.add(modifikationsdatum);
 		vPanel2.add(erstellungsdatum);
-		super.onLoad();
+		RootPanel.get("content").clear();
+		RootPanel.get("content").add(this);
+//		super.onLoad();
 	}
 
 	public void run() {

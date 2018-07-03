@@ -15,6 +15,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Eigenschaftsauspraegung;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteByTeilhaberschaftReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.AlleKontakteReport;
 import de.hdm.itprojektss18Gruppe3.shared.report.Column;
@@ -122,10 +123,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));
-//		headline.addColumn(new Column("Status"));
-//		headline.addColumn(new Column("Nutzer"));
 		headline.addColumn(new Column("Empfangen von"));
 		headline.addColumn(new Column("Geteilt mit"));
+		headline.addColumn(new Column("Eigenschaften"));
 		headline.addColumn(new Column("Erzeugungsdatum"));
 		headline.addColumn(new Column("Modifkationsdatum"));
 		
@@ -139,16 +139,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 //			allContacts =	this.getKontaktVerwaltung().findAllKontaktByNutzerID(nutzer.getId());
 //		}
 		allContacts = this.getKontaktVerwaltung().findAllKontakteAndTeilhaberschaftenByNutzer(nutzer);
-		
+		Vector<EigenschaftsAuspraegungWrapper> auspraegungen = new Vector<EigenschaftsAuspraegungWrapper>();
 		for (NutzerTeilhaberschaftKontaktWrapper kontakt : allContacts) {
 			Row kontakte = new Row();
-			
+			auspraegungen = this.getKontaktVerwaltung().findAllEigenschaftsauspraegungWrapper(nutzer, kontakt.getKontakt());
 			
 			if(kontakt.getNutzer()== null && kontakt.getTeilhaberschaft() == null && kontakt.getKontakt().getStatus() == 0){
 				kontakte.addColumn(new Column(kontakt.getKontakt().getName()));
-//				kontakte.addColumn(new Column("Nicht Geteilt"));
 				kontakte.addColumn(new Column(""));
 				kontakte.addColumn(new Column(""));
+				kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getErzeugungsdatum()).toString()));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getModifikationsdatum()).toString()));
 				
@@ -156,9 +156,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				
 			} else if(kontakt.getNutzer().getId() == kontakt.getTeilhaberschaft().getEigentuemerID() && kontakt.getTeilhaberschaft() != null && kontakt.getKontakt() != null ){
 				kontakte.addColumn(new Column(kontakt.getKontakt().getName()));
-//				kontakte.addColumn(new Column("Empfangen"));
 				kontakte.addColumn(new Column(kontakt.getNutzer().getMail()));
 				kontakte.addColumn(new Column(""));
+				kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getErzeugungsdatum()).toString()));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getModifikationsdatum()).toString()));
 				
@@ -167,9 +167,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			} else if(kontakt.getTeilhaberschaft().getEigentuemerID() == nutzer.getId() && kontakt.getTeilhaberschaft() != null && kontakt.getKontakt() != null ){				
 			
 				kontakte.addColumn(new Column(kontakt.getKontakt().getName()));
-//				kontakte.addColumn(new Column("Geteilt"));
 				kontakte.addColumn(new Column(""));
 				kontakte.addColumn(new Column(kontakt.getNutzer().getMail()));
+				kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getErzeugungsdatum()).toString()));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getModifikationsdatum()).toString()));
 				
@@ -209,7 +209,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Nutzer nutzerEigentuemer = findNutzerByMail(eigentuemer);
 		Nutzer nutzerTeilnehmer = findNutzerByMail(teilnehmer);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ");
-		
+		Vector<EigenschaftsAuspraegungWrapper> auspraegungen = new Vector<EigenschaftsAuspraegungWrapper>();
 		Vector<Kontakt> alleKontakteByTeilhaberschaft = new Vector<Kontakt>();
 		AlleKontakteByTeilhaberschaftReport result = new AlleKontakteByTeilhaberschaftReport();
 		result.setTitle("Alle Kontakte der Teilhaberschaften zwischen zwei Nutzern");
@@ -224,30 +224,27 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));
+		
 //		headline.addColumn(new Column("Status"));
-		headline.addColumn(new Column("Ersteller"));
+		headline.addColumn(new Column("Teilhaber"));
+		headline.addColumn(new Column("Eigenschaften"));
 		headline.addColumn(new Column("Erzeugungsdatum"));
 		headline.addColumn(new Column("Modifkationsdatum"));
 
 		result.addRow(headline);
 		
-		if(teilnehmer.equals("")){
-			alleKontakteByTeilhaberschaft= this.getKontaktVerwaltung().findAllKontakteByEigentuemerID(nutzerEigentuemer.getId());
-		} else {
+//		if(teilnehmer.equals("")){
+//			alleKontakteByTeilhaberschaft= this.getKontaktVerwaltung().findAllKontakteByEigentuemerID(nutzerEigentuemer.getId());
+//		} else {
 			alleKontakteByTeilhaberschaft = this.getKontaktVerwaltung()
-					.findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(nutzerEigentuemer.getId(), nutzerTeilnehmer.getId());
-					
-		}
-
+					.findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(nutzerEigentuemer.getId(), nutzerTeilnehmer.getId());			
+//		}
 		for (Kontakt kontakt : alleKontakteByTeilhaberschaft) {
+			auspraegungen = this.getKontaktVerwaltung().findAllEigenschaftsauspraegungWrapper(nutzerEigentuemer, kontakt);
 			Row kontakte = new Row();
 			kontakte.addColumn(new Column(kontakt.getName()));
-//			if (kontakt.getStatus() == 1) {
-//				kontakte.addColumn(new Column("Geteilt"));
-//			} else if (kontakt.getStatus() == 0) {
-//				kontakte.addColumn(new Column("Nicht Geteilt"));
-//			}
-			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
+			kontakte.addColumn(new Column(nutzerTeilnehmer.getMail()));
+			kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 			kontakte.addColumn(new Column(dtf.format(kontakt.getErzeugungsdatum()).toString()));
 			kontakte.addColumn(new Column(dtf.format(kontakt.getModifikationsdatum()).toString()));
 			result.addRow(kontakte);
@@ -314,14 +311,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			Row kontakte = new Row();
 			kontakte.addColumn(new Column(kontakt.getName()));
 			
-			auspraegungen = this.getKontaktVerwaltung().findEigenschaftHybrid(kontakt);
+			auspraegungen = this.getKontaktVerwaltung().findAllEigenschaftsauspraegungWrapper(loggedinNutzer, kontakt);
 			
-			
-//			if (kontakt.getStatus() == 1) {
-//				kontakte.addColumn(new Column("Geteilt"));
-//			} else if (kontakt.getStatus() == 0) {
-//				kontakte.addColumn(new Column("Nicht Geteilt"));
-//			}
 			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
 			
 			kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));

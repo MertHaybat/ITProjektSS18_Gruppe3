@@ -36,5 +36,9 @@ public class Nutzer extends Person{
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-
+	public String toString(){
+		return "<table><tr><td>"+this.getMail()+"</td></tr></table>";
+	
+	
+	}
 }
