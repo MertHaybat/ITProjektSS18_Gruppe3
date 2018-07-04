@@ -102,8 +102,6 @@ public class KontaktForm extends MainFrame {
 	private Vector<EigenschaftsAuspraegungWrapper> resultWrapperVector = new Vector<EigenschaftsAuspraegungWrapper>();
 	private String eigenschaft = "";
 
-	private CellTableAuspraegungWrapper.IconColumn iconColumn = celltable.new IconColumn();
-
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(
 			clickEigenschaft);
 
@@ -451,8 +449,6 @@ public class KontaktForm extends MainFrame {
 				celltable.setColumnWidth(wertEigenschaftColumn, 40, Unit.EM);
 				celltable.addColumn(wertAuspraegungColumn, "Wert");
 				celltable.setColumnWidth(wertAuspraegungColumn, 55, Unit.EM);
-				celltable.addColumn(iconColumn, "");
-				celltable.setColumnWidth(iconColumn, 5, Unit.PCT);
 				flextable.setWidget(15, 0, tableButtonPanel);
 
 			}

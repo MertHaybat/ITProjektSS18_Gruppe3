@@ -99,7 +99,7 @@ public class HTMLReportWriter extends ReportWriter {
 		this.resetReportText();
 		StringBuffer result = new StringBuffer();
 		// result.append("<h3>" + p.getTitle() + "</h3>");
-		result.append("<table style=\"width:600px;border:1px solid silver\"><tr>");
+		result.append("<table style=\"width:100%;border:1px solid silver\"><tr>");
 		result.append("<td><b>" + p.getTitle() + "</b></td></tr><tr>");
 
 		result.append("<td><b>" + paragraph2HTML(p.getHeaderData()) + "</b></td>");
@@ -108,7 +108,7 @@ public class HTMLReportWriter extends ReportWriter {
 		result.append("</tr><tr><td></td><td>" + p.getCreated().toString() + "</td></tr></table>");
 
 		Vector<Row> rows = p.getRows();
-		result.append("<table style=\"width:400px\">");
+		result.append("<table style=\"width:100%\">");
 		for (int i = 0; i < rows.size(); i++) {
 			Row row = rows.elementAt(i);
 			result.append("<tr>");
@@ -136,7 +136,7 @@ public class HTMLReportWriter extends ReportWriter {
 	public void process(AlleKontakteByTeilhaberschaftReport p) {
 		this.resetReportText();
 		  StringBuffer result = new StringBuffer();
-		  result.append("<table style=\"width:600px;border:1px solid silver\"><tr>");
+		  result.append("<table style=\"width:100%;border:1px solid silver\"><tr>");
 			result.append("<td><b>" + p.getTitle() + "</b></td></tr><tr>");
 
 			result.append("<td><b>" + paragraph2HTML(p.getHeaderData()) + "</b></td>");
@@ -145,7 +145,7 @@ public class HTMLReportWriter extends ReportWriter {
 			result.append("</tr><tr><td></td><td>" + p.getCreated().toString() + "</td></tr></table>");
 			
 		  	 Vector<Row> rows = p.getRows();
-		     result.append("<table style=\"width:400px\">");
+		     result.append("<table style=\"width:100%\">");
 		     for (int i = 0; i < rows.size(); i++) {
 		         Row row = rows.elementAt(i);
 		         result.append("<tr>");
@@ -177,7 +177,7 @@ public class HTMLReportWriter extends ReportWriter {
 		this.resetReportText();
 		StringBuffer result = new StringBuffer();
 
-		result.append("<table style=\"width:600px;border:1px solid silver\"><tr>");
+		result.append("<table style=\"width:100%;border:1px solid silver\"><tr>");
 		result.append("<td><b>" + p.getTitle() + "</b></td></tr><tr>");
 
 		result.append("<td><b>" + paragraph2HTML(p.getHeaderData()) + "</b></td>");
@@ -186,7 +186,7 @@ public class HTMLReportWriter extends ReportWriter {
 		result.append("</tr><tr><td></td><td>" + p.getCreated().toString() + "</td></tr></table>");
 
 		Vector<Row> rows = p.getRows();
-		result.append("<table style=\"width:400px\">");
+		result.append("<table style=\"width:100%\">");
 		for (int i = 0; i < rows.size(); i++) {
 			Row row = rows.elementAt(i);
 			result.append("<tr>");

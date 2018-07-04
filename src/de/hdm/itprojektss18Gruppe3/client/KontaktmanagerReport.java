@@ -31,8 +31,8 @@ public class KontaktmanagerReport implements EntryPoint {
 	private HorizontalPanel hPanelBar = new HorizontalPanel();
 	private Anchor signInLink = new Anchor();
 	private Anchor signOutLink = new Anchor("Sign Out");
-	private Label loginLabel = new Label(
-			"Please sign in to your Google Account to access the Kontaktmanager Report application.");
+	private Label welcomeMessage = new Label("Report Generator");
+	private Label loginMessage = new Label("Bitte loggen Sie sich mit Ihrem Google Account ein");
 	private Button logoutButton = new Button("Ausloggen");
 	private Button loginButton = new Button("Login");
 	private static ReportGeneratorAsync reportVerwaltung = ClientsideSettings.getReportGenerator();
@@ -87,8 +87,12 @@ public class KontaktmanagerReport implements EntryPoint {
 	private void loadLogin() {
 
 		loginButton.addClickHandler(new loginButtonClickHandler());
-
-		loginPanel.add(loginLabel);
+		loginButton.setStylePrimaryName("loginButton");
+		welcomeMessage.setStylePrimaryName("landingPageWelcomeMessage");
+		loginPanel.setStylePrimaryName("loginPanel");
+		loginMessage.setStylePrimaryName("landingPageLoginMessage");
+		loginPanel.add(welcomeMessage);
+		loginPanel.add(loginMessage);
 		loginPanel.add(loginButton);
 		RootPanel.get("contentReport").add(loginPanel);
 
@@ -137,8 +141,6 @@ public class KontaktmanagerReport implements EntryPoint {
 //		RootPanel.get("logout").add(logoutButton);
 
 		ReportSelectMenu reportMenu = new ReportSelectMenu();
-		RootPanel.get("leftmenutree").clear();
-		RootPanel.get("leftmenutree").add(reportMenu);
 		RootPanel.get("menubar").clear();
 		RootPanel.get("menubar").add(reportMenu);
 //		RootPanel.get("menubar").clear();
