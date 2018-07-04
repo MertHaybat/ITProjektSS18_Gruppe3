@@ -135,6 +135,7 @@ public class AllKontaktView extends MainFrame {
 			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
 
 		}
+	//	kontaktmanagerVerwaltung.findAllTeilhaberschaftByKontaktliste(k.getId(), callback);
 		Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
 		super.onLoad();
 	}
@@ -174,6 +175,32 @@ public class AllKontaktView extends MainFrame {
 		RootPanel.get("content").add(vPanel);
 	}
 
+	public class KontaktlisteTeilhaberschaftCallback implements AsyncCallback<Vector<Teilhaberschaft>>{
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Vector<Teilhaberschaft> result) {
+			boolean kontaktlisteTeilhaberschaft = false;
+			
+			for (Teilhaberschaft teilhaberschaftResult : result) {
+				if(teilhaberschaftResult.getKontaktlisteID() == kontaktliste.getId()){
+					kontaktlisteTeilhaberschaft = true;
+					teilhaberschaft = teilhaberschaftResult;
+					break;
+				}
+			}
+			if(kontaktlisteTeilhaberschaft == true){
+				
+			}
+		}
+		
+	}
+	
 	public static class AddTeilhaberschaftKontaktlisteCommand implements Command {
 
 		@Override

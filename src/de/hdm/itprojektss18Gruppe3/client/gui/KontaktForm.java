@@ -72,6 +72,8 @@ public class KontaktForm extends MainFrame {
 	private Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
 	private static Kontakt k = null;
 	private static Kontaktliste kontaktliste = null;
+	private static Teilhaberschaft kontaktTeilhaberschaft = null;
+
 
 	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
 	private Button deleteTeilhaberschaftButton = new Button("Teilhaberschaft löschen");
@@ -97,10 +99,12 @@ public class KontaktForm extends MainFrame {
 	private CellTableAuspraegungWrapper celltable = new CellTableAuspraegungWrapper(selection);
 	private ClickableTextCell clickEigenschaft = new ClickableTextCell();
 	private EditTextCell editEigenschaft = new EditTextCell();
-	private SingleSelectionModel<EigenschaftsAuspraegungWrapper> ssm = new SingleSelectionModel<EigenschaftsAuspraegungWrapper>();
+	private static SingleSelectionModel<EigenschaftsAuspraegungWrapper> ssm = new SingleSelectionModel<EigenschaftsAuspraegungWrapper>();
 	private Vector<Teilhaberschaft> teilhaberschaftVector = new Vector<Teilhaberschaft>();
 	private Vector<EigenschaftsAuspraegungWrapper> resultWrapperVector = new Vector<EigenschaftsAuspraegungWrapper>();
 	private String eigenschaft = "";
+	private static Boolean ownKontakt = null;
+	private static Boolean kontaktteilhaberschaftBoolean = null;
 
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(
 			clickEigenschaft);
@@ -131,7 +135,7 @@ public class KontaktForm extends MainFrame {
 		kontaktmanagerVerwaltung.createKontakt("Neuer Kontakt", 0, nutzer.getId(), new CreateKontaktCallback());
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(this);
-//		super.onLoad();
+		//		super.onLoad();
 	}
 
 	public KontaktForm(Kontakt kontakt) {
@@ -143,13 +147,15 @@ public class KontaktForm extends MainFrame {
 
 		kontaktmanagerVerwaltung.findEigenschaftAndAuspraegungByKontakt(nutzer.getId(), kontakt.getId(),
 				new AllAuspraegungenCallback());
+
 		modifikationsdatum.setText("Zuletzt geändert am: " + dtf.format(kontakt.getModifikationsdatum()));
 		erstellungsdatum.setText("Erstellt am: " + dtf.format(kontakt.getErzeugungsdatum()));
 		vPanel2.add(modifikationsdatum);
 		vPanel2.add(erstellungsdatum);
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(this);
-//		super.onLoad();
+		run();
+		//		super.onLoad();
 	}
 
 	public void run() {
@@ -175,12 +181,76 @@ public class KontaktForm extends MainFrame {
 		this.add(vPanel3);
 		this.add(vPanel2);
 
-		Menubar mb = new Menubar(k);
+
 		RootPanel.get("content").add(vPanel);
 		RootPanel.get("content").add(vPanel3);
 		RootPanel.get("content").add(vPanel2);
 
 	}
+
+
+	public class TeilhaberschaftKontaktCallback implements AsyncCallback<Vector<Teilhaberschaft>>{
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onSuccess(Vector<Teilhaberschaft> result) {
+			kontaktteilhaberschaftBoolean = false;
+
+			for (Teilhaberschaft teilhaberschaft : result) {
+				if(teilhaberschaft.getKontaktID() == k.getId() && teilhaberschaft.getEigenschaftsauspraegungID() == 0){
+					kontaktteilhaberschaftBoolean = true;
+					kontaktTeilhaberschaft = teilhaberschaft;
+					break;
+				}
+			}
+			if(kontaktteilhaberschaftBoolean == true) { 
+				Menubar mb = new Menubar(k, kontaktTeilhaberschaft); 
+			} else if(ownKontakt == false) {
+				Menubar mb = new Menubar(k, ownKontakt); 
+			} else {
+				Menubar mb = new Menubar(k); 
+			}
+		}
+
+
+	}
+
+	public static class DeleteTeilhaberschaftCommand implements Command {
+
+		@Override
+		public void execute() {
+			kontaktmanagerVerwaltung.deleteTeilhaberschaftById(kontaktTeilhaberschaft, new DeleteTeilhaberschaftCallback());
+		}
+
+
+	}
+
+	public static class DeleteTeilhaberschaftCallback implements AsyncCallback<Void> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onSuccess(Void result) {
+			Window.alert("Teilhaberschaft gelöscht");
+			CustomTreeModel ctm = new CustomTreeModel();
+			AllKontaktView akw = new AllKontaktView();
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
+
+		}
+
+
+	}
+
 	public class WertAuspraegungFieldUpdater implements FieldUpdater<EigenschaftsAuspraegungWrapper, String> {
 
 		@Override
@@ -434,6 +504,9 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onSuccess(String result) {
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+			ownKontakt = null;
 			if (result.equals("teilhaberschaft")) {
 				wertEigenschaftColumn = celltable.new WertEigenschaftColumn(clickEigenschaft);
 				wertAuspraegungColumn = celltable.new WertAuspraegungColumn(clickEigenschaft);
@@ -441,38 +514,44 @@ public class KontaktForm extends MainFrame {
 				celltable.addColumn(wertAuspraegungColumn, "");
 				kontaktNameBox.setEnabled(false);
 				celltable.setSelectionModel(ssm);
-				deleteTeilhaberschaftButton.addClickHandler(new DeleteTeilhaberschaftAuspraegungClickHandler());
 				hPanel.add(deleteTeilhaberschaftButton);
-
+				ownKontakt = false;
 			} else {
 				celltable.addColumn(wertEigenschaftColumn, "Eigenschaft");
 				celltable.setColumnWidth(wertEigenschaftColumn, 40, Unit.EM);
 				celltable.addColumn(wertAuspraegungColumn, "Wert");
 				celltable.setColumnWidth(wertAuspraegungColumn, 55, Unit.EM);
 				flextable.setWidget(15, 0, tableButtonPanel);
-
+				ownKontakt = true;
 			}
+			kontaktmanagerVerwaltung.findTeilhaberschaftByKontaktAndTeilhaber(nutzer.getId(), k.getId(), new TeilhaberschaftKontaktCallback());
 		}
 
 	}
 
-	public class DeleteTeilhaberschaftAuspraegungClickHandler implements ClickHandler {
+	public static class DeleteTeilhaberschaftAuspraegungCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
-			Nutzer nutzer = new Nutzer();
-			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-			Teilhaberschaft t = new Teilhaberschaft();
-			t.setKontaktID(ssm.getSelectedObject().getPersonIdEigenschaftsauspraegungValue());
-			t.setEigenschaftsauspraegungID(ssm.getSelectedObject().getAuspraegung().getId());
-			t.setTeilhabenderID(nutzer.getId());
-			kontaktmanagerVerwaltung.deleteTeilhaberschaftByTeilhaberschaft(t,
-					new DeleteTeilhaberschaftAuspraegungCallback());
-		}
+		public void execute() {
 
+			if(ssm.getSelectedSet().size() > 0) {
+
+				Nutzer nutzer = new Nutzer();
+				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
+				Teilhaberschaft t = new Teilhaberschaft();
+				t.setKontaktID(ssm.getSelectedObject().getPersonIdEigenschaftsauspraegungValue());
+				t.setEigenschaftsauspraegungID(ssm.getSelectedObject().getAuspraegung().getId());
+				t.setTeilhabenderID(nutzer.getId());
+				kontaktmanagerVerwaltung.deleteTeilhaberschaftByTeilhaberschaft(t,
+						new DeleteTeilhaberschaftAuspraegungCallback());
+			} else {
+				Window.alert("Wählen Sie zunächst die Eigenschaft aus, für welche die Teilhaberschaft"
+						+ " gelöscht werden soll");
+			}
+		}
 	}
 
-	public class DeleteTeilhaberschaftAuspraegungCallback implements AsyncCallback<Void> {
+	public static class DeleteTeilhaberschaftAuspraegungCallback implements AsyncCallback<Void> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -481,7 +560,12 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onSuccess(Void result) {
-			AllKontaktView allkontaktView = new AllKontaktView();
+			Kontaktliste kl = new Kontaktliste();
+			kl.setBezeichnung("Empfangene Kontakte");
+			CustomTreeModel ctm = new CustomTreeModel();
+			AllKontaktView akw = new AllKontaktView();
+			RootPanel.get("leftmenutree").clear();
+			RootPanel.get("leftmenutree").add(ctm);
 		}
 
 	}

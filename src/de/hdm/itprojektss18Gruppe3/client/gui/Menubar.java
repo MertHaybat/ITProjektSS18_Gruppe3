@@ -38,6 +38,7 @@ import de.hdm.itprojektss18Gruppe3.shared.LoginService;
 import de.hdm.itprojektss18Gruppe3.shared.LoginServiceAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 /*
  * Klasse für die Menüleiste. Hier werden die Menüpunkte entsprechend dem geladen, 
@@ -50,6 +51,7 @@ public class Menubar extends MenuBar {
 	private Anchor signOutLink = new Anchor("Sign Out");
 	private HorizontalPanel hp = new HorizontalPanel();
 	private TextBox textBox = new TextBox();
+	private Teilhaberschaft teilhaberschaft = null;
 
 	private MenuBar menubar = new MenuBar();
 	private MenuBar menubarRightSide = new MenuBar();
@@ -59,6 +61,7 @@ public class Menubar extends MenuBar {
 	private MenuBar shareMenu = new MenuBar(true);
 	private MenuBar teilhaberschaftMenu = new MenuBar(true);
 
+	private Boolean ownKontakt = null;
 	private Kontakt kontakt = null;
 	private Kontaktliste kontaktliste = null;
 	private ArrayList<Kontakt> allKontakteSelectedArrayList = null;
@@ -104,13 +107,11 @@ public class Menubar extends MenuBar {
 		RootPanel.get("menubar").clear();
 		addMenuItemsToArray();
 
-
 		run();
 	}
 
 	public Menubar(Kontakt k) {
 		addMenuItemsToArray();
-		this.kontakt = k;
 		deleteKontakt.setEnabled(true);
 		shareKontakt.setEnabled(true);
 		addKontaktToKontaktliste.setEnabled(true);
@@ -120,6 +121,38 @@ public class Menubar extends MenuBar {
 		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
 		addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
 
+		run();
+	}
+
+	public Menubar(Kontakt k, Teilhaberschaft t) {
+		addMenuItemsToArray();
+		this.kontakt = k;
+		this.teilhaberschaft = t;
+		deleteKontakt.setEnabled(false);
+		deleteTeilhaberschaften.setEnabled(true);
+		deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftCommand());
+
+
+		shareKontakt.setEnabled(true);
+		addKontaktToKontaktliste.setEnabled(true);
+		addKontaktEigenschaft.setEnabled(true);
+
+		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
+		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
+		addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
+
+		run();
+	}
+
+	public Menubar(Kontakt k, Boolean ownKontakt) {
+		addMenuItemsToArray();
+		this.kontakt = k;
+
+		deleteTeilhaberschaften.setEnabled(true);
+		deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftAuspraegungCommand());
+		shareKontakt.setEnabled(true);
+		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
+		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
 		run();
 	}
 

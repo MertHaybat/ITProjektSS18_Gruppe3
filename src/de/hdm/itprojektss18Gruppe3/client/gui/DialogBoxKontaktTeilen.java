@@ -189,7 +189,6 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 		@Override
 		public void onSuccess(Nutzer result) {
-
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("mail"));
@@ -272,6 +271,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 			}
 			hide();
 			CustomTreeModel ctm = new CustomTreeModel();
+			AllKontaktView akw = new AllKontaktView();
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
 		}
