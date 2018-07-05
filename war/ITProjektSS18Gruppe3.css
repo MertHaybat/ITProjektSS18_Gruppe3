@@ -489,6 +489,14 @@ body {
 
 /* .GWT WIDGET FORMATIERUNGEN */
 
+
+.shareImageIndicator {
+	width: 20%;
+	position: relative;
+	margin-right: 100px;
+}
+
+
 .gwt-DialogBox .Caption {
 	background: white;
 	cursor: default;

@@ -182,8 +182,10 @@ public class KontaktPopup extends DialogBox {
 
 		@Override
 		public void onSuccess(Kontakt result) {
+			Kontakt k = result;
 			hide();
 			Window.alert("Kontakt wurde erfolgreich erstellt.");
+			Menubar mb = new Menubar(k);
 			KontaktForm kontaktForm = new KontaktForm(result);
 			CustomTreeModel ctm = new CustomTreeModel();
 			RootPanel.get("leftmenutree").clear();

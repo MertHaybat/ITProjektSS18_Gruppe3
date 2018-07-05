@@ -353,6 +353,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 			CustomTreeModel ctm = new CustomTreeModel();
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
+			KontaktForm kf = new KontaktForm(kontaktNeu);
 
 		}
 	}

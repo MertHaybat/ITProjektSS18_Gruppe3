@@ -103,28 +103,22 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	 * einer Baumknotenauswahl wird je nach Typ des Business-Objekts der
 	 * "selectedKontaktliste" bzw. das "selectedKontakt" gesetzt.
 	 */
-	
-	//-----Die KontaktListviews auskommentiert!!
 	private class SelectionChangeEventHandler implements SelectionChangeEvent.Handler {
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 			BusinessObject selection = selectionModel.getSelectedObject();
-//			KontaktlistView kontaktlistView = new KontaktlistView();
-//			kontaktlistView.getMenuBarContainerFlowPanel();
 			if (selection instanceof Kontaktliste) {
 				setSelectedKontaktliste((Kontaktliste) selection);
 				if(getSelectedKontaktliste().getBezeichnung().equals("Eigene Kontakte")){
 					AllKontaktView allkontaktView = new AllKontaktView();
 				} else {
 					AllKontaktView allkontaktView = new AllKontaktView(getSelectedKontaktliste());
-					
+
 				}
-//				allkontaktView.getAllKontakteCellTableContainer().clear();
 			} else if (selection instanceof Kontakt) {
 				setSelectedKontakt((Kontakt) selection);
 				KontaktForm kontaktForm = new KontaktForm(getSelectedKontakt());
 			}
-//			KontaktlistView klisteView = new KontaktlistView(getSelectedKontakt(), getSelectedKontaktliste());
 		}
 	}
 
@@ -160,7 +154,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		}
 
 		public class FindAllKontaktlisteByTeilhaberschaftCallback
-				implements AsyncCallback<Vector<NutzerTeilhaberschaftKontaktlisteWrapper>> {
+		implements AsyncCallback<Vector<NutzerTeilhaberschaftKontaktlisteWrapper>> {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -211,7 +205,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 					public void onSuccess(Vector<NutzerTeilhaberschaftKontaktWrapper> result) {
 						Vector<Kontakt> kontakt = new Vector<Kontakt>();
 						for (NutzerTeilhaberschaftKontaktWrapper wrapper : result) {
-						
+
 							kontakt.add(wrapper.getKontakt());
 							teilhaberschaftVector.add(wrapper.getTeilhaberschaft());
 
@@ -246,18 +240,18 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID((Kontaktliste) value,
 					new AsyncCallback<Vector<Kontakt>>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-							Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
-						}
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
+				}
 
-						@Override
-						public void onSuccess(Vector<Kontakt> result) {
-							for (Kontakt k : result) {
-								kontaktProvider.getList().add(k);
-							}
-						}
-					});
+				@Override
+				public void onSuccess(Vector<Kontakt> result) {
+					for (Kontakt k : result) {
+						kontaktProvider.getList().add(k);
+					}
+				}
+			});
 
 			// Return a node info that pairs the data with a cell.
 			return new DefaultNodeInfo<Kontakt>(kontaktProvider, new KontaktCell(), selectionModel, null);
@@ -287,15 +281,19 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				sb.appendHtmlConstant("<table width='100%'><td>");
 				sb.appendEscaped(value.getBezeichnung());
 				sb.appendHtmlConstant("</td><td style='float: right'>");
-				if (value.getBezeichnung().equals("Eigene Kontakte") || value.getBezeichnung().equals("Empfangene Kontakte")){
-					
-					
+				if (value.getBezeichnung().equals("Eigene Kontakte")){
+
+				} else if(value.getBezeichnung().equals("Empfangene Kontakte")) {
+					sb.appendHtmlConstant("<img width=\"22\" src=\"images/received_share.png\" style=\"vertical-align: middle; opacity: 0.7\">");
+				}
+				else if(value.getNutzerID() != nutzerKontaktliste.getId()) {
+					sb.appendHtmlConstant("<img width=\"22\" src=\"images/received_share.png\" style=\"vertical-align: middle; opacity: 0.7\">");
 				} else {
 					if (value.getStatus() == 0) {
-						sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\" style=\"vertical-align: middle;\">");
-											
+						sb.appendHtmlConstant("<img width=\"18\" src=\"images/singleperson.svg\" style=\"vertical-align: middle; margin-right: 2px; opacity: 0.7\">");
+
 					} else if (value.getStatus() == 1) {
-						sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\" style=\"vertical-align: middle;\">");
+						sb.appendHtmlConstant("<img width=\"21\" src=\"images/group.svg\" style=\"vertical-align: middle; opacity: 0.7\">");
 					}
 				}
 				sb.appendHtmlConstant("</td></table>");
@@ -316,11 +314,11 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 				sb.appendEscaped(value.getName());
 				sb.appendHtmlConstant("</td><td style='float: right'>");
 				if (value.getStatus() == 0) {
-					sb.appendHtmlConstant("<img width=\"16\" src=\"images/singleperson.svg\" style=\"vertical-align: middle;\">");
+					sb.appendHtmlConstant("<img width=\"16\" src=\"images/singleperson.svg\" style=\"vertical-align: middle; opacity: 0.7; margin-right: 2px;\">");
 
 				} else if (value.getStatus() == 1) {
 
-					sb.appendHtmlConstant("<img width=\"16\" src=\"images/group.svg\" style=\"vertical-align: middle;\">");
+					sb.appendHtmlConstant("<img width=\"16\" src=\"images/group.svg\" style=\"vertical-align: middle; opacity: 0.7\">");
 				}
 				sb.appendHtmlConstant("</td></table>");
 			} else if (value == null) {
@@ -344,18 +342,18 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		navigationCellTree = new CellTree(customTreeModel, "Root", CellTreeResources.INSTANCE,
 				new CellTree.CellTreeMessages() {
 
-					@Override
-					public String showMore() {
-						// TODO Auto-generated method stub
-						return null;
-					}
+			@Override
+			public String showMore() {
+				// TODO Auto-generated method stub
+				return null;
+			}
 
-					@Override
-					public String emptyTree() {
-						// TODO Auto-generated method stub
-						return "Leere Kontaktliste";
-					}
-				});
+			@Override
+			public String emptyTree() {
+				// TODO Auto-generated method stub
+				return "Leere Kontaktliste";
+			}
+		});
 
 		navigationCellTree.setAnimationEnabled(true);
 		navigationTreePanel.add(navigationCellTree);

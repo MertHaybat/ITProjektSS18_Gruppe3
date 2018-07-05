@@ -45,11 +45,9 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	private HTML headline = new HTML("Teilhaberschaften verwalten");
-	private HTML nutzerVerwalten = new HTML("Nutzer verwalten");
 	private HTML auspraegungVerwalten = new HTML("Geteilte Eigenschaftsausprägungen:");
 	private HTML kontakteVerwalten = new HTML("Geteilte Kontakte:");
 	private HTML kontaktlisteVerwalten = new HTML("Geteilte Kontaktlisten:");
-	private Anchor nutzerAnchor = new Anchor("Nutzer löschen");
 	private Label emptyLabel;
 
 	private static MultiSelectionModel<NutzerTeilhaberschaftKontaktWrapper> selectionKontaktAuspraegung;
@@ -140,10 +138,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		kontaktmanagerVerwaltung.findKontaktTeilhaberschaftEigentuemer(nutzer.getId(), new KontaktCallback());
 		kontaktmanagerVerwaltung.findAuspraegungTeilhaberschaftEigentuemer(nutzer.getId(), new AuspraegungCallback());
 
-		nutzerAnchor.addClickHandler(new DeleteNutzerClickHandler());
-
 		headline.setStylePrimaryName("h3");
-		nutzerVerwalten.setStylePrimaryName("h3");
 
 		vPanel.add(headline);
 		vPanel.add(new HTML("<br><br>"));
@@ -156,8 +151,6 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		vPanel.add(kontaktlisteVerwalten);
 		vPanel.add(teilhaberschaftKontaktliste);
 		vPanel.add(new HTML("<br><br><br>"));
-		vPanel.add(nutzerVerwalten);
-		vPanel.add(nutzerAnchor);
 		vPanel.setStylePrimaryName("teilhaberschaftVerwaltungPanel");
 
 		RootPanel.get("content").add(vPanel);
@@ -215,37 +208,6 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		public void onSuccess(Void result) {
 			TeilhaberschaftVerwaltungView tvv = new TeilhaberschaftVerwaltungView();
 		}
-	}
-
-	public class DeleteNutzerClickHandler implements ClickHandler{
-
-		@Override
-		public void onClick(ClickEvent event) {
-			boolean deleteNutzer = Window.confirm("Möchten Sie den Nutzer löschen?");
-			if(deleteNutzer == true){
-				Nutzer nutzer = new Nutzer();
-				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-				nutzer.setMail(Cookies.getCookie("email"));
-				kontaktmanagerVerwaltung.deleteNutzer(nutzer, new DeleteNutzerCallback());	
-			} 
-		}
-
-	}
-	public class DeleteNutzerCallback implements AsyncCallback<Void>{
-
-		@Override
-		public void onFailure(Throwable caught) {
-			Window.alert("Fehler beim Löschen des Nutzers: " + caught.getMessage());
-		}
-
-		@Override
-		public void onSuccess(Void result) {
-			Anchor signOutLink = new Anchor();
-			Window.alert("Nutzer wurde gelöscht");
-			signOutLink.setHref(Cookies.getCookie("signout"));
-			Window.open(signOutLink.getHref(), "_self", "");
-		}
-
 	}
 
 	public class AuspraegungCallback implements AsyncCallback<Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>>{

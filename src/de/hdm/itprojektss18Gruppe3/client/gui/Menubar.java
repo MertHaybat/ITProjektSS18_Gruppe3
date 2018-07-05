@@ -62,6 +62,7 @@ public class Menubar extends MenuBar {
 	private MenuBar teilhaberschaftMenu = new MenuBar(true);
 
 	private Boolean ownKontakt = null;
+	private Boolean kontaktlisteTeilhaberschaft = null;
 	private Kontakt kontakt = null;
 	private Kontaktliste kontaktliste = null;
 	private ArrayList<Kontakt> allKontakteSelectedArrayList = null;
@@ -74,7 +75,7 @@ public class Menubar extends MenuBar {
 	private MenuItem addKontakt = new MenuItem("Neuen Kontakt erstellen", new AllKontaktView.CreateKontaktCommand());
 	private MenuItem deleteKontakt = new MenuItem("Kontakt löschen", new AllKontaktView.KontaktDeleteCommand());
 	private MenuItem shareKontakt = new MenuItem("Kontakt teilen",
-			new AllKontaktView.AddTeilhaberschaftKontaktCommand());
+			new ShareKontaktCommand());
 	private MenuItem addKontaktEigenschaft = new MenuItem("Neue Eigenschaft für Kontakt", new KontaktForm.CreateEigenschaftAuspraegungCommand());
 	private MenuItem alterKontakt = new MenuItem("Kontakt bearbeiten", new AlterKontaktCommand());
 	private MenuItem addKontaktToKontaktliste = new MenuItem("Kontakt zur Kontaktliste hinzufügen",
@@ -111,6 +112,7 @@ public class Menubar extends MenuBar {
 	}
 
 	public Menubar(Kontakt k) {
+		this.kontakt = k;
 		addMenuItemsToArray();
 		deleteKontakt.setEnabled(true);
 		shareKontakt.setEnabled(true);
@@ -118,7 +120,7 @@ public class Menubar extends MenuBar {
 		addKontaktEigenschaft.setEnabled(true);
 
 		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
-		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
+		shareKontakt.setScheduledCommand(new ShareKontaktAndEigenschaftenCommand());
 		addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
 
 		run();
@@ -138,7 +140,6 @@ public class Menubar extends MenuBar {
 		addKontaktEigenschaft.setEnabled(true);
 
 		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
-		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
 		addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
 
 		run();
@@ -147,7 +148,6 @@ public class Menubar extends MenuBar {
 	public Menubar(Kontakt k, Boolean ownKontakt) {
 		addMenuItemsToArray();
 		this.kontakt = k;
-
 		deleteTeilhaberschaften.setEnabled(true);
 		deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftAuspraegungCommand());
 		shareKontakt.setEnabled(true);
@@ -160,19 +160,32 @@ public class Menubar extends MenuBar {
 		addMenuItemsToArray();
 		this.allKontakteSelectedArrayList = allKontakteSelectedArrayList;
 		this.kontaktliste = kl;
-		if(!kontaktliste.getBezeichnung().equals("Empfangene Kontakte") && !kontaktliste.getBezeichnung().equals("Eigene Kontakte")) {
+		kontaktlisteTeilhaberschaft = AllKontaktView.getKontaktlisteTeilhaberschaft();
+		shareKontakt.setScheduledCommand(new AllKontaktView.AddTeilhaberschaftKontaktCommand());
+		if(!kontaktliste.getBezeichnung().equals("Empfangene Kontakte") && !kontaktliste.getBezeichnung().equals("Eigene Kontakte") &&
+				kontaktlisteTeilhaberschaft == false ) {
 			deleteKontaktliste.setEnabled(true);
 			shareKontaktliste.setEnabled(true);
 			addNewKontaktToKontaktliste.setEnabled(true);
 			renameKontaktliste.setEnabled(true);
 		}
 
-		if(allKontakteSelectedArrayList.size() > 0) {
+		if(allKontakteSelectedArrayList.size() > 0 && kontaktlisteTeilhaberschaft == false) {
 			deleteKontakt.setEnabled(true);
 			shareKontakt.setEnabled(true);
 			addKontaktToKontaktliste.setEnabled(true);
 			deleteKontaktFromKontaktliste.setEnabled(true);
 			alterKontakt.setEnabled(true);
+		}
+		
+		if(kontaktlisteTeilhaberschaft == true && allKontakteSelectedArrayList.size() > 0) {
+			deleteTeilhaberschaften.setEnabled(true);
+			deleteTeilhaberschaften.setScheduledCommand(new AllKontaktView.TeilhaberschaftButtonCommand());
+		} 
+		
+		if (kontaktlisteTeilhaberschaft == true && allKontakteSelectedArrayList.size() == 0) {
+			deleteTeilhaberschaften.setEnabled(true);
+			deleteTeilhaberschaften.setScheduledCommand(new AllKontaktView.DeleteTeilhaberschaftKontaktlisteCommand());
 		}
 		run();
 	}
@@ -382,6 +395,16 @@ public class Menubar extends MenuBar {
 		@Override
 		public void execute() {
 			DialogBoxKontaktTeilen dialogbox = new DialogBoxKontaktTeilen(kontakt);
+			dialogbox.center();
+		}
+
+	}
+	
+	public class ShareKontaktAndEigenschaftenCommand implements Command {
+
+		@Override
+		public void execute() {
+			TeilhaberschaftDialogBox dialogbox = new TeilhaberschaftDialogBox(kontakt);
 			dialogbox.center();
 		}
 

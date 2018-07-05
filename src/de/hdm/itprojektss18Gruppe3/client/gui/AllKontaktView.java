@@ -71,6 +71,8 @@ public class AllKontaktView extends MainFrame {
 
 	private HTML headline = new HTML();
 	private CheckboxCell checkBoxCell = new CheckboxCell(true, false);
+	
+	private static Boolean kontaktlisteTeilhaberschaft = false;
 
 	/**
 	 * Instanziierung und Deklarierung von Listen die für die Verwaltung der BO's notwendig sind.
@@ -127,7 +129,6 @@ public class AllKontaktView extends MainFrame {
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		if (k.getBezeichnung().equals("Empfangene Kontakte")) {
 			headline = new HTML("Alle Kontakte, die Sie als Empfänger geteilt bekommen haben");
-			teilhaberschaftButton.addClickHandler(new TeilhaberschaftButtonClickHandler());
 			kontaktmanagerVerwaltung.findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(nutzer.getId(),
 					new TeilhaberschaftKontakteCallback());
 		} else {
@@ -135,8 +136,8 @@ public class AllKontaktView extends MainFrame {
 			kontaktmanagerVerwaltung.findAllKontakteByKontaktlisteID(k, new AllKontaktByNutzerCallback());
 
 		}
-	//	kontaktmanagerVerwaltung.findAllTeilhaberschaftByKontaktliste(k.getId(), callback);
-		Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
+		kontaktmanagerVerwaltung.findAllTeilhaberschaftByKontaktliste(k.getId(), new KontaktlisteTeilhaberschaftCallback());
+
 		super.onLoad();
 	}
 
@@ -179,26 +180,28 @@ public class AllKontaktView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			
+			Window.alert("Fehler beim Laden der Teilhaberschaften " + caught.getMessage());
 		}
 
 		@Override
 		public void onSuccess(Vector<Teilhaberschaft> result) {
-			boolean kontaktlisteTeilhaberschaft = false;
+			kontaktlisteTeilhaberschaft = false;
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			
 			for (Teilhaberschaft teilhaberschaftResult : result) {
-				if(teilhaberschaftResult.getKontaktlisteID() == kontaktliste.getId()){
+				if(teilhaberschaftResult.getKontaktlisteID() == kontaktliste.getId() && nutzer.getId() != kontaktliste.getNutzerID()){
 					kontaktlisteTeilhaberschaft = true;
 					teilhaberschaft = teilhaberschaftResult;
 					break;
 				}
 			}
-			if(kontaktlisteTeilhaberschaft == true){
-				
-			}
+			Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
 		}
-		
+	}
+	
+	public static Boolean getKontaktlisteTeilhaberschaft() {
+		return kontaktlisteTeilhaberschaft;
 	}
 	
 	public static class AddTeilhaberschaftKontaktlisteCommand implements Command {
@@ -214,10 +217,10 @@ public class AllKontaktView extends MainFrame {
 		}
 	}
 
-	class TeilhaberschaftButtonClickHandler implements ClickHandler {
+	static class TeilhaberschaftButtonCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
 			if (allKontakteSelectedArrayList.isEmpty()) {
 				Window.alert("Sie müssen mindestens eine Teilhaberschaft auswählen");
 			} else {
@@ -296,10 +299,10 @@ public class AllKontaktView extends MainFrame {
 
 	}
 
-	class DeleteTeilhaberschaftKontaktlisteClickHandler implements ClickHandler {
+	static class DeleteTeilhaberschaftKontaktlisteCommand implements Command {
 
 		@Override
-		public void onClick(ClickEvent event) {
+		public void execute() {
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			Teilhaberschaft teilhaberschaft = new Teilhaberschaft();
@@ -319,12 +322,15 @@ public class AllKontaktView extends MainFrame {
 			@Override
 			public void onSuccess(Void result) {
 				AllKontaktView allkontaktview = new AllKontaktView();
+				CustomTreeModel ctm = new CustomTreeModel();
+				RootPanel.get("leftmenutree").clear();
+				RootPanel.get("leftmenutree").add(ctm);
 			}
 
 		}
 	}
 
-	class DeleteTeilhaberschaftCallback implements AsyncCallback<Void> {
+	static class DeleteTeilhaberschaftCallback implements AsyncCallback<Void> {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -492,6 +498,9 @@ public class AllKontaktView extends MainFrame {
 			allKontakteSelectedArrayList
 			.addAll(((MultiSelectionModel<Kontakt>) allKontakteCellTable.getSsmAuspraegung()).getSelectedSet());
 
+			if(kontaktliste.getBezeichnung() == "Empfangene Kontakte") {
+				kontaktlisteTeilhaberschaft = true;
+			}
 			Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
 		}
 

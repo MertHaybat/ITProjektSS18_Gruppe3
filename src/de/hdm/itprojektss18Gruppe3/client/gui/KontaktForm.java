@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -74,9 +75,7 @@ public class KontaktForm extends MainFrame {
 	private static Kontaktliste kontaktliste = null;
 	private static Teilhaberschaft kontaktTeilhaberschaft = null;
 
-
-	private Button zurueckZuAllKontaktView = new Button("Alle Kontakte");
-	private Button deleteTeilhaberschaftButton = new Button("Teilhaberschaft löschen");
+	private Image shareImageIndicator = new Image();
 
 	private FlexTable flextable = new FlexTable();
 	private VerticalPanel vPanel = new VerticalPanel();
@@ -159,6 +158,12 @@ public class KontaktForm extends MainFrame {
 	}
 
 	public void run() {
+
+
+
+	//	singleShare.setSize(width, height);
+
+
 		celltable.setWidth("130%");
 		kontaktNameBox.addKeyPressHandler(new KontaktTextBoxKeyPressHandler());
 		headline.setStylePrimaryName("h3");
@@ -166,6 +171,15 @@ public class KontaktForm extends MainFrame {
 		kontaktNameBox.setStylePrimaryName("kontaktFormTextBox");
 		kontaktLabelkontaktName.add(kontaktNameLabel);
 		kontaktLabelkontaktName.add(kontaktNameBox);
+
+		if(k.getStatus() == 0) {
+			shareImageIndicator.setUrl("/images/singleperson.svg");
+		} else if (k.getStatus() == 1){
+			shareImageIndicator.setUrl("/images/group.svg");
+		}
+		
+		shareImageIndicator.setStylePrimaryName("shareImageIndicator");
+		kontaktLabelkontaktName.add(shareImageIndicator);
 
 		vPanel.add(headline);
 		vPanel.add(new HTML("<br><br>"));
@@ -199,10 +213,13 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onSuccess(Vector<Teilhaberschaft> result) {
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			kontaktteilhaberschaftBoolean = false;
 
 			for (Teilhaberschaft teilhaberschaft : result) {
-				if(teilhaberschaft.getKontaktID() == k.getId() && teilhaberschaft.getEigenschaftsauspraegungID() == 0){
+				if(teilhaberschaft.getKontaktID() == k.getId() && teilhaberschaft.getEigenschaftsauspraegungID() == 0 ||
+						nutzer.getId() != k.getNutzerID()){
 					kontaktteilhaberschaftBoolean = true;
 					kontaktTeilhaberschaft = teilhaberschaft;
 					break;
@@ -226,8 +243,6 @@ public class KontaktForm extends MainFrame {
 		public void execute() {
 			kontaktmanagerVerwaltung.deleteTeilhaberschaftById(kontaktTeilhaberschaft, new DeleteTeilhaberschaftCallback());
 		}
-
-
 	}
 
 	public static class DeleteTeilhaberschaftCallback implements AsyncCallback<Void> {
@@ -514,7 +529,13 @@ public class KontaktForm extends MainFrame {
 				celltable.addColumn(wertAuspraegungColumn, "");
 				kontaktNameBox.setEnabled(false);
 				celltable.setSelectionModel(ssm);
-				hPanel.add(deleteTeilhaberschaftButton);
+				ownKontakt = false;
+			} else if (nutzer.getId() != k.getNutzerID()) {
+				celltable.addColumn(wertEigenschaftColumn, "Eigenschaft");
+				celltable.setColumnWidth(wertEigenschaftColumn, 40, Unit.EM);
+				celltable.addColumn(wertAuspraegungColumn, "Wert");
+				celltable.setColumnWidth(wertAuspraegungColumn, 55, Unit.EM);
+				flextable.setWidget(15, 0, tableButtonPanel);
 				ownKontakt = false;
 			} else {
 				celltable.addColumn(wertEigenschaftColumn, "Eigenschaft");

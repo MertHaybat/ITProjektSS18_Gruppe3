@@ -88,10 +88,10 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 		public void render(Context context, Kontakt object, SafeHtmlBuilder sb) {
 			// TODO Auto-generated method stub
 			if (object.getStatus() == 0){
-				sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">");
+				sb.appendHtmlConstant("<img width=\"15\" src=\"images/singleperson.svg\" style=\"vertical-align: middle; opacity: 0.7\">");
 			} else if (object.getStatus() == 1){
 
-				sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">");
+				sb.appendHtmlConstant("<img width=\"18\" src=\"images/group.svg\" style=\"vertical-align: middle; opacity: 0.7\">");
 			}
 			super.render(context, object, sb);
 		}		
