@@ -114,7 +114,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 				}
 			}
 		};
-		
+
 		kontaktmanagerVerwaltung.findAllNutzer(new getAllNutzerCallback());
 		selectedNutzerCT.addColumn(nutzertxtColumn, "");
 		selectedNutzerCT.addColumn(buttonColumn1, "");
@@ -173,10 +173,10 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 						}
 					}
 					if(nutzerVorhanden == true){
-						
+
 						Nutzer nutzer = new Nutzer();
 						nutzer.setMail(box.getValue());
-						
+
 						nutzerSuggestbox.add(nutzer);
 						box.setValue("");
 						selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);

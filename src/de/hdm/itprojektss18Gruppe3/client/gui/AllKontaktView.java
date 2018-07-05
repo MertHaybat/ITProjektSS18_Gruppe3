@@ -71,7 +71,7 @@ public class AllKontaktView extends MainFrame {
 
 	private HTML headline = new HTML();
 	private CheckboxCell checkBoxCell = new CheckboxCell(true, false);
-	
+
 	private static Boolean kontaktlisteTeilhaberschaft = false;
 
 	/**
@@ -188,7 +188,7 @@ public class AllKontaktView extends MainFrame {
 			kontaktlisteTeilhaberschaft = false;
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-			
+
 			for (Teilhaberschaft teilhaberschaftResult : result) {
 				if(teilhaberschaftResult.getKontaktlisteID() == kontaktliste.getId() && nutzer.getId() != kontaktliste.getNutzerID()){
 					kontaktlisteTeilhaberschaft = true;
@@ -199,11 +199,11 @@ public class AllKontaktView extends MainFrame {
 			Menubar mb = new Menubar(kontaktliste, allKontakteSelectedArrayList);
 		}
 	}
-	
+
 	public static Boolean getKontaktlisteTeilhaberschaft() {
 		return kontaktlisteTeilhaberschaft;
 	}
-	
+
 	public static class AddTeilhaberschaftKontaktlisteCommand implements Command {
 
 		@Override
