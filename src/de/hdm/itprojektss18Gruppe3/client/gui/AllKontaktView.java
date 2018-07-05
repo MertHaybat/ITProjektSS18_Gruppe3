@@ -100,11 +100,10 @@ public class AllKontaktView extends MainFrame {
 	/**
 	 * Instanziierung des CellTables, welches verwendet wird. Damit auch die Columns, die als Innere Klasse in der CellTable Klasse sind.
 	 */
-	private CellTableKontakt allKontakteCellTable = new CellTableKontakt();
-	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(
-			clickCell);
-	private CellTableKontakt.CheckColumn checkColumn = allKontakteCellTable.new CheckColumn(checkBoxCell);
-	private CellTableKontakt.IconColumn iconColumn = allKontakteCellTable.new IconColumn(textCell);
+	private CellTableKontakt allKontakteCellTable = null;
+	private CellTableKontakt.KontaktnameColumn kontaktnameColumn = null;
+	private CellTableKontakt.CheckColumn checkColumn = null;
+	private CellTableKontakt.IconColumn iconColumn = null;
 
 
 	public AllKontaktView() {
@@ -123,6 +122,8 @@ public class AllKontaktView extends MainFrame {
 
 		kontaktliste = k;
 
+
+		
 		allKontakteSelectedArrayList.clear();
 
 		Nutzer nutzer = new Nutzer();
@@ -144,7 +145,10 @@ public class AllKontaktView extends MainFrame {
 
 
 	public void run() {
-
+		allKontakteCellTable = new CellTableKontakt(kontaktliste);
+		kontaktnameColumn = allKontakteCellTable.new KontaktnameColumn(clickCell);
+		checkColumn = allKontakteCellTable.new CheckColumn(checkBoxCell);
+		iconColumn = allKontakteCellTable.new IconColumn(textCell);
 		allKontakteCellTable.setEmptyTableWidget(new Label("Diese Kontaktliste ist leer"));
 
 		allKontakteCellTableContainer.clear();

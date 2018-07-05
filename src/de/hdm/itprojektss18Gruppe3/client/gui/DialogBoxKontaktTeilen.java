@@ -63,6 +63,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 	private Kontakt soloKontakt = new Kontakt();
 	private ListDataProvider<Nutzer> nutzerDataProvider = new ListDataProvider<Nutzer>(nutzerSuggestbox);
 	private Kontaktliste kontaktliste = new Kontaktliste();
+	private Boolean singleKontakt = null;
 
 	public DialogBoxKontaktTeilen(Kontakt kontakt) {
 		this.soloKontakt = kontakt;
@@ -204,7 +205,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("mail"));
 			kontaktmanagerVerwaltung.createTeilhaberschaft(kontaktliste.getId(), 0, 0, result.getId(), nutzer.getId(),
-					new createTeilhaberschaftCallback());
+					new createTeilhaberschaftCallback(singleKontakt));
 		}
 
 	}
@@ -232,18 +233,21 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 			@Override
 			public void onSuccess(Nutzer result) {
+				Boolean singleKontakt = null;
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				nutzer.setMail(Cookies.getCookie("mail"));
 				if (kontakt.size() > 0) {
 					for (Kontakt kontakt : kontakt) {
+						singleKontakt = false;
 						kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontakt.getId(), 0, result.getId(),
-								nutzer.getId(), new createTeilhaberschaftCallback());
+								nutzer.getId(), new createTeilhaberschaftCallback(singleKontakt));
 
 					}
 				} else {
+					singleKontakt = true;
 					kontaktmanagerVerwaltung.createTeilhaberschaft(0, soloKontakt.getId(), 0, result.getId(),
-							nutzer.getId(), new createTeilhaberschaftCallback());
+							nutzer.getId(), new createTeilhaberschaftCallback(singleKontakt));
 
 				}
 			}
@@ -266,6 +270,12 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 
 	class createTeilhaberschaftCallback implements AsyncCallback<Teilhaberschaft> {
 
+		Boolean singleKontakt;
+
+		public createTeilhaberschaftCallback(Boolean singleKontakt) {
+			this.singleKontakt = singleKontakt;
+		}
+
 		@Override
 		public void onFailure(Throwable caught) {
 			Window.alert("Fehler beim Laden: " + caught.getMessage());
@@ -280,13 +290,16 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 			} else {
 				Window.alert("Teilhaberschaft erfolgreich erstellt");
 			}
-			hide();
 			CustomTreeModel ctm = new CustomTreeModel();
-			AllKontaktView akw = new AllKontaktView();
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
+			if(singleKontakt == true) {
+				KontaktForm kf = new KontaktForm(soloKontakt);
+			} else {
+				AllKontaktView akw = new AllKontaktView();
+			}
+			hide();
 		}
-
 	}
 
 	public class AbortTeilhaberschaftClickHandler implements ClickHandler {

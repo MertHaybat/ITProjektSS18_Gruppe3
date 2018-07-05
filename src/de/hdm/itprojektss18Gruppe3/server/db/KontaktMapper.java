@@ -447,7 +447,7 @@ public class KontaktMapper extends PersonMapper{
 		Vector<Kontakt> result = new Vector<Kontakt>();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT `kontakt`.`id`, `kontakt`.`name`, `kontakt`.`erzeugungsdatum`, `kontakt`.`modifikationsdatum`, `kontakt`.`status`, `kontaktliste`.`id` "
+			PreparedStatement stmt = con.prepareStatement("SELECT `kontakt`.`id`, `kontakt`.`name`, `kontakt`.`erzeugungsdatum`, `kontakt`.`modifikationsdatum`, `kontakt`.`status`, `kontakt`.`nutzerid`, `kontaktliste`.`id` "
 					+ "FROM `kontaktliste` INNER JOIN `kontaktkontaktliste` "
 					+ "ON `kontaktkontaktliste`.`kontaktlisteid` = `kontaktliste`.`id` INNER JOIN `kontakt` "
 					+ "ON `kontaktkontaktliste`.`kontaktid` = `kontakt`.`id` WHERE `kontaktliste`.`id` = ? ORDER BY name ASC ");
@@ -463,6 +463,7 @@ public class KontaktMapper extends PersonMapper{
 				
 				kontakt.setId(rs.getInt("kontakt.id"));
 				kontakt.setName(rs.getString("name"));
+				kontakt.setNutzerID(rs.getInt("nutzerid"));
 				kontakt.setErzeugungsdatum(rs.getTimestamp("erzeugungsdatum"));
 				kontakt.setModifikationsdatum(rs.getTimestamp("modifikationsdatum"));
 				kontakt.setStatus(rs.getInt("status"));

@@ -254,10 +254,7 @@ public class KontaktForm extends MainFrame {
 			AllKontaktView akw = new AllKontaktView();
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
-
 		}
-
-
 	}
 
 	public class WertAuspraegungFieldUpdater implements FieldUpdater<EigenschaftsAuspraegungWrapper, String> {

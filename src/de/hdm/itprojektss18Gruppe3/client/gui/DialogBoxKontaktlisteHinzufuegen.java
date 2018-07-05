@@ -137,7 +137,7 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			for (Kontakt kontakt : kontakte) {
 				for (Kontaktliste kontaktliste : selectionModel.getSelectedSet()) {
 					kontaktmanagerVerwaltung.createKontaktKontaktliste(kontakt.getId(), kontaktliste.getId(), new CreateKontaktKontaktlisteCallback());
-
+					
 				}
 			}
 		}
