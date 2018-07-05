@@ -183,18 +183,27 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 		public void execute() {
 			if(selectionKontaktAuspraegung.getSelectedSet().size() > 0) {
 				for(NutzerTeilhaberschaftKontaktWrapper t : selectionKontaktAuspraegung.getSelectedSet()) {
-					kontaktmanagerVerwaltung.deleteTeilhaberschaftByID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
+					kontaktmanagerVerwaltung.deleteTeilhaberschaftById(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
 				}
+				CustomTreeModel ctm = new CustomTreeModel();
+				RootPanel.get("leftmenutree").clear();
+				RootPanel.get("leftmenutree").add(ctm);
 			}
 			if(selectionEigenschaftAuspraegung.getSelectedSet().size() > 0) {
 				for(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper t : selectionEigenschaftAuspraegung.getSelectedSet()) {
-					kontaktmanagerVerwaltung.deleteTeilhaberschaftByEigenschaftsauspraegungID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
+					kontaktmanagerVerwaltung.deleteTeilhaberschaftById(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
 				}
+				CustomTreeModel ctm = new CustomTreeModel();
+				RootPanel.get("leftmenutree").clear();
+				RootPanel.get("leftmenutree").add(ctm);
 			}
 			if(selectionKontaktlisteAuspraegung.getSelectedSet().size() > 0) {
 				for(NutzerTeilhaberschaftKontaktlisteWrapper t : selectionKontaktlisteAuspraegung.getSelectedSet()) {
-					kontaktmanagerVerwaltung.deleteTeilhaberschaftByKontaktlisteID(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
+					kontaktmanagerVerwaltung.deleteTeilhaberschaftById(t.getTeilhaberschaft(), new DeleteTeilhaberschaftCallback());
 				}
+				CustomTreeModel ctm = new CustomTreeModel();
+				RootPanel.get("leftmenutree").clear();
+				RootPanel.get("leftmenutree").add(ctm);
 			}
 
 			if((selectionKontaktAuspraegung.getSelectedSet().size() == 0 && selectionEigenschaftAuspraegung.getSelectedSet().size() == 0 && selectionKontaktlisteAuspraegung.getSelectedSet().size() == 0)) {

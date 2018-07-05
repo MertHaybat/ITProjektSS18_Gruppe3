@@ -152,7 +152,6 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 		eigenschaftCT.setSelectionModel(eigenschaftModel, eigenschaftSelectionEventManager);
 
-		//		eigenschaftCT.addCellPreviewHandler(new EigenschaftPreviewClickHander());
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		b1.addClickHandler(new insertTeilhaberschaftClickHandler());
 		b2.addClickHandler(new closeDialogBoxClickHandler());
@@ -210,17 +209,27 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		@Override
 		public void onKeyPress(KeyPressEvent event) {
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+				boolean nutzerVorhanden = false;
 				if (box.getValue() == "") {
-
 				} else {
-
-					Nutzer nutzer = new Nutzer();
-					nutzer.setMail(box.getValue());
-
-					nutzerSuggestbox.add(nutzer);
-					box.setValue("");
-					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+					for (Nutzer nutzerListe : nutzerListe) {
+						if(nutzerListe.getMail() == box.getValue()){
+							nutzerVorhanden = true;
+						}
+					}
+					if(nutzerVorhanden == true){
+						
+						Nutzer nutzer = new Nutzer();
+						nutzer.setMail(box.getValue());
+						
+						nutzerSuggestbox.add(nutzer);
+						box.setValue("");
+						selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
+						selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+					} else {
+						Window.alert("Angegebene E-Mail Adresse ist ungültig.");
+						box.setValue("");
+					}
 				}
 			}
 
@@ -287,10 +296,14 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 			if(nutzerSuggestbox.size() == 0){
 				Window.alert("Sie müssen mindestens eine E-Mail Adresse angeben.");
 			} else {
-
-				for (Nutzer nutzersuggest : nutzerSuggestbox) {
-					kontaktmanagerVerwaltung.checkEmail(nutzersuggest.getMail(), new KontaktFindNutzerByMailCallback());
-
+				if(ssmAuspraegung.getSelectedSet().size()>=1 || kontaktTeilenCB.getValue() == true){
+					for (Nutzer nutzersuggest : nutzerSuggestbox) {
+						kontaktmanagerVerwaltung.checkEmail(nutzersuggest.getMail(), new KontaktFindNutzerByMailCallback());
+						
+					}
+					
+				} else {
+					Window.alert("Sie müssen eine Auswahl treffen");
 				}
 			}
 

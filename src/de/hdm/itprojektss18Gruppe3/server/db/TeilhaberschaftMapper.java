@@ -835,7 +835,7 @@ public class TeilhaberschaftMapper {
 		Vector<Teilhaberschaft> result = new Vector<Teilhaberschaft>();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE kontaktid= ? ORDER BY `kontaktlisteid` ASC");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM teilhaberschaft WHERE kontaktlisteid= ? ORDER BY `kontaktlisteid` ASC");
 
 			stmt.setInt(1, kontaktlisteID);
 			ResultSet rs = stmt.executeQuery();
