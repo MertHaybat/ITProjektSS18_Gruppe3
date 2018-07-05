@@ -47,7 +47,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 	private HTML headline = new HTML("Teilhaberschaften verwalten");
 	private HTML nutzerVerwalten = new HTML("Nutzer verwalten");
 	private HTML auspraegungVerwalten = new HTML("Geteilte Eigenschaftsausprägungen:");
-	private HTML kontakteVerwalten = new HTML("Geteilte Kontakte:");
+	private HTML kontakteVerwalten = new HTML("Vollständig geteilte Kontakte:");
 	private HTML kontaktlisteVerwalten = new HTML("Geteilte Kontaktlisten:");
 	private Anchor nutzerAnchor = new Anchor("Nutzer löschen");
 	private Label emptyLabel;
