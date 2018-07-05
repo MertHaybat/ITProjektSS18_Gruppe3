@@ -65,6 +65,7 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 		@Override
 		public void onSuccess(Vector<Eigenschaftsauspraegung> result) {
 			auspraegungVector = result;
+			
 		}
 		
 	}
