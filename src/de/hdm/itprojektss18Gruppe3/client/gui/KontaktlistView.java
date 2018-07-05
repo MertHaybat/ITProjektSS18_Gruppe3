@@ -338,7 +338,7 @@ public class KontaktlistView extends MainFrame {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							Window.alert("Fehler beim Auslesen aller Kontakte");
+							Window.alert("Fehler beim Auslesen aller Kontakte" + caught.getMessage());
 
 						}
 
