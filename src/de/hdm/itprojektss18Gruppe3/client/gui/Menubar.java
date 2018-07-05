@@ -308,6 +308,7 @@ public class Menubar extends MenuBar {
 
 		@Override
 		public void onFailure(Throwable caught) {
+			Window.alert("Der Vorgang konnte nicht abgeschlossen werden: " + caught.getMessage());
 		}
 
 		@Override

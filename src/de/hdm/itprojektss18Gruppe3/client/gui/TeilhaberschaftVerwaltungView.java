@@ -46,7 +46,7 @@ public class TeilhaberschaftVerwaltungView extends MainFrame {
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
 	private HTML headline = new HTML("Teilhaberschaften verwalten");
 	private HTML auspraegungVerwalten = new HTML("Geteilte Eigenschaftsausprägungen:");
-	private HTML kontakteVerwalten = new HTML("Geteilte Kontakte:");
+	private HTML kontakteVerwalten = new HTML("Vollständig geteilte Kontakte:");
 	private HTML kontaktlisteVerwalten = new HTML("Geteilte Kontaktlisten:");
 	private Label emptyLabel;
 
