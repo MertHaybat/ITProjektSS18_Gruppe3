@@ -160,6 +160,7 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			kontaktliste.setBezeichnung(tkontaktliste.getValue());
 			kontaktmanagerVerwaltung.saveKontaktliste(kontaktliste, new saveKontaktlisteCallback());
 		}	
 	}

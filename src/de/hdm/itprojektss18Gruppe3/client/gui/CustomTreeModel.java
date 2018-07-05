@@ -41,6 +41,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 
 	private VerticalPanel treeContainer = new VerticalPanel();
 	private Nutzer nutzerKontaktliste = new Nutzer();
+	private Nutzer nutzer = new Nutzer();
 	private CellTree navigationCellTree;
 	private Label navigationHeadline = new Label("Kontaktlisten");
 	private ScrollPanel navigationTreePanel = new ScrollPanel();
@@ -69,6 +70,7 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 	 * kann, die Kontaktlisten des Nutzers laden zu können.
 	 */
 	public CustomTreeModel() {
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		selectionModel = new SingleSelectionModel<BusinessObject>();
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEventHandler());
 		kontaktDataProvider = new HashMap<Kontaktliste, ListDataProvider<Kontakt>>();
@@ -192,13 +194,10 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 		} else if (value instanceof Kontaktliste) {
 			final ListDataProvider<Kontakt> kontaktProvider = new ListDataProvider<Kontakt>();
 			if (((Kontaktliste) value).getBezeichnung().equals("Empfangene Kontakte")) {
-				Nutzer nutzer = new Nutzer();
-				nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 				kontaktmanagerVerwaltung.findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(nutzer.getId(), new AsyncCallback<Vector<NutzerTeilhaberschaftKontaktWrapper>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Window.alert("Fehler beim Laden" + caught.getMessage());
 					}
 
 					@Override
@@ -312,14 +311,6 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 			if (value != null) {
 				sb.appendHtmlConstant("<table width='85%'><td><td>");
 				sb.appendEscaped(value.getName());
-				sb.appendHtmlConstant("</td><td style='float: right'>");
-				if (value.getStatus() == 0) {
-					sb.appendHtmlConstant("<img width=\"16\" src=\"images/singleperson.svg\" style=\"vertical-align: middle; opacity: 0.7; margin-right: 2px;\">");
-
-				} else if (value.getStatus() == 1) {
-
-					sb.appendHtmlConstant("<img width=\"16\" src=\"images/group.svg\" style=\"vertical-align: middle; opacity: 0.7\">");
-				}
 				sb.appendHtmlConstant("</td></table>");
 			} else if (value == null) {
 				sb.appendHtmlConstant("<table><td>");

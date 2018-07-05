@@ -133,15 +133,9 @@ public class Menubar extends MenuBar {
 		deleteKontakt.setEnabled(false);
 		deleteTeilhaberschaften.setEnabled(true);
 		deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftCommand());
-
-
-		shareKontakt.setEnabled(true);
-		addKontaktToKontaktliste.setEnabled(true);
-		addKontaktEigenschaft.setEnabled(true);
-
 		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
 		addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
-
+		
 		run();
 	}
 
@@ -149,10 +143,11 @@ public class Menubar extends MenuBar {
 		addMenuItemsToArray();
 		this.kontakt = k;
 		deleteTeilhaberschaften.setEnabled(true);
-		deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftAuspraegungCommand());
 		shareKontakt.setEnabled(true);
+		deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftAuspraegungCommand());
 		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
 		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
+		
 		run();
 	}
 
@@ -180,6 +175,7 @@ public class Menubar extends MenuBar {
 		
 		if(kontaktlisteTeilhaberschaft == true && allKontakteSelectedArrayList.size() > 0) {
 			deleteTeilhaberschaften.setEnabled(true);
+			shareKontakt.setEnabled(true);
 			deleteTeilhaberschaften.setScheduledCommand(new AllKontaktView.TeilhaberschaftButtonCommand());
 		} 
 		

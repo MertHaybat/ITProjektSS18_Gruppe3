@@ -521,12 +521,17 @@ body {
 .gwt-DialogBox .dialogMiddleCenter {
 	padding: 15px;
 	background: white;
-	margin-left: 60px;
+	margin-left: 40px;
 }
 
 .gwt-DialogBox .dialogMiddleCenterInner table tbody tr {
 	display: table;
 	margin: auto auto;
+	width: 100%;
+}
+
+.gwt-DialogBox .dialogMiddleCenterInner table table {
+	width: 100%;
 }
 
 .gwt-DialogBox .dialogMiddleCenterInner table tbody tr:last-child {

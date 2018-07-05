@@ -12,6 +12,7 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.CellPreviewEvent;
@@ -21,6 +22,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
 
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 public class CellTableKontakt extends CellTable<Kontakt>{
 	
@@ -29,6 +31,8 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 	private final Handler<Kontakt> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
 	private CellTable cellTable = new CellTable<Kontakt>(15, (com.google.gwt.user.cellview.client.CellTable.Resources) GWT.create(CellTableResources.class));
+	private Nutzer nutzer = new Nutzer();
+	
 	
 	public CellTableKontakt(){
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
@@ -45,6 +49,7 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 
 	public void run(){
 		this.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 	}
 	
 	public class CheckColumn extends Column<Kontakt, Boolean>{
@@ -87,7 +92,10 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 		@Override
 		public void render(Context context, Kontakt object, SafeHtmlBuilder sb) {
 			// TODO Auto-generated method stub
-			if (object.getStatus() == 0){
+			if(nutzer.getId() != object.getNutzerID()) {
+				sb.appendHtmlConstant("<img width=\"18\" src=\"images/received_share.png\" style=\"vertical-align: middle; opacity: 0.7\">");
+			}
+			else if (object.getStatus() == 0){
 				sb.appendHtmlConstant("<img width=\"15\" src=\"images/singleperson.svg\" style=\"vertical-align: middle; opacity: 0.7\">");
 			} else if (object.getStatus() == 1){
 

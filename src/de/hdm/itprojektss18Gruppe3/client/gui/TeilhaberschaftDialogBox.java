@@ -138,6 +138,9 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		this.setAutoHideEnabled(true);
 
 		this.setText("Kontakt/Kontakteigenschaften teilen");
+		
+
+		
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
 		ftTeilhaberschaft.setWidget(1, 0, kt);
 		ftTeilhaberschaft.setWidget(2, 0, new HTML("<br>"));
@@ -169,6 +172,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 
 		kt.addColumn(checkBoxAuspraegung, ""); 
+		kt.setColumnWidth(checkBoxAuspraegung, "100%");
 		kt.addColumn(eigenschaftColumn, "");
 		kt.addColumn(auspraegungColumn, "");
 

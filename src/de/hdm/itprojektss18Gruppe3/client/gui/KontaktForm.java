@@ -159,11 +159,6 @@ public class KontaktForm extends MainFrame {
 
 	public void run() {
 
-
-
-	//	singleShare.setSize(width, height);
-
-
 		celltable.setWidth("130%");
 		kontaktNameBox.addKeyPressHandler(new KontaktTextBoxKeyPressHandler());
 		headline.setStylePrimaryName("h3");
@@ -172,12 +167,6 @@ public class KontaktForm extends MainFrame {
 		kontaktLabelkontaktName.add(kontaktNameLabel);
 		kontaktLabelkontaktName.add(kontaktNameBox);
 
-		if(k.getStatus() == 0) {
-			shareImageIndicator.setUrl("/images/singleperson.svg");
-		} else if (k.getStatus() == 1){
-			shareImageIndicator.setUrl("/images/group.svg");
-		}
-		
 		shareImageIndicator.setStylePrimaryName("shareImageIndicator");
 		kontaktLabelkontaktName.add(shareImageIndicator);
 
@@ -226,15 +215,20 @@ public class KontaktForm extends MainFrame {
 				}
 			}
 			if(kontaktteilhaberschaftBoolean == true) { 
+				shareImageIndicator.setUrl("/images/received_share.png");
 				Menubar mb = new Menubar(k, kontaktTeilhaberschaft); 
 			} else if(ownKontakt == false) {
 				Menubar mb = new Menubar(k, ownKontakt); 
+				shareImageIndicator.setUrl("/images/received_share.png");
 			} else {
 				Menubar mb = new Menubar(k); 
+				if(k.getStatus() == 0) {
+					shareImageIndicator.setUrl("/images/singleperson.svg");
+				} else if (k.getStatus() == 1){
+					shareImageIndicator.setUrl("/images/group.svg");
+				}
 			}
 		}
-
-
 	}
 
 	public static class DeleteTeilhaberschaftCommand implements Command {
