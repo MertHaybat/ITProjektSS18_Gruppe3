@@ -193,7 +193,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
+			Window.alert("Der Vorgang konnte nicht abgeschlossen werden: " + caught.getMessage());
 
 		}
 
@@ -234,7 +234,7 @@ public class KontaktForm extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
+			Window.alert("Der Vorgang konnte nicht abgeschlossen werden: " + caught.getMessage());
 
 		}
 

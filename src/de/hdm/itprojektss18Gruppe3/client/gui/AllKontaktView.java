@@ -179,7 +179,7 @@ public class AllKontaktView extends MainFrame {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
+			Window.alert("Der Vorgang konnte nicht abgeschlossen werden: " + caught.getMessage());
 			
 		}
 
