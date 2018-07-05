@@ -169,14 +169,12 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		kontaktmanagerVerwaltung.findAllEigenschaften(new AllEigenschaftenCallback());
 		
 		ssmKontakt.addSelectionChangeHandler(new SelectionHandlerAuspraegung());
-//		kontaktCellTable.getSsmAuspraegung().addSelectionChangeHandler(new SelectionHandlerAuspraegung());
 		kontaktCellTable.setSelectionModel(ssmKontakt);
 		ssmKontakt.addSelectionChangeHandler(new SelectionHandlerAuspraegung());
 		kontaktCellTable.addColumn(kontaktnameColumn, "Kontaktname");
 		kontaktCellTable.addColumn(iconColumn, "");
 		kontaktCellTable.setColumnWidth(iconColumn, 5, Unit.EM);
 		kontaktCellTable.setEmptyTableWidget(emptyListMessage);
-//		kontaktCellTable.addCellPreviewHandler(new PreviewClickHander());
 		
 		kontaktCellTable.addDomHandler(new KontaktFormDoubleClickHandler(), DoubleClickEvent.getType());
 		celltable.setSelectionModel(selection);
@@ -187,14 +185,12 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		celltable.addColumn(wertAuspraegungColumn, "");
 		celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 		
-	//	suchErgebnisPanel.setStylePrimaryName("cellListWidgetContainerPanel");
 		hPanel.add(suchErgebnisPanel);
 		hPanel.add(suchErgebnisZweiPanel);
 		this.add(eingabeText);
 		this.add(layout);
 		this.add(hPanel);
 		this.setStylePrimaryName("disclosureSearchPanel");
-//		this.add(suchErgebnisZweiPanel);
 	}
 	public class KontaktFormDoubleClickHandler implements DoubleClickHandler{
 
@@ -313,11 +309,17 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
-			kontaktCellTable.setRowData(0, result);
-			kontaktCellTable.setRowCount(result.size(), true);
-			kontaktCellTable.redraw();
-
-			suchErgebnisPanel.add(kontaktCellTable);
+			if(result.size() == 0){
+				Window.alert("Kein Kontakt gefunden!");
+			} else {
+				kontaktCellTable.setRowData(0, result);
+				kontaktCellTable.setRowCount(result.size(), true);
+				kontaktCellTable.redraw();
+				
+				suchErgebnisPanel.add(kontaktCellTable);
+				
+			}
+			
 
 		}
 
@@ -360,11 +362,16 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
-			kontaktCellTable.setRowData(0, result);
-			kontaktCellTable.setRowCount(result.size(), true);
-			kontaktCellTable.redraw();
-			
-			suchErgebnisPanel.add(kontaktCellTable);
+			if(result.size() == 0){
+				Window.alert("Keine Suchergebnisse");
+			} else {
+				
+				kontaktCellTable.setRowData(0, result);
+				kontaktCellTable.setRowCount(result.size(), true);
+				kontaktCellTable.redraw();
+				
+				suchErgebnisPanel.add(kontaktCellTable);
+			}
 		}
 		
 	}
@@ -433,15 +440,4 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		}
 	}
 	
-//	public class PreviewClickHander implements CellPreviewEvent.Handler<Kontakt> {
-//
-//		@Override
-//		public void onCellPreview(CellPreviewEvent<Kontakt> event) {
-//			
-//			if(Event.getTypeInt(event.getNativeEvent().getType()) == Event.ONCLICK){
-//					
-//					KontaktForm kf = new KontaktForm(event.getValue());
-//				}
-//		}
-//	}
 }

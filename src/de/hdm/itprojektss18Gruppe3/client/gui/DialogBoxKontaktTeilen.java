@@ -114,6 +114,7 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 				}
 			}
 		};
+		
 		kontaktmanagerVerwaltung.findAllNutzer(new getAllNutzerCallback());
 		selectedNutzerCT.addColumn(nutzertxtColumn, "");
 		selectedNutzerCT.addColumn(buttonColumn1, "");
@@ -163,17 +164,27 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 		@Override
 		public void onKeyPress(KeyPressEvent event) {
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+				boolean nutzerVorhanden = false;
 				if (box.getValue() == "") {
-					Window.alert("Sie müssen eine E-Mail Adresse eingeben.");
 				} else {
-
-					Nutzer nutzer = new Nutzer();
-					nutzer.setMail(box.getValue());
-
-					nutzerSuggestbox.add(nutzer);
-					box.setValue("");
-					selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
-					selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+					for (Nutzer nutzerListe : nutzerListe) {
+						if(nutzerListe.getMail() == box.getValue()){
+							nutzerVorhanden = true;
+						}
+					}
+					if(nutzerVorhanden == true){
+						
+						Nutzer nutzer = new Nutzer();
+						nutzer.setMail(box.getValue());
+						
+						nutzerSuggestbox.add(nutzer);
+						box.setValue("");
+						selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
+						selectedNutzerCT.setRowData(0, nutzerSuggestbox);
+					} else {
+						Window.alert("Angegebene E-Mail Adresse ist ungültig.");
+						box.setValue("");
+					}
 				}
 			}
 		}

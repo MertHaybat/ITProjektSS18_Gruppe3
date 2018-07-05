@@ -265,14 +265,14 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 
 		}
 		if (eigenschaftsauspraegungID != 0 & kontaktID != 0){
-			Vector<Teilhaberschaft> t = this.teilhaberschaftMapper.findTeilhaberschaftByAuspraegungIDAndNutzerID(kontaktID, teilhabenderID);
+			Vector<Teilhaberschaft> t = this.findTeilhaberschaftByKontaktAndTeilhaber(teilhabenderID, kontaktID);
 			if(t.size()!=0){
 				return null;
 			}
 		}
 		Vector<Teilhaberschaft> teilhaberschaften = findAllTeilhaberschaftenByTeilhabenderID(teilhabenderID);
 		if(teilhaberschaften.size() == 0){
-			this.teilhaberschaftMapper.createTeilhaberschaft(teilhaberschaft);
+//			this.teilhaberschaftMapper.createTeilhaberschaft(teilhaberschaft);
 		} else {
 			for (Teilhaberschaft teilhaberschaft2 : teilhaberschaften) {
 				if (teilhaberschaft2.getKontaktlisteID() == kontaktlisteID
@@ -1010,10 +1010,37 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 	 */
 	@Override
 	public void deleteTeilhaberschaftById(Teilhaberschaft t) throws IllegalArgumentException {
-
+		Vector<Teilhaberschaft> teilhaberschaftVector = new Vector<Teilhaberschaft>();
+		Kontakt kontakt = null;
+		Kontaktliste liste = null;
 		Teilhaberschaft teil = new Teilhaberschaft();
 		teil.setId(t.getId());
 		this.teilhaberschaftMapper.deleteTeilhaberschaftByID(teil);
+		
+		if(t.getKontaktID()!= 0){
+			teilhaberschaftVector = findTeilhaberschaftByKontaktID(t.getKontaktID());
+			if(teilhaberschaftVector.size()==0){
+				kontakt = findKontaktByID(t.getKontaktID());
+				kontakt.setStatus(0);
+				this.saveKontakt(kontakt);
+			}
+		}
+		if(t.getKontaktlisteID() != 0){
+			teilhaberschaftVector = findAllTeilhaberschaftByKontaktliste(t.getKontaktlisteID());
+			if(teilhaberschaftVector.size()==0){
+				liste = findKontaktlisteByID(t.getKontaktlisteID());
+				liste.setStatus(0);
+				this.saveKontaktliste(liste);
+			}
+		}
+		if(t.getEigenschaftsauspraegungID() != 0){
+			Vector<Teilhaberschaft> teilhaberschaft = findAllTeilhaberschaftByAuspraegung(t.getEigenschaftsauspraegungID());
+			if(teilhaberschaft.size() == 0){
+				Eigenschaftsauspraegung auspraegung = findEigenschaftsauspraegungById(t.getEigenschaftsauspraegungID());
+				auspraegung.setStatus(0);
+				this.saveEigenschaftsauspraegung(auspraegung);
+			}
+		}
 
 	}
 
