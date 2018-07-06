@@ -57,7 +57,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 *            Übergabeparameter des Fremdschlüssels für den Kontakt
 	 * @return Kontakt; Zurückgegeben wird ein Objekt der Klasse Kontakt
 	 */
-	public Kontakt createKontakt(String name, int status, int nutzerID);
+	public Kontakt createKontakt(String name, int status, int nutzerID) throws IllegalArgumentException;
 	
 	/**
 	 * Auslesen aller Kontakte.
@@ -675,14 +675,14 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return <Kontakt> findTeilhabendeKontakteAuspraegungen, die Ausprägung der empfangenen Kontakte 
 	 * @throws IllegalArgumentException
 	 */
-	Vector<Kontakt> findTeilhabendeKontakteAuspraegungen(int teilhabenderID) throws IllegalArgumentException;
+	public Vector<Kontakt> findTeilhabendeKontakteAuspraegungen(int teilhabenderID) throws IllegalArgumentException;
 
 	/**
 	 * Löschen der Teilhaberschaft 
 	 * @param t
 	 * @throws IllegalArgumentException
 	 */
-	void deleteTeilhaberschaftByTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException;
+	public void deleteTeilhaberschaftByTeilhaberschaft(Teilhaberschaft t) throws IllegalArgumentException;
 
 	/**
 	 * Ausgabe der Eigenschaftsausprägung und der Kontakte bei empfangengen Kontakten 
@@ -690,7 +690,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<NutzerTeilhaberschaftKontaktWrapper>, Eigenschaftsausprägungen der empfangenen Kontakte 
 	 * @throws IllegalArgumentException
 	 */
-	Vector<NutzerTeilhaberschaftKontaktWrapper> findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(
+	public Vector<NutzerTeilhaberschaftKontaktWrapper> findEigenschaftsauspraegungAndKontaktByTeilhaberschaft(
 			int teilhabenderID) throws IllegalArgumentException;
 
 	/**
@@ -700,7 +700,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<EigenschaftsAuspraegungWrapper>, Eigenschaft und Ausprägung des Kontaktes
 	 * @throws IllegalArgumentException
 	 */
-	Vector<EigenschaftsAuspraegungWrapper> findEigenschaftAndAuspraegungByKontakt(int nutzerID, int kontaktID)
+	public Vector<EigenschaftsAuspraegungWrapper> findEigenschaftAndAuspraegungByKontakt(int nutzerID, int kontaktID)
 			throws IllegalArgumentException;
 
 	/**
@@ -710,7 +710,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<Teilhaberschaft>, Teilhaberschaft 
 	 * @throws IllegalArgumentException
 	 */
-	Vector<Teilhaberschaft> findTeilhaberschaftByAuspraegungIDAndNutzerID(int nutzerid, int auspraegungid)
+	public Vector<Teilhaberschaft> findTeilhaberschaftByAuspraegungIDAndNutzerID(int nutzerid, int auspraegungid)
 			throws IllegalArgumentException;
 
 	/**
@@ -720,7 +720,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<Teilhaberschaft>, Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
-	Vector<Teilhaberschaft> findTeilhaberschaftByKontaktAndTeilhaber(int nutzerid, int kontaktid)
+	public Vector<Teilhaberschaft> findTeilhaberschaftByKontaktAndTeilhaber(int nutzerid, int kontaktid)
 			throws IllegalArgumentException;
 
 	/**
@@ -729,7 +729,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @param auspraegung
 	 * @return Teilhaberschaft
 	 */
-	String findTeilhaberschaftString(int nutzerid, Vector<Eigenschaftsauspraegung> auspraegung);
+	public String findTeilhaberschaftString(int nutzerid, Vector<Eigenschaftsauspraegung> auspraegung) throws IllegalArgumentException;
 
 	/**
 	 * Ausgabe der Kontakte und Teilhaberschaften nach Nutzerobjekt 
@@ -737,7 +737,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<NutzerTeilhaberschaftKontaktWrapper>, Kontakte und Teilhaberschaften
 	 * @throws IllegalArgumentException
 	 */
-	Vector<NutzerTeilhaberschaftKontaktWrapper> findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer) throws IllegalArgumentException;
+	public Vector<NutzerTeilhaberschaftKontaktWrapper> findAllKontakteAndTeilhaberschaftenByNutzer(Nutzer nutzer) throws IllegalArgumentException;
 
 	/**
 	 * Ausgabe der Kontakte und Teilhaberschaft nach Primärschlüssel der Eigentümer und des Teilhabender 
@@ -746,7 +746,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<Kontakt>, Kontakt und Teilhaberschaft
 	 * @throws IllegalArgumentException
 	 */
-	Vector<Kontakt> findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(int eigentuemerID, int teilhabenderID)
+	public Vector<Kontakt> findKontaktTeilhaberschaftByEigentuemerAndTeilhaber(int eigentuemerID, int teilhabenderID)
 			throws IllegalArgumentException;
 
 	/**
@@ -755,7 +755,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<NutzerTeilhaberschaftKontaktlisteWrapper>, Kontaktliste 
 	 * @throws IllegalArgumentException
 	 */
-	Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findKontaktlisteTeilhaberschaftEigentuemer(int eigentuemerID)
+	public Vector<NutzerTeilhaberschaftKontaktlisteWrapper> findKontaktlisteTeilhaberschaftEigentuemer(int eigentuemerID)
 			throws IllegalArgumentException;
 
 	/**
@@ -764,7 +764,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<NutzerTeilhaberschaftKontaktWrapper>, Kontakte 
 	 * @throws IllegalArgumentException
 	 */
-	Vector<NutzerTeilhaberschaftKontaktWrapper> findKontaktTeilhaberschaftEigentuemer(int eigentuemerID)
+	public Vector<NutzerTeilhaberschaftKontaktWrapper> findKontaktTeilhaberschaftEigentuemer(int eigentuemerID)
 			throws IllegalArgumentException;
 
 	/**
@@ -773,7 +773,7 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>, Ausprägung
 	 * @throws IllegalArgumentException
 	 */
-	Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftEigentuemer(
+	public Vector<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> findAuspraegungTeilhaberschaftEigentuemer(
 			int eigentuemerID) throws IllegalArgumentException;
 
 	/**
@@ -785,15 +785,15 @@ public interface KontaktmanagerAdministration extends RemoteService {
 	 * @return Vector<Kontakt>, Kontakte, Eigenschaften und Eigenschaftsausprägungen
 	 * @throws IllegalArgumentException
 	 */
-	Vector<Kontakt> findAllKontakteEigenschaftAuspraegung(Nutzer nutzer, Eigenschaft eigenschaft,
+	public Vector<Kontakt> findAllKontakteEigenschaftAuspraegung(Nutzer nutzer, Eigenschaft eigenschaft,
 			Eigenschaftsauspraegung auspraegung) throws IllegalArgumentException;
 
-	Vector<Teilhaberschaft> findAllTeilhaberschaftByKontaktliste(int kontaktlisteID) throws IllegalArgumentException;
+	public Vector<Teilhaberschaft> findAllTeilhaberschaftByKontaktliste(int kontaktlisteID) throws IllegalArgumentException;
 
-	Vector<Teilhaberschaft> findAllTeilhaberschaftByAuspraegung(int auspraegungID) throws IllegalArgumentException;
+	public Vector<Teilhaberschaft> findAllTeilhaberschaftByAuspraegung(int auspraegungID) throws IllegalArgumentException;
 
-	Vector<EigenschaftsAuspraegungWrapper> findAllEigenschaftsauspraegungWrapper(Nutzer nutzer, Kontakt kontakt);
+	public Vector<EigenschaftsAuspraegungWrapper> findAllEigenschaftsauspraegungWrapper(Nutzer nutzer, Kontakt kontakt) throws IllegalArgumentException;
 
-	Vector<Eigenschaftsauspraegung> findAllGeteiltAndEigeneAuspraegungen(int nutzerID) throws IllegalArgumentException; 
+	public Vector<Eigenschaftsauspraegung> findAllGeteiltAndEigeneAuspraegungen(int nutzerID) throws IllegalArgumentException; 
 
 }
