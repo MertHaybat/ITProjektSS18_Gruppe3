@@ -65,9 +65,9 @@ public class KontaktMapper extends PersonMapper{
 		 * Verbindung zur DB Connection
 		 */	
 		Connection con = DBConnection.connection();
-		java.sql.Date sqlDate = new java.sql.Date(kontakt.getErzeugungsdatum().getTime());
-		java.sql.Date sqlDate1 = new java.sql.Date(kontakt.getModifikationsdatum().getTime());
-			
+		java.sql.Timestamp sqlDate = new java.sql.Timestamp(kontakt.getErzeugungsdatum().getTime());
+		java.sql.Timestamp sqlDate1 = new java.sql.Timestamp(kontakt.getModifikationsdatum().getTime());
+		
 		try {
 			Statement stmt = con.createStatement();
 			
@@ -92,8 +92,8 @@ public class KontaktMapper extends PersonMapper{
 				Statement.RETURN_GENERATED_KEYS);
 				stmt1.setInt(1, kontakt.getId());
 				stmt1.setString(2, kontakt.getName());
-				stmt1.setDate(3, sqlDate);
-				stmt1.setDate(4, sqlDate1);
+				stmt1.setTimestamp(3, sqlDate);
+				stmt1.setTimestamp(4, sqlDate1);
 				stmt1.setInt(5, kontakt.getStatus());
 				stmt1.setInt(6, kontakt.getNutzerID());
 				

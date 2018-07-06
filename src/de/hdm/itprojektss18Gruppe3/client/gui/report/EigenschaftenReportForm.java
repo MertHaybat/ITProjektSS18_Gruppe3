@@ -42,7 +42,6 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		nutzer.setMail(Cookies.getCookie("email"));
-		reportverwaltung.findAllAuspraegungen(nutzer.getId(), new AllAuspraeungenCallback());
 		btAllAuspraegungen.setStylePrimaryName("reportButton");
 
 		this.add(labelbEigenschaft);
@@ -54,20 +53,7 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 		RootPanel.get("contentReport").add(this);
 		btAllAuspraegungen.addClickHandler(new AllAuspraegungenClickHandler());
 	}
-	class AllAuspraeungenCallback implements AsyncCallback<Vector<Eigenschaftsauspraegung>>{
-
-		@Override
-		public void onFailure(Throwable caught) {
-			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
-		}
-
-		@Override
-		public void onSuccess(Vector<Eigenschaftsauspraegung> result) {
-			auspraegungVector = result;
-			
-		}
-		
-	}
+	
 	class AllAuspraegungenClickHandler implements ClickHandler{
 
 		@Override
