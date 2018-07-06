@@ -54,36 +54,25 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 		btAllAuspraegungen.addClickHandler(new AllAuspraegungenClickHandler());
 	}
 	
-	class AllAuspraegungenClickHandler implements ClickHandler{
+	class AllAuspraegungenClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			boolean vorhanden = false;
-			for (Eigenschaftsauspraegung eigenschaftsauspraegung : auspraegungVector) {
-				if(tbAuspraegung.getValue().equals(eigenschaftsauspraegung.getWert())){
-					vorhanden = true;
-				}
-			}
+
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 			nutzer.setMail(Cookies.getCookie("email"));
-			if(tbEigenschaft.getValue().equals("") && tbAuspraegung.getValue().equals("")){
+			if (tbEigenschaft.getValue().equals("") && tbAuspraegung.getValue().equals("")) {
 				Window.alert("Bitte Eigenschaft oder Ausprägung eingeben");
 			} else {
-				if(vorhanden == true || tbAuspraegung.getValue().equals("")){
-					vpanel.clear();
-					vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(nutzer.getMail(), tbEigenschaft.getValue(),
-							tbAuspraegung.getValue()));
-					RootPanel.get("contentReport").add(vpanel);
-					
-				} else {
-					Window.alert("Keine Kontakte mit der eingegebenen Eigenschaftsausprägung vorhanden");
-				}
-				
-				
+				vpanel.clear();
+				vpanel.add(new AllKontaktEigenschaftenAndAuspraegungen(nutzer.getMail(), tbEigenschaft.getValue(),
+						tbAuspraegung.getValue()));
+				RootPanel.get("contentReport").add(vpanel);
+
 			}
 		}
-		
-	}
 
+	}
 }
+

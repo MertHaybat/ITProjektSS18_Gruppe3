@@ -51,10 +51,12 @@ public class AllKontaktEigenschaftenAndAuspraegungen extends HTMLResultPanel {
 			int resultSize = result.getRows().size();
 			if(resultSize == 0){
 				Window.alert("Es gibt keine Kontakte mit den eingegebenen Eigenschaften und Eigenschaftsausprägungen");
+			} else {
+				HTMLReportWriter hrw = new HTMLReportWriter();
+				hrw.process(result);
+				append(hrw.getReportText());
+				
 			}
-			HTMLReportWriter hrw = new HTMLReportWriter();
-			hrw.process(result);
-			append(hrw.getReportText());
 		}
 
 	}

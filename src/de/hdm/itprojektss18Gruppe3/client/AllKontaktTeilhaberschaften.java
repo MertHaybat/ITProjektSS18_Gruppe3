@@ -52,10 +52,11 @@ public class AllKontaktTeilhaberschaften extends HTMLResultPanel{
 			int resultSize = result.getRows().size();
 			if(resultSize == 0){
 				Window.alert("Es gibt keine Teilhaberschaften");
+			} else {
+				HTMLReportWriter hrw = new HTMLReportWriter();
+				hrw.process(result);
+				append(hrw.getReportText());
 			}
-			HTMLReportWriter hrw = new HTMLReportWriter();
-			hrw.process(result);
-			append(hrw.getReportText());
 		}
 
 	}
