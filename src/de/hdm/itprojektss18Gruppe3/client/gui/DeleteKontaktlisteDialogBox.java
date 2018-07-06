@@ -43,9 +43,9 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 	private Button abortButton = new Button("Abbrechen");
 	private Button okButton = new Button("OK");
 	private Kontaktliste kontaktlisteToDelete;
-	
+
 	private HTML infoLabel;
-	
+
 	/**
 	 * Non-Argument-Konstruktor
 	 * @param kontaktlisteToDelete 
@@ -59,18 +59,18 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 		infoLabel = new HTML("Möchten Sie die Kontaktliste " + kontaktlisteToDelete.getBezeichnung() + " wirklich löschen?<br><br>");
 		flextable1.setWidget(0, 0, deleteButton);
 		flextable1.setWidget(0, 1, abortButton);
-		
+
 		vPanel.add(infoLabel);
 		vPanel.add(flextable1);
 		vPanel.add(hPanel);
 		vPanel.add(hPanel2);
 		this.add(vPanel);
-		
+
 		deleteButton.addClickHandler(new deleteKontaktlisteClickHandler());
 		abortButton.addClickHandler(new closeClickHandler());
-		
+
 	}
-	
+
 	public class deleteKontaktlisteCallback implements AsyncCallback<Void> {
 
 		@Override
@@ -90,7 +90,7 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 			AllKontaktView allkontaktView = new AllKontaktView();
 		}
 	}
-	
+
 	public class deleteKontaktlisteClickHandler implements ClickHandler {
 
 		@Override
@@ -98,13 +98,13 @@ public class DeleteKontaktlisteDialogBox extends DialogBox {
 			kontaktmanagerVerwaltung.deleteKontaktlisteByID(kontaktlisteToDelete, new deleteKontaktlisteCallback());
 		}
 	}
-	
+
 	public class closeClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			hide();
 		}
-		
+
 	}
 }

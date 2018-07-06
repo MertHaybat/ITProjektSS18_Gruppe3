@@ -138,9 +138,9 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 		this.setAutoHideEnabled(true);
 
 		this.setText("Kontakt/Kontakteigenschaften teilen");
-		
 
-		
+
+
 		ftTeilhaberschaft.setWidget(0, 0, lb1);
 		ftTeilhaberschaft.setWidget(1, 0, kt);
 		ftTeilhaberschaft.setWidget(2, 0, new HTML("<br>"));
@@ -222,10 +222,10 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 						}
 					}
 					if(nutzerVorhanden == true){
-						
+
 						Nutzer nutzer = new Nutzer();
 						nutzer.setMail(box.getValue());
-						
+
 						nutzerSuggestbox.add(nutzer);
 						box.setValue("");
 						selectedNutzerCT.setRowCount(nutzerSuggestbox.size(), true);
@@ -303,9 +303,9 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 				if(ssmAuspraegung.getSelectedSet().size()>=1 || kontaktTeilenCB.getValue() == true){
 					for (Nutzer nutzersuggest : nutzerSuggestbox) {
 						kontaktmanagerVerwaltung.checkEmail(nutzersuggest.getMail(), new KontaktFindNutzerByMailCallback());
-						
+
 					}
-					
+
 				} else {
 					Window.alert("Sie müssen eine Auswahl treffen");
 				}
@@ -340,12 +340,8 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 						kontaktmanagerVerwaltung.createTeilhaberschaft(0, kontaktNeu.getId(),
 								eListe.get(i).getIDEigenschaftsauspraegungValue(), result.getId(), nutzer.getId(),
 								new createTeilhaberschaftCallback());
-
 					}
-
 				}
-
-
 			}
 		}
 	}
@@ -365,13 +361,30 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 				Window.alert("Sie können nichts mit sich selbst teilen!");
 			} else {
 				Window.alert("Teilhaberschaft erfolgreich erstellt");
+				hide();
 			}
-			hide();
+			kontaktmanagerVerwaltung.findKontaktByID(result.getKontaktID(), new FindKontaktByIDAsyncCallback()); {
+			}
+		}
+	}
+
+
+	public class FindKontaktByIDAsyncCallback implements AsyncCallback<Kontakt> {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onSuccess(Kontakt result) {
+			Kontakt sharedKontakt = new Kontakt();
+			sharedKontakt = result;
 			CustomTreeModel ctm = new CustomTreeModel();
+			KontaktForm kf = new KontaktForm(sharedKontakt);
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
-			KontaktForm kf = new KontaktForm(kontaktNeu);
-
 		}
 	}
 

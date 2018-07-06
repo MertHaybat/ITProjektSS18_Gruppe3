@@ -42,7 +42,7 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 	private FlexTable flextable1 = new FlexTable();
 	private Label abfrage= new HTML("In welche Kontaktlisten möchten Sie die Auswahl hinzufügen?<br><br>");
 	private Label keineKontaktlisteLabel = new HTML("Sie müssen zuerst eine Kontaktliste angelegt haben, um einen Kontakt zu einer Kontaktliste"
-					+ " hinzufügen zu können!<br><br>");
+			+ " hinzufügen zu können!<br><br>");
 	private Button speichern = new Button("Speichern");
 	private Button abbrechen = new Button("Abbrechen");
 	private ArrayList<Kontakt> kontakte = new ArrayList<>();
@@ -53,7 +53,7 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			.getKontaktVerwaltung();
 	private final Handler<Kontaktliste> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
-	
+
 	public DialogBoxKontaktlisteHinzufuegen(Kontakt k) {
 		kontakte.add(k);
 		Nutzer nutzer = new Nutzer();
@@ -76,17 +76,17 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 		kontaktmanagerVerwaltung.findAllKontaktlisteByNutzerID(nutzer.getId(), new AllKontaktlisteByNutzerCallback());
 	}
 
-		/*
-		 * Run Methode mit der Abfrage, ob der Nutzer bereits Kontaktlisten angelegt hat. Ist dies nicht der
-		 * Fall, so wird ihm der Hinweis angezeigt, dass die gewünschte Aktion nicht möglich ist.
-		 */	
-		public void run() {
-			this.setGlassEnabled(true);
-			this.setAnimationEnabled(true);
-			this.setAutoHideEnabled(true);
-			this.setText("Kontakt zur Kontaktliste hinzufügen");
-			kontaktliste.setWidth("100%");
-			if(allKontaktlistenResult.size() > 0) {
+	/*
+	 * Run Methode mit der Abfrage, ob der Nutzer bereits Kontaktlisten angelegt hat. Ist dies nicht der
+	 * Fall, so wird ihm der Hinweis angezeigt, dass die gewünschte Aktion nicht möglich ist.
+	 */	
+	public void run() {
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
+		this.setText("Kontakt zur Kontaktliste hinzufügen");
+		kontaktliste.setWidth("100%");
+		if(allKontaktlistenResult.size() > 0) {
 			Column<Kontaktliste, String> kontaktnameColumn = new Column<Kontaktliste, String>(new TextCell()) {
 				@Override
 				public String getValue(Kontaktliste object) {
@@ -103,7 +103,7 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			vPanel.add(flextable1);
 			vPanel.add(hPanel);
 			this.add(vPanel);
-			
+
 		} else {
 			vPanel.add(keineKontaktlisteLabel);
 			vPanel.add(abbrechen);
@@ -111,7 +111,6 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			this.add(vPanel);
 		}
 	}
-
 
 	public class AllKontaktlisteByNutzerCallback implements AsyncCallback<Vector<Kontaktliste>>{
 
@@ -128,8 +127,8 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			allKontaktlistenResult.addAll(result);
 			run();
 		}
-
 	}
+
 	public class AddClickHandler implements ClickHandler{
 
 		@Override
@@ -137,20 +136,20 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			for (Kontakt kontakt : kontakte) {
 				for (Kontaktliste kontaktliste : selectionModel.getSelectedSet()) {
 					kontaktmanagerVerwaltung.createKontaktKontaktliste(kontakt.getId(), kontaktliste.getId(), new CreateKontaktKontaktlisteCallback());
-					
+
 				}
 			}
 		}
-
 	}
+
 	public class AbortClickHandler implements ClickHandler{
 
 		@Override
 		public void onClick(ClickEvent event) {
 			hide();
 		}
-
 	}
+
 	public class CreateKontaktKontaktlisteCallback implements AsyncCallback<KontaktKontaktliste>{
 
 		@Override
@@ -171,8 +170,8 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
 		}
-
 	}
+	
 	public class PreviewClickHander implements Handler<Kontaktliste> {
 		@Override
 		public void onCellPreview(CellPreviewEvent<Kontaktliste> event) {
@@ -185,6 +184,4 @@ public class DialogBoxKontaktlisteHinzufuegen extends DialogBox{
 			}
 		}
 	}
-
-
 }

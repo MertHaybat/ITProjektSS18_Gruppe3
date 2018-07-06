@@ -134,11 +134,11 @@ public class KontaktForm extends MainFrame {
 		kontaktmanagerVerwaltung.createKontakt("Neuer Kontakt", 0, nutzer.getId(), new CreateKontaktCallback());
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(this);
-		//		super.onLoad();
+		super.onLoad();
 	}
 
 	public KontaktForm(Kontakt kontakt) {
-		k = kontakt;
+		this.k = kontakt;
 		kontaktNameBox.setValue(kontakt.getName());
 		Nutzer nutzer = new Nutzer();
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
@@ -153,8 +153,7 @@ public class KontaktForm extends MainFrame {
 		vPanel2.add(erstellungsdatum);
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(this);
-		run();
-		//		super.onLoad();
+		super.onLoad();
 	}
 
 	public void run() {
@@ -169,13 +168,10 @@ public class KontaktForm extends MainFrame {
 
 		shareImageIndicator.setStylePrimaryName("shareImageIndicator");
 		kontaktLabelkontaktName.add(shareImageIndicator);
-
+		kontaktLabelkontaktName.setStylePrimaryName("kontaktFormView");
 		vPanel.add(headline);
-		vPanel.add(new HTML("<br><br>"));
 		vPanel.add(kontaktLabelkontaktName);
-		vPanel.add(new HTML("<br><br>"));
-		vPanel.add(celltable);
-		vPanel.add(new HTML("<br>"));		
+		vPanel.add(celltable);		
 		vPanel.setStylePrimaryName("kontaktFormPanel");
 		vPanel2.setStylePrimaryName("kontaktFormPanel");
 		vPanel3.setStylePrimaryName("kontaktFormPanel");
@@ -343,28 +339,11 @@ public class KontaktForm extends MainFrame {
 
 	}
 
-	public class ZurueckZuKontaktlisteClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			KontaktlistView allKontaktlistView = new KontaktlistView();
-		}
-	}
-
-	public class ZurueckZuKontaktClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			RootPanel.get("content").clear();
-			AllKontaktView allKontaktView = new AllKontaktView();
-		}
-	}
-
 	public class DeleteTeilhaberschaftClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			kontaktmanagerVerwaltung.deleteTeilhaberschaftByID(teilhaberschaft, new DeleteTeilhaberschaftCallBack());
+			kontaktmanagerVerwaltung.deleteTeilhaberschaftByID(teilhaberschaft, new DeleteTeilhaberschaftCallback());
 		}
 
 		class DeleteTeilhaberschaftCallBack implements AsyncCallback<Void> {

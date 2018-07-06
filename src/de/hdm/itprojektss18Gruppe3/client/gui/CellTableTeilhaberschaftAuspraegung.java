@@ -22,29 +22,29 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
  */
 public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> {
 
-	
+
 	private final MultiSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> ssmAuspraegung 
-		= new MultiSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>();
+	= new MultiSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper>();
 	private final Handler<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
 
 	public CellTableTeilhaberschaftAuspraegung(){
 		run();
 	}
-	
+
 	public MultiSelectionModel<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> getSelectionModel() {
 		return ssmAuspraegung;
 	}
-	
+
 	public void run(){
 		this.setEmptyTableWidget(new Label("Keine Teilhaberschaften vorhanden"));
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
 		this.addCellPreviewHandler(new PreviewClickHander());
-		
+
 	}
-	
+
 	public class TeilhaberschaftNutzer extends Column <NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>{
-		
+
 		public TeilhaberschaftNutzer(Cell<String> cell){
 			super(cell);
 		}
@@ -54,7 +54,7 @@ public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilha
 			return object.getNutzer().getMail();
 		}
 	}
-	
+
 	public class TeilhaberschaftKontakt extends Column <NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>{
 
 		public TeilhaberschaftKontakt(Cell<String> cell) {
@@ -67,7 +67,7 @@ public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilha
 			return object.getKontakt().getName();
 		}
 	}
-	
+
 	public class TeilhaberschaftEigenschaft extends Column <NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>{
 
 		public TeilhaberschaftEigenschaft(Cell<String> cell) {
@@ -80,18 +80,18 @@ public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilha
 			return object.getEigenschaft().getBezeichnung();
 		}
 	}
-	
+
 	public class TeilhaberschaftAuspraegung extends Column <NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, String>{
-		
+
 		public TeilhaberschaftAuspraegung (Cell<String> cell){
 			super(cell);
 		}
-		
+
 		public String getValue(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper object){
 			return object.getEigenschaftsauspraegung().getWert();
 		}
 	}
-	
+
 	public class CheckColumn extends Column<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper, Boolean>{
 
 		public CheckColumn(Cell<Boolean> cell) {
@@ -101,7 +101,7 @@ public class CellTableTeilhaberschaftAuspraegung extends CellTable <NutzerTeilha
 		public Boolean getValue(NutzerTeilhaberschaftEigenschaftAuspraegungWrapper object) {
 			return ssmAuspraegung.isSelected(object);
 		}
-	
+
 	}
 	public class PreviewClickHander implements Handler<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> {
 		@Override

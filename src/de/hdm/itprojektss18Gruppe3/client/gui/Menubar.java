@@ -46,6 +46,8 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
  * Klasse für die Menüleiste. Hier werden die Menüpunkte entsprechend dem geladen, 
  * was aufgrund der Aktion des Nutzers im Moment möglich ist. Auch ist hier die TextBox
  * für die schnelle Suche integriert
+ * 
+ * @author kevinhofmann
  */
 public class Menubar extends MenuBar {
 
@@ -130,6 +132,7 @@ public class Menubar extends MenuBar {
 			shareKontakt.setScheduledCommand(new ShareKontaktAndEigenschaftenCommand());
 			addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
 		} else {
+			addKontaktEigenschaft.setEnabled(true);
 			deleteTeilhaberschaften.setEnabled(true);
 			shareKontakt.setEnabled(true);
 			deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftAuspraegungCommand());
@@ -158,14 +161,23 @@ public class Menubar extends MenuBar {
 		kontaktlisteTeilhaberschaft = AllKontaktView.getKontaktlisteTeilhaberschaft();
 		shareKontakt.setScheduledCommand(new AllKontaktView.AddTeilhaberschaftKontaktCommand());
 		if(!kontaktliste.getBezeichnung().equals("Empfangene Kontakte") && !kontaktliste.getBezeichnung().equals("Eigene Kontakte") &&
-				kontaktlisteTeilhaberschaft == false ) {
+			kontaktlisteTeilhaberschaft == false ) {
 			deleteKontaktliste.setEnabled(true);
 			shareKontaktliste.setEnabled(true);
 			addNewKontaktToKontaktliste.setEnabled(true);
 			renameKontaktliste.setEnabled(true);
-		}
+		} 
+		
+		if(kontaktliste.getBezeichnung().equals("Eigene Kontakte") && 
+				allKontakteSelectedArrayList.size() > 0) {
+			deleteKontakt.setEnabled(true);
+			shareKontakt.setEnabled(true);
+			alterKontakt.setEnabled(true);
+			
+			} 
 
-		if(allKontakteSelectedArrayList.size() > 0 && kontaktlisteTeilhaberschaft == false) {
+		if(allKontakteSelectedArrayList.size() > 0 && kontaktlisteTeilhaberschaft == false &&  
+				!kontaktliste.getBezeichnung().equals("Empfangene Kontakte") && !kontaktliste.getBezeichnung().equals("Eigene Kontakte")) {
 			deleteKontakt.setEnabled(true);
 			shareKontakt.setEnabled(true);
 			addKontaktToKontaktliste.setEnabled(true);
@@ -192,6 +204,12 @@ public class Menubar extends MenuBar {
 		run();
 	}
 
+	
+	/*
+	 * Alle MenuItems werden über diese Methode vorerst ausgegraut, damit die 
+	 * einzelnen Konsturktoren jeweils funktionsabhängig einzelne Items wieder
+	 * reaktivieren können
+	 */
 	public void addMenuItemsToArray() {
 		allMenuItems.add(deleteKontakt);
 		allMenuItems.add(shareKontakt);
@@ -268,12 +286,16 @@ public class Menubar extends MenuBar {
 
 		textBox.addKeyPressHandler(new TextBoxKeyPressHandler());
 
+		/*
+		 * Ist ein MenuItem deaktiviert, so wird dies über einen entsprechenden
+		 * CSS Tag grau hinterlegt. Dies erledigt die nachfolgende Foreach Schleife
+		 * für alle inaktiven Items.
+		 */
 		for(MenuItem item : allMenuItems) {
 			if(!item.isEnabled()) {
 				item.setStylePrimaryName("disabledMenuBar");
 			}
 		}
-
 
 		hp.add(menubar);
 		hp.add(textBox);

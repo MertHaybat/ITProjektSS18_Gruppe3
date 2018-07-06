@@ -20,24 +20,24 @@ import de.hdm.itprojektss18Gruppe3.client.gui.CellTableAuspraegungWrapper.Previe
  *
  */
 public class CellTableTeilhaberschaftKontakt extends CellTable<NutzerTeilhaberschaftKontaktWrapper>{
-	
+
 	private final MultiSelectionModel<NutzerTeilhaberschaftKontaktWrapper> ssmAuspraegung = 
 			new MultiSelectionModel<NutzerTeilhaberschaftKontaktWrapper>();
 	private final Handler <NutzerTeilhaberschaftKontaktWrapper> selectionEventManager =
 			DefaultSelectionEventManager.createCheckboxManager();
-	
+
 	public CellTableTeilhaberschaftKontakt(){
 		this.setEmptyTableWidget(new Label("Keine Teilhaberschaften vorhanden"));
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
 		this.addCellPreviewHandler(new PreviewClickHander());
 	}
-	
+
 	public MultiSelectionModel<NutzerTeilhaberschaftKontaktWrapper> getSelectionModel() {
 		return ssmAuspraegung;
 	}
-	
+
 	public class TeilhaberschaftNutzer extends Column<NutzerTeilhaberschaftKontaktWrapper, String>{
-		
+
 		public TeilhaberschaftNutzer (Cell<String>cell){
 			super(cell);
 		}
@@ -48,18 +48,18 @@ public class CellTableTeilhaberschaftKontakt extends CellTable<NutzerTeilhabersc
 	}
 
 	public class TeilhaberschaftKontakt extends Column <NutzerTeilhaberschaftKontaktWrapper, String>{
-		
+
 		public TeilhaberschaftKontakt(Cell <String> cell){
 			super(cell);
-			
+
 		}
-		
+
 		public String getValue(NutzerTeilhaberschaftKontaktWrapper object){
 			return object.getKontakt().getName();
 		}
-		
+
 	}
-	
+
 	public class CheckColumn extends Column<NutzerTeilhaberschaftKontaktWrapper, Boolean>{
 
 		public CheckColumn(Cell<Boolean> cell) {
@@ -69,7 +69,7 @@ public class CellTableTeilhaberschaftKontakt extends CellTable<NutzerTeilhabersc
 		public Boolean getValue(NutzerTeilhaberschaftKontaktWrapper object) {
 			return ssmAuspraegung.isSelected(object);
 		}
-		
+
 	}
 	public class PreviewClickHander implements Handler<NutzerTeilhaberschaftKontaktWrapper> {
 		@Override

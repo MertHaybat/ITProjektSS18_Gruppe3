@@ -11,6 +11,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -38,24 +39,24 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
  */
 @SuppressWarnings("unused")
 public class ITProjektSS18Gruppe3 implements EntryPoint {
-	
+
 	/**
 	 * Deklarierung der Klasse LoginInfo für die Google API
 	 */
 	private LoginInfo loginInfo = null;
-	
+
 	/**
 	 * Instanziierung der GUI Objekten: Panels, Label, Anchor und Button
 	 */
 	private VerticalPanel loginPanel = new VerticalPanel();
-	
+
 	private Label welcomeMessage = new Label("Willkommen beim Kontaktmanager");
 	private Label loginMessage = new Label("Bitte loggen Sie sich mit Ihrem" + " Google Account ein");
 	private Anchor signInLink = new Anchor("Sign In");
 	private Anchor signOutLink = new Anchor("Sign Out");
 
 	private Button loginButton = new Button("LOGIN");
-	
+
 	/**
 	 * Instanziierung des Proxys
 	 */
@@ -176,7 +177,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		}
 
 	}
-	
+
 	/**
 	 * Nested Class einer DialogBox für die Nutzer Erstellung Abfrage.
 	 * @author Mert
@@ -191,6 +192,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 		private Button ja = new Button("Ja");
 		private Button nein = new Button("Nein");
 		private VerticalPanel vpanel = new VerticalPanel();
+		private HorizontalPanel buttonPanel = new HorizontalPanel();
 		/**
 		 * Instanziierung der googleMail. Diese speichert später die übergebene gmail Adresse.
 		 */
@@ -205,8 +207,9 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			ja.addClickHandler(new CreateNutzerClickHandler());
 			nein.addClickHandler(new DontCreateNutzerClickHandler());
 			vpanel.add(frage);
-			vpanel.add(ja);
-			vpanel.add(nein);
+			buttonPanel.add(ja);
+			buttonPanel.add(nein);
+			vpanel.add(buttonPanel);
 			this.add(vpanel);
 
 		}
@@ -242,7 +245,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				kontaktmanagerVerwaltung.createNutzer(googleMail, new CreateNutzerCallback());
-	
+
 			}
 
 		}
@@ -263,7 +266,7 @@ public class ITProjektSS18Gruppe3 implements EntryPoint {
 			}
 
 		}
-		
+
 	}
 	public static class SuchenCommand implements Command {
 

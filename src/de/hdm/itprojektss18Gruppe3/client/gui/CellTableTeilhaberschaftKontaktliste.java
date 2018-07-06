@@ -21,7 +21,7 @@ import de.hdm.itprojektss18Gruppe3.client.gui.CellTableTeilhaberschaftKontakt.Pr
  *
  */
 public class CellTableTeilhaberschaftKontaktliste extends CellTable <NutzerTeilhaberschaftKontaktlisteWrapper>{
-	
+
 	private final MultiSelectionModel<NutzerTeilhaberschaftKontaktlisteWrapper> ssmAuspraegung =
 			new MultiSelectionModel<NutzerTeilhaberschaftKontaktlisteWrapper>();
 	private final Handler <NutzerTeilhaberschaftKontaktlisteWrapper> selectionEventManager = 
@@ -31,7 +31,7 @@ public class CellTableTeilhaberschaftKontaktliste extends CellTable <NutzerTeilh
 		this.setEmptyTableWidget(new Label("Keine Teilhaberschaften vorhanden"));
 		run();
 	}
-	
+
 	public MultiSelectionModel<NutzerTeilhaberschaftKontaktlisteWrapper> getSelectionModel() {
 		return ssmAuspraegung;
 	}
@@ -40,20 +40,20 @@ public class CellTableTeilhaberschaftKontaktliste extends CellTable <NutzerTeilh
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
 		this.addCellPreviewHandler(new PreviewClickHander());
 	}
-	
+
 	public class TeilhaberschaftKontaktliste extends Column <NutzerTeilhaberschaftKontaktlisteWrapper, String>{
-		
+
 		public TeilhaberschaftKontaktliste(Cell<String>cell){
 			super(cell);
 		}
-		
+
 		public String getValue (NutzerTeilhaberschaftKontaktlisteWrapper object){
-		return object.getKontaktliste().getBezeichnung();
+			return object.getKontaktliste().getBezeichnung();
 		}
 	}
-	
+
 	public class TeilhaberschaftNutzer extends Column <NutzerTeilhaberschaftKontaktlisteWrapper, String>{
-		
+
 		public TeilhaberschaftNutzer(Cell<String>cell){
 			super(cell);
 		}
@@ -61,7 +61,7 @@ public class CellTableTeilhaberschaftKontaktliste extends CellTable <NutzerTeilh
 			return object.getNutzer().getMail();
 		}
 	}
-	
+
 	public class CheckColumn extends Column<NutzerTeilhaberschaftKontaktlisteWrapper, Boolean>{
 
 		public CheckColumn(Cell<Boolean> cell) {
@@ -71,7 +71,7 @@ public class CellTableTeilhaberschaftKontaktliste extends CellTable <NutzerTeilh
 		public Boolean getValue(NutzerTeilhaberschaftKontaktlisteWrapper object) {
 			return ssmAuspraegung.isSelected(object);
 		}
-		
+
 	}
 	public class PreviewClickHander implements Handler<NutzerTeilhaberschaftKontaktlisteWrapper> {
 		@Override

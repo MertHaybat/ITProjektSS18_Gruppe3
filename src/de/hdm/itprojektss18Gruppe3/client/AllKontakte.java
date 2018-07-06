@@ -18,13 +18,13 @@ import de.hdm.itprojektss18Gruppe3.shared.report.HTMLReportWriter;
  *
  */
 public class AllKontakte extends HTMLResultPanel{
-	
+
 	/**
 	 * Instanziierung des Proxy Objekts für den Report Generator
 	 */
 	ReportGeneratorAsync reportverwaltung = ClientsideSettings.getReportGenerator();
 
-	
+
 	/**
 	 * Konstruktor der Klasse AllKontakte
 	 */
@@ -34,8 +34,8 @@ public class AllKontakte extends HTMLResultPanel{
 		nutzer.setMail(Cookies.getCookie("email"));
 		reportverwaltung.createAlleKontakteReport(nutzer, new CreateAlleKontakteReportCallback());
 	}
-	
-	
+
+
 	/**
 	 * Nested Class für den AsyncCallback createAlleKontakteReport  
 	 *
@@ -57,6 +57,6 @@ public class AllKontakte extends HTMLResultPanel{
 			hrw.process(result);
 			append(hrw.getReportText());			
 		}
-		
+
 	}
 }

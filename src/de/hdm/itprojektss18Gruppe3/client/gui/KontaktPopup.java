@@ -74,18 +74,17 @@ public class KontaktPopup extends DialogBox {
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
 
+		buttonPanel.add(speichern);
+		buttonPanel.add(abbrechen);
+		
 		ktNameTa.setReadOnly(true);
 		ktNameTa.setValue("Name des neuen Kontaktes");
 		ktNameTa.addClickHandler(new KontaktClickHandler());
 		ktNameTa.setWidth("15em");
 
-		buttonPanel.add(speichern);
-		buttonPanel.add(abbrechen);
-		flextable1.setWidget(0, 0, ktNameTa);	
-		flextable1.setWidget(1, 0, new HTML("<br>"));
-		flextable1.setWidget(2, 0, buttonPanel);
-		
-		vPanel.add(flextable1);
+		vPanel.add(ktNameTa);
+		vPanel.add(new HTML("<br>"));
+		vPanel.add(buttonPanel);
 		this.add(vPanel);
 		this.setGlassEnabled(true);
 	}
@@ -187,9 +186,10 @@ public class KontaktPopup extends DialogBox {
 			Window.alert("Kontakt wurde erfolgreich erstellt.");
 			Menubar mb = new Menubar(k);
 			CustomTreeModel ctm = new CustomTreeModel();
+			KontaktForm kontaktForm = new KontaktForm(k);
 			RootPanel.get("leftmenutree").clear();
 			RootPanel.get("leftmenutree").add(ctm);
-			KontaktForm kontaktForm = new KontaktForm(result);
+
 
 		}
 

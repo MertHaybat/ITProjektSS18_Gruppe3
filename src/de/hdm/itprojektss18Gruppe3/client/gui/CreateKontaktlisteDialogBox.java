@@ -21,6 +21,7 @@ import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
+import de.hdm.itprojektss18Gruppe3.client.gui.KontaktPopup.KontaktClickHandler;
 
 /**
  * Die Klasse "KontaktlisteDialogBox" ermöglicht das Hinzufügen einer neuen Kontaktliste über eine DialogBox
@@ -64,10 +65,6 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 	 * Non-Argument-Konstruktor
 	 */
 	public CreateKontaktlisteDialogBox() {
-		this.setText("Neue Kontaktliste erstellen");
-		this.setGlassEnabled(true);
-		this.setAnimationEnabled(true);
-		this.setAutoHideEnabled(true);
 		bspeichern.addClickHandler(new insertKontaktlisteClickHandler());
 		run();
 	}
@@ -85,19 +82,35 @@ public class CreateKontaktlisteDialogBox extends DialogBox {
 	}
 
 	public void run(){
+		
+		this.setText("Neue Kontaktliste erstellen");
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		this.setAutoHideEnabled(true);
+		
 		hPanel.add(bspeichern);
 		hPanel.add(babbrechen);
-		kontaktlisteLabel.setStylePrimaryName("labelSize1");
-		labelPanel.add(kontaktlisteLabel);
 		labelPanel.add(tkontaktliste);
+		tkontaktliste.setReadOnly(true);
+		tkontaktliste.setValue("Bezeichnung der Kontaktliste");
+		tkontaktliste.addClickHandler(new KontaktClickHandler());
+		tkontaktliste.setWidth("15em");
 
 		babbrechen.addClickHandler(new closeKontaktlisteClickHandler());
 
 		vPanel.add(labelPanel);
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(hPanel);
-		vPanel.setWidth("300px");
 		this.add(vPanel);
+	}
+	
+	class KontaktClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+			tkontaktliste.setReadOnly(false);
+			tkontaktliste.setValue("");
+		}
 	}
 
 	public class createKontaktlisteCallback implements AsyncCallback<Kontaktliste> {

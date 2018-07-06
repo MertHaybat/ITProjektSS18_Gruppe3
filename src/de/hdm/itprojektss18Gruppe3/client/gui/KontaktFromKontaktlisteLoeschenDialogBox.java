@@ -32,9 +32,9 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
  *
  */
 public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
-	
+
 	private static KontaktmanagerAdministrationAsync kontaktmanagerVerwaltung = ClientsideSettings.getKontaktVerwaltung();
-	
+
 	/**
 	 * Panels für die Möglichkeit zum Anordnen der Buttons
 	 */
@@ -54,7 +54,7 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	private KontaktKontaktliste kontaktKontaktlisteObject = new KontaktKontaktliste();
 	private ArrayList<Kontakt> kontakteToRemoveFromKontaktliste;
 	private Label abfrageLabel = null;
-	
+
 	public KontaktFromKontaktlisteLoeschenDialogBox(ArrayList<Kontakt> kontakteToRemoveFromKontaktliste, Kontaktliste kontaktliste) {
 
 		this.kontakteToRemoveFromKontaktliste = kontakteToRemoveFromKontaktliste;
@@ -62,9 +62,9 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		StringBuilder listOfNames = new StringBuilder();
 		for(Kontakt k:kontakteToRemoveFromKontaktliste) {
 			listOfNames.append(k.getName() + ", ");
-			
+
 		}
-		
+
 		/**
 		 * Anordnung der Buttons in der DialogBox durch die Panels
 		 */
@@ -78,23 +78,23 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		this.setGlassEnabled(true);
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
-		
+
 		vPanel.add(hPanel1);
 		vPanel.add(hPanel2);
 		this.add(vPanel);
-		
+
 		/**
 		 * ClickHandler
 		 */
 		bBestaetigen.addClickHandler(new deleteKontakteFromKontaktlisteClickHandler());
 		bAbbrechen.addClickHandler(new closeKontaktKontaktlisteClickHandler());	
 	}
-	
+
 	public KontaktFromKontaktlisteLoeschenDialogBox(Kontakt kontaktToRemoveFromKontaktliste, Kontaktliste kontaktliste) {
-		
+
 		this.kontaktToRemoveFromKontaktliste = kontaktToRemoveFromKontaktliste;
 		this.kontaktliste = kontaktliste;
-		
+
 		/**
 		 * Anordnung der Buttons in der DialogBox durch die Panels
 		 */
@@ -108,11 +108,11 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		this.setGlassEnabled(true);
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
-		
+
 		vPanel.add(hPanel1);
 		vPanel.add(hPanel2);
 		this.add(vPanel);
-		
+
 		/**
 		 * ClickHandler
 		 */
@@ -120,44 +120,44 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		bAbbrechen.addClickHandler(new closeKontaktKontaktlisteClickHandler());	
 	}
 
-	
+
 	class deleteKontakteFromKontaktlisteClickHandler implements ClickHandler {
 		KontaktKontaktliste k = new KontaktKontaktliste();
 
 		@Override	
 		public void onClick(ClickEvent event) {
-				for (Kontakt kontakt : kontakteToRemoveFromKontaktliste) {
-					k.setKontaktID(kontakt.getId());
-					k.setKontaktlisteID(kontaktliste.getId());
-					kontaktmanagerVerwaltung.deleteKontaktKontaktliste(k, new deleteKontaktKontaktlisteCallback());
-				
+			for (Kontakt kontakt : kontakteToRemoveFromKontaktliste) {
+				k.setKontaktID(kontakt.getId());
+				k.setKontaktlisteID(kontaktliste.getId());
+				kontaktmanagerVerwaltung.deleteKontaktKontaktliste(k, new deleteKontaktKontaktlisteCallback());
+
 			}
-			
+
 		}
 	}
-	
+
 	class deleteKontaktKontaktlisteClickHandler implements ClickHandler {
-		
+
 		KontaktKontaktliste kkl = new KontaktKontaktliste();
-		
+
 		@Override
 		public void onClick(ClickEvent event) {
 			kkl.setKontaktID(kontaktToRemoveFromKontaktliste.getId());
 			kkl.setKontaktlisteID(kontaktliste.getId());
 			kontaktmanagerVerwaltung.deleteKontaktKontaktliste(kkl, new deleteKontaktKontaktlisteCallback());
-			
+
 		}
 	}
-	
+
 	public class closeKontaktKontaktlisteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			hide();
 		}
-		
+
 	}
-	
+
 
 	public class deleteKontaktKontaktlisteCallback implements AsyncCallback<Void> {
 

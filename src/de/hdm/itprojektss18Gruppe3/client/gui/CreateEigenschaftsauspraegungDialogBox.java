@@ -50,7 +50,7 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 	public CreateEigenschaftsauspraegungDialogBox(Kontakt k, Kontaktliste kontaktliste) {
 		this.kontakt = k;
 		this.kontaktliste = kontaktliste;
-		
+
 		//Horizontal Panel besetzen mit den Buttons
 		hPanel.add(erstellen);
 		hPanel.add(abbrechen);
@@ -74,14 +74,12 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 		abbrechen.addClickHandler(new AbbruchClickHandler());
 
 		//CSS Style für die Buttons übernehmen
-		erstellen.setStylePrimaryName("mainButton");
-		abbrechen.setStylePrimaryName("mainButton");
-		
+
 		this.setGlassEnabled(true);
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
 		this.setText("Neue Kontakteigenschaft erstellen");
-		
+
 	}
 
 	/**
@@ -112,8 +110,6 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 		public void onSuccess(Eigenschaftsauspraegung result) {
 			hide();
 			KontaktForm kForm = new KontaktForm(kontakt);
-			KontaktlistView klisteView = new KontaktlistView(kontaktliste);
-
 		}
 
 	}
@@ -131,7 +127,7 @@ public class CreateEigenschaftsauspraegungDialogBox extends DialogBox {
 
 			if (input.equals("") || inputAuspraegung.equals("")) {
 				Window.alert("Bitte beide Felder ausfüllen");
-				
+
 			} else {
 
 				if (input.equals("PLZ") || input.equals("Telefonnummer")) {

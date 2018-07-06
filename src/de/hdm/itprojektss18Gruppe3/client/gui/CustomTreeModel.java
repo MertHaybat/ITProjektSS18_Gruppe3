@@ -173,7 +173,6 @@ public class CustomTreeModel extends VerticalPanel implements TreeViewModel {
 					kontaktlistenDataProvider.getList().add(kL);
 				}
 			}
-
 		}
 	}
 

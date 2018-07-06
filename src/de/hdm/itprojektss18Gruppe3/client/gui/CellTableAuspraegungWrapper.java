@@ -16,29 +16,29 @@ import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import de.hdm.itprojektss18Gruppe3.client.EigenschaftsAuspraegungWrapper;
 
 public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegungWrapper> {
-	
+
 	private final Handler<EigenschaftsAuspraegungWrapper> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
 	private MultiSelectionModel<EigenschaftsAuspraegungWrapper> ssmAuspraegung = null;
-	
+
 	public CellTableAuspraegungWrapper(NoSelectionModel<EigenschaftsAuspraegungWrapper> ssm) {
 		this.setSelectionModel(ssm);
 		run();
-		}
+	}
 	public CellTableAuspraegungWrapper(MultiSelectionModel<EigenschaftsAuspraegungWrapper> ssm) {
 		this.setSelectionModel(ssm, selectionEventManager);
 		this.addCellPreviewHandler(new PreviewClickHander());
 
 		this.ssmAuspraegung = ssm;
 		run();
-		}
+	}
 
 
 
 	public void run(){
 		this.setStylePrimaryName("auspraegungCellTable");
 	}
-	
+
 	public class WertEigenschaftColumn extends Column<EigenschaftsAuspraegungWrapper, String>{
 
 		public WertEigenschaftColumn(Cell<String> cell) {
@@ -56,7 +56,7 @@ public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegu
 		public WertAuspraegungColumn(Cell<String> cell) {
 			super(cell);
 		}
-	
+
 		@Override
 		public String getValue(EigenschaftsAuspraegungWrapper object) {
 			object.setIDEigenschaftsauspraegungValue(object.getIDEigenschaftsauspraegungValue());
@@ -73,7 +73,7 @@ public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegu
 		public Boolean getValue(EigenschaftsAuspraegungWrapper object) {
 			return ssmAuspraegung.isSelected(object);
 		}
-		
+
 	}
 	public class IconColumn extends TextColumn<EigenschaftsAuspraegungWrapper>{
 
@@ -81,19 +81,19 @@ public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegu
 		public String getValue(EigenschaftsAuspraegungWrapper object) {
 			return "";
 		}
-		  @Override
-	        public void render(Context context, EigenschaftsAuspraegungWrapper object, SafeHtmlBuilder sb) {
-	        	// TODO Auto-generated method stub
-	        	if(object.getStatusValue() == 0){
-	        		sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">"); 
-	        		
-	        	} else {
-	        		sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">"); 
-	        	}
+		@Override
+		public void render(Context context, EigenschaftsAuspraegungWrapper object, SafeHtmlBuilder sb) {
+			// TODO Auto-generated method stub
+			if(object.getStatusValue() == 0){
+				sb.appendHtmlConstant("<img width=\"20\" src=\"images/singleperson.svg\">"); 
 
-	        	super.render(context, object, sb);
-	        }
-		
+			} else {
+				sb.appendHtmlConstant("<img width=\"20\" src=\"images/group.svg\">"); 
+			}
+
+			super.render(context, object, sb);
+		}
+
 	}
 	public class PreviewClickHander implements Handler<EigenschaftsAuspraegungWrapper> {
 		@Override
@@ -108,6 +108,6 @@ public class CellTableAuspraegungWrapper extends CellTable<EigenschaftsAuspraegu
 		}
 	}
 }
-	
+
 
 

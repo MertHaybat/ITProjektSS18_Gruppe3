@@ -122,8 +122,6 @@ public class AllKontaktView extends MainFrame {
 
 		kontaktliste = k;
 
-
-		
 		allKontakteSelectedArrayList.clear();
 
 		Nutzer nutzer = new Nutzer();
@@ -141,8 +139,6 @@ public class AllKontaktView extends MainFrame {
 
 		super.onLoad();
 	}
-
-
 
 	public void run() {
 		allKontakteCellTable = new CellTableKontakt(kontaktliste);

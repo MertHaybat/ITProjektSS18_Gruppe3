@@ -16,12 +16,12 @@ import de.hdm.itprojektss18Gruppe3.shared.report.HTMLReportWriter;
  *
  */
 public class AllKontaktTeilhaberschaften extends HTMLResultPanel{
-	
+
 	/**
 	 * Instanziierung des Proxy Objekts für den Report Generator
 	 */
 	ReportGeneratorAsync reportverwaltung = ClientsideSettings.getReportGenerator();
-	
+
 	/**
 	 * Konstruktor der Klasse AllKontaktTeilhaberschaften
 	 * 
@@ -29,14 +29,14 @@ public class AllKontaktTeilhaberschaften extends HTMLResultPanel{
 	 * @param teilhabender: In der GUI eigegebene Teilhaber einer Teilhaberschaft
 	 */
 	public AllKontaktTeilhaberschaften(String eigentuemer, String teilhabender) {
-		
-	
+
+
 		reportverwaltung.createAlleKontakteByTeilhaberschaftReport(eigentuemer, teilhabender,
 				new CreateAlleKontakteByTeilhaberschaftCallback());
-		
+
 	}
 
-	
+
 	/**
 	 * Nested Class für den AsyncCallback createAlleKontakteByTeilhaberschaftReport
 	 */

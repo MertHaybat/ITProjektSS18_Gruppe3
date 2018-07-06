@@ -129,12 +129,10 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 		vPanel.add(box);
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(selectedNutzerCT);
-
+		vPanel.add(new HTML("<br>"));
 		vPanel.add(hPanel);
 		box.addKeyPressHandler(new NutzerHinzufuegenKeyPressHandler());
 		box.setStylePrimaryName("gwt-SuggestBox");
-		sichern.setStylePrimaryName("mainButton");
-		abbrechen.setStylePrimaryName("mainButton");
 
 		this.add(vPanel);
 	}
@@ -289,16 +287,12 @@ public class DialogBoxKontaktTeilen extends DialogBox {
 				Window.alert("Sie können nichts mit sich selbst teilen!");
 			} else {
 				Window.alert("Teilhaberschaft erfolgreich erstellt");
+				hide();
+				AllKontaktView akv = new AllKontaktView();
+				CustomTreeModel ctm = new CustomTreeModel();
+				RootPanel.get("leftmenutree").clear();
+				RootPanel.get("leftmenutree").add(ctm);
 			}
-			CustomTreeModel ctm = new CustomTreeModel();
-			RootPanel.get("leftmenutree").clear();
-			RootPanel.get("leftmenutree").add(ctm);
-			if(singleKontakt == true) {
-				KontaktForm kf = new KontaktForm(soloKontakt);
-			} else {
-				AllKontaktView akw = new AllKontaktView();
-			}
-			hide();
 		}
 	}
 

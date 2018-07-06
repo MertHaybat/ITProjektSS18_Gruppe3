@@ -33,7 +33,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 public class CellTableKontakt extends CellTable<Kontakt>{
-	
+
 	private List<Kontakt> allSelectedKontakte = new ArrayList<>();
 	private Kontaktliste kontaktliste = null;
 	private MultiSelectionModel<Kontakt> ssmAuspraegung = new MultiSelectionModel<Kontakt>();
@@ -42,23 +42,23 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 	private CellTable cellTable = new CellTable<Kontakt>(15, (com.google.gwt.user.cellview.client.CellTable.Resources) GWT.create(CellTableResources.class));
 	private Nutzer nutzer = new Nutzer();
 
-	
+
 	public CellTableKontakt(){
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
 		run();
 	}
-	
+
 	public CellTableKontakt(Kontaktliste kl){
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
 		this.kontaktliste = kl;
 		run();
 	}
-	
+
 	public CellTableKontakt(SingleSelectionModel<Kontakt> ssm){
 		this.setSelectionModel(ssm);
 		run();
 	}
-	
+
 	public MultiSelectionModel<Kontakt> getSsmAuspraegung() {
 		return ssmAuspraegung;
 	}
@@ -66,9 +66,9 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 	public void run(){
 		this.setEmptyTableWidget(new Label("Du hast bisher keine Kontakte angelegt"));
 		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-	
+
 	}
-	
+
 	public class CheckColumn extends Column<Kontakt, Boolean>{
 
 		public CheckColumn(Cell<Boolean> cell) {
@@ -79,27 +79,27 @@ public class CellTableKontakt extends CellTable<Kontakt>{
 			allSelectedKontakte.add(object);
 			return ssmAuspraegung.isSelected(object);
 		}
-		
+
 	}
-	
+
 	public class KontaktnameColumn extends Column<Kontakt, String>{
 
 		public KontaktnameColumn(Cell<String> cell) {
 			super(cell);
 		}
-		
+
 		@Override
 		public String getValue(Kontakt object) {
 			return object.getName();
 		}
-		
+
 	}
-	
+
 	public class IconColumn extends Column<Kontakt, String>{
 		String value = "";
 		public IconColumn(Cell<String> cell) {
 			super(cell);
-		
+
 		}
 		@Override
 		public String getValue(Kontakt object) {

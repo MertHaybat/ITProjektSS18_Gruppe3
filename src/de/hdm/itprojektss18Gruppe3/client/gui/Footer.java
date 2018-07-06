@@ -17,6 +17,13 @@ import de.hdm.itprojektss18Gruppe3.client.ClientsideSettings;
 import de.hdm.itprojektss18Gruppe3.shared.KontaktmanagerAdministrationAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
+/*
+ * Klasse, welche in das Footer Div implementiert wird und die FUßzeile unseres Kontaktmanagers bilder
+ * Hier findet sich auch der Button um den aktuellen Nutzer zu löschen sowie das Impressum
+ * 
+ * @autor: kevinhofmann
+ */
+
 public class Footer extends HorizontalPanel {
 
 	private Label footerLabel = new HTML("IT Projekt SS18 | Hochschule der Medien Stuttgart |");
@@ -34,8 +41,8 @@ public class Footer extends HorizontalPanel {
 				Impressum ip = new Impressum();
 
 			}
-
 		});
+		
 		deleteNutzer.addClickHandler(new DeleteNutzerClickHandler());
 		deleteNutzer.setStylePrimaryName("impressumButton");
 		impressum.setStylePrimaryName("impressumButton");

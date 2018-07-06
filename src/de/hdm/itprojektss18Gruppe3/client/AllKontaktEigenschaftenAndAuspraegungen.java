@@ -39,7 +39,7 @@ public class AllKontaktEigenschaftenAndAuspraegungen extends HTMLResultPanel {
 	 *
 	 */
 	class AllKontaktEigenschaftAndAuspraegungenCallback
-			implements AsyncCallback<KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport> {
+	implements AsyncCallback<KontakteMitBestimmtenEigenschaftenUndAuspraegungenReport> {
 
 		@Override
 		public void onFailure(Throwable caught) {

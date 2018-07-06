@@ -13,7 +13,7 @@ import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 
 
 public class CellTableNutzer extends CellTable<Nutzer>{
-	
+
 	private final MultiSelectionModel<Nutzer> ssmAuspraegung = new MultiSelectionModel<Nutzer>();
 	private final Handler<Nutzer> selectionEventManager = DefaultSelectionEventManager
 			.createCheckboxManager();
@@ -24,8 +24,8 @@ public class CellTableNutzer extends CellTable<Nutzer>{
 	public void run(){
 		this.setSelectionModel(ssmAuspraegung, selectionEventManager);
 	}
-	
-	
+
+
 	public class NutzerColumn extends Column<Nutzer, String>{
 
 		public NutzerColumn(Cell<String> cell) {
@@ -47,6 +47,6 @@ public class CellTableNutzer extends CellTable<Nutzer>{
 		public String getValue(Nutzer object) {
 			return "x";
 		}
-		
+
 	}
 }
