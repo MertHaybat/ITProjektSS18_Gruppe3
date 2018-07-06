@@ -123,9 +123,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));
+		headline.addColumn(new Column("Eigenschaften"));
 		headline.addColumn(new Column("Empfangen von"));
 		headline.addColumn(new Column("Geteilt mit"));
-		headline.addColumn(new Column("Eigenschaften"));
 		headline.addColumn(new Column("Erzeugungsdatum"));
 		headline.addColumn(new Column("Modifkationsdatum"));
 		
@@ -146,9 +146,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			
 			if(kontakt.getNutzer()== null && kontakt.getTeilhaberschaft() == null && kontakt.getKontakt().getStatus() == 0){
 				kontakte.addColumn(new Column(kontakt.getKontakt().getName()));
-				kontakte.addColumn(new Column(""));
-				kontakte.addColumn(new Column(""));
 				kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
+				kontakte.addColumn(new Column(""));
+				kontakte.addColumn(new Column(""));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getErzeugungsdatum()).toString()));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getModifikationsdatum()).toString()));
 				
@@ -156,9 +156,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				
 			} else if(kontakt.getNutzer().getId() == kontakt.getTeilhaberschaft().getEigentuemerID() && kontakt.getTeilhaberschaft() != null && kontakt.getKontakt() != null ){
 				kontakte.addColumn(new Column(kontakt.getKontakt().getName()));
+				kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 				kontakte.addColumn(new Column(kontakt.getNutzer().getMail()));
 				kontakte.addColumn(new Column(""));
-				kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getErzeugungsdatum()).toString()));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getModifikationsdatum()).toString()));
 				
@@ -167,9 +167,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			} else if(kontakt.getTeilhaberschaft().getEigentuemerID() == nutzer.getId() && kontakt.getTeilhaberschaft() != null && kontakt.getKontakt() != null ){				
 			
 				kontakte.addColumn(new Column(kontakt.getKontakt().getName()));
+				kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 				kontakte.addColumn(new Column(""));
 				kontakte.addColumn(new Column(kontakt.getNutzer().getMail()));
-				kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getErzeugungsdatum()).toString()));
 				kontakte.addColumn(new Column(dtf.format(kontakt.getKontakt().getModifikationsdatum()).toString()));
 				
@@ -226,8 +226,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		headline.addColumn(new Column("Kontaktname"));
 		
 //		headline.addColumn(new Column("Status"));
-		headline.addColumn(new Column("Teilhaber"));
 		headline.addColumn(new Column("Eigenschaften"));
+		headline.addColumn(new Column("Teilhaber"));
 		headline.addColumn(new Column("Erzeugungsdatum"));
 		headline.addColumn(new Column("Modifkationsdatum"));
 
@@ -243,8 +243,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			auspraegungen = this.getKontaktVerwaltung().findAllEigenschaftsauspraegungWrapper(nutzerEigentuemer, kontakt);
 			Row kontakte = new Row();
 			kontakte.addColumn(new Column(kontakt.getName()));
-			kontakte.addColumn(new Column(nutzerTeilnehmer.getMail()));
 			kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
+			kontakte.addColumn(new Column(nutzerTeilnehmer.getMail()));
 			kontakte.addColumn(new Column(dtf.format(kontakt.getErzeugungsdatum()).toString()));
 			kontakte.addColumn(new Column(dtf.format(kontakt.getModifikationsdatum()).toString()));
 			result.addRow(kontakte);
@@ -293,8 +293,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Row headline = new Row();
 		headline.addColumn(new Column("Kontaktname"));
 //		headline.addColumn(new Column("Status"));
-		headline.addColumn(new Column("Ersteller"));
 		headline.addColumn(new Column("Eigenschaften"));
+		headline.addColumn(new Column("Ersteller"));
 		headline.addColumn(new Column("Erzeugungsdatum"));
 		headline.addColumn(new Column("Modifkationsdatum"));
 //		for (Eigenschaft eigenschaft2 : eigenschaften) {
@@ -314,9 +314,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			
 			auspraegungen = this.getKontaktVerwaltung().findAllEigenschaftsauspraegungWrapper(loggedinNutzer, kontakt);
 			
+			kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 			kontakte.addColumn(new Column(this.getKontaktVerwaltung().findNutzerByID(kontakt.getNutzerID()).getMail()));
 			
-			kontakte.addColumn(new Column(auspraegungen.toString().replace("[", "").replace("]", "").replace(",", "")));
 			kontakte.addColumn(new Column(dtf.format(kontakt.getErzeugungsdatum()).toString()));
 			kontakte.addColumn(new Column(dtf.format(kontakt.getModifikationsdatum()).toString()));
 			

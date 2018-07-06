@@ -313,11 +313,19 @@ public class DisclosurePanelSuche extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Vector<Kontakt> result) {
+			Vector<Kontakt> kontaktResult = new Vector<Kontakt>();
+			int kontaktID = 0;
 			if(result.size() == 0){
 				Window.alert("Kein Kontakt gefunden!");
 			} else {
-				kontaktCellTable.setRowData(0, result);
-				kontaktCellTable.setRowCount(result.size(), true);
+				for (Kontakt kontakt : result) {
+					if(kontakt.getId() != kontaktID){
+						kontaktResult.add(kontakt);
+						kontaktID = kontakt.getId();
+					}
+				}
+				kontaktCellTable.setRowData(0, kontaktResult);
+				kontaktCellTable.setRowCount(kontaktResult.size(), true);
 				kontaktCellTable.redraw();
 				
 				suchErgebnisPanel.add(kontaktCellTable);

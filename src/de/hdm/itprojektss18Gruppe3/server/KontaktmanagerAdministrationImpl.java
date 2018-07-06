@@ -530,30 +530,30 @@ public class KontaktmanagerAdministrationImpl extends RemoteServiceServlet imple
 			Eigenschaft eigenschaft) throws IllegalArgumentException {
 		Vector<Eigenschaftsauspraegung> auspraegungen = new Vector<Eigenschaftsauspraegung>();
 
-		if(e.getWert().equals("")){
+		if (e.getWert().equals("")) {
 			auspraegungen = findAllEigenschaftsauspraegungByEigenschaftID(eigenschaft);
-			
-		} else {
-		
-		char a = e.getWert().charAt(0);
-		String b = "*";
-		char c = b.charAt(0);
-		char d = e.getWert().charAt(e.getWert().length() - 1);
 
-		if (eigenschaft != null){
-			
-			e.setEigenschaftID(eigenschaft.getId());
-		}
-
-		if (a == c) {
-			e.setWert(e.getWert().replace("*", "%"));
-			auspraegungen = this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByWert(e);
-		} else if (c == d) {
-			e.setWert(e.getWert().replace("*", "%"));
-			auspraegungen = this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByWert(e);
 		} else {
-			auspraegungen = this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByWert(e);
-		}
+
+			char a = e.getWert().charAt(0);
+			String b = "*";
+			char c = b.charAt(0);
+			char d = e.getWert().charAt(e.getWert().length() - 1);
+
+			if (eigenschaft != null) {
+
+				e.setEigenschaftID(eigenschaft.getId());
+			}
+
+			if (a == c) {
+				e.setWert(e.getWert().replace("*", "%"));
+				auspraegungen = this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByWert(e);
+			} else if (c == d) {
+				e.setWert(e.getWert().replace("*", "%"));
+				auspraegungen = this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByWert(e);
+			} else {
+				auspraegungen = this.eigenschaftsauspraegungMapper.findAllEigenschaftsauspraegungByWert(e);
+			}
 		}
 		return auspraegungen;
 	}

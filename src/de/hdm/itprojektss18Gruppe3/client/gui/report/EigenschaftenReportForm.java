@@ -58,8 +58,7 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			
+			Window.alert("Fehler beim Laden der Daten: " + caught.getMessage());
 		}
 
 		@Override
@@ -101,20 +100,4 @@ public class EigenschaftenReportForm extends HorizontalPanel {
 		
 	}
 
-//	class EigenschaftenCallback implements AsyncCallback<Vector<Eigenschaft>> {
-//
-//		@Override
-//		public void onFailure(Throwable caught) {
-//			Window.alert("Fehler beim Laden aus der Datenbank" + caught.getMessage());
-//		}
-//
-//		@Override
-//		public void onSuccess(Vector<Eigenschaft> result) {
-//			// TODO Auto-generated method stub
-//			for (Eigenschaft eigenschaft : result) {
-//				tbEigenschaft.addItem(eigenschaft.getBezeichnung());
-//			}
-//		}
-//
-//	}
 }
