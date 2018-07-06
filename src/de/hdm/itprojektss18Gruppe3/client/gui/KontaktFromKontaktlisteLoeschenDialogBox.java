@@ -9,7 +9,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -51,12 +53,9 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 	private Kontakt kontaktToRemoveFromKontaktliste;
 	private KontaktKontaktliste kontaktKontaktlisteObject = new KontaktKontaktliste();
 	private ArrayList<Kontakt> kontakteToRemoveFromKontaktliste;
-		
+	private Label abfrageLabel = null;
 	
 	public KontaktFromKontaktlisteLoeschenDialogBox(ArrayList<Kontakt> kontakteToRemoveFromKontaktliste, Kontaktliste kontaktliste) {
-		
-		bBestaetigen.setStylePrimaryName("mainButton");
-		bAbbrechen.setStylePrimaryName("mainButton");
 
 		this.kontakteToRemoveFromKontaktliste = kontakteToRemoveFromKontaktliste;
 		this.kontaktliste = kontaktliste;
@@ -69,7 +68,10 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		/**
 		 * Anordnung der Buttons in der DialogBox durch die Panels
 		 */
-		setText("Möchtest du " + listOfNames.toString().substring(0, listOfNames.length() - 2) + " aus der Kontaktliste entfernen?");
+		abfrageLabel = new Label("Möchtest du " + listOfNames.toString().substring(0, listOfNames.length() - 2) + " aus der Kontaktliste entfernen?");
+		vPanel.add(abfrageLabel);
+		vPanel.add(new HTML("<br>"));
+		this.setText("Kontakt aus Kontaktliste löschen");
 		flextable1.setWidget(0, 0, bBestaetigen);
 		flextable1.setWidget(0, 1, bAbbrechen);
 		vPanel.add(flextable1);
@@ -96,9 +98,12 @@ public class KontaktFromKontaktlisteLoeschenDialogBox extends DialogBox {
 		/**
 		 * Anordnung der Buttons in der DialogBox durch die Panels
 		 */
-		setText("Möchtest du " + kontaktToRemoveFromKontaktliste.getName() + " aus der Kontaktliste entfernen?");
+		this.setText("Kontakt aus Kontaktliste löschen");
+		abfrageLabel = new Label("Möchtest du " + kontaktToRemoveFromKontaktliste.getName() + " aus der Kontaktliste entfernen?");
 		flextable1.setWidget(0, 0, bBestaetigen);
 		flextable1.setWidget(0, 1, bAbbrechen);
+		vPanel.add(abfrageLabel);
+		vPanel.add(new HTML("<br>"));
 		vPanel.add(flextable1);
 		this.setGlassEnabled(true);
 		this.setAnimationEnabled(true);

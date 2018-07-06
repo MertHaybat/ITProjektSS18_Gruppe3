@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -38,6 +39,7 @@ import de.hdm.itprojektss18Gruppe3.shared.LoginService;
 import de.hdm.itprojektss18Gruppe3.shared.LoginServiceAsync;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontakt;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18Gruppe3.shared.bo.Nutzer;
 import de.hdm.itprojektss18Gruppe3.shared.bo.Teilhaberschaft;
 
 /*
@@ -65,6 +67,7 @@ public class Menubar extends MenuBar {
 	private Boolean kontaktlisteTeilhaberschaft = null;
 	private Kontakt kontakt = null;
 	private Kontaktliste kontaktliste = null;
+	private Nutzer nutzer = null;
 	private ArrayList<Kontakt> allKontakteSelectedArrayList = null;
 	private ArrayList<MenuItem> allMenuItems = new ArrayList<MenuItem>();
 	private ArrayList<NutzerTeilhaberschaftEigenschaftAuspraegungWrapper> selectedTeilhaberschaftAuspraegung = null;
@@ -112,17 +115,27 @@ public class Menubar extends MenuBar {
 	}
 
 	public Menubar(Kontakt k) {
+		nutzer = new Nutzer();
+		nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
 		this.kontakt = k;
 		addMenuItemsToArray();
-		deleteKontakt.setEnabled(true);
-		shareKontakt.setEnabled(true);
-		addKontaktToKontaktliste.setEnabled(true);
-		addKontaktEigenschaft.setEnabled(true);
+		
+		if(nutzer.getId() == kontakt.getNutzerID()) {
+			deleteKontakt.setEnabled(true);
+			shareKontakt.setEnabled(true);
+			addKontaktToKontaktliste.setEnabled(true);
+			addKontaktEigenschaft.setEnabled(true);
 
-		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
-		shareKontakt.setScheduledCommand(new ShareKontaktAndEigenschaftenCommand());
-		addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
-
+			deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
+			shareKontakt.setScheduledCommand(new ShareKontaktAndEigenschaftenCommand());
+			addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
+		} else {
+			deleteTeilhaberschaften.setEnabled(true);
+			shareKontakt.setEnabled(true);
+			deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftAuspraegungCommand());
+			deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
+			shareKontakt.setScheduledCommand(new ShareKontaktCommand());	
+		}
 		run();
 	}
 
@@ -134,20 +147,7 @@ public class Menubar extends MenuBar {
 		deleteTeilhaberschaften.setEnabled(true);
 		deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftCommand());
 		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
-		addKontaktToKontaktliste.setScheduledCommand(new AddKontaktToKontaktlisteCommand());
-		
-		run();
-	}
-
-	public Menubar(Kontakt k, Boolean ownKontakt) {
-		addMenuItemsToArray();
-		this.kontakt = k;
-		deleteTeilhaberschaften.setEnabled(true);
-		shareKontakt.setEnabled(true);
-		deleteTeilhaberschaften.setScheduledCommand(new KontaktForm.DeleteTeilhaberschaftAuspraegungCommand());
-		deleteKontakt.setScheduledCommand(new DeleteKontaktCommand());
-		shareKontakt.setScheduledCommand(new ShareKontaktCommand());
-		
+		addKontaktEigenschaft.setEnabled(true);
 		run();
 	}
 

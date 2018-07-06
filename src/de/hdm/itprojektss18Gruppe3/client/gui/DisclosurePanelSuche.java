@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -179,13 +180,16 @@ public class DisclosurePanelSuche extends VerticalPanel {
 		kontaktCellTable.addDomHandler(new KontaktFormDoubleClickHandler(), DoubleClickEvent.getType());
 		celltable.setSelectionModel(selection);
 
+		kontaktCellTable.setWidth("100%");
 		
-		celltable.addColumn(wertEigenschaftColumn, "");
+		celltable.getElement().getStyle().setPaddingLeft(5, Unit.EM);
+		celltable.addColumn(wertEigenschaftColumn, "Eigenschaft");
 		celltable.setColumnWidth(wertEigenschaftColumn, 7, Unit.EM);
-		celltable.addColumn(wertAuspraegungColumn, "");
+		celltable.addColumn(wertAuspraegungColumn, "Wert");
 		celltable.setColumnWidth(wertAuspraegungColumn, 14, Unit.EM);
 		
 		hPanel.add(suchErgebnisPanel);
+		hPanel.add(new HTML("<br><br>"));
 		hPanel.add(suchErgebnisZweiPanel);
 		this.add(eingabeText);
 		this.add(layout);

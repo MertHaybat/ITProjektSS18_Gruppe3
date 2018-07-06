@@ -81,6 +81,7 @@ public class KontaktForm extends MainFrame {
 	private VerticalPanel vPanel = new VerticalPanel();
 	private VerticalPanel vPanel2 = new VerticalPanel();
 	private VerticalPanel vPanel3 = new VerticalPanel();
+	private VerticalPanel containerPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private HorizontalPanel kontaktLabelkontaktName = new HorizontalPanel();
 	private HorizontalPanel tableButtonPanel = new HorizontalPanel();
@@ -102,7 +103,6 @@ public class KontaktForm extends MainFrame {
 	private Vector<Teilhaberschaft> teilhaberschaftVector = new Vector<Teilhaberschaft>();
 	private Vector<EigenschaftsAuspraegungWrapper> resultWrapperVector = new Vector<EigenschaftsAuspraegungWrapper>();
 	private String eigenschaft = "";
-	private static Boolean ownKontakt = null;
 	private static Boolean kontaktteilhaberschaftBoolean = null;
 
 	private CellTableAuspraegungWrapper.WertEigenschaftColumn wertEigenschaftColumn = celltable.new WertEigenschaftColumn(
@@ -180,14 +180,11 @@ public class KontaktForm extends MainFrame {
 		vPanel2.setStylePrimaryName("kontaktFormPanel");
 		vPanel3.setStylePrimaryName("kontaktFormPanel");
 
-		this.add(vPanel);
-		this.add(vPanel3);
-		this.add(vPanel2);
+		containerPanel.add(vPanel);
+		containerPanel.add(vPanel3);
+		containerPanel.add(vPanel2);
 
-
-		RootPanel.get("content").add(vPanel);
-		RootPanel.get("content").add(vPanel3);
-		RootPanel.get("content").add(vPanel2);
+		RootPanel.get("content").add(containerPanel);
 
 	}
 
@@ -217,8 +214,8 @@ public class KontaktForm extends MainFrame {
 			if(kontaktteilhaberschaftBoolean == true) { 
 				shareImageIndicator.setUrl("/images/received_share.png");
 				Menubar mb = new Menubar(k, kontaktTeilhaberschaft); 
-			} else if(ownKontakt == false) {
-				Menubar mb = new Menubar(k, ownKontakt); 
+			} else if(k.getNutzerID() != nutzer.getId()) {
+				Menubar mb = new Menubar(k); 
 				shareImageIndicator.setUrl("/images/received_share.png");
 			} else {
 				Menubar mb = new Menubar(k); 
@@ -512,7 +509,7 @@ public class KontaktForm extends MainFrame {
 		public void onSuccess(String result) {
 			Nutzer nutzer = new Nutzer();
 			nutzer.setId(Integer.parseInt(Cookies.getCookie("id")));
-			ownKontakt = null;
+
 			if (result.equals("teilhaberschaft")) {
 				wertEigenschaftColumn = celltable.new WertEigenschaftColumn(clickEigenschaft);
 				wertAuspraegungColumn = celltable.new WertAuspraegungColumn(clickEigenschaft);
@@ -520,21 +517,21 @@ public class KontaktForm extends MainFrame {
 				celltable.addColumn(wertAuspraegungColumn, "");
 				kontaktNameBox.setEnabled(false);
 				celltable.setSelectionModel(ssm);
-				ownKontakt = false;
+
 			} else if (nutzer.getId() != k.getNutzerID()) {
 				celltable.addColumn(wertEigenschaftColumn, "Eigenschaft");
 				celltable.setColumnWidth(wertEigenschaftColumn, 40, Unit.EM);
 				celltable.addColumn(wertAuspraegungColumn, "Wert");
 				celltable.setColumnWidth(wertAuspraegungColumn, 55, Unit.EM);
 				flextable.setWidget(15, 0, tableButtonPanel);
-				ownKontakt = false;
+
 			} else {
 				celltable.addColumn(wertEigenschaftColumn, "Eigenschaft");
 				celltable.setColumnWidth(wertEigenschaftColumn, 40, Unit.EM);
 				celltable.addColumn(wertAuspraegungColumn, "Wert");
 				celltable.setColumnWidth(wertAuspraegungColumn, 55, Unit.EM);
 				flextable.setWidget(15, 0, tableButtonPanel);
-				ownKontakt = true;
+
 			}
 			kontaktmanagerVerwaltung.findTeilhaberschaftByKontaktAndTeilhaber(nutzer.getId(), k.getId(), new TeilhaberschaftKontaktCallback());
 		}
