@@ -51,7 +51,7 @@ public class KontaktlisteMapper {
 	}
 	
 	/**
-	 * Die Methode "createKontaktliste" ermöglicht das Einfügen von Objekten "Kontaktliste".
+	 * Die Methode "createKontaktliste" ermöglicht das Einfügen vom Objekt "Kontaktliste".
 	 * 
 	 *@return kontaktliste vom Objekt Kontaktliste
 	 *@see createKontaktliste
@@ -112,7 +112,7 @@ public class KontaktlisteMapper {
 	}
 	
 	/**
-	 * Mit dieser Methode "updateKontaktliste" wird das Aktualisieren eines Objektes vom "Kontaktliste" ermöglicht.
+	 * Mit dieser Methode "updateKontaktliste" wird das Aktualisieren eines Objektes vom Objekt "Kontaktliste" ermöglicht.
 	 * 
 	 * @param kontaktliste
 	 * @return kontaktliste vom Objekt Kontaktliste
