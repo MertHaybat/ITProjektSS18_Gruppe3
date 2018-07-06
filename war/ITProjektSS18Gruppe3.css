@@ -551,6 +551,29 @@ body {
 	background-color: white !important;
 }
 
+.reportButton {
+	font-size: 0.8em !important;
+	font-weight: normal !important;
+	width: auto;
+	border-radius: 6px;
+	border: 1px solid #d9d9d9 !important;
+	cursor: pointer;
+	color: #2c2c2c !important;
+	background-color: whitesmoke !important;
+	padding: 6px 5px 6px 5px !important;
+	text-shadow: 0px 1px 1px #ffffff !important;
+	text-align: center;
+	background-image: none !important;
+	margin-right: 5px !important;
+	box-shadow: 1px 1px #999;
+}
+
+.reportButton:hover {
+	transform: scale(1.02);
+	box-shadow: inset 1px 1px 1px 1px #f2f2f2 !important;
+	background-color: white !important;
+}
+
 .gwt-SuggestBox {
 	margin-left: 20px;
 	display: inline-block;

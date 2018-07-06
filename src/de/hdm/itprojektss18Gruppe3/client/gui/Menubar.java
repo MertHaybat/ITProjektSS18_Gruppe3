@@ -173,7 +173,7 @@ public class Menubar extends MenuBar {
 			deleteKontakt.setEnabled(true);
 			shareKontakt.setEnabled(true);
 			alterKontakt.setEnabled(true);
-			
+			addKontaktToKontaktliste.setEnabled(true);
 			} 
 
 		if(allKontakteSelectedArrayList.size() > 0 && kontaktlisteTeilhaberschaft == false &&  

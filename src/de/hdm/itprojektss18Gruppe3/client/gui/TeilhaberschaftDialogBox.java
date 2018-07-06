@@ -70,6 +70,7 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 	private SuggestBox box = new SuggestBox(oracle);
 	private List<Nutzer> nutzerListe = new ArrayList<>();
 	private List<Nutzer> nutzerSuggestbox = new ArrayList<>();
+	private List<Kontakt> kontaktList = new ArrayList<>();
 	private CheckBox kontaktTeilenCB = new CheckBox("Gesamten Kontakt teilen");
 
 
@@ -124,6 +125,8 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 
 	public TeilhaberschaftDialogBox(List<Kontakt> kontakt) {
 
+		this.kontaktList = kontakt;
+		
 		for (Kontakt kontakte : kontakt) {
 
 			kontaktmanagerVerwaltung.findEigenschaftHybrid(kontakte, new EigenschaftAuspraegungCallback());
@@ -363,7 +366,10 @@ public class TeilhaberschaftDialogBox extends DialogBox {
 				Window.alert("Teilhaberschaft erfolgreich erstellt");
 				hide();
 			}
-			kontaktmanagerVerwaltung.findKontaktByID(result.getKontaktID(), new FindKontaktByIDAsyncCallback()); {
+			if(kontaktList.size() == 1) {
+				AllKontaktView akv = new AllKontaktView();
+			} else {
+			kontaktmanagerVerwaltung.findKontaktByID(result.getKontaktID(), new FindKontaktByIDAsyncCallback()); 
 			}
 		}
 	}

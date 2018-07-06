@@ -36,16 +36,16 @@ public class ReportSelectMenu extends FlowPanel {
 		loginService.login(GWT.getHostPageBaseURL() + "KontaktmanagerReport.html", new LoginCallback());
 
 		bt1.addClickHandler(new reportEinsClickHandler());
-		bt1.setStylePrimaryName("mainButton");
+		bt1.setStylePrimaryName("reportButton");
 
 		bt2.addClickHandler(new reportZweiClickHandler());
-		bt2.setStylePrimaryName("mainButton");
+		bt2.setStylePrimaryName("reportButton");
 
 		bt3.addClickHandler(new reportDreiClickHandler());
-		bt3.setStylePrimaryName("mainButton");
+		bt3.setStylePrimaryName("reportButton");
 
 		logoutButton.addClickHandler(new logoutClickHandler());
-		logoutButton.setStylePrimaryName("mainButton");
+		logoutButton.setStylePrimaryName("reportButton");
 		logoutButton.addStyleName("reportButtonFloat");
 
 		this.add(bt1);
